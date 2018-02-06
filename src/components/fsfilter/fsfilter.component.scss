@@ -1,0 +1,374 @@
+.fs-filter {
+  position: relative;
+  margin-bottom: 20px;
+
+  .inline-filter {
+    display: inline-block;
+    .filter-group {
+      display: inline-block;
+    }
+  }
+
+  .title {
+    display: none;
+  }
+
+  .results {
+      min-height: 90px;
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+  }
+
+  .status {
+    position: relative;
+
+    .progress-infinite {
+        position: absolute;
+        top :0;
+        width: 100%;
+    }
+  }
+
+  .full-search {
+    .filter.filter-date {
+        > span {
+            display: inline-block
+        }
+    }
+  }
+
+  .filter-by {
+    display: none;
+  }
+
+  .menu-filter {
+    .search {
+      top: 8px;
+      position: absolute;
+      margin-left: 1px;
+      left: 0;
+
+      mat-icon {
+          transform: scale(.9);
+      }
+    }
+
+    .backdrop {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 69;
+      outline: none;
+    }
+
+    .menu-filter-input {
+
+      position: relative;
+
+      .inline-actions {
+        white-space: nowrap;
+        position: absolute;
+        right: 0;
+        top: 8px;
+        z-index: 50;
+
+        a {
+          color: rgba(0,0,0,0.54);
+          background: #fff;
+          height: 22px;
+          margin-bottom: 5px;
+
+          i {
+              transform: scale(.9);
+              vertical-align: middle;
+          }
+
+          &:hover {
+              color: inherit;
+          }
+        }
+      }
+      /*
+      .action-filter {
+        display: none;
+        z-index: 30;
+      }
+      */
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      /*
+      TODO
+      md-datepicker-container {
+        width: 100%;
+        .md-datepicker-input-container {
+            margin-left: 0;
+        }
+      }
+      */
+
+      .main-filter-bar {
+        height: 40px; /* Largest height between inputs, buttons, icons */
+        mat-form-field {
+          width: 100%;
+          /*
+          input {
+            padding-right: 26px;
+            padding-left: 26px;
+            position: relative;
+          }
+          */
+        }
+      }
+
+      .filters {
+        position: absolute;
+        width: 100%;
+        margin-top: -4px;
+        display: none;
+
+        .wrap {
+          padding: 8px 17px 17px 17px;
+          background: #fff;
+          box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+          overflow: auto;
+        }
+
+        .filter-group {
+          display: table-row-group;
+        }
+
+        .filter {
+          display: table-row;
+
+          .interface {
+
+            &.interface-checkbox {
+            }
+
+            &.interface-range input {
+              text-align: center;
+            }
+
+            //TODO
+            &.interface-datetime fs-datetime.has-time .md-input {
+              width: 100%;
+            }
+            //TODO
+            fs-datetime-range input {
+              text-align: center;
+            }
+          }
+
+          .interface,
+          .filter-label {
+            display: table-cell;
+          }
+
+          .filter-label {
+            width: 1%;
+            white-space: nowrap;
+            vertical-align: middle;
+            padding-right: 15px;
+          }
+        }
+
+        //TODO
+        md-autocomplete-container md-input-container {
+          margin: 0;
+        }
+
+        .isolate  {
+          .interface {
+              line-height: 20px;
+              padding-top: 5px;
+          }
+          //TODO
+          md-checkbox {
+              margin: 0 0 0 2px;
+          }
+        }
+
+        .buttons {
+          padding-top: 15px;
+          .filter-button,
+          .reset-button {
+              margin: 0;
+          }
+
+          .reset-button {
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .filter {
+
+    margin-right: 15px;
+    display: inline-block;
+    //TODO
+    label {
+      white-space: nowrap;
+      color: rgba(0,0,0,0.54);
+    }
+
+    &.filter-range {
+      mat-form-field {
+        min-width: initial;
+        width: 50px;
+        &.filter-range-min {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .infinite-records {
+    color: #999;
+    font-size: 13px;
+    margin-left: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+
+      .order-toggle {
+          cursor: pointer;
+          padding-left: 4px;
+      }
+
+      .saved-filters {
+        float: right;
+        display: flex;
+      }
+  }
+
+  //TODO
+  .md-datepicker-calendar-pane {
+    margin-left: -10px;
+  }
+
+  .saved-filter-menu {
+    padding-top: 0;
+    .my-saved-filters {
+      line-height: 50px;
+      padding: 0 10px;
+      font-weight: bold;
+    }
+  }
+
+  &.filters-open {
+		.inline-actions {
+	    	z-index: 71;
+	    }
+
+	    .main-filter-bar md-input-container input,
+	    .menu-filter-input .filters {
+	        z-index: 70;
+	        display: block;
+	    }
+	}
+}
+
+@media screen and (max-width: 750px) {
+  .fs-filter {
+    .saved-filters {
+      float: none;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+
+  body.fs-filters-open {
+		overflow: hidden !important;
+
+		.inline-actions {
+			display: none;
+		}
+	}
+
+  .fs-filter {
+    margin-top: 0;
+
+    .title {
+      display: block;
+      /*
+      fs-heading {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      */
+    }
+  }
+
+  .responsive-top-actions {
+    display: block;
+  }
+
+  .filter-by {
+    //display: block;
+    margin: 10px 0;
+  }
+
+  .menu-filter {
+    .menu-filter-input {
+      .filters {
+          .wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            overflow-y: auto;
+            z-index: 999;
+          }
+
+          .filter-group,
+          .filter,
+          .filter .filter-label,
+          .filter .interface {
+            display: block;
+          }
+      }
+
+      .action-filter {
+        //z-index: 30;
+      }
+
+      .action-reload {
+        display: none;
+      }
+
+      .filter-group {
+        margin: 10px 0 0 0;
+
+        &:first-child {
+          margin: 0;
+        }
+      }
+
+      .filter {
+        .filter-label {
+          line-height: 21px;
+          display: block;
+          -webkit-transform: translate3d(0, 7px, 0) scale(0.75);
+          transform: translate3d(0, 7px, 0) scale(0.75);
+          transition: cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s;
+          -webkit-transform-origin: left top;
+          transform-origin: left top;
+          color: rgba(0, 0, 0, 0.54);
+        }
+      }
+    }
+  }
+}
