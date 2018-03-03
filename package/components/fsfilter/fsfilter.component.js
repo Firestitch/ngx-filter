@@ -10,18 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var common_1 = require("@firestitch/common");
+var lodash_1 = require("lodash");
+var util_1 = require("@firestitch/common/util");
+var array_1 = require("@firestitch/common/array");
 var store_1 = require("@firestitch/store");
 var classes_1 = require("./../../classes");
 var Observable_1 = require("rxjs/Observable");
 var router_1 = require("@angular/router");
 require("rxjs/add/observable/forkJoin");
 var moment_timezone_1 = require("moment-timezone");
-var common_2 = require("@angular/common");
+var common_1 = require("@angular/common");
 var FsFilterComponent = (function () {
-    function FsFilterComponent(FsUtil, FsArray, FsStore, route, location) {
-        this.FsUtil = FsUtil;
-        this.FsArray = FsArray;
+    function FsFilterComponent(FsStore, route, location) {
         this.FsStore = FsStore;
         this.route = route;
         this.location = location;
@@ -59,7 +59,7 @@ var FsFilterComponent = (function () {
         var wait_observables$ = [], update_observables$ = [];
         for (var _i = 0, _a = this.filter.fsConfig.items; _i < _a.length; _i++) {
             var filter = _a[_i];
-            if (filter.name && this.FsUtil.isObject(filter.name)) {
+            if (filter.name && lodash_1.isObject(filter.name)) {
                 filter.names = filter.name;
                 filter.name = Object.keys(filter.names).join('-');
             }
@@ -168,7 +168,7 @@ var FsFilterComponent = (function () {
             if (!values[label]) {
                 continue;
             }
-            var filter = this.FsArray.filter(this.filter.fsConfig.items, { label: label })[0];
+            var filter = array_1.filter(this.filter.fsConfig.items, { label: label })[0];
             if (filter) {
                 if (filter.type == 'date' || filter.type == 'datetime') {
                     var date = Date.parse(values[label]);
@@ -197,7 +197,7 @@ var FsFilterComponent = (function () {
                         var values_1 = [];
                         for (var _e = 0, _f = values_1[label].split(','); _e < _f.length; _e++) {
                             var value = _f[_e];
-                            var item = this.FsArray.filter(filter.values, { name: value })[0];
+                            var item = array_1.filter(filter.values, { name: value })[0];
                             if (item) {
                                 values_1.push(item.value);
                             }
@@ -206,7 +206,7 @@ var FsFilterComponent = (function () {
                         filter.model = values_1;
                     }
                     else {
-                        var item = this.FsArray.filter(filter.values, { name: values[label] })[0];
+                        var item = array_1.filter(filter.values, { name: values[label] })[0];
                         if (item) {
                             filter.model = item.value;
                         }
@@ -313,7 +313,7 @@ var FsFilterComponent = (function () {
         }
     };
     FsFilterComponent.prototype.onAutocompleteChange = function (filter, $event) {
-        if (this.FsUtil.isObject(filter.model)) {
+        if (lodash_1.isObject(filter.model)) {
             this.onFilterChange(filter);
         }
         else {
@@ -321,12 +321,11 @@ var FsFilterComponent = (function () {
         }
     };
     FsFilterComponent.prototype.onAutocompleteChipsChange = function (filter, input) {
-        var _this = this;
-        if (!this.FsUtil.isObject(filter.selectedValue)) {
+        if (!lodash_1.isObject(filter.selectedValue)) {
             filter.values$ = filter.values(filter.selectedValue)
                 .map(function (values) {
-                var selected = _this.FsArray.list(filter.model, 'value');
-                return _this.FsArray.filter(values, function (value) {
+                var selected = array_1.list(filter.model, 'value');
+                return array_1.filter(values, function (value) {
                     return selected.indexOf(value.value) === -1;
                 });
             });
@@ -336,7 +335,7 @@ var FsFilterComponent = (function () {
         }
     };
     FsFilterComponent.prototype.removeAutucompleteChipItem = function (filter, item) {
-        this.FsArray.remove(filter.model, { value: item.value });
+        array_1.remove(filter.model, { value: item.value });
         this.onFilterChange(filter);
     };
     FsFilterComponent.prototype.addAutucompleteChipItem = function (filter, $event) {
@@ -360,7 +359,7 @@ var FsFilterComponent = (function () {
             var value = this.copy(filter.model);
             if (filter.type === 'select') {
                 if (filter.multiple) {
-                    if (!this.FsUtil.isArray(value) || !value.length) {
+                    if (!lodash_1.isArray(value) || !value.length) {
                         continue;
                     }
                     var values = [];
@@ -392,14 +391,14 @@ var FsFilterComponent = (function () {
                     }
                 }
             }
-            if (this.FsUtil.isEmpty(value, { zero: true })) {
+            if (util_1.isEmpty(value, { zero: true })) {
                 continue;
             }
             if (filter.type == 'autocomplete') {
                 value = filter.model.name;
             }
             else if (filter.type == 'autocompletechips') {
-                if (!this.FsUtil.isArray(filter.model) || !filter.model.length) {
+                if (!lodash_1.isArray(filter.model) || !filter.model.length) {
                     continue;
                 }
                 var values = [];
@@ -502,9 +501,9 @@ var FsFilterComponent = (function () {
                 filter.primary = false;
             }
             if (filter.type == 'checkbox') {
-                filter.checked = _this.FsUtil.string(filter.checked);
-                filter.unchecked = _this.FsUtil.string(filter.unchecked);
-                filter.default = filter.default === undefined ? filter.unchecked : _this.FsUtil.string(filter.default);
+                filter.checked = lodash_1.toString(filter.checked);
+                filter.unchecked = lodash_1.toString(filter.unchecked);
+                filter.default = filter.default === undefined ? filter.unchecked : lodash_1.toString(filter.default);
             }
             else if (filter.type == 'text') {
                 if (!_this.primary) {
@@ -544,7 +543,7 @@ var FsFilterComponent = (function () {
                         }
                     }
                     ;
-                    if (_this.FsUtil.isArray(filter.model)) {
+                    if (lodash_1.isArray(filter.model)) {
                         if (filter.model.length == filter.values.length) {
                             filter.model = null;
                             filter.isolate.enabled = false;
@@ -647,7 +646,7 @@ var FsFilterComponent = (function () {
     FsFilterComponent.prototype.selectChange = function (filter) {
         if (filter.isolate) {
             filter.isolate.enabled = false;
-            if (filter.multiple && this.FsUtil.isArray(filter.model)) {
+            if (filter.multiple && lodash_1.isArray(filter.model)) {
                 var index = filter.model.indexOf(filter.isolate.value);
                 if (index > -1) {
                     filter.model.splice(index, 1);
@@ -665,9 +664,10 @@ var FsFilterComponent = (function () {
         }
         this.onFilterChange(filter);
     };
-    FsFilterComponent.prototype.reset = function () {
+    FsFilterComponent.prototype.cancel = function () {
         this.clear();
         this.filterChange = true;
+        this.filterToggle(false, true);
     };
     FsFilterComponent.prototype.displayAutocomplete = function (data) {
         return data ? data.name : data;
@@ -682,15 +682,15 @@ var FsFilterComponent = (function () {
             if (filter.type == 'select') {
                 if (filter.multiple) {
                     if (filter.isolate) {
-                        if (!this.FsUtil.isArray(filter.model) || !filter.model.length) {
-                            value = this.FsArray.list(filter.values, 'value');
+                        if (!lodash_1.isArray(filter.model) || !filter.model.length) {
+                            value = array_1.list(filter.values, 'value');
                         }
                     }
                 }
                 else {
                     if (filter.isolate) {
                         if (filter.model == '__all') {
-                            value = this.FsArray.list(filter.values, 'value');
+                            value = array_1.list(filter.values, 'value');
                         }
                     }
                     else {
@@ -701,12 +701,12 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'autocompletechips') {
-                if (this.FsUtil.isArray(filter.model) && filter.model.length && !opts['expand']) {
-                    value = this.FsArray.list(filter.model, 'value');
+                if (lodash_1.isArray(filter.model) && filter.model.length && !opts['expand']) {
+                    value = array_1.list(filter.model, 'value');
                 }
             }
             // @TODO
-            if (this.FsUtil.isEmpty(value, { zero: true })) {
+            if (util_1.isEmpty(value, { zero: true })) {
                 continue;
             }
             if (filter.type == 'date' || filter.type == 'datetime') {
@@ -726,12 +726,12 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'autocomplete') {
-                if (this.FsUtil.isEmpty(filter.model.value, { zero: true })) {
+                if (util_1.isEmpty(filter.model.value, { zero: true })) {
                     continue;
                 }
                 value = opts['expand'] ? filter.model : filter.model.value;
             }
-            if (this.FsUtil.isObject(filter.names) && opts['names'] !== false) {
+            if (lodash_1.isObject(filter.names) && opts['names'] !== false) {
                 for (var key in filter.names) {
                     if (value[filter.names[key]]) {
                         query[key] = value[filter.names[key]];
@@ -746,7 +746,7 @@ var FsFilterComponent = (function () {
         ;
         if (opts['flatten']) {
             for (var name_1 in query) {
-                if (this.FsUtil.isArray(query[name_1])) {
+                if (lodash_1.isArray(query[name_1])) {
                     query[name_1] = query[name_1].join(',');
                 }
             }
@@ -758,10 +758,10 @@ var FsFilterComponent = (function () {
      * @TODO Temp solution
      */
     FsFilterComponent.prototype.copy = function (data) {
-        if (this.FsUtil.isObject(data)) {
+        if (lodash_1.isObject(data)) {
             return Object.assign({}, data);
         }
-        else if (this.FsUtil.isArray(data)) {
+        else if (lodash_1.isArray(data)) {
             return data.slice();
         }
         else {
@@ -780,8 +780,7 @@ var FsFilterComponent = (function () {
             styleUrls: ['./fsfilter.component.css'],
             encapsulation: core_1.ViewEncapsulation.None
         }),
-        __metadata("design:paramtypes", [common_1.FsUtil, common_1.FsArray,
-            store_1.FsStore, router_1.ActivatedRoute, common_2.Location])
+        __metadata("design:paramtypes", [store_1.FsStore, router_1.ActivatedRoute, common_1.Location])
     ], FsFilterComponent);
     return FsFilterComponent;
 }());

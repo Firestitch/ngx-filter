@@ -23,10 +23,6 @@
           -->
           <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->
             <span>Filter by</span>
-            <div fxFlex></div>
-            <div><!-- heading-actions -->
-              <a (click)="filterToggle(false,true)"><mat-icon class="action-clear">clear</mat-icon></a>
-            </div>
           </div>
 
           <ng-container *ngFor="let filterItem of filter.fsConfig.items">
@@ -35,7 +31,7 @@
 
           <div class="buttons">
               <button mat-raised-button color="accent" (click)="filterToggle(false,true)" class="filter-button">Search</button>
-              <button mat-button color="accent" (click)="reset()" class="reset-button">Reset</button>
+              <button mat-button color="accent" (click)="cancel()" class="cancel-button">Cancel</button>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { OnInit, OnDestroy } from '@angular/core';
-import { FsUtil, FsArray } from '@firestitch/common';
 import { FsStore } from '@firestitch/store';
 import { FsFilter } from './../../classes';
 import { Observable } from 'rxjs/Observable';
@@ -7,8 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
 import { Location } from '@angular/common';
 export declare class FsFilterComponent implements OnInit, OnDestroy {
-    private FsUtil;
-    private FsArray;
     private FsStore;
     private route;
     private location;
@@ -20,7 +17,7 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     filterChange: boolean;
     primary: boolean;
     persists: any;
-    constructor(FsUtil: FsUtil, FsArray: FsArray, FsStore: FsStore, route: ActivatedRoute, location: Location);
+    constructor(FsStore: FsStore, route: ActivatedRoute, location: Location);
     ngOnInit(): void;
     menuFilterChange(search: any): void;
     filtersClear(): void;
@@ -43,7 +40,7 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     walkSelectNestedValues(filter: any, parent_id: any, values: any, depth?: number): any[];
     selectChange(filter: any): void;
     isolateChange(filter: any): void;
-    reset(): void;
+    cancel(): void;
     displayAutocomplete(data: any): string;
     gets(opts?: {}): {};
     /**

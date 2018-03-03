@@ -1,10 +1,10 @@
-import { Component, ViewEncapsulation, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { FsUtil, FsArray } from '@firestitch/common';
+import { Component, ViewEncapsulation, Input, OnInit, OnDestroy } from '@angular/core';
+import { isObject, isArray, toString } from 'lodash';
+import { isEmpty } from '@firestitch/common/util';
+import { filter as arrayFilter, list as arrayList, remove as arrayRemove } from '@firestitch/common/array';
 import { FsStore } from '@firestitch/store';
 import { FsFilter } from './../../classes';
 import { Observable } from 'rxjs/Observable';
-import { Subscriber } from 'rxjs/Subscriber';
-import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
 import moment from 'moment-timezone';
@@ -25,8 +25,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   primary = false;
   persists = null;
 
-  constructor(private FsUtil: FsUtil, private FsArray: FsArray,
-    private FsStore: FsStore, private route: ActivatedRoute, private location: Location) { }
+  constructor(private FsStore: FsStore, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit() {
 
@@ -64,7 +63,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     let wait_observables$ = [], update_observables$ = [];
     for (let filter of this.filter.fsConfig.items) {
 
-      if (filter.name && this.FsUtil.isObject(filter.name)) {
+      if (filter.name && isObject(filter.name)) {
         filter.names = filter.name;
         filter.name = Object.keys(filter.names).join('-');
       }
@@ -195,7 +194,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       if (!values[label]) {
         continue;
       }
-      let filter = this.FsArray.filter(this.filter.fsConfig.items, { label: label })[0];
+      let filter = arrayFilter(this.filter.fsConfig.items, { label: label })[0];
 
       if (filter) {
 
@@ -234,7 +233,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
             let values = [];
             for (let value of values[label].split(',')) {
 
-              let item = this.FsArray.filter(filter.values, { name: value })[0];
+              let item = arrayFilter(filter.values, { name: value })[0];
 
               if (item) {
                 values.push(item.value);
@@ -245,7 +244,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
           } else {
 
-            let item = this.FsArray.filter(filter.values, { name: values[label] })[0];
+            let item = arrayFilter(filter.values, { name: values[label] })[0];
 
             if (item) {
                filter.model = item.value;
@@ -373,7 +372,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
   onAutocompleteChange(filter, $event?) {
 
-    if (this.FsUtil.isObject(filter.model)) {
+    if (isObject(filter.model)) {
       this.onFilterChange(filter);
     } else {
       filter.values$ = filter.values(filter.model);
@@ -381,11 +380,11 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   onAutocompleteChipsChange(filter, input) {
-    if (!this.FsUtil.isObject(filter.selectedValue)) {
+    if (!isObject(filter.selectedValue)) {
       filter.values$ = filter.values(filter.selectedValue)
         .map(values => {
-          const selected = this.FsArray.list(filter.model, 'value');
-          return this.FsArray.filter(values, (value) => {
+          const selected = arrayList(filter.model, 'value');
+          return arrayFilter(values, (value) => {
             return (<any[]>selected).indexOf(value.value) === -1;
           });
         });
@@ -395,7 +394,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   removeAutucompleteChipItem(filter, item) {
-    this.FsArray.remove(filter.model, { value: item.value });
+    arrayRemove(filter.model, { value: item.value });
     this.onFilterChange(filter);
   }
 
@@ -426,7 +425,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
         if (filter.multiple) {
 
-          if (!this.FsUtil.isArray(value) || !value.length) {
+          if (!isArray(value) || !value.length) {
             continue;
           }
 
@@ -462,7 +461,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.FsUtil.isEmpty(value, { zero: true })) {
+      if (isEmpty(value, { zero: true })) {
         continue;
       }
 
@@ -471,7 +470,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       } else if (filter.type == 'autocompletechips') {
 
-        if (!this.FsUtil.isArray(filter.model) || !filter.model.length) {
+        if (!isArray(filter.model) || !filter.model.length) {
           continue;
         }
 
@@ -594,9 +593,9 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       if (filter.type == 'checkbox') {
 
-        filter.checked = this.FsUtil.string(filter.checked);
-        filter.unchecked = this.FsUtil.string(filter.unchecked);
-        filter.default = filter.default === undefined ? filter.unchecked : this.FsUtil.string(filter.default);
+        filter.checked = toString(filter.checked);
+        filter.unchecked = toString(filter.unchecked);
+        filter.default = filter.default === undefined ? filter.unchecked : toString(filter.default);
       } else if (filter.type == 'text') {
 
         if (!this.primary) {
@@ -645,7 +644,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
             }
           };
 
-          if (this.FsUtil.isArray(filter.model)) {
+          if (isArray(filter.model)) {
             if (filter.model.length == filter.values.length) {
               filter.model = null;
               filter.isolate.enabled = false;
@@ -770,7 +769,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       filter.isolate.enabled = false;
 
-      if (filter.multiple && this.FsUtil.isArray(filter.model)) {
+      if (filter.multiple && isArray(filter.model)) {
         const index = filter.model.indexOf(filter.isolate.value);
 
         if (index > -1) {
@@ -816,8 +815,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         if (filter.multiple) {
 
           if (filter.isolate) {
-            if (!this.FsUtil.isArray(filter.model) || !filter.model.length) {
-              value = this.FsArray.list(filter.values, 'value');
+            if (!isArray(filter.model) || !filter.model.length) {
+              value = arrayList(filter.values, 'value');
             }
           }
 
@@ -825,7 +824,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
           if (filter.isolate) {
             if (filter.model == '__all') {
-              value = this.FsArray.list(filter.values, 'value');
+              value = arrayList(filter.values, 'value');
             }
           } else {
             if (filter.model == '__all') {
@@ -834,13 +833,13 @@ export class FsFilterComponent implements OnInit, OnDestroy {
           }
         }
       } else if (filter.type == 'autocompletechips') {
-        if (this.FsUtil.isArray(filter.model) && filter.model.length && !opts['expand']) {
-          value = this.FsArray.list(filter.model, 'value');
+        if (isArray(filter.model) && filter.model.length && !opts['expand']) {
+          value = arrayList(filter.model, 'value');
         }
       }
 
       // @TODO
-      if (this.FsUtil.isEmpty(value, { zero: true })) {
+      if (isEmpty(value, { zero: true })) {
         continue;
       }
 
@@ -866,14 +865,14 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       } else if (filter.type == 'autocomplete') {
 
-        if (this.FsUtil.isEmpty(filter.model.value, { zero: true })) {
+        if (isEmpty(filter.model.value, { zero: true })) {
           continue;
         }
 
         value = opts['expand'] ? filter.model : filter.model.value;
       }
 
-      if (this.FsUtil.isObject(filter.names) && opts['names'] !== false) {
+      if (isObject(filter.names) && opts['names'] !== false) {
         for (let key in filter.names) {
           if (value[filter.names[key]]) {
             query[key] = value[filter.names[key]];
@@ -886,7 +885,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
     if (opts['flatten']) {
       for(let name in query) {
-        if (this.FsUtil.isArray(query[name])) {
+        if (isArray(query[name])) {
           query[name] = query[name].join(',');
         }
       };
@@ -898,9 +897,9 @@ export class FsFilterComponent implements OnInit, OnDestroy {
    * @TODO Temp solution
    */
   copy(data) {
-    if (this.FsUtil.isObject(data)) {
+    if (isObject(data)) {
       return Object.assign({}, data);
-    } else if (this.FsUtil.isArray(data)) {
+    } else if (isArray(data)) {
       return data.slice();
     } else {
       return data;
