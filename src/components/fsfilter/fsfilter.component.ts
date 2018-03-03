@@ -793,9 +793,10 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     this.onFilterChange(filter);
   }
 
-  reset () {
+  cancel () {
     this.clear();
     this.filterChange = true;
+    this.filterToggle(false,true);
   }
 
   displayAutocomplete(data): string {
