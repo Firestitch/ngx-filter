@@ -1,5 +1,5 @@
 <div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="filter.fsConfig.items.length"
-     [ngClass]="{ 'filters-open': extended_filter, loading: loading }">
+     [ngClass]="{ 'filters-open': extendedFilter, loading: loading }">
   <div *ngIf="!filter.fsConfig.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class="backdrop" *ngIf="extended_filter" (click)="filterToggle(false,true)"></div>
+      <div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>
     </div>
   </div>
 
