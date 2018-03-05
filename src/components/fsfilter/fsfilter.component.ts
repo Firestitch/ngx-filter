@@ -809,8 +809,6 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.clear();
-    this.filterChange = true;
     this.filterToggle(false, true);
   }
 
