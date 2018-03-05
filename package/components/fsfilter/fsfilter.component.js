@@ -672,8 +672,6 @@ var FsFilterComponent = (function () {
         this.onFilterChange(filter);
     };
     FsFilterComponent.prototype.cancel = function () {
-        this.clear();
-        this.filterChange = true;
         this.filterToggle(false, true);
     };
     FsFilterComponent.prototype.displayAutocomplete = function (data) {
