@@ -21,20 +21,20 @@ require("rxjs/add/observable/forkJoin");
 var moment_timezone_1 = require("moment-timezone");
 var common_1 = require("@angular/common");
 var FsFilterComponent = (function () {
-    function FsFilterComponent(FsStore, route, location) {
-        this.FsStore = FsStore;
+    function FsFilterComponent(_store, route, location) {
+        this._store = _store;
         this.route = route;
         this.location = location;
         this.filter = null;
         this.searchinput = { value: '' };
-        this.extended_filter = false;
+        this.extendedFilter = false;
         this.filterChange = false;
         this.primary = false;
         this.persists = null;
     }
     FsFilterComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.persists = this.FsStore.get(this.filter.fsConfig.namespace + '-persist', {});
+        this.persists = this._store.get(this.filter.fsConfig.namespace + '-persist', {});
         if (this.persists === undefined) {
             this.persists = {};
         }
@@ -45,18 +45,19 @@ var FsFilterComponent = (function () {
             if (!this.filter.fsConfig.persist.name) {
                 this.filter.fsConfig.persist.name = this.location.path();
             }
-            if (!this.persists[this.filter.fsConfig.persist.name] || !this.persists[this.filter.fsConfig.persist.name]['data']) {
+            if (!this.persists[this.filter.fsConfig.persist.name] || !this.persists[this.filter.fsConfig.persist.name].data) {
                 this.persists[this.filter.fsConfig.persist.name] = { data: {}, date: new Date() };
             }
             if (this.filter.fsConfig.persist.timeout) {
-                var date = new Date(this.persists[this.filter.fsConfig.persist.name]['date']);
+                var date = new Date(this.persists[this.filter.fsConfig.persist.name].date);
                 if (moment_timezone_1.default(date).subtract(this.filter.fsConfig.persist.timeout, 'minutes').isAfter(moment_timezone_1.default())) {
                     this.persists[this.filter.fsConfig.persist.name] = { data: {}, date: new Date() };
                 }
             }
         }
-        // preload any filters which have filter.wait.  Once they are all loaded then proceed to load main data & rest of filters.
-        var wait_observables$ = [], update_observables$ = [];
+        // preload any filters which have filter.wait.
+        // Once they are all loaded then proceed to load main data & rest of filters.
+        var waitObservables$ = [], updateObservables$ = [];
         for (var _i = 0, _a = this.filter.fsConfig.items; _i < _a.length; _i++) {
             var filter = _a[_i];
             if (filter.name && lodash_1.isObject(filter.name)) {
@@ -64,7 +65,7 @@ var FsFilterComponent = (function () {
                 filter.name = Object.keys(filter.names).join('-');
             }
             if (this.filter.fsConfig.persist) {
-                var persisted = this.persists[this.filter.fsConfig.persist.name]['data'];
+                var persisted = this.persists[this.filter.fsConfig.persist.name].data;
                 if (persisted[filter.name]) {
                     var value = persisted[filter.name];
                     if (value) {
@@ -105,26 +106,30 @@ var FsFilterComponent = (function () {
             }
             var observable$ = this.sanitizeFilter(filter);
             if (filter.wait || (filter.type == 'select' && filter.isolate && filter.wait === undefined)) {
-                wait_observables$.push(observable$);
+                waitObservables$.push(observable$);
             }
             else {
-                update_observables$.push(observable$);
+                updateObservables$.push(observable$);
             }
         }
-        ;
-        Observable_1.Observable.forkJoin(wait_observables$)
-            .subscribe(function () { }, function () { }, function () {
+        Observable_1.Observable.forkJoin(waitObservables$)
+            .subscribe(function () {
+        }, function () {
+        }, function () {
             if (_this.filter.fsConfig.load) {
                 _this.reload({ filterUpdate: false });
             }
-            Observable_1.Observable.forkJoin(update_observables$)
-                .subscribe(function () { }, function () { }, function () {
+            Observable_1.Observable.forkJoin(updateObservables$)
+                .subscribe(function () {
+            }, function () {
+            }, function () {
                 if (_this.filter.fsConfig.init) {
                     _this.filter.fsConfig.init(_this);
                 }
                 _this.filterUpdate();
             });
         });
+        console.log(this.filter.fsConfig.items);
     };
     FsFilterComponent.prototype.menuFilterChange = function (search) {
         var text = '';
@@ -147,15 +152,14 @@ var FsFilterComponent = (function () {
         var textSearch = [];
         for (var _b = 0, matches_1 = matches; _b < matches_1.length; _b++) {
             var match = matches_1[_b];
-            var filter_match = match.trim().match(/\(?([^:\)]+)\)?:\(?([^)]+)/);
-            if (filter_match) {
-                values[filter_match[1].trim()] = filter_match[2];
+            var filterMatch = match.trim().match(/\(?([^:\)]+)\)?:\(?([^)]+)/);
+            if (filterMatch) {
+                values[filterMatch[1].trim()] = filterMatch[2];
             }
             else {
                 textSearch.push(match);
             }
         }
-        ;
         this.filtersClear();
         for (var _c = 0, _d = this.filter.fsConfig.items; _c < _d.length; _c++) {
             var filter = _d[_c];
@@ -163,7 +167,6 @@ var FsFilterComponent = (function () {
                 filter.model = textSearch.join(' ');
             }
         }
-        ;
         for (var label in values) {
             if (!values[label]) {
                 continue;
@@ -194,16 +197,15 @@ var FsFilterComponent = (function () {
                 }
                 else if (filter.type == 'select') {
                     if (filter.multiple) {
-                        var values_1 = [];
-                        for (var _e = 0, _f = values_1[label].split(','); _e < _f.length; _e++) {
+                        var modelValues = [];
+                        for (var _e = 0, _f = modelValues[label].split(','); _e < _f.length; _e++) {
                             var value = _f[_e];
                             var item = array_1.filter(filter.values, { name: value })[0];
                             if (item) {
-                                values_1.push(item.value);
+                                modelValues.push(item.value);
                             }
                         }
-                        ;
-                        filter.model = values_1;
+                        filter.model = modelValues;
                     }
                     else {
                         var item = array_1.filter(filter.values, { name: values[label] })[0];
@@ -220,7 +222,6 @@ var FsFilterComponent = (function () {
                 }
             }
         }
-        ;
         this.reload({ filterUpdate: false });
     };
     FsFilterComponent.prototype.filtersClear = function () {
@@ -246,7 +247,6 @@ var FsFilterComponent = (function () {
                 filter.model = {};
             }
         }
-        ;
     };
     FsFilterComponent.prototype.menuFilterClick = function ($event) {
         if (window.innerWidth >= 600) {
@@ -280,20 +280,23 @@ var FsFilterComponent = (function () {
     };
     FsFilterComponent.prototype.load = function (opts) {
         if (opts === void 0) { opts = {}; }
-        if (opts['filterUpdate'] !== false) {
+        if (opts.filterUpdate !== false) {
             this.filterUpdate();
         }
         var query = this.gets({ flatten: true });
         if (this.filter.fsConfig.persist) {
-            this.persists[this.filter.fsConfig.persist.name] = { data: this.gets({ expand: true, names: false }), date: new Date() };
-            this.FsStore.set(this.filter.fsConfig.namespace + '-persist', this.persists, {});
+            this.persists[this.filter.fsConfig.persist.name] = {
+                data: this.gets({ expand: true, names: false }),
+                date: new Date()
+            };
+            this._store.set(this.filter.fsConfig.namespace + '-persist', this.persists, {});
         }
         if (this.filter.fsConfig.change) {
             this.filter.fsConfig.change(query, this);
         }
     };
     FsFilterComponent.prototype.filterToggle = function (value, search) {
-        this.extended_filter = value;
+        this.extendedFilter = value;
         setTimeout(function () {
             var body = document.body;
             value ? body.classList.add('fs-filters-open') : body.classList.remove('fs-filters-open');
@@ -353,7 +356,8 @@ var FsFilterComponent = (function () {
         }
     };
     FsFilterComponent.prototype.filterUpdate = function () {
-        var label, formatted, searches = [];
+        var label, formatted;
+        var searches = [];
         for (var _i = 0, _a = this.filter.fsConfig.items; _i < _a.length; _i++) {
             var filter = _a[_i];
             var value = this.copy(filter.model);
@@ -366,9 +370,9 @@ var FsFilterComponent = (function () {
                     for (var _b = 0, value_1 = value; _b < value_1.length; _b++) {
                         var item = value_1[_b];
                         for (var _c = 0, _d = filter.values; _c < _d.length; _c++) {
-                            var filter_item = _d[_c];
-                            if (!String(filter_item.value).localeCompare(String(item))) {
-                                values.push(filter_item.name);
+                            var filterItem = _d[_c];
+                            if (!String(filterItem.value).localeCompare(String(item))) {
+                                values.push(filterItem.name);
                             }
                         }
                     }
@@ -379,9 +383,9 @@ var FsFilterComponent = (function () {
                         continue;
                     }
                     for (var _e = 0, _f = filter.values; _e < _f.length; _e++) {
-                        var filter_item = _f[_e];
-                        if (!String(filter_item.value).localeCompare(String(value))) {
-                            value = filter_item.name;
+                        var filterItem = _f[_e];
+                        if (!String(filterItem.value).localeCompare(String(value))) {
+                            value = filterItem.name;
                         }
                     }
                 }
@@ -443,8 +447,8 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'range') {
-                var min = value['min'];
-                var max = value['max'];
+                var min = value.min;
+                var max = value.max;
                 var parts = [];
                 if (min) {
                     parts.push(min);
@@ -462,11 +466,12 @@ var FsFilterComponent = (function () {
                 label = filter.label.match(/\s/) ? '(' + filter.label + ')' : filter.label;
             }
             formatted = label + ':' + (value.match(/\s/) ? '(' + value + ')' : value);
-            searches.push({ value: value,
+            searches.push({
+                value: value,
                 type: filter.type,
-                formatted: formatted });
+                formatted: formatted
+            });
         }
-        ;
         this.searchinput.value = '';
         if (searches.length === 1 && searches[0].type == 'text') {
             this.searchinput.value = searches[0].value;
@@ -535,14 +540,15 @@ var FsFilterComponent = (function () {
                 filter.values = data;
                 if (filter.isolate) {
                     for (var index in filter.values) {
-                        if (!filter.values[index]) {
-                            continue;
-                        }
-                        if (filter.values[index].value == filter.isolate.value) {
-                            filter.values.splice(index, 1);
+                        if (filter.values.hasOwnProperty(index)) {
+                            if (!filter.values[index]) {
+                                continue;
+                            }
+                            if (filter.values[index].value == filter.isolate.value) {
+                                filter.values.splice(index, 1);
+                            }
                         }
                     }
-                    ;
                     if (lodash_1.isArray(filter.model)) {
                         if (filter.model.length == filter.values.length) {
                             filter.model = null;
@@ -565,7 +571,6 @@ var FsFilterComponent = (function () {
                         filter.groups[value.group].push(value);
                     }
                 }
-                ;
             }
             if (filter.model === undefined) {
                 filter.model = filter.default;
@@ -600,48 +605,50 @@ var FsFilterComponent = (function () {
     FsFilterComponent.prototype.walkSelectValues = function (filter, filterValues) {
         var values = [];
         for (var key in filterValues) {
-            if (!filterValues[key]) {
-                continue;
+            if (filterValues.hasOwnProperty(key)) {
+                if (!filterValues[key]) {
+                    continue;
+                }
+                var value = { value: key, name: filterValues[key] };
+                if (typeof filterValues[key] == 'object') {
+                    value = filterValues[key];
+                }
+                if (value.value === null) {
+                    value.value = 'null';
+                }
+                values.push(value);
             }
-            var value = { value: key, name: filterValues[key] };
-            if (typeof filterValues[key] == 'object') {
-                value = filterValues[key];
-            }
-            if (value.value === null) {
-                value.value = 'null';
-            }
-            values.push(value);
         }
-        ;
         return values;
     };
-    FsFilterComponent.prototype.walkSelectNestedValues = function (filter, parent_id, values, depth) {
+    FsFilterComponent.prototype.walkSelectNestedValues = function (filter, parentId, values, depth) {
         if (depth === void 0) { depth = 0; }
-        var prepped_values = [];
-        var value_field = filter.nested.value_field || 'id';
-        var parent_field = filter.nested.parent_field || 'parent_id';
-        var name_field = filter.nested.label_field || 'name';
+        var preppedValues = [];
+        var valueField = filter.nested.value_field || 'id';
+        var parentField = filter.nested.parent_field || 'parent_id';
+        var nameField = filter.nested.label_field || 'name';
         for (var key in values) {
-            if (!values[key]) {
-                continue;
-            }
-            if (values[key][parent_field] != parent_id) {
-                continue;
-            }
-            var value = {
-                value: values[key][value_field],
-                name: values[key][name_field],
-                depth: depth,
-                style: { 'margin-left': (depth * 16) + 'px' }
-            };
-            prepped_values.push(value);
-            var children = this.walkSelectNestedValues(filter, values[key][value_field], values, depth + 1);
-            if (children.length > 0) {
-                Array.prototype.push.apply(prepped_values, children);
+            if (values.hasOwnProperty(key)) {
+                if (!values[key]) {
+                    continue;
+                }
+                if (values[key][parentField] != parentId) {
+                    continue;
+                }
+                var value = {
+                    value: values[key][valueField],
+                    name: values[key][nameField],
+                    depth: depth,
+                    style: { 'margin-left': (depth * 16) + 'px' }
+                };
+                preppedValues.push(value);
+                var children = this.walkSelectNestedValues(filter, values[key][valueField], values, depth + 1);
+                if (children.length > 0) {
+                    Array.prototype.push.apply(preppedValues, children);
+                }
             }
         }
-        ;
-        return prepped_values;
+        return preppedValues;
     };
     FsFilterComponent.prototype.selectChange = function (filter) {
         if (filter.isolate) {
@@ -677,7 +684,7 @@ var FsFilterComponent = (function () {
         var query = {};
         for (var _i = 0, _a = this.filter.fsConfig.items; _i < _a.length; _i++) {
             var filter = _a[_i];
-            //@TODO
+            // TODO
             var value = this.copy(filter.model);
             if (filter.type == 'select') {
                 if (filter.multiple) {
@@ -701,7 +708,7 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'autocompletechips') {
-                if (lodash_1.isArray(filter.model) && filter.model.length && !opts['expand']) {
+                if (lodash_1.isArray(filter.model) && filter.model.length && !opts.expand) {
                     value = array_1.list(filter.model, 'value');
                 }
             }
@@ -715,8 +722,8 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
-                var from = value['from'];
-                var to = value['to'];
+                var from = value.from;
+                var to = value.to;
                 value = {};
                 if (from) {
                     value.from = moment_timezone_1.default(from).format();
@@ -729,28 +736,25 @@ var FsFilterComponent = (function () {
                 if (util_1.isEmpty(filter.model.value, { zero: true })) {
                     continue;
                 }
-                value = opts['expand'] ? filter.model : filter.model.value;
+                value = opts.expand ? filter.model : filter.model.value;
             }
-            if (lodash_1.isObject(filter.names) && opts['names'] !== false) {
+            if (lodash_1.isObject(filter.names) && opts.names !== false) {
                 for (var key in filter.names) {
                     if (value[filter.names[key]]) {
                         query[key] = value[filter.names[key]];
                     }
                 }
-                ;
             }
             else {
                 query[filter.name] = value;
             }
         }
-        ;
-        if (opts['flatten']) {
+        if (opts.flatten) {
             for (var name_1 in query) {
                 if (lodash_1.isArray(query[name_1])) {
                     query[name_1] = query[name_1].join(',');
                 }
             }
-            ;
         }
         return query;
     };
@@ -768,7 +772,8 @@ var FsFilterComponent = (function () {
             return data;
         }
     };
-    FsFilterComponent.prototype.ngOnDestroy = function () { };
+    FsFilterComponent.prototype.ngOnDestroy = function () {
+    };
     __decorate([
         core_1.Input(),
         __metadata("design:type", classes_1.FsFilter)

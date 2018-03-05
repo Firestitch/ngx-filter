@@ -75,6 +75,8 @@
     .fs-filter .menu-filter .menu-filter-input .main-filter-bar {
       height: 40px;
       /* Largest height between inputs, buttons, icons */ }
+      .fs-filter .menu-filter .menu-filter-input .main-filter-bar .mat-input-prefix {
+        align-self: flex-end; }
       .fs-filter .menu-filter .menu-filter-input .main-filter-bar mat-form-field {
         width: 100%;
         /*
@@ -95,9 +97,12 @@
         box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
         overflow: auto; }
       .fs-filter .menu-filter .menu-filter-input .filters .filter-group {
-        display: table-row-group; }
+        display: table;
+        width: 100%; }
       .fs-filter .menu-filter .menu-filter-input .filters .filter {
         display: table-row; }
+        .fs-filter .menu-filter .menu-filter-input .filters .filter .interface.interface-checkbox .checkbox-label, .fs-filter .menu-filter .menu-filter-input .filters .filter .interface.interface .checkbox-label {
+          display: none; }
         .fs-filter .menu-filter .menu-filter-input .filters .filter .interface.interface-range input {
           text-align: center; }
         .fs-filter .menu-filter .menu-filter-input .filters .filter .interface.interface-datetime fs-datetime.has-time .md-input {
@@ -170,6 +175,12 @@
   .fs-filter .saved-filters {
     float: none; } }
 
+@media screen and (min-width: 600px) {
+  .mat-input-container mat-label {
+    display: none; }
+  .inline-filter.inline .mat-input-container mat-label {
+    display: inherit; } }
+
 @media screen and (max-width: 599px) {
   body.fs-filters-open {
     overflow: hidden !important; }
@@ -190,7 +201,9 @@
   .responsive-top-actions {
     display: block; }
   .filter-by {
-    margin: 10px 0; }
+    margin: 10px 0;
+    font-weight: 600;
+    font-size: 16px; }
   .menu-filter .menu-filter-input .filters .wrap {
     position: fixed;
     top: 0;
@@ -204,6 +217,8 @@
   .menu-filter .menu-filter-input .filters .filter .filter-label,
   .menu-filter .menu-filter-input .filters .filter .interface {
     display: block; }
+  .menu-filter .menu-filter-input .filters .interface-checkbox .checkbox-label, .menu-filter .menu-filter-input .filters .interface .checkbox-label {
+    display: block !important; }
   .menu-filter .menu-filter-input .action-reload {
     display: none; }
   .menu-filter .menu-filter-input .filter-group {
@@ -211,11 +226,4 @@
     .menu-filter .menu-filter-input .filter-group:first-child {
       margin: 0; }
   .menu-filter .menu-filter-input .filter .filter-label {
-    line-height: 21px;
-    display: block;
-    -webkit-transform: translate3d(0, 7px, 0) scale(0.75);
-    transform: translate3d(0, 7px, 0) scale(0.75);
-    transition: cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s;
-    -webkit-transform-origin: left top;
-    transform-origin: left top;
-    color: rgba(0, 0, 0, 0.54); } }
+    display: none !important; } }

@@ -1,45 +1,61 @@
-<div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="filter.fsConfig.items.length" [ngClass]="{ 'filters-open': extended_filter, loading: loading }">
+<div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="filter.fsConfig.items.length"
+     [ngClass]="{ 'filters-open': extendedFilter, loading: loading }">
   <div *ngIf="!filter.fsConfig.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
     <div class="menu-filter-input" fxFlex="grow">
-      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center" *ngIf="filter.fsConfig.items.length">
-          <mat-form-field>
-            <input matInput [(ngModel)]="searchinput.value" name="filter-input" (ngModelChange)="menuFilterChange(searchinput.value)" (click)="menuFilterClick($event)" (keydown)="menuFilterKeydown($event)">
-            <mat-placeholder><mat-icon>search</mat-icon> Search</mat-placeholder>
-          </mat-form-field>
+      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
+           *ngIf="filter.fsConfig.items.length">
+        <mat-form-field>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [(ngModel)]="searchinput.value" name="filter-input"
+                 (ngModelChange)="menuFilterChange(searchinput.value)"
+                 (focus)="menuFilterShow()"
+                 (click)="menuFilterClick($event)"
+                 (keydown)="menuFilterKeydown($event)">
+          <mat-placeholder>Search</mat-placeholder>
+        </mat-form-field>
 
-          <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
-            <a (click)="menuFilterShow()" class="action-filter" [fxHide.gt-xs]="true"><mat-icon>filter_list</mat-icon></a>
-            <a (click)="clear()" *ngIf="searchinput.value"><mat-icon>clear</mat-icon></a>
-            <a (click)="reload()" class="action-reload"><mat-icon>refresh</mat-icon></a>
-          </div>
+        <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
+          <a (click)="menuFilterShow()" class="action-filter" [fxHide.gt-xs]="true">
+            <mat-icon>filter_list</mat-icon>
+          </a>
+          <a (click)="clear()" *ngIf="searchinput.value">
+            <mat-icon>clear</mat-icon>
+          </a>
+          <a (click)="reload()" class="action-reload">
+            <mat-icon>refresh</mat-icon>
+          </a>
+        </div>
       </div>
 
       <div class="filters">
         <div class="wrap">
           <!-- @TODO
-            Mobal version of filters
-            fs-heading
-            heading-actions
-          -->
+					  Mobal version of filters
+					  fs-heading
+					  heading-actions
+					-->
           <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->
-            <span>Filter by</span>
+            Refine Search
           </div>
 
           <ng-container *ngFor="let filterItem of filter.fsConfig.items">
-            <ng-container *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>
+            <ng-container
+              *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>
           </ng-container>
 
           <div class="buttons">
-              <button mat-raised-button color="accent" (click)="filterToggle(false,true)" class="filter-button">Search</button>
-              <button mat-button color="accent" (click)="cancel()" class="cancel-button">Cancel</button>
+            <button mat-raised-button color="accent" (click)="filterToggle(false,true)"
+                    class="filter-button">Search
+            </button>
+            <button mat-button color="accent" (click)="cancel()" class="cancel-button">Cancel</button>
           </div>
         </div>
       </div>
-      <div class="backdrop" *ngIf="extended_filter" (click)="filterToggle(false,true)"></div>
+      <div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>
     </div>
   </div>
 
-  <div *ngIf="filter.fsConfig.inline" class="inline-filter">
+  <div *ngIf="filter.fsConfig.inline" class="inline-filter" [ngClass]="{'inline': filter.fsConfig.inline}">
     <ng-container *ngFor="let filterItem of filter.fsConfig.items">
       <ng-container *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>
     </ng-container>
@@ -56,15 +72,22 @@
       </div>
 
       <div class="interface" *ngIf="filterItem.type == 'text'">
-        <mat-form-field>
-          <input matInput [(ngModel)]="filterItem.model" (keyup)="filterKeyup(filterItem,$event)" (change)="onFilterChange(filterItem, $event)"/>
-          <mat-placeholder *ngIf="filter.fsConfig.inline"><mat-icon>search</mat-icon> {{ filterItem.label }}</mat-placeholder>
+        <mat-form-field [floatLabel]="'auto'">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <input matInput [(ngModel)]="filterItem.model" (keyup)="filterKeyup(filterItem,$event)"
+                 (change)="onFilterChange(filterItem, $event)"/>
+          <mat-placeholder *ngIf="filter.fsConfig.inline">
+            <mat-icon>search</mat-icon>
+            {{ filterItem.label }}
+          </mat-placeholder>
         </mat-form-field>
       </div>
 
       <div class="interface" *ngIf="filterItem.type == 'select' && filterItem.values?.length > 0">
-        <mat-form-field *ngIf="filterItem.multiple && !filterItem.groups">
-          <mat-select [(ngModel)]="filterItem.model" multiple="filterItem.multiple" (onClose)="selectChange(filterItem)" (keyup)="filterKeyup(filterItem,$event)">
+        <mat-form-field floatLabel="auto" *ngIf="filterItem.multiple && !filterItem.groups">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <mat-select [(ngModel)]="filterItem.model" multiple="filterItem.multiple"
+                      (onClose)="selectChange(filterItem)" (keyup)="filterKeyup(filterItem,$event)">
             <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">
               {{ item.name }}
             </mat-option>
@@ -72,8 +95,10 @@
           <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
         </mat-form-field>
 
-        <mat-form-field *ngIf="!filterItem.multiple && !filterItem.groups">
-          <mat-select [(ngModel)]="filterItem.model" (change)="selectChange(filterItem)" (keyup)="filterKeyup(filterItem,$event)">
+        <mat-form-field floatLabel="auto" *ngIf="!filterItem.multiple && !filterItem.groups">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <mat-select [(ngModel)]="filterItem.model" (change)="selectChange(filterItem)"
+                      (keyup)="filterKeyup(filterItem,$event)">
             <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">
               {{ item.name }}
             </mat-option>
@@ -82,138 +107,156 @@
         </mat-form-field>
 
         <!--<mat-form-field class="md-no-float md-no-label md-no-message" ng-show="!filter.multiple && filter.groups">
-            <mat-select ng-model="filter.model" aria-label="select" ng-change="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">
-                <md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">
-                    <md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">
-                        {{::item.name}}
-                    </md-option>
-                </md-optgroup>
-            </mat-select>
-        </mat-form-field>-->
+					<mat-select ng-model="filter.model" aria-label="select" ng-change="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">
+						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">
+							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">
+								{{::item.name}}
+							</md-option>
+						</md-optgroup>
+					</mat-select>
+				</mat-form-field>-->
 
         <!--<md-input-container class="md-no-float md-no-label md-no-message" ng-show="filter.multiple && filter.groups">
-            <md-select ng-model="filter.model" aria-label="select" multiple="filter.multiple" md-on-close="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">
-                <md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">
-                    <md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">
-                        {{::item.name}}
-                    </md-option>
-                </md-optgroup>
-            </md-select>
-        </md-input-container>-->
+					<md-select ng-model="filter.model" aria-label="select" multiple="filter.multiple" md-on-close="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">
+						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">
+							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">
+								{{::item.name}}
+							</md-option>
+						</md-optgroup>
+					</md-select>
+				</md-input-container>-->
       </div>
 
-      <div class="interface interface-range" *ngIf="filterItem.type == 'range'" >
+      <div class="interface interface-range" *ngIf="filterItem.type == 'range'">
         <span fxLayout="row">
-          <div>
-            <mat-form-field class="filter-range-min">
-              <input matInput
-              [(ngModel)]="filterItem.model.min"
-              (change)="onFilterChange(filterItem)"
-              placeholder="{{ filterItem.placeholder[0] }}">
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field class="filter-range-max">
-              <input matInput
-              [(ngModel)]="filterItem.model.max"
-              (change)="onFilterChange(filterItem)"
-              placeholder="{{ filterItem.placeholder[1] }}">
-            </mat-form-field>
-          </div>
+          <mat-form-field class="filter-range-min">
+			  <input matInput
+               [(ngModel)]="filterItem.model.min"
+               (change)="onFilterChange(filterItem)">
+			  <mat-placeholder>
+				  {{filterItem.placeholder[0]}}
+			  </mat-placeholder>
+			</mat-form-field>
+			<mat-form-field class="filter-range-max">
+			  <input matInput
+               [(ngModel)]="filterItem.model.max"
+               (change)="onFilterChange(filterItem)">
+				<mat-placeholder>
+				  {{filterItem.placeholder[1]}}
+			  	</mat-placeholder>
+			</mat-form-field>
         </span>
       </div>
 
       <div class="interface" *ngIf="filterItem.type == 'autocomplete'">
 
-        <mat-form-field>
-          <input matInput type="text" [(ngModel)]="filterItem.model" (ngModelChange)="onAutocompleteChange(filterItem)"  name="{{ filterItem.name }}" [matAutocomplete]="autocompleteInput">
+        <mat-form-field floatLabel="auto">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <input matInput type="text" [(ngModel)]="filterItem.model"
+                 (ngModelChange)="onAutocompleteChange(filterItem)" name="{{ filterItem.name }}"
+                 [matAutocomplete]="autocompleteInput">
           <mat-autocomplete #autocompleteInput="matAutocomplete" [displayWith]="displayAutocomplete">
-            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}</mat-option>
+            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}
+            </mat-option>
           </mat-autocomplete>
           <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
         </mat-form-field>
       </div>
 
       <div class="interface interface-date" *ngIf="filterItem.type == 'date'">
-        <mat-form-field>
-          <input matInput fsDatepicker [(ngModel)]="filterItem.model" readonly (change)="onFilterChange(filterItem)" name="{{ filterItem.name }}">
+        <mat-form-field floatLabel="auto">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <input matInput fsDatepicker [(ngModel)]="filterItem.model" readonly
+                 (change)="onFilterChange(filterItem)" name="{{ filterItem.name }}">
           <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
         </mat-form-field>
       </div>
 
       <div class="interface" *ngIf="filterItem.type == 'autocompletechips'">
-        <mat-form-field>
-            <mat-chip-list #chipList>
-                <mat-chip *ngFor="let item of filterItem.model" (remove)="removeAutucompleteChipItem(filterItem, item)">
-                    {{ item.name }}<mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
+        <mat-form-field floatLabel="auto">
+          <mat-label>{{filterItem.label}}</mat-label>
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let item of filterItem.model"
+                      (remove)="removeAutucompleteChipItem(filterItem, item)">
+              {{ item.name }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
 
-                <input #chipsInput matInput [(ngModel)]="filterItem.selectedValue" (ngModelChange)="onAutocompleteChipsChange(filterItem, chipsInput)" type="text" name="{{ filterItem.name }}"
-                        [matChipInputFor]="chipList"
-                        [matAutocomplete]="autocompleteChipsInput">
-            </mat-chip-list>
+            <input #chipsInput matInput [(ngModel)]="filterItem.selectedValue"
+                   (ngModelChange)="onAutocompleteChipsChange(filterItem, chipsInput)" type="text"
+                   name="{{ filterItem.name }}"
+                   [matChipInputFor]="chipList"
+                   [matAutocomplete]="autocompleteChipsInput">
+          </mat-chip-list>
 
-            <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete" (optionSelected)="addAutucompleteChipItem(filterItem, $event)">
-              <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}</mat-option>
-            </mat-autocomplete>
-            <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
-          </mat-form-field>
+          <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete"
+                            (optionSelected)="addAutucompleteChipItem(filterItem, $event)">
+            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
+        </mat-form-field>
       </div>
 
       <div class="interface interface-checkbox" *ngIf="filterItem.type == 'checkbox'">
-        <mat-checkbox (change)="onFilterChange(filterItem)" [(ngModel)]="filterItem.model">{{ filter.fsConfig.inline ? filterItem.label : '' }}</mat-checkbox>
+        <mat-checkbox (change)="onFilterChange(filterItem)" [(ngModel)]="filterItem.model">
+          {{ filter.fsConfig.inline ? filterItem.label : '' }}
+          <span class="checkbox-label">{{filterItem.label}}</span>
+        </mat-checkbox>
       </div>
 
-                  <!--
+      <!--
 
-                  <div class="interface" ng-if="filter.type == 'autocompletechips'">
+			<div class="interface" ng-if="filter.type == 'autocompletechips'">
 
-    <md-chips-autocomplete-container class="md-block">
-        <md-chips 	ng-model="filter.model"
-              md-autocomplete-snap
-              md-require-match="false"
-              md-on-remove="filterChange(filter)"
-              md-on-add="filterChange(filter)">
-            <md-autocomplete
-            md-no-cache="true"
-            md-items="item in filter.values(filter.search, filter)"
-            md-search-text="filter.search"
-            md-item-text=""
-            md-min-length="1"
-            md-require-match
-            md-autoselect>
-                <span md-highlight-text="filter.search">{{item.name}}</span>
-            </md-autocomplete>
-            <md-chip-template>
-                <span>
-                  {{$chip.name}}
-                </span>
-            </md-chip-template>
-        </md-chips>
-    </md-chips-autocomplete-container>
-                  </div>
+<md-chips-autocomplete-container class="md-block">
+  <md-chips 	ng-model="filter.model"
+		md-autocomplete-snap
+		md-require-match="false"
+		md-on-remove="filterChange(filter)"
+		md-on-add="filterChange(filter)">
+	  <md-autocomplete
+	  md-no-cache="true"
+	  md-items="item in filter.values(filter.search, filter)"
+	  md-search-text="filter.search"
+	  md-item-text=""
+	  md-min-length="1"
+	  md-require-match
+	  md-autoselect>
+		  <span md-highlight-text="filter.search">{{item.name}}</span>
+	  </md-autocomplete>
+	  <md-chip-template>
+		  <span>
+			{{$chip.name}}
+		  </span>
+	  </md-chip-template>
+  </md-chips>
+</md-chips-autocomplete-container>
+			</div>
 
-                  <div class="interface  interface-datetime" ng-if="filter.type == 'datetime'">
-                      <fs-datetime fs-class="md-no-label md-no-message" fs-time="true" fs-model="filter.model" fs-change="filterChange(filter)"></fs-datetime>
-                  </div>
+			<div class="interface  interface-datetime" ng-if="filter.type == 'datetime'">
+				<fs-datetime fs-class="md-no-label md-no-message" fs-time="true" fs-model="filter.model" fs-change="filterChange(filter)"></fs-datetime>
+			</div>
 
-                  <div class="interface interface-daterange" ng-if="filter.type == 'daterange'">
-                      <fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model['from']" fs-to="filter.model['to']" fs-change="filterChange(filter)"></fs-datetime-range>
-                  </div>
+			<div class="interface interface-daterange" ng-if="filter.type == 'daterange'">
+				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model['from']" fs-to="filter.model['to']" fs-change="filterChange(filter)"></fs-datetime-range>
+			</div>
 
-                  <div class="interface interface-datetimerange" ng-if="filter.type == 'datetimerange'">
-                      <fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model['from']" fs-to="filter.model['to']" fs-change="filterChange(filter)" fs-time="true"></fs-datetime-range>
-                  </div>
+			<div class="interface interface-datetimerange" ng-if="filter.type == 'datetimerange'">
+				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model['from']" fs-to="filter.model['to']" fs-change="filterChange(filter)" fs-time="true"></fs-datetime-range>
+			</div>
 
-              </div>
-            -->
+		</div>
+	  -->
     </div>
 
     <div *ngIf="filterItem.isolate && !filter.fsConfig.inline" class="filter isolate">
-        <div class="filter-label">{{ filterItem.isolate.label }}</div>
-        <div class="interface">
-            <mat-checkbox (change)="isolateChange(filterItem)" [(ngModel)]="filterItem.isolate.enabled"></mat-checkbox>
-        </div>
+      <div class="filter-label">{{ filterItem.isolate.label }}</div>
+      <div class="interface">
+        <mat-checkbox (change)="isolateChange(filterItem)" [(ngModel)]="filterItem.isolate.enabled">
+          <span class="checkbox-label">{{filterItem.label}}</span>
+        </mat-checkbox>
+      </div>
     </div>
   </div>
 </ng-template>

@@ -6,18 +6,18 @@ import { ActivatedRoute } from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
 import { Location } from '@angular/common';
 export declare class FsFilterComponent implements OnInit, OnDestroy {
-    private FsStore;
+    private _store;
     private route;
     private location;
     filter: FsFilter;
     searchinput: {
         value: string;
     };
-    extended_filter: boolean;
+    extendedFilter: boolean;
     filterChange: boolean;
     primary: boolean;
     persists: any;
-    constructor(FsStore: FsStore, route: ActivatedRoute, location: Location);
+    constructor(_store: FsStore, route: ActivatedRoute, location: Location);
     ngOnInit(): void;
     menuFilterChange(search: any): void;
     filtersClear(): void;
@@ -26,7 +26,7 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     menuFilterShow(): void;
     clear(): void;
     reload(opts?: any): void;
-    load(opts?: {}): void;
+    load(opts?: any): void;
     filterToggle(value: any, search?: any): void;
     onFilterChange(filter: any, $event?: any): void;
     onAutocompleteChange(filter: any, $event?: any): void;
@@ -37,12 +37,12 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     filterUpdate(): void;
     sanitizeFilter(filter: any): Observable<{}>;
     walkSelectValues(filter: any, filterValues: any): any[];
-    walkSelectNestedValues(filter: any, parent_id: any, values: any, depth?: number): any[];
+    walkSelectNestedValues(filter: any, parentId: any, values: any, depth?: number): any[];
     selectChange(filter: any): void;
     isolateChange(filter: any): void;
     cancel(): void;
     displayAutocomplete(data: any): string;
-    gets(opts?: {}): {};
+    gets(opts?: any): {};
     /**
      * @TODO Temp solution
      */
