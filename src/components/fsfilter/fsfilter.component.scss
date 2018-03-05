@@ -1,3 +1,4 @@
+
 .fs-filter {
   position: relative;
   margin-bottom: 20px;
@@ -14,27 +15,27 @@
   }
 
   .results {
-      min-height: 90px;
-      position: relative;
-      overflow-x: auto;
-      overflow-y: hidden;
+    min-height: 90px;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .status {
     position: relative;
 
     .progress-infinite {
-        position: absolute;
-        top :0;
-        width: 100%;
+      position: absolute;
+      top: 0;
+      width: 100%;
     }
   }
 
   .full-search {
     .filter.filter-date {
-        > span {
-            display: inline-block
-        }
+      > span {
+        display: inline-block
+      }
     }
   }
 
@@ -50,7 +51,7 @@
       left: 0;
 
       mat-icon {
-          transform: scale(.9);
+        transform: scale(.9);
       }
     }
 
@@ -76,18 +77,18 @@
         z-index: 50;
 
         a {
-          color: rgba(0,0,0,0.54);
+          color: rgba(0, 0, 0, 0.54);
           background: #fff;
           height: 22px;
           margin-bottom: 5px;
 
           i {
-              transform: scale(.9);
-              vertical-align: middle;
+            transform: scale(.9);
+            vertical-align: middle;
           }
 
           &:hover {
-              color: inherit;
+            color: inherit;
           }
         }
       }
@@ -114,6 +115,11 @@
 
       .main-filter-bar {
         height: 40px; /* Largest height between inputs, buttons, icons */
+
+        .mat-input-prefix {
+          align-self: flex-end;
+        }
+
         mat-form-field {
           width: 100%;
           /*
@@ -140,7 +146,8 @@
         }
 
         .filter-group {
-          display: table-row-group;
+          display: table;
+          width: 100%;
         }
 
         .filter {
@@ -148,7 +155,10 @@
 
           .interface {
 
-            &.interface-checkbox {
+            &.interface-checkbox, &.interface {
+              .checkbox-label {
+                display: none;
+              }
             }
 
             &.interface-range input {
@@ -183,14 +193,14 @@
           margin: 0;
         }
 
-        .isolate  {
+        .isolate {
           .interface {
-              line-height: 20px;
-              padding-top: 5px;
+            line-height: 20px;
+            padding-top: 5px;
           }
           //TODO
           md-checkbox {
-              margin: 0 0 0 2px;
+            margin: 0 0 0 2px;
           }
         }
 
@@ -198,7 +208,7 @@
           padding-top: 15px;
           .filter-button,
           .cancel-button {
-              margin: 0;
+            margin: 0;
           }
 
           .cancel-button {
@@ -216,7 +226,7 @@
     //TODO
     label {
       white-space: nowrap;
-      color: rgba(0,0,0,0.54);
+      color: rgba(0, 0, 0, 0.54);
     }
 
     &.filter-range {
@@ -239,15 +249,15 @@
     text-overflow: ellipsis;
     display: block;
 
-      .order-toggle {
-          cursor: pointer;
-          padding-left: 4px;
-      }
+    .order-toggle {
+      cursor: pointer;
+      padding-left: 4px;
+    }
 
-      .saved-filters {
-        float: right;
-        display: flex;
-      }
+    .saved-filters {
+      float: right;
+      display: flex;
+    }
   }
 
   //TODO
@@ -265,16 +275,16 @@
   }
 
   &.filters-open {
-		.inline-actions {
-	    	z-index: 71;
-	    }
+    .inline-actions {
+      z-index: 71;
+    }
 
-	    .main-filter-bar md-input-container input,
-	    .menu-filter-input .filters {
-	        z-index: 70;
-	        display: block;
-	    }
-	}
+    .main-filter-bar md-input-container input,
+    .menu-filter-input .filters {
+      z-index: 70;
+      display: block;
+    }
+  }
 }
 
 @media screen and (max-width: 750px) {
@@ -285,15 +295,32 @@
   }
 }
 
+@media screen and (min-width: 600px) {
+  .mat-input-container {
+    mat-label {
+      display: none;
+    }
+  }
+  .inline-filter {
+    &.inline {
+      .mat-input-container {
+        mat-label {
+          display: inherit;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 599px) {
 
   body.fs-filters-open {
-		overflow: hidden !important;
+    overflow: hidden !important;
 
-		.inline-actions {
-			display: none;
-		}
-	}
+    .inline-actions {
+      display: none;
+    }
+  }
 
   .fs-filter {
     margin-top: 0;
@@ -318,27 +345,34 @@
   .filter-by {
     //display: block;
     margin: 10px 0;
+    font-weight: 600;
+    font-size: 16px;
   }
 
   .menu-filter {
     .menu-filter-input {
       .filters {
-          .wrap {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            overflow-y: auto;
-            z-index: 999;
-          }
+        .wrap {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          overflow-y: auto;
+          z-index: 999;
+        }
 
-          .filter-group,
-          .filter,
-          .filter .filter-label,
-          .filter .interface {
-            display: block;
+        .filter-group,
+        .filter,
+        .filter .filter-label,
+        .filter .interface {
+          display: block;
+        }
+        .interface-checkbox, .interface {
+          .checkbox-label {
+            display: block !important;
           }
+        }
       }
 
       .action-filter {
@@ -359,14 +393,7 @@
 
       .filter {
         .filter-label {
-          line-height: 21px;
-          display: block;
-          -webkit-transform: translate3d(0, 7px, 0) scale(0.75);
-          transform: translate3d(0, 7px, 0) scale(0.75);
-          transition: cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s;
-          -webkit-transform-origin: left top;
-          transform-origin: left top;
-          color: rgba(0, 0, 0, 0.54);
+          display: none !important;
         }
       }
     }

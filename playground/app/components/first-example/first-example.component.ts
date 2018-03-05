@@ -22,6 +22,7 @@ export class FirstExampleComponent {
   constructor(private fsArray: FsArray) {
     this.filter.fsConfig = {
       persist: 'filter',
+      inline: false,
       items: [
         {
           name: 'keyword',

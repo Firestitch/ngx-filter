@@ -1,31 +1,32 @@
-import { Component, ViewEncapsulation, Input, OnInit, OnDestroy } from '@angular/core';
-import { isObject, isArray, toString } from 'lodash';
-import { isEmpty } from '@firestitch/common/util';
-import { filter as arrayFilter, list as arrayList, remove as arrayRemove } from '@firestitch/common/array';
-import { FsStore } from '@firestitch/store';
-import { FsFilter } from './../../classes';
-import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute } from '@angular/router';
+import {Component, ViewEncapsulation, Input, OnInit, OnDestroy} from '@angular/core';
+import {isObject, isArray, toString} from 'lodash';
+import {isEmpty} from '@firestitch/common/util';
+import {filter as arrayFilter, list as arrayList, remove as arrayRemove} from '@firestitch/common/array';
+import {FsStore} from '@firestitch/store';
+import {FsFilter} from './../../classes';
+import {Observable} from 'rxjs/Observable';
+import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
 import moment from 'moment-timezone';
-import { Location } from '@angular/common';
+import {Location} from '@angular/common';
 
 @Component({
-    selector: 'fs-filter',
-    templateUrl: './fsfilter.component.html',
-    styleUrls: ['./fsfilter.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'fs-filter',
+  templateUrl: './fsfilter.component.html',
+  styleUrls: ['./fsfilter.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FsFilterComponent implements OnInit, OnDestroy {
 
   @Input() filter: FsFilter = null;
-  searchinput = { value: '' };
+  searchinput = {value: ''};
   extended_filter = false;
   filterChange = false;
   primary = false;
   persists = null;
 
-  constructor(private FsStore: FsStore, private route: ActivatedRoute, private location: Location) { }
+  constructor(private FsStore: FsStore, private route: ActivatedRoute, private location: Location) {
+  }
 
   ngOnInit() {
 
@@ -38,7 +39,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     if (this.filter.fsConfig.persist) {
 
       if (typeof this.filter.fsConfig.persist.persist !== 'object') {
-        this.filter.fsConfig.persist = { name: this.filter.fsConfig.persist };
+        this.filter.fsConfig.persist = {name: this.filter.fsConfig.persist};
       }
 
       if (!this.filter.fsConfig.persist.name) {
@@ -46,7 +47,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       }
 
       if (!this.persists[this.filter.fsConfig.persist.name] || !this.persists[this.filter.fsConfig.persist.name]['data']) {
-        this.persists[this.filter.fsConfig.persist.name] = { data: {}, date: new Date() };
+        this.persists[this.filter.fsConfig.persist.name] = {data: {}, date: new Date()};
       }
 
       if (this.filter.fsConfig.persist.timeout) {
@@ -54,7 +55,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         let date = new Date(this.persists[this.filter.fsConfig.persist.name]['date']);
 
         if (moment(date).subtract(this.filter.fsConfig.persist.timeout, 'minutes').isAfter(moment())) {
-          this.persists[this.filter.fsConfig.persist.name] = { data: {}, date: new Date() };
+          this.persists[this.filter.fsConfig.persist.name] = {data: {}, date: new Date()};
         }
       }
     }
@@ -104,10 +105,10 @@ export class FsFilterComponent implements OnInit, OnDestroy {
             filter.model = filter.model.split(',');
           } else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
             let parts = filter.model.split(',');
-            filter.model = { from: moment(parts[0]), to: moment(parts[1]) };
+            filter.model = {from: moment(parts[0]), to: moment(parts[1])};
           } else if (filter.type == 'range') {
             let parts = filter.model.split(',');
-            filter.model = { min: parts[0], max: parts[1] };
+            filter.model = {min: parts[0], max: parts[1]};
           }
         }
       }
@@ -122,29 +123,35 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       } else {
         update_observables$.push(observable$);
       }
-    };
+    }
+    ;
 
     Observable.forkJoin(wait_observables$)
-    .subscribe(
-      () => {},
-      () => {},
-      () => {
+      .subscribe(
+        () => {
+        },
+        () => {
+        },
+        () => {
 
-        if (this.filter.fsConfig.load) {
-          this.reload({ filterUpdate: false });
-        }
+          if (this.filter.fsConfig.load) {
+            this.reload({filterUpdate: false});
+          }
 
-        Observable.forkJoin(update_observables$)
-        .subscribe(
-          () => {},
-          () => {},
-          () => {
-            if (this.filter.fsConfig.init) {
-              this.filter.fsConfig.init(this);
-            }
-            this.filterUpdate();
-          });
-      });
+          Observable.forkJoin(update_observables$)
+            .subscribe(
+              () => {
+              },
+              () => {
+              },
+              () => {
+                if (this.filter.fsConfig.init) {
+                  this.filter.fsConfig.init(this);
+                }
+                this.filterUpdate();
+              });
+        });
+    console.log(this.filter.fsConfig.items);
   }
 
   menuFilterChange(search) {
@@ -179,22 +186,24 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       } else {
         textSearch.push(match);
       }
-    };
+    }
+    ;
 
     this.filtersClear();
 
-    for(let filter of this.filter.fsConfig.items) {
+    for (let filter of this.filter.fsConfig.items) {
       if (filter.type == 'text' && filter.primary) {
         filter.model = textSearch.join(' ');
       }
-    };
+    }
+    ;
 
     for (let label in values) {
 
       if (!values[label]) {
         continue;
       }
-      let filter = arrayFilter(this.filter.fsConfig.items, { label: label })[0];
+      let filter = arrayFilter(this.filter.fsConfig.items, {label: label})[0];
 
       if (filter) {
 
@@ -224,7 +233,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
         } else if (filter.type == 'range') {
           let parts = values[label].split(',');
-          filter.model = { min: parts[0], max: parts[1] };
+          filter.model = {min: parts[0], max: parts[1]};
 
         } else if (filter.type == 'select') {
 
@@ -233,33 +242,35 @@ export class FsFilterComponent implements OnInit, OnDestroy {
             let values = [];
             for (let value of values[label].split(',')) {
 
-              let item = arrayFilter(filter.values, { name: value })[0];
+              let item = arrayFilter(filter.values, {name: value})[0];
 
               if (item) {
                 values.push(item.value);
               }
-            };
+            }
+            ;
 
             filter.model = values;
 
           } else {
 
-            let item = arrayFilter(filter.values, { name: values[label] })[0];
+            let item = arrayFilter(filter.values, {name: values[label]})[0];
 
             if (item) {
-               filter.model = item.value;
+              filter.model = item.value;
             }
           }
 
         } else if (filter.type == 'checkbox') {
-          filter.model = (values[label] == 'Yes') ? filter.checked  : filter.unchecked;
+          filter.model = (values[label] == 'Yes') ? filter.checked : filter.unchecked;
         } else {
           filter.model = values[label];
         }
       }
-    };
+    }
+    ;
 
-    this.reload({ filterUpdate: false });
+    this.reload({filterUpdate: false});
   }
 
   filtersClear() {
@@ -279,7 +290,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       } else if (filter.type == 'range') {
         filter.model = {};
       }
-    };
+    }
+    ;
   }
 
   menuFilterClick($event) {
@@ -292,7 +304,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         const selected = window.getSelection().toString();
 
         if (selected) {
-          setTimeout(function() {
+          setTimeout(function () {
             const index = $event.target.value.indexOf(selected);
             if (index >= 0) {
               $event.target.setSelectionRange(index, index + selected.length);
@@ -319,7 +331,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   reload(opts?) {
-    return this.load(Object.assign({}, { clear: true }, opts));
+    return this.load(Object.assign({}, {clear: true}, opts));
   }
 
   load(opts = {}) {
@@ -328,10 +340,13 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       this.filterUpdate();
     }
 
-    const query = this.gets({ flatten: true });
+    const query = this.gets({flatten: true});
 
     if (this.filter.fsConfig.persist) {
-      this.persists[this.filter.fsConfig.persist.name] = { data: this.gets({ expand: true, names: false }), date: new Date() };
+      this.persists[this.filter.fsConfig.persist.name] = {
+        data: this.gets({expand: true, names: false}),
+        date: new Date()
+      };
       this.FsStore.set(this.filter.fsConfig.namespace + '-persist', this.persists, {});
     }
 
@@ -344,7 +359,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
     this.extended_filter = value;
 
-    setTimeout(function() {
+    setTimeout(function () {
       const body = document.body;
 
       value ? body.classList.add('fs-filters-open') : body.classList.remove('fs-filters-open');
@@ -394,7 +409,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   removeAutucompleteChipItem(filter, item) {
-    arrayRemove(filter.model, { value: item.value });
+    arrayRemove(filter.model, {value: item.value});
     this.onFilterChange(filter);
   }
 
@@ -406,7 +421,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   filterKeyup(filter, $event) {
     if (filter.type == 'text' || filter.type == 'select') {
       if ($event.keyCode == 13) {
-        setTimeout(function() {
+        setTimeout(function () {
           this.onFilterChange(filter);
           this.filterToggle(false, true);
         });
@@ -461,7 +476,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (isEmpty(value, { zero: true })) {
+      if (isEmpty(value, {zero: true})) {
         continue;
       }
 
@@ -500,8 +515,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       } else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
 
         if (value) {
-          let from 	= moment(value.from);
-          let to 		= moment(value.to);
+          let from = moment(value.from);
+          let to = moment(value.to);
           let format = filter.type == 'datetimerange' ? 'MMM D, YYYY h:mm a' : 'MMM D, YYYY';
           value = [];
 
@@ -550,10 +565,13 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       }
 
       formatted = label + ':' + (value.match(/\s/) ? '(' + value + ')' : value);
-      searches.push({	value: value,
-              type: filter.type,
-              formatted: formatted });
-    };
+      searches.push({
+        value: value,
+        type: filter.type,
+        formatted: formatted
+      });
+    }
+    ;
 
     this.searchinput.value = '';
     if (searches.length === 1 && searches[0].type == 'text') {
@@ -620,7 +638,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         if (filter.nested) {
           // generate a list of values from objects that have not been nested.
           if (!filter.multiple) {
-            data.push({ value: '__all', name: 'All', depth: 0 });
+            data.push({value: '__all', name: 'All', depth: 0});
           }
 
           Array.prototype.push.apply(data, this.walkSelectNestedValues(filter, null, filter.values));
@@ -642,7 +660,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
             if (filter.values[index].value == filter.isolate.value) {
               filter.values.splice(index, 1);
             }
-          };
+          }
+          ;
 
           if (isArray(filter.model)) {
             if (filter.model.length == filter.values.length) {
@@ -668,7 +687,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
             filter.groups[value.group].push(value);
           }
-        };
+        }
+        ;
       }
 
       if (filter.model === undefined) {
@@ -714,7 +734,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         continue;
       }
 
-      let value = { value: key, name: filterValues[key] };
+      let value = {value: key, name: filterValues[key]};
 
       if (typeof filterValues[key] == 'object') {
         value = filterValues[key];
@@ -725,7 +745,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       }
 
       values.push(value);
-    };
+    }
+    ;
 
     return values;
   }
@@ -750,7 +771,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         value: values[key][value_field],
         name: values[key][name_field],
         depth: depth,
-        style: { 'margin-left': (depth * 16) + 'px' }
+        style: {'margin-left': (depth * 16) + 'px'}
       };
 
       prepped_values.push(value);
@@ -759,7 +780,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       if (children.length > 0) {
         Array.prototype.push.apply(prepped_values, children);
       }
-    };
+    }
+    ;
 
     return prepped_values;
   }
@@ -781,7 +803,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     this.onFilterChange(filter);
   }
 
-  isolateChange (filter) {
+  isolateChange(filter) {
 
     if (filter.isolate.enabled) {
       filter.model = filter.multiple ? [filter.isolate.value] : filter.isolate.value;
@@ -792,17 +814,17 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     this.onFilterChange(filter);
   }
 
-  cancel () {
+  cancel() {
     this.clear();
     this.filterChange = true;
-    this.filterToggle(false,true);
+    this.filterToggle(false, true);
   }
 
   displayAutocomplete(data): string {
     return data ? data.name : data;
   }
 
-  gets (opts = {}) {
+  gets(opts = {}) {
 
     let query = {};
 
@@ -839,7 +861,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       }
 
       // @TODO
-      if (isEmpty(value, { zero: true })) {
+      if (isEmpty(value, {zero: true})) {
         continue;
       }
 
@@ -851,8 +873,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       } else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
 
-        let from 	= value['from'];
-        let to 		= value['to'];
+        let from = value['from'];
+        let to = value['to'];
 
         value = {};
         if (from) {
@@ -865,7 +887,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       } else if (filter.type == 'autocomplete') {
 
-        if (isEmpty(filter.model.value, { zero: true })) {
+        if (isEmpty(filter.model.value, {zero: true})) {
           continue;
         }
 
@@ -877,22 +899,26 @@ export class FsFilterComponent implements OnInit, OnDestroy {
           if (value[filter.names[key]]) {
             query[key] = value[filter.names[key]];
           }
-        };
+        }
+        ;
       } else {
         query[filter.name] = value;
       }
-    };
+    }
+    ;
 
     if (opts['flatten']) {
-      for(let name in query) {
+      for (let name in query) {
         if (isArray(query[name])) {
           query[name] = query[name].join(',');
         }
-      };
+      }
+      ;
     }
 
     return query;
   }
+
   /**
    * @TODO Temp solution
    */
@@ -906,6 +932,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+  }
 
 }
