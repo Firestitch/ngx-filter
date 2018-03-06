@@ -312,6 +312,12 @@
   }
 }
 
+.inline-actions {
+  a {
+    cursor: pointer;
+  }
+}
+
 @media screen and (max-width: 599px) {
 
   body.fs-filters-open {

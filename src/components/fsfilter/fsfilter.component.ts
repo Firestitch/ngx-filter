@@ -151,7 +151,6 @@ export class FsFilterComponent implements OnInit, OnDestroy {
                 this.filterUpdate();
               });
         });
-    console.log(this.filter.fsConfig.items);
   }
 
   menuFilterChange(search) {
