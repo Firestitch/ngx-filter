@@ -129,7 +129,6 @@ var FsFilterComponent = (function () {
                 _this.filterUpdate();
             });
         });
-        console.log(this.filter.fsConfig.items);
     };
     FsFilterComponent.prototype.menuFilterChange = function (search) {
         var text = '';
