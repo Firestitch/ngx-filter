@@ -166,7 +166,7 @@
       <div class="interface interface-date" *ngIf="filterItem.type == 'date'">
         <mat-form-field floatLabel="auto">
           <mat-label>{{filterItem.label}}</mat-label>
-          <input matInput fsDatepicker [(ngModel)]="filterItem.model" readonly
+          <input matInput fsDatePicker [(ngModel)]="filterItem.model"
                  (change)="onFilterChange(filterItem)" name="{{ filterItem.name }}">
           <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>
         </mat-form-field>

@@ -13,7 +13,7 @@ import {  MatIconModule,
           MatCheckboxModule
          } from '@angular/material';
 
-import { FsDatepickerModule } from '@firestitch/datepicker';
+import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsCommonModule } from '@firestitch/common';
 import { FsStoreModule } from '@firestitch/store';
 import { FsFilterComponent } from './components/fsfilter/fsfilter.component';
@@ -28,7 +28,7 @@ export * from './classes';
     FormsModule,
     FsCommonModule,
     FsStoreModule,
-    FsDatepickerModule,
+    FsDatePickerModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
