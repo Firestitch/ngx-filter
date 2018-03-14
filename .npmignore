@@ -32,3 +32,8 @@ Desktop.ini
 # Library files
 src/*
 build/*
+dll/
+docs/
+playground/
+demo/
+tools/

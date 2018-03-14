@@ -36,5 +36,6 @@ dist/*
 /.tmp
 /build
 /dist
+/dll
 /node_modules
 /.playground
