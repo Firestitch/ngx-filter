@@ -32,10 +32,8 @@ Desktop.ini
 dist/*
 
 # Playground tmp files
-.playground
-/.tmp
-/build
-/dist
-/dll
-/node_modules
-/.playground
+/.tmp/
+/build/
+/dist/
+/dll/
+/.playground/
