@@ -1,6 +1,6 @@
 {
   "name": "@firestitch/filter",
-  "version": "0.1.6",
+  "version": "0.1.10",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/fs-filter"
@@ -114,14 +114,14 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "@angular/flex-layout": "2.0.0-beta.10-4905443",
+    "@angular/forms": "^5.2.3",
     "@angular/material": "^5.0.1",
+    "@angular/router": "^5.2.3",
     "@firestitch/datepicker": "^0.1.8",
     "@firestitch/store": "^0.1.5",
     "moment": "^2.19.4",
     "moment-timezone": "^0.5.14",
-    "@angular/flex-layout": "2.0.0-beta.10-4905443",
-    "@angular/router": "^5.2.3",
-    "rxjs": "^5.5.5",
-    "@angular/forms": "^5.2.3"
+    "rxjs": "^5.5.5"
   }
 }

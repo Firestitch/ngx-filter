@@ -1046,6 +1046,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = __webpack_require__("@angular/common");
 var forms_1 = __webpack_require__("@angular/forms");
+var router_1 = __webpack_require__("@angular/router");
 var core_1 = __webpack_require__("@angular/core");
 var material_1 = __webpack_require__("@angular/material");
 var material_2 = __webpack_require__("@angular/material");
@@ -1070,6 +1071,7 @@ var FsFilterModule = (function () {
         core_1.NgModule({
             imports: [
                 common_1.CommonModule,
+                router_1.RouterModule,
                 forms_1.FormsModule,
                 common_2.FsCommonModule,
                 store_1.FsStoreModule,

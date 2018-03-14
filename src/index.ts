@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { MAT_PLACEHOLDER_GLOBAL_OPTIONS } from '@angular/material';
 import {  MatIconModule,
@@ -22,6 +24,7 @@ export * from './classes';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
     FsCommonModule,
     FsStoreModule,
