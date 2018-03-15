@@ -1,6 +1,6 @@
 {
   "name": "@firestitch/filter",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/fs-filter"
@@ -113,7 +113,7 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@angular/flex-layout": "2.0.0-beta.10-4905443",
     "@firestitch/datepicker": "^0.1.13",
     "@firestitch/store": "^0.1.6",
