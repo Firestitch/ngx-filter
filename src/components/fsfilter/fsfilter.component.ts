@@ -7,7 +7,7 @@ import {FsFilter} from './../../classes';
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
-import moment from 'moment-timezone';
+import * as moment from 'moment-timezone';
 import {Location} from '@angular/common';
 
 @Component({
@@ -820,7 +820,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     const query = {};
 
     for (const filter of this.filter.fsConfig.items) {
-      // TODO
+
       let value = this.copy(filter.model);
 
       if (filter.type == 'select') {
@@ -911,10 +911,11 @@ export class FsFilterComponent implements OnInit, OnDestroy {
    * @TODO Temp solution
    */
   copy(data) {
-    if (isObject(data)) {
-      return Object.assign({}, data);
-    } else if (isArray(data)) {
+
+    if (isArray(data)) {
       return data.slice();
+    }else if (isObject(data)) {
+      return Object.assign({}, data);
     } else {
       return data;
     }
