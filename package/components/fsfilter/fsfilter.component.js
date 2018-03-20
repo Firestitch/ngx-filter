@@ -18,7 +18,7 @@ var classes_1 = require("./../../classes");
 var Observable_1 = require("rxjs/Observable");
 var router_1 = require("@angular/router");
 require("rxjs/add/observable/forkJoin");
-var moment_timezone_1 = require("moment-timezone");
+var moment = require("moment-timezone");
 var common_1 = require("@angular/common");
 var FsFilterComponent = (function () {
     function FsFilterComponent(_store, route, location) {
@@ -50,7 +50,7 @@ var FsFilterComponent = (function () {
             }
             if (this.filter.fsConfig.persist.timeout) {
                 var date = new Date(this.persists[this.filter.fsConfig.persist.name].date);
-                if (moment_timezone_1.default(date).subtract(this.filter.fsConfig.persist.timeout, 'minutes').isAfter(moment_timezone_1.default())) {
+                if (moment(date).subtract(this.filter.fsConfig.persist.timeout, 'minutes').isAfter(moment())) {
                     this.persists[this.filter.fsConfig.persist.name] = { data: {}, date: new Date() };
                 }
             }
@@ -70,11 +70,11 @@ var FsFilterComponent = (function () {
                     var value = persisted[filter.name];
                     if (value) {
                         if (filter.type == 'daterange' || filter.type == 'datetimerange') {
-                            value.from = value.from ? moment_timezone_1.default.utc(value.from) : null;
-                            value.to = value.to ? moment_timezone_1.default.utc(value.to) : null;
+                            value.from = value.from ? moment.utc(value.from) : null;
+                            value.to = value.to ? moment.utc(value.to) : null;
                         }
                         else if (filter.type.match(/^date/)) {
-                            value = moment_timezone_1.default(value);
+                            value = moment(value);
                         }
                     }
                     filter.model = value;
@@ -93,7 +93,7 @@ var FsFilterComponent = (function () {
                     }
                     else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
                         var parts = filter.model.split(',');
-                        filter.model = { from: moment_timezone_1.default(parts[0]), to: moment_timezone_1.default(parts[1]) };
+                        filter.model = { from: moment(parts[0]), to: moment(parts[1]) };
                     }
                     else if (filter.type == 'range') {
                         var parts = filter.model.split(',');
@@ -175,7 +175,7 @@ var FsFilterComponent = (function () {
                 if (filter.type == 'date' || filter.type == 'datetime') {
                     var date = Date.parse(values[label]);
                     if (date) {
-                        filter.model = moment_timezone_1.default(date);
+                        filter.model = moment(date);
                     }
                 }
                 else if (filter.type == 'daterange') {
@@ -416,7 +416,7 @@ var FsFilterComponent = (function () {
                 if (filter.type == 'datetime') {
                     format += ' h:mm a';
                 }
-                value = moment_timezone_1.default(value);
+                value = moment(value);
                 if (!value) {
                     continue;
                 }
@@ -424,8 +424,8 @@ var FsFilterComponent = (function () {
             }
             else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
                 if (value) {
-                    var from = moment_timezone_1.default(value.from);
-                    var to = moment_timezone_1.default(value.to);
+                    var from = moment(value.from);
+                    var to = moment(value.to);
                     var format = filter.type == 'datetimerange' ? 'MMM D, YYYY h:mm a' : 'MMM D, YYYY';
                     value = [];
                     if (from) {
@@ -681,7 +681,6 @@ var FsFilterComponent = (function () {
         var query = {};
         for (var _i = 0, _a = this.filter.fsConfig.items; _i < _a.length; _i++) {
             var filter = _a[_i];
-            // TODO
             var value = this.copy(filter.model);
             if (filter.type == 'select') {
                 if (filter.multiple) {
@@ -715,7 +714,7 @@ var FsFilterComponent = (function () {
             }
             if (filter.type == 'date' || filter.type == 'datetime') {
                 if (value) {
-                    value = moment_timezone_1.default(value).format();
+                    value = moment(value).format();
                 }
             }
             else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
@@ -723,10 +722,10 @@ var FsFilterComponent = (function () {
                 var to = value.to;
                 value = {};
                 if (from) {
-                    value.from = moment_timezone_1.default(from).format();
+                    value.from = moment(from).format();
                 }
                 if (to) {
-                    value.to = moment_timezone_1.default(to).format();
+                    value.to = moment(to).format();
                 }
             }
             else if (filter.type == 'autocomplete') {
@@ -759,11 +758,11 @@ var FsFilterComponent = (function () {
      * @TODO Temp solution
      */
     FsFilterComponent.prototype.copy = function (data) {
-        if (lodash_1.isObject(data)) {
-            return Object.assign({}, data);
-        }
-        else if (lodash_1.isArray(data)) {
+        if (lodash_1.isArray(data)) {
             return data.slice();
+        }
+        else if (lodash_1.isObject(data)) {
+            return Object.assign({}, data);
         }
         else {
             return data;

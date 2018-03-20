@@ -58,7 +58,7 @@
       white-space: nowrap;
       position: absolute;
       right: 0;
-      top: 8px;
+      top: 5px;
       z-index: 50; }
       .fs-filter .menu-filter .menu-filter-input .inline-actions a {
         color: rgba(0, 0, 0, 0.54);
@@ -88,8 +88,8 @@
           */ }
     .fs-filter .menu-filter .menu-filter-input .filters {
       position: absolute;
-      width: 100%;
-      margin-top: -4px;
+      min-width: 400px;
+      margin-top: -8px;
       display: none; }
       .fs-filter .menu-filter .menu-filter-input .filters .wrap {
         padding: 8px 17px 17px 17px;
@@ -97,7 +97,7 @@
         box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
         overflow: auto; }
       .fs-filter .menu-filter .menu-filter-input .filters .filter-group {
-        display: table;
+        display: table-row-group;
         width: 100%; }
       .fs-filter .menu-filter .menu-filter-input .filters .filter {
         display: table-row; }
@@ -215,7 +215,8 @@
     right: 0;
     overflow-y: auto;
     z-index: 999; }
-  .menu-filter .menu-filter-input .filters .filter-group,
+  .menu-filter .menu-filter-input .filters .filter-group {
+    display: table !important; }
   .menu-filter .menu-filter-input .filters .filter,
   .menu-filter .menu-filter-input .filters .filter .filter-label,
   .menu-filter .menu-filter-input .filters .filter .interface {
