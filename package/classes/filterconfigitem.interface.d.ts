@@ -15,6 +15,7 @@ export interface FilterConfigItem {
     primary?: boolean;
     search?: any;
     unchecked?: any;
+    checked?: any;
     alias?: any;
     placeholder?: any;
     default?: any;

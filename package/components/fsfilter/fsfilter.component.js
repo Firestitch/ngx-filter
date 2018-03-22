@@ -76,6 +76,9 @@ var FsFilterComponent = (function () {
                         else if (filter.type.match(/^date/)) {
                             value = moment(value);
                         }
+                        else if (filter.type === 'checkbox' && filter.checked !== undefined) {
+                            value = value == filter.checked ? true : false;
+                        }
                     }
                     filter.model = value;
                 }
@@ -214,10 +217,10 @@ var FsFilterComponent = (function () {
                     }
                 }
                 else if (filter.type == 'checkbox') {
-                    filter.model = (values[label] == 'Yes') ? filter.checked : filter.unchecked;
+                    filter.model = (values[label] == 'Yes') ? true : false;
                 }
                 else {
-                    filter.model = values[label];
+                    filter.model = values[label] == filter.checked ? true : false;
                 }
             }
         }
@@ -240,7 +243,7 @@ var FsFilterComponent = (function () {
                 filter.isolate.enabled = false;
             }
             else if (filter.type == 'checkbox') {
-                filter.model = filter.unchecked;
+                filter.model = false;
             }
             else if (filter.type == 'range') {
                 filter.model = {};
@@ -438,7 +441,7 @@ var FsFilterComponent = (function () {
                 }
             }
             else if (filter.type == 'checkbox') {
-                if (filter.model == filter.unchecked) {
+                if (filter.model == false) {
                     return;
                 }
                 else {
@@ -505,8 +508,8 @@ var FsFilterComponent = (function () {
                 filter.primary = false;
             }
             if (filter.type == 'checkbox') {
-                filter.checked = lodash_1.toString(filter.checked);
-                filter.unchecked = lodash_1.toString(filter.unchecked);
+                filter.checked = filter.checked ? lodash_1.toString(filter.checked) : true;
+                filter.unchecked = filter.unchecked ? lodash_1.toString(filter.unchecked) : false;
                 filter.default = filter.default === undefined ? filter.unchecked : lodash_1.toString(filter.default);
             }
             else if (filter.type == 'text') {
@@ -576,7 +579,7 @@ var FsFilterComponent = (function () {
             }
             if (filter.model === undefined) {
                 if (filter.type == 'checkbox') {
-                    filter.model = filter.unchecked;
+                    filter.model = false;
                 }
                 else if (filter.type == 'select') {
                     if (filter.multiple) {
@@ -707,6 +710,9 @@ var FsFilterComponent = (function () {
                 if (lodash_1.isArray(filter.model) && filter.model.length && !opts.expand) {
                     value = array_1.list(filter.model, 'value');
                 }
+            }
+            else if (filter.type == 'checkbox') {
+                value = filter.model ? filter.checked : filter.unchecked;
             }
             // @TODO
             if (util_1.isEmpty(value, { zero: true })) {

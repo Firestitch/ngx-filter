@@ -19,7 +19,7 @@ import {Location} from '@angular/common';
 export class FsFilterComponent implements OnInit, OnDestroy {
 
   @Input() filter: FsFilter = null;
-  searchinput = {value: ''};
+  searchinput = { value: '' };
   extendedFilter = false;
   filterChange = false;
   primary = false;
@@ -85,6 +85,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
             } else if (filter.type.match(/^date/)) {
               value = moment(value);
+            } else if (filter.type === 'checkbox' && filter.checked !== undefined) {
+              value = value == filter.checked ? true : false;
             }
           }
 
@@ -258,9 +260,9 @@ export class FsFilterComponent implements OnInit, OnDestroy {
           }
 
         } else if (filter.type == 'checkbox') {
-          filter.model = (values[label] == 'Yes') ? filter.checked : filter.unchecked;
+          filter.model = (values[label] == 'Yes') ? true : false;
         } else {
-          filter.model = values[label];
+          filter.model = values[label] == filter.checked ? true : false;
         }
       }
     }
@@ -281,7 +283,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         filter.model = null;
         filter.isolate.enabled = false;
       } else if (filter.type == 'checkbox') {
-        filter.model = filter.unchecked;
+        filter.model = false;
       } else if (filter.type == 'range') {
         filter.model = {};
       }
@@ -528,7 +530,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       } else if (filter.type == 'checkbox') {
 
-        if (filter.model == filter.unchecked) {
+        if (filter.model == false) {
           return;
         } else {
           value = 'Yes';
@@ -605,8 +607,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
 
       if (filter.type == 'checkbox') {
 
-        filter.checked = toString(filter.checked);
-        filter.unchecked = toString(filter.unchecked);
+        filter.checked = filter.checked ? toString(filter.checked) : true;
+        filter.unchecked = filter.unchecked ? toString(filter.unchecked) : false;
         filter.default = filter.default === undefined ? filter.unchecked : toString(filter.default);
       } else if (filter.type == 'text') {
 
@@ -691,7 +693,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       if (filter.model === undefined) {
 
         if (filter.type == 'checkbox') {
-          filter.model = filter.unchecked;
+          filter.model = false;
 
         } else if (filter.type == 'select') {
 
@@ -849,10 +851,12 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         if (isArray(filter.model) && filter.model.length && !opts.expand) {
           value = arrayList(filter.model, 'value');
         }
+      } else if (filter.type == 'checkbox') {
+        value = filter.model ? filter.checked : filter.unchecked;
       }
 
       // @TODO
-      if (isEmpty(value, {zero: true})) {
+      if (isEmpty(value, { zero: true })) {
         continue;
       }
 
