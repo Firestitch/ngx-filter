@@ -937,7 +937,12 @@ var FsFilterComponent = (function () {
                 }
             }
             if (filter.model === undefined) {
-                filter.model = filter.default;
+                if (filter.type == 'checkbox') {
+                    filter.model = filter.checked == filter.default ? true : false;
+                }
+                else {
+                    filter.model = filter.default;
+                }
             }
             if (filter.model === undefined) {
                 if (filter.type == 'checkbox') {
