@@ -63,8 +63,7 @@
       .fs-filter .menu-filter .menu-filter-input .inline-actions a {
         color: rgba(0, 0, 0, 0.54);
         background: #fff;
-        height: 22px;
-        margin-bottom: 5px; }
+        height: 22px; }
         .fs-filter .menu-filter .menu-filter-input .inline-actions a i {
           transform: scale(0.9);
           vertical-align: middle; }
