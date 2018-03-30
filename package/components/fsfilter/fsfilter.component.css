@@ -223,8 +223,6 @@
     display: block; }
   .menu-filter .menu-filter-input .filters .interface-checkbox .checkbox-label, .menu-filter .menu-filter-input .filters .interface .checkbox-label {
     display: block !important; }
-  .menu-filter .menu-filter-input .action-reload {
-    display: none; }
   .menu-filter .menu-filter-input .filter-group {
     margin: 10px 0 0 0; }
     .menu-filter .menu-filter-input .filter-group:first-child {
