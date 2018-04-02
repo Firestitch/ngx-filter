@@ -313,10 +313,6 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  menuFilterKeydown($event) {
-    this.filterToggle($event.keyCode !== 13);
-  }
-
   menuFilterShow() {
     this.filterToggle(true);
   }

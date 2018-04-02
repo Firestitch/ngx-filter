@@ -22,7 +22,6 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     menuFilterChange(search: any): void;
     filtersClear(): void;
     menuFilterClick($event: any): void;
-    menuFilterKeydown($event: any): void;
     menuFilterShow(): void;
     clear(): void;
     reload(opts?: any): void;

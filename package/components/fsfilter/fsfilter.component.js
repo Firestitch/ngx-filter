@@ -267,9 +267,6 @@ var FsFilterComponent = (function () {
             this.menuFilterShow();
         }
     };
-    FsFilterComponent.prototype.menuFilterKeydown = function ($event) {
-        this.filterToggle($event.keyCode !== 13);
-    };
     FsFilterComponent.prototype.menuFilterShow = function () {
         this.filterToggle(true);
     };

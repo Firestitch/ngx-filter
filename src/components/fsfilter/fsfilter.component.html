@@ -7,8 +7,7 @@
         <mat-form-field class="filter-input">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput [(ngModel)]="searchinput.value" name="filter-input"
-                 (ngModelChange)="menuFilterChange(searchinput.value)"
-                 (keydown)="menuFilterKeydown($event)">
+                 (ngModelChange)="menuFilterChange(searchinput.value)">
           <mat-placeholder>Search</mat-placeholder>
         </mat-form-field>
 
