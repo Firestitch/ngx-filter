@@ -288,6 +288,8 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         filter.model = {};
       }
     }
+
+    this.reload({filterUpdate: false});
   }
 
   menuFilterClick($event) {
