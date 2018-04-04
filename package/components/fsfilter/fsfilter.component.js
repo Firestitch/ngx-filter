@@ -249,6 +249,7 @@ var FsFilterComponent = (function () {
                 filter.model = {};
             }
         }
+        this.reload({ filterUpdate: false });
     };
     FsFilterComponent.prototype.menuFilterClick = function ($event) {
         if (window.innerWidth >= 600) {
