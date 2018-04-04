@@ -1,6 +1,13 @@
-import {Component, ViewEncapsulation, Input, OnInit, OnDestroy} from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  Input,
+  OnInit,
+  OnDestroy,
+  EventEmitter
+} from '@angular/core';
 import {isObject, isArray, toString} from 'lodash';
-import {isEmpty} from '@firestitch/common/util';
+import { isEmpty } from '@firestitch/common/util';
 import {filter as arrayFilter, list as arrayList, remove as arrayRemove} from '@firestitch/common/array';
 import {FsStore} from '@firestitch/store';
 import {FsFilter} from './../../classes';
@@ -9,6 +16,8 @@ import {ActivatedRoute} from '@angular/router';
 import 'rxjs/add/observable/forkJoin';
 import * as moment from 'moment-timezone';
 import {Location} from '@angular/common';
+import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
+
 
 @Component({
   selector: 'fs-filter',
@@ -19,13 +28,25 @@ import {Location} from '@angular/common';
 export class FsFilterComponent implements OnInit, OnDestroy {
 
   @Input() filter: FsFilter = null;
+  modelChanged = new EventEmitter();
   searchinput = { value: '' };
   extendedFilter = false;
   filterChange = false;
   primary = false;
   persists = null;
 
+  destroyed = false;
+
   constructor(private _store: FsStore, private route: ActivatedRoute, private location: Location) {
+    this.modelChanged
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        takeWhile(() => !this.destroyed)
+      )
+      .subscribe((value) => {
+        this.menuFilterChange(value);
+      })
   }
 
   ngOnInit() {
@@ -153,6 +174,10 @@ export class FsFilterComponent implements OnInit, OnDestroy {
                 this.filterUpdate();
               });
         });
+  }
+
+  modelChange(value) {
+    this.modelChanged.emit(value);
   }
 
   menuFilterChange(search) {
@@ -288,8 +313,6 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         filter.model = {};
       }
     }
-
-    this.reload({filterUpdate: false});
   }
 
   menuFilterClick($event) {
@@ -322,6 +345,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   clear() {
     this.filtersClear();
     this.filterUpdate();
+    this.reload({filterUpdate: false});
   }
 
   reload(opts?) {
@@ -929,6 +953,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroyed = true;
   }
 
 }
