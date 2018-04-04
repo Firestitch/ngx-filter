@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy } from '@angular/core';
+import { OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { FsStore } from '@firestitch/store';
 import { FsFilter } from './../../classes';
 import { Observable } from 'rxjs/Observable';
@@ -10,6 +10,7 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     private route;
     private location;
     filter: FsFilter;
+    modelChanged: EventEmitter<{}>;
     searchinput: {
         value: string;
     };
@@ -17,8 +18,10 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     filterChange: boolean;
     primary: boolean;
     persists: any;
+    destroyed: boolean;
     constructor(_store: FsStore, route: ActivatedRoute, location: Location);
     ngOnInit(): void;
+    modelChange(value: any): void;
     menuFilterChange(search: any): void;
     filtersClear(): void;
     menuFilterClick($event: any): void;

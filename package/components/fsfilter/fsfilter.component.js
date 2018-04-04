@@ -20,17 +20,26 @@ var router_1 = require("@angular/router");
 require("rxjs/add/observable/forkJoin");
 var moment = require("moment-timezone");
 var common_1 = require("@angular/common");
+var operators_1 = require("rxjs/operators");
 var FsFilterComponent = (function () {
     function FsFilterComponent(_store, route, location) {
+        var _this = this;
         this._store = _store;
         this.route = route;
         this.location = location;
         this.filter = null;
+        this.modelChanged = new core_1.EventEmitter();
         this.searchinput = { value: '' };
         this.extendedFilter = false;
         this.filterChange = false;
         this.primary = false;
         this.persists = null;
+        this.destroyed = false;
+        this.modelChanged
+            .pipe(operators_1.debounceTime(500), operators_1.distinctUntilChanged(), operators_1.takeWhile(function () { return !_this.destroyed; }))
+            .subscribe(function (value) {
+            _this.menuFilterChange(value);
+        });
     }
     FsFilterComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -132,6 +141,9 @@ var FsFilterComponent = (function () {
                 _this.filterUpdate();
             });
         });
+    };
+    FsFilterComponent.prototype.modelChange = function (value) {
+        this.modelChanged.emit(value);
     };
     FsFilterComponent.prototype.menuFilterChange = function (search) {
         var text = '';
@@ -249,7 +261,6 @@ var FsFilterComponent = (function () {
                 filter.model = {};
             }
         }
-        this.reload({ filterUpdate: false });
     };
     FsFilterComponent.prototype.menuFilterClick = function ($event) {
         if (window.innerWidth >= 600) {
@@ -274,6 +285,7 @@ var FsFilterComponent = (function () {
     FsFilterComponent.prototype.clear = function () {
         this.filtersClear();
         this.filterUpdate();
+        this.reload({ filterUpdate: false });
     };
     FsFilterComponent.prototype.reload = function (opts) {
         return this.load(Object.assign({}, { clear: true }, opts));
@@ -778,6 +790,7 @@ var FsFilterComponent = (function () {
         }
     };
     FsFilterComponent.prototype.ngOnDestroy = function () {
+        this.destroyed = true;
     };
     __decorate([
         core_1.Input(),
