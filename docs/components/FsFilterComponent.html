@@ -363,10 +363,16 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#destroyed">destroyed</a>
+                            </li>
+                            <li>
                                 <a href="#extendedFilter">extendedFilter</a>
                             </li>
                             <li>
                                 <a href="#filterChange">filterChange</a>
+                            </li>
+                            <li>
+                                <a href="#modelChanged">modelChanged</a>
                             </li>
                             <li>
                                 <a href="#persists">persists</a>
@@ -431,10 +437,10 @@
                                 <a href="#menuFilterClick">menuFilterClick</a>
                             </li>
                             <li>
-                                <a href="#menuFilterKeydown">menuFilterKeydown</a>
+                                <a href="#menuFilterShow">menuFilterShow</a>
                             </li>
                             <li>
-                                <a href="#menuFilterShow">menuFilterShow</a>
+                                <a href="#modelChange">modelChange</a>
                             </li>
                             <li>
                                 <a href="#ngOnDestroy">ngOnDestroy</a>
@@ -1367,66 +1373,6 @@
                 <tbody>
                     <tr>
                         <td class="col-md-4">
-                            <a name="menuFilterKeydown"></a>
-                            <span class="name">
-                                <b>
-                                menuFilterKeydown
-                                </b>
-                                <a href="#menuFilterKeydown"><span class="fa fa-link"></span></a>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-    <code>menuFilterKeydown($event: )</code>
-                        </td>
-                    </tr>
-    
-    
-    
-                    <tr>
-                        <td class="col-md-4">
-    
-                                <div class="io-description">
-                                        <b>Parameters :</b>
-                                        <table class="params">
-                                            <thead>
-                                                <tr>
-                                                    <td>Name</td>
-                                                    <td>Optional</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                    <tr>
-                                                        <td>$event</td>
-                                                        
-                                                        
-                                                        <td>
-                                                                no
-                                                        </td>
-                                                        
-    
-                                                    </tr>
-                                            </tbody>
-                                        </table>
-                                </div>
-                                <div>
-                                </div>
-                                <div class="io-description">
-                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-    
-                                </div>
-                                    <div class="io-description">
-                                        
-                                    </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-sm table-bordered">
-                <tbody>
-                    <tr>
-                        <td class="col-md-4">
                             <a name="menuFilterShow"></a>
                             <span class="name">
                                 <b>
@@ -1451,6 +1397,66 @@
                                     <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
     
                                 </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="modelChange"></a>
+                            <span class="name">
+                                <b>
+                                modelChange
+                                </b>
+                                <a href="#modelChange"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>modelChange(value: )</code>
+                        </td>
+                    </tr>
+    
+    
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                        <td>value</td>
+                                                        
+                                                        
+                                                        <td>
+                                                                no
+                                                        </td>
+                                                        
+    
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
                         </td>
                     </tr>
                 </tbody>
@@ -2170,6 +2176,34 @@
                 <tbody>
                     <tr>
                         <td class="col-md-4">
+                            <a name="destroyed"></a>
+                            <span class="name">
+                                <b>
+                                destroyed
+                                </b>
+                                <a href="#destroyed"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>destroyed:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>false</code>
+                            </td>
+                        </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
                             <a name="extendedFilter"></a>
                             <span class="name">
                                 <b>
@@ -2216,6 +2250,34 @@
                         <tr>
                             <td class="col-md-4">
                                 <i>Default value : </i><code>false</code>
+                            </td>
+                        </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="modelChanged"></a>
+                            <span class="name">
+                                <b>
+                                modelChanged
+                                </b>
+                                <a href="#modelChanged"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>modelChanged:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>new EventEmitter()</code>
                             </td>
                         </tr>
     
@@ -2334,8 +2396,7 @@
         &lt;mat-form-field class&#x3D;&quot;filter-input&quot;&gt;
           &lt;mat-icon matPrefix&gt;search&lt;/mat-icon&gt;
           &lt;input matInput [(ngModel)]&#x3D;&quot;searchinput.value&quot; name&#x3D;&quot;filter-input&quot;
-                 (ngModelChange)&#x3D;&quot;menuFilterChange(searchinput.value)&quot;
-                 (keydown)&#x3D;&quot;menuFilterKeydown($event)&quot;&gt;
+                 (ngModelChange)&#x3D;&quot;modelChange(searchinput.value)&quot;&gt;
           &lt;mat-placeholder&gt;Search&lt;/mat-placeholder&gt;
         &lt;/mat-form-field&gt;
 
@@ -2369,10 +2430,10 @@
           &lt;/ng-container&gt;
 
           &lt;div class&#x3D;&quot;buttons&quot;&gt;
-            &lt;button mat-raised-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;filterToggle(false,true)&quot;
+            &lt;button type&#x3D;&quot;button&quot; mat-raised-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;filterToggle(false,true)&quot;
                     class&#x3D;&quot;filter-button&quot;&gt;Search
             &lt;/button&gt;
-            &lt;button mat-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;cancel()&quot; class&#x3D;&quot;cancel-button&quot;&gt;Cancel&lt;/button&gt;
+            &lt;button type&#x3D;&quot;button&quot; mat-button color&#x3D;&quot;accent&quot; (click)&#x3D;&quot;cancel()&quot; class&#x3D;&quot;cancel-button&quot;&gt;Cancel&lt;/button&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
@@ -2611,7 +2672,7 @@
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="filter.fsConfig.items.length"     [ngClass]="{ \'filters-open\': extendedFilter, loading: loading }">  <div *ngIf="!filter.fsConfig.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>    <div class="menu-filter-input" fxFlex="grow">      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"           *ngIf="filter.fsConfig.items.length">        <mat-form-field class="filter-input">          <mat-icon matPrefix>search</mat-icon>          <input matInput [(ngModel)]="searchinput.value" name="filter-input"                 (ngModelChange)="menuFilterChange(searchinput.value)"                 (keydown)="menuFilterKeydown($event)">          <mat-placeholder>Search</mat-placeholder>        </mat-form-field>        <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">          <a (click)="clear()" *ngIf="searchinput.value">            <mat-icon>clear</mat-icon>          </a>          <a (click)="menuFilterShow()" class="action-filter">            <mat-icon>filter_list</mat-icon>          </a>          <a (click)="reload()" class="action-reload">            <mat-icon>refresh</mat-icon>          </a>        </div>      </div>      <div class="filters">        <div class="wrap">          <!-- @TODO					  Mobal version of filters					  fs-heading					  heading-actions					-->          <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->            Refine Search          </div>          <ng-container *ngFor="let filterItem of filter.fsConfig.items">            <ng-container              *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>          </ng-container>          <div class="buttons">            <button mat-raised-button color="accent" (click)="filterToggle(false,true)"                    class="filter-button">Search            </button>            <button mat-button color="accent" (click)="cancel()" class="cancel-button">Cancel</button>          </div>        </div>      </div>      <div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>    </div>  </div>  <div *ngIf="filter.fsConfig.inline" class="inline-filter" [ngClass]="{\'inline\': filter.fsConfig.inline}">    <ng-container *ngFor="let filterItem of filter.fsConfig.items">      <ng-container *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>    </ng-container>  </div></div><ng-template #filterTemplate let-filterItem="localSk">  <div class="filter-group" *ngIf="!filterItem.disabled">    <div class="filter filter-{{ filterItem.type }}">      <div class="filter-label" *ngIf="!filter.fsConfig.inline">        <div class="filter-label-content">          {{ filterItem.label }}        </div>      </div>      <div class="interface" *ngIf="filterItem.type == \'text\'">        <mat-form-field [floatLabel]="\'auto\'">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput [(ngModel)]="filterItem.model" (keyup)="filterKeyup(filterItem,$event)"                 (change)="onFilterChange(filterItem, $event)"/>          <mat-placeholder *ngIf="filter.fsConfig.inline">            <mat-icon>search</mat-icon>            {{ filterItem.label }}          </mat-placeholder>        </mat-form-field>      </div>      <div class="interface" *ngIf="filterItem.type == \'select\' && filterItem.values?.length > 0">        <mat-form-field floatLabel="auto" *ngIf="filterItem.multiple && !filterItem.groups">          <mat-label>{{filterItem.label}}</mat-label>          <mat-select [(ngModel)]="filterItem.model" multiple="filterItem.multiple"                      (onClose)="selectChange(filterItem)" (keyup)="filterKeyup(filterItem,$event)">            <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">              {{ item.name }}            </mat-option>          </mat-select>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>        <mat-form-field floatLabel="auto" *ngIf="!filterItem.multiple && !filterItem.groups">          <mat-label>{{filterItem.label}}</mat-label>          <mat-select [(ngModel)]="filterItem.model" (change)="selectChange(filterItem)"                      (keyup)="filterKeyup(filterItem,$event)">            <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">              {{ item.name }}            </mat-option>          </mat-select>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>        <!--<mat-form-field class="md-no-float md-no-label md-no-message" ng-show="!filter.multiple && filter.groups">					<mat-select ng-model="filter.model" aria-label="select" ng-change="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">								{{::item.name}}							</md-option>						</md-optgroup>					</mat-select>				</mat-form-field>-->        <!--<md-input-container class="md-no-float md-no-label md-no-message" ng-show="filter.multiple && filter.groups">					<md-select ng-model="filter.model" aria-label="select" multiple="filter.multiple" md-on-close="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">								{{::item.name}}							</md-option>						</md-optgroup>					</md-select>				</md-input-container>-->      </div>      <div class="interface interface-range" *ngIf="filterItem.type == \'range\'">        <span fxLayout="row">          <mat-form-field class="filter-range-min">			  <input matInput               [(ngModel)]="filterItem.model.min"               (change)="onFilterChange(filterItem)">			  <mat-placeholder>				  {{filterItem.placeholder[0]}}			  </mat-placeholder>			</mat-form-field>			<mat-form-field class="filter-range-max">			  <input matInput               [(ngModel)]="filterItem.model.max"               (change)="onFilterChange(filterItem)">				<mat-placeholder>				  {{filterItem.placeholder[1]}}			  	</mat-placeholder>			</mat-form-field>        </span>      </div>      <div class="interface" *ngIf="filterItem.type == \'autocomplete\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput type="text" [(ngModel)]="filterItem.model"                 (ngModelChange)="onAutocompleteChange(filterItem)" name="{{ filterItem.name }}"                 [matAutocomplete]="autocompleteInput">          <mat-autocomplete #autocompleteInput="matAutocomplete" [displayWith]="displayAutocomplete">            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}            </mat-option>          </mat-autocomplete>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface interface-date" *ngIf="filterItem.type == \'date\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput fsDatePicker [(ngModel)]="filterItem.model"                 (change)="onFilterChange(filterItem)" name="{{ filterItem.name }}">          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface" *ngIf="filterItem.type == \'autocompletechips\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <mat-chip-list #chipList>            <mat-chip *ngFor="let item of filterItem.model"                      (remove)="removeAutucompleteChipItem(filterItem, item)">              {{ item.name }}              <mat-icon matChipRemove>cancel</mat-icon>            </mat-chip>            <input #chipsInput matInput [(ngModel)]="filterItem.selectedValue"                   (ngModelChange)="onAutocompleteChipsChange(filterItem, chipsInput)" type="text"                   name="{{ filterItem.name }}"                   [matChipInputFor]="chipList"                   [matAutocomplete]="autocompleteChipsInput">          </mat-chip-list>          <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete"                            (optionSelected)="addAutucompleteChipItem(filterItem, $event)">            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}            </mat-option>          </mat-autocomplete>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface interface-checkbox" *ngIf="filterItem.type == \'checkbox\'">        <mat-checkbox (change)="onFilterChange(filterItem)" [(ngModel)]="filterItem.model">          {{ filter.fsConfig.inline ? filterItem.label : \'\' }}          <span class="checkbox-label">{{filterItem.label}}</span>        </mat-checkbox>      </div>      <!--			<div class="interface" ng-if="filter.type == \'autocompletechips\'"><md-chips-autocomplete-container class="md-block">  <md-chips 	ng-model="filter.model"		md-autocomplete-snap		md-require-match="false"		md-on-remove="filterChange(filter)"		md-on-add="filterChange(filter)">	  <md-autocomplete	  md-no-cache="true"	  md-items="item in filter.values(filter.search, filter)"	  md-search-text="filter.search"	  md-item-text=""	  md-min-length="1"	  md-require-match	  md-autoselect>		  <span md-highlight-text="filter.search">{{item.name}}</span>	  </md-autocomplete>	  <md-chip-template>		  <span>			{{$chip.name}}		  </span>	  </md-chip-template>  </md-chips></md-chips-autocomplete-container>			</div>			<div class="interface  interface-datetime" ng-if="filter.type == \'datetime\'">				<fs-datetime fs-class="md-no-label md-no-message" fs-time="true" fs-model="filter.model" fs-change="filterChange(filter)"></fs-datetime>			</div>			<div class="interface interface-daterange" ng-if="filter.type == \'daterange\'">				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model[\'from\']" fs-to="filter.model[\'to\']" fs-change="filterChange(filter)"></fs-datetime-range>			</div>			<div class="interface interface-datetimerange" ng-if="filter.type == \'datetimerange\'">				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model[\'from\']" fs-to="filter.model[\'to\']" fs-change="filterChange(filter)" fs-time="true"></fs-datetime-range>			</div>		</div>	  -->    </div>    <div *ngIf="filterItem.isolate && !filter.fsConfig.inline" class="filter isolate">      <div class="filter-label">{{ filterItem.isolate.label }}</div>      <div class="interface">        <mat-checkbox (change)="isolateChange(filterItem)" [(ngModel)]="filterItem.isolate.enabled">          <span class="checkbox-label">{{filterItem.label}}</span>        </mat-checkbox>      </div>    </div>  </div></ng-template></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="filter.fsConfig.items.length"     [ngClass]="{ \'filters-open\': extendedFilter, loading: loading }">  <div *ngIf="!filter.fsConfig.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>    <div class="menu-filter-input" fxFlex="grow">      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"           *ngIf="filter.fsConfig.items.length">        <mat-form-field class="filter-input">          <mat-icon matPrefix>search</mat-icon>          <input matInput [(ngModel)]="searchinput.value" name="filter-input"                 (ngModelChange)="modelChange(searchinput.value)">          <mat-placeholder>Search</mat-placeholder>        </mat-form-field>        <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">          <a (click)="clear()" *ngIf="searchinput.value">            <mat-icon>clear</mat-icon>          </a>          <a (click)="menuFilterShow()" class="action-filter">            <mat-icon>filter_list</mat-icon>          </a>          <a (click)="reload()" class="action-reload">            <mat-icon>refresh</mat-icon>          </a>        </div>      </div>      <div class="filters">        <div class="wrap">          <!-- @TODO					  Mobal version of filters					  fs-heading					  heading-actions					-->          <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->            Refine Search          </div>          <ng-container *ngFor="let filterItem of filter.fsConfig.items">            <ng-container              *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>          </ng-container>          <div class="buttons">            <button type="button" mat-raised-button color="accent" (click)="filterToggle(false,true)"                    class="filter-button">Search            </button>            <button type="button" mat-button color="accent" (click)="cancel()" class="cancel-button">Cancel</button>          </div>        </div>      </div>      <div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>    </div>  </div>  <div *ngIf="filter.fsConfig.inline" class="inline-filter" [ngClass]="{\'inline\': filter.fsConfig.inline}">    <ng-container *ngFor="let filterItem of filter.fsConfig.items">      <ng-container *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>    </ng-container>  </div></div><ng-template #filterTemplate let-filterItem="localSk">  <div class="filter-group" *ngIf="!filterItem.disabled">    <div class="filter filter-{{ filterItem.type }}">      <div class="filter-label" *ngIf="!filter.fsConfig.inline">        <div class="filter-label-content">          {{ filterItem.label }}        </div>      </div>      <div class="interface" *ngIf="filterItem.type == \'text\'">        <mat-form-field [floatLabel]="\'auto\'">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput [(ngModel)]="filterItem.model" (keyup)="filterKeyup(filterItem,$event)"                 (change)="onFilterChange(filterItem, $event)"/>          <mat-placeholder *ngIf="filter.fsConfig.inline">            <mat-icon>search</mat-icon>            {{ filterItem.label }}          </mat-placeholder>        </mat-form-field>      </div>      <div class="interface" *ngIf="filterItem.type == \'select\' && filterItem.values?.length > 0">        <mat-form-field floatLabel="auto" *ngIf="filterItem.multiple && !filterItem.groups">          <mat-label>{{filterItem.label}}</mat-label>          <mat-select [(ngModel)]="filterItem.model" multiple="filterItem.multiple"                      (onClose)="selectChange(filterItem)" (keyup)="filterKeyup(filterItem,$event)">            <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">              {{ item.name }}            </mat-option>          </mat-select>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>        <mat-form-field floatLabel="auto" *ngIf="!filterItem.multiple && !filterItem.groups">          <mat-label>{{filterItem.label}}</mat-label>          <mat-select [(ngModel)]="filterItem.model" (change)="selectChange(filterItem)"                      (keyup)="filterKeyup(filterItem,$event)">            <mat-option *ngFor="let item of filterItem.values" [value]="item.value" [ngStyle]="item.style">              {{ item.name }}            </mat-option>          </mat-select>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>        <!--<mat-form-field class="md-no-float md-no-label md-no-message" ng-show="!filter.multiple && filter.groups">					<mat-select ng-model="filter.model" aria-label="select" ng-change="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">								{{::item.name}}							</md-option>						</md-optgroup>					</mat-select>				</mat-form-field>-->        <!--<md-input-container class="md-no-float md-no-label md-no-message" ng-show="filter.multiple && filter.groups">					<md-select ng-model="filter.model" aria-label="select" multiple="filter.multiple" md-on-close="selectChange(filter)" ng-keyup="filterKeyup(filter,$event)">						<md-optgroup label="{{group}}" ng-repeat="(group, values) in filter.groups">							<md-option ng-repeat="item in values" value="{{::item.value}}" ng-style="item.style">								{{::item.name}}							</md-option>						</md-optgroup>					</md-select>				</md-input-container>-->      </div>      <div class="interface interface-range" *ngIf="filterItem.type == \'range\'">        <span fxLayout="row">          <mat-form-field class="filter-range-min">			  <input matInput               [(ngModel)]="filterItem.model.min"               (change)="onFilterChange(filterItem)">			  <mat-placeholder>				  {{filterItem.placeholder[0]}}			  </mat-placeholder>			</mat-form-field>			<mat-form-field class="filter-range-max">			  <input matInput               [(ngModel)]="filterItem.model.max"               (change)="onFilterChange(filterItem)">				<mat-placeholder>				  {{filterItem.placeholder[1]}}			  	</mat-placeholder>			</mat-form-field>        </span>      </div>      <div class="interface" *ngIf="filterItem.type == \'autocomplete\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput type="text" [(ngModel)]="filterItem.model"                 (ngModelChange)="onAutocompleteChange(filterItem)" name="{{ filterItem.name }}"                 [matAutocomplete]="autocompleteInput">          <mat-autocomplete #autocompleteInput="matAutocomplete" [displayWith]="displayAutocomplete">            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}            </mat-option>          </mat-autocomplete>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface interface-date" *ngIf="filterItem.type == \'date\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <input matInput fsDatePicker [(ngModel)]="filterItem.model"                 (change)="onFilterChange(filterItem)" name="{{ filterItem.name }}">          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface" *ngIf="filterItem.type == \'autocompletechips\'">        <mat-form-field floatLabel="auto">          <mat-label>{{filterItem.label}}</mat-label>          <mat-chip-list #chipList>            <mat-chip *ngFor="let item of filterItem.model"                      (remove)="removeAutucompleteChipItem(filterItem, item)">              {{ item.name }}              <mat-icon matChipRemove>cancel</mat-icon>            </mat-chip>            <input #chipsInput matInput [(ngModel)]="filterItem.selectedValue"                   (ngModelChange)="onAutocompleteChipsChange(filterItem, chipsInput)" type="text"                   name="{{ filterItem.name }}"                   [matChipInputFor]="chipList"                   [matAutocomplete]="autocompleteChipsInput">          </mat-chip-list>          <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete"                            (optionSelected)="addAutucompleteChipItem(filterItem, $event)">            <mat-option *ngFor="let item of filterItem.values$ | async" [value]="item">{{ item.name }}            </mat-option>          </mat-autocomplete>          <mat-placeholder *ngIf="filter.fsConfig.inline">{{ filterItem.label }}</mat-placeholder>        </mat-form-field>      </div>      <div class="interface interface-checkbox" *ngIf="filterItem.type == \'checkbox\'">        <mat-checkbox (change)="onFilterChange(filterItem)" [(ngModel)]="filterItem.model">          {{ filter.fsConfig.inline ? filterItem.label : \'\' }}          <span class="checkbox-label">{{filterItem.label}}</span>        </mat-checkbox>      </div>      <!--			<div class="interface" ng-if="filter.type == \'autocompletechips\'"><md-chips-autocomplete-container class="md-block">  <md-chips 	ng-model="filter.model"		md-autocomplete-snap		md-require-match="false"		md-on-remove="filterChange(filter)"		md-on-add="filterChange(filter)">	  <md-autocomplete	  md-no-cache="true"	  md-items="item in filter.values(filter.search, filter)"	  md-search-text="filter.search"	  md-item-text=""	  md-min-length="1"	  md-require-match	  md-autoselect>		  <span md-highlight-text="filter.search">{{item.name}}</span>	  </md-autocomplete>	  <md-chip-template>		  <span>			{{$chip.name}}		  </span>	  </md-chip-template>  </md-chips></md-chips-autocomplete-container>			</div>			<div class="interface  interface-datetime" ng-if="filter.type == \'datetime\'">				<fs-datetime fs-class="md-no-label md-no-message" fs-time="true" fs-model="filter.model" fs-change="filterChange(filter)"></fs-datetime>			</div>			<div class="interface interface-daterange" ng-if="filter.type == \'daterange\'">				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model[\'from\']" fs-to="filter.model[\'to\']" fs-change="filterChange(filter)"></fs-datetime-range>			</div>			<div class="interface interface-datetimerange" ng-if="filter.type == \'datetimerange\'">				<fs-datetime-range fs-class="md-no-label md-no-message" fs-from="filter.model[\'from\']" fs-to="filter.model[\'to\']" fs-change="filterChange(filter)" fs-time="true"></fs-datetime-range>			</div>		</div>	  -->    </div>    <div *ngIf="filterItem.isolate && !filter.fsConfig.inline" class="filter isolate">      <div class="filter-label">{{ filterItem.isolate.label }}</div>      <div class="interface">        <mat-checkbox (change)="isolateChange(filterItem)" [(ngModel)]="filterItem.isolate.enabled">          <span class="checkbox-label">{{filterItem.label}}</span>        </mat-checkbox>      </div>    </div>  </div></ng-template></div>'
     var COMPONENTS = [{'name': 'FsFilterComponent', 'selector': 'fs-filter'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'FsFilterComponent'};
