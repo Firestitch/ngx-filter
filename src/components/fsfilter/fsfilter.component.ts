@@ -149,6 +149,15 @@ export class FsFilterComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (this.filter.fsConfig.init) {
+      this.filter.fsConfig.init(this);
+    }
+
+    if (!waitObservables$.length) {
+      this.initActions(updateObservables$);
+      return;
+    }
+
     Observable.forkJoin(waitObservables$)
       .subscribe(
         () => {
@@ -156,23 +165,7 @@ export class FsFilterComponent implements OnInit, OnDestroy {
         () => {
         },
         () => {
-
-          if (this.filter.fsConfig.load) {
-            this.reload({filterUpdate: false});
-          }
-
-          Observable.forkJoin(updateObservables$)
-            .subscribe(
-              () => {
-              },
-              () => {
-              },
-              () => {
-                if (this.filter.fsConfig.init) {
-                  this.filter.fsConfig.init(this);
-                }
-                this.filterUpdate();
-              });
+          this.initActions(updateObservables$);
         });
   }
 
@@ -936,6 +929,22 @@ export class FsFilterComponent implements OnInit, OnDestroy {
     }
 
     return query;
+  }
+
+  initActions(updateObservables$) {
+    if (this.filter.fsConfig.load) {
+      this.reload({filterUpdate: false});
+    }
+
+    Observable.forkJoin(updateObservables$)
+      .subscribe(
+        () => {
+        },
+        () => {
+        },
+        () => {
+          this.filterUpdate();
+        });
   }
 
   /**
