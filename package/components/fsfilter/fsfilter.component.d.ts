@@ -45,6 +45,7 @@ export declare class FsFilterComponent implements OnInit, OnDestroy {
     cancel(): void;
     displayAutocomplete(data: any): string;
     gets(opts?: any): {};
+    initActions(updateObservables$: any): void;
     /**
      * @TODO Temp solution
      */

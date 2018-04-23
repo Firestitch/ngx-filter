@@ -124,22 +124,18 @@ var FsFilterComponent = (function () {
                 updateObservables$.push(observable$);
             }
         }
+        if (this.filter.fsConfig.init) {
+            this.filter.fsConfig.init(this);
+        }
+        if (!waitObservables$.length) {
+            this.initActions(updateObservables$);
+            return;
+        }
         Observable_1.Observable.forkJoin(waitObservables$)
             .subscribe(function () {
         }, function () {
         }, function () {
-            if (_this.filter.fsConfig.load) {
-                _this.reload({ filterUpdate: false });
-            }
-            Observable_1.Observable.forkJoin(updateObservables$)
-                .subscribe(function () {
-            }, function () {
-            }, function () {
-                if (_this.filter.fsConfig.init) {
-                    _this.filter.fsConfig.init(_this);
-                }
-                _this.filterUpdate();
-            });
+            _this.initActions(updateObservables$);
         });
     };
     FsFilterComponent.prototype.modelChange = function (value) {
@@ -774,6 +770,18 @@ var FsFilterComponent = (function () {
             }
         }
         return query;
+    };
+    FsFilterComponent.prototype.initActions = function (updateObservables$) {
+        var _this = this;
+        if (this.filter.fsConfig.load) {
+            this.reload({ filterUpdate: false });
+        }
+        Observable_1.Observable.forkJoin(updateObservables$)
+            .subscribe(function () {
+        }, function () {
+        }, function () {
+            _this.filterUpdate();
+        });
     };
     /**
      * @TODO Temp solution
