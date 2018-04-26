@@ -9,8 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from './app/material.module';
 import { RouterModule } from '@angular/router';
 import { FsExampleModule } from '@firestitch/example';
-import { FsExamplesComponent } from '../tools/components/examples/examples.component';
 import { FirstExampleComponent } from './app/components/first-example/first-example.component';
+
 
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -22,14 +22,13 @@ import { FirstExampleComponent } from './app/components/first-example/first-exam
     FormsModule,
     FsExampleModule,
     RouterModule.forRoot([
-      { path: '', component: AppComponent}
+      { path: '', component: AppComponent }
     ])
   ],
   entryComponents: [
   ],
   declarations: [
     AppComponent,
-    FsExamplesComponent,
     FirstExampleComponent
   ],
   providers: [
