@@ -88,6 +88,7 @@
     .fs-filter .menu-filter .menu-filter-input .filters {
       position: absolute;
       min-width: 400px;
+      width: 100%;
       margin-top: -8px;
       display: none; }
       .fs-filter .menu-filter .menu-filter-input .filters .wrap {
