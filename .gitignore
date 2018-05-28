@@ -37,3 +37,5 @@ dist/*
 /dist/
 /dll/
 /.playground/
+/*.code-workspace
+/package
