@@ -1,0 +1,61 @@
+<div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="config?.items?.length"
+     [ngClass]="{ 'filters-open': showFilterMenu, loading: loading }">
+  <div *ngIf="!config.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
+    <div class="menu-filter-input" fxFlex="grow">
+      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
+           *ngIf="config.items.length">
+        <mat-form-field class="filter-input">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [(ngModel)]="searchinput" name="filter-input"
+                 (ngModelChange)="modelChange(searchinput)">
+          <mat-placeholder>Search</mat-placeholder>
+        </mat-form-field>
+
+        <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
+          <a (click)="clear()" *ngIf="searchinput">
+            <mat-icon>clear</mat-icon>
+          </a>
+          <a (click)="switchFilterVisibility()" class="action-filter">
+            <mat-icon>filter_list</mat-icon>
+          </a>
+          <a (click)="reload()" class="action-reload">
+            <mat-icon>refresh</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <filters-list [items]="config.items"
+                    [inline]="config.inline"
+                    (filterChanged)="filterChange($event)"
+                    (search)="search()"
+                    (cancel)="cancel()">
+      </filters-list>
+      <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
+      <!--<div class="filters">
+        <div class="wrap">
+          &lt;!&ndash; @TODO
+					  Mobal version of filters
+					  fs-heading
+					  heading-actions
+					&ndash;&gt;
+          <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> &lt;!&ndash; fs-heading &ndash;&gt;
+            Refine Search
+          </div>
+
+          <ng-container *ngFor="let filterItem of config.items">
+            <ng-container
+              *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>
+          </ng-container>
+
+          <div class="buttons">
+            <button type="button" mat-button (click)="filterToggle(false,true)"
+                    class="filter-button">Search
+            </button>
+            <button type="button" mat-button (click)="cancel()" class="cancel-button">Cancel</button>
+          </div>
+        </div>
+      </div>-->
+      <!--<div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>-->
+    </div>
+  </div>
+</div>

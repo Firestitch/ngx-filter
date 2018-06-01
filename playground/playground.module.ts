@@ -10,6 +10,7 @@ import { AppMaterialModule } from './app/material.module';
 import { RouterModule } from '@angular/router';
 import { FsExampleModule } from '@firestitch/example';
 import { FirstExampleComponent } from './app/components/first-example/first-example.component';
+import { SecondExampleComponent } from './app/components/second-example/second-example.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FirstExampleComponent } from './app/components/first-example/first-exam
   ],
   declarations: [
     AppComponent,
-    FirstExampleComponent
+    FirstExampleComponent,
+    SecondExampleComponent,
   ],
   providers: [
   ],

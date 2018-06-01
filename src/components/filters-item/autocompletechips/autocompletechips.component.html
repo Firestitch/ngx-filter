@@ -1,0 +1,24 @@
+<mat-form-field floatLabel="auto">
+  <mat-label>{{item.label}}</mat-label>
+  <mat-chip-list #chipList>
+    <mat-chip *ngFor="let item of item.model"
+              (remove)="removeAutocompleteChipItem(item)">
+      {{ item.name }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+
+    <input #chipsInput matInput [(ngModel)]="item.selectedValue"
+           (ngModelChange)="onAutocompleteChipsChange(chipsInput)" type="text"
+           name="{{ item.name }}"
+           [matChipInputFor]="chipList"
+           [matAutocomplete]="autocompleteChipsInput">
+  </mat-chip-list>
+
+  <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete"
+                    (optionSelected)="addAutocompleteChipItem( $event)">
+    <mat-option *ngFor="let item of item.values$ | async" [value]="item">
+      {{ item.name }}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+</mat-form-field>

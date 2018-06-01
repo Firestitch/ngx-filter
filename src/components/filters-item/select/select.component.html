@@ -1,0 +1,23 @@
+<ng-template [ngIf]="item.values?.length">
+  <mat-form-field floatLabel="auto" *ngIf="item.multiple && !item.groups">
+    <mat-label>{{item.label}}</mat-label>
+    <mat-select [(ngModel)]="item.model"
+                [multiple]="item.multiple"
+                (onClose)="selectChange()">
+      <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
+        {{ item.name }}
+      </mat-option>
+    </mat-select>
+    <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+  </mat-form-field>
+
+  <mat-form-field floatLabel="auto" *ngIf="!item.multiple && !item.groups">
+    <mat-label>{{item.label}}</mat-label>
+    <mat-select [(ngModel)]="item.model" (change)="selectChange()">
+      <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
+        {{ item.name }}
+      </mat-option>
+    </mat-select>
+    <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+  </mat-form-field>
+</ng-template>

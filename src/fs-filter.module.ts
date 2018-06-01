@@ -19,6 +19,16 @@ import { FsStoreModule } from '@firestitch/store';
 import { FsFilterComponent } from './components/fsfilter/fsfilter.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FsFilter } from './classes/fsfilter.class';
+import { FilterComponent } from './components/filter/filter.component';
+import { FiltersListComponent } from './components/filters-list/filters-list.component';
+import { FilterItemComponent } from './components/filters-item/filter-item.component';
+import { SelectComponent } from './components/filters-item/select/select.component';
+import { TextComponent } from './components/filters-item/text/text.component';
+import { RangeComponent } from './components/filters-item/range/range.component';
+import { AutocompleteComponent } from './components/filters-item/autocomplete/autocomplete.component';
+import { AutocompletechipsComponent } from './components/filters-item/autocompletechips/autocompletechips.component';
+import { DateComponent } from './components/filters-item/date/date.component';
+import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.component';
 export * from './classes';
 
 @NgModule({
@@ -39,14 +49,25 @@ export * from './classes';
     FlexLayoutModule
   ],
   declarations: [
-    FsFilterComponent
+    FsFilterComponent,
+    FilterComponent,
+    FiltersListComponent,
+    FilterItemComponent,
+    SelectComponent,
+    TextComponent,
+    RangeComponent,
+    AutocompleteComponent,
+    AutocompletechipsComponent,
+    DateComponent,
+    CheckboxComponent,
   ],
   providers: [
     FsFilter,
     { provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'never' } }
   ],
   exports: [
-    FsFilterComponent
+    FsFilterComponent,
+    FilterComponent,
   ]
 })
 export class FsFilterModule {
