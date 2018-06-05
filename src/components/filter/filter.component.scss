@@ -313,6 +313,11 @@
 }
 
 .inline-actions {
+  .active-filters-counter {
+    color: #9d9d9d;
+    font-size: 14px;
+
+  }
   a {
     cursor: pointer;
   }

@@ -11,15 +11,15 @@ export class FiltersListComponent {
 
   @Output() public filterChanged = new EventEmitter();
   @Output() public search = new EventEmitter();
-  @Output() public cancel = new EventEmitter();
+  // @Output() public cancel = new EventEmitter();
 
   public doSearch() {
     this.search.next();
   }
 
-  public doCancel() {
-    this.cancel.next();
-  }
+  // public doCancel() {
+  //   this.cancel.next();
+  // }
 
   public filterChange(event) {
     this.filterChanged.next(event);

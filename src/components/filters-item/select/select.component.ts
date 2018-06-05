@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { list as arrayList } from '@firestitch/common/array';
 
 
 @Component({
@@ -27,5 +28,7 @@ export class SelectComponent extends BaseItemComponent {
     }
 
     this.itemChange();
+
+    // console.log('value', value)
   }
 }

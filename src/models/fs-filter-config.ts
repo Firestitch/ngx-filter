@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import * as _isObject from 'lodash/isObject';
 import * as _clone from 'lodash/clone';
 
-import { FsFilterConfigItem } from './fs-filter-item';
+import { FsFilterConfigItem, ItemType } from './fs-filter-item';
 
 
 export class FsFilterConfig extends Model {
@@ -19,6 +19,7 @@ export class FsFilterConfig extends Model {
   @Alias() public change: Function;
 
   public items: FsFilterConfigItem[] = [];
+  public searchInput = null;
 
   constructor(data: any = {}) {
     super();
@@ -30,6 +31,8 @@ export class FsFilterConfig extends Model {
     if (items && Array.isArray(items)) {
       this.items = items.map((item) => new FsFilterConfigItem(item, this, route, persists));
     }
+
+    this.searchInput = this.items.find((item) => item.type === ItemType.text);
   }
 
   public gets(opts: any = {}) {
@@ -40,7 +43,7 @@ export class FsFilterConfig extends Model {
 
       let value = _clone(filter.model);
 
-      if (filter.type == 'select') {
+      if (filter.type == ItemType.select) {
 
         if (filter.multiple) {
 
@@ -62,11 +65,11 @@ export class FsFilterConfig extends Model {
             }
           }
         }
-      } else if (filter.type == 'autocompletechips') {
+      } else if (filter.type == ItemType.autocompletechips) {
         if (Array.isArray(filter.model) && filter.model.length && !opts.expand) {
           value = arrayList(filter.model, 'value');
         }
-      } else if (filter.type == 'checkbox') {
+      } else if (filter.type == ItemType.checkbox) {
         value = filter.model ? filter.checked : filter.unchecked;
       }
 
@@ -75,13 +78,13 @@ export class FsFilterConfig extends Model {
         continue;
       }
 
-      if (filter.type == 'date' || filter.type == 'datetime') {
+      if (filter.type == ItemType.date || filter.type == ItemType.datetime) {
 
         if (value) {
           value = moment(value).format();
         }
 
-      } else if (filter.type == 'daterange' || filter.type == 'datetimerange') {
+      } else if (filter.type == ItemType.daterange || filter.type == ItemType.datetimerange) {
 
         const from = value.from;
         const to = value.to;
@@ -95,7 +98,7 @@ export class FsFilterConfig extends Model {
           value.to = moment(to).format();
         }
 
-      } else if (filter.type == 'autocomplete') {
+      } else if (filter.type == ItemType.autocomplete) {
 
         if (isEmpty(filter.model.value, {zero: true})) {
           continue;
@@ -124,6 +127,48 @@ export class FsFilterConfig extends Model {
     }
 
     return query;
+  }
+
+  public countOfFilledItems() {
+    return this.items.reduce((counter, filter) => {
+
+      switch (filter.type) {
+        case ItemType.select: {
+          if (filter.model && filter.model !== '__all') {
+            counter++;
+          }
+        } break;
+
+        case ItemType.autocompletechips: {
+          if (Array.isArray(filter.model) && filter.model.length) {
+            counter++;
+          }
+        } break;
+
+        case ItemType.checkbox: {
+          if (filter.model) {
+            counter++;
+          }
+        } break;
+
+        case ItemType.daterange: case ItemType.datetimerange: {
+          if (filter.model.from || filter.model.to) {
+            counter++;
+          }
+        } break;
+
+        default: {
+          if (filter.model &&
+            (!isEmpty(filter.model, {zero: true}) || !isEmpty(filter.model.value, {zero: true}))
+          ) {
+            counter++;
+          }
+        }
+
+      }
+
+      return counter;
+    }, 0);
   }
 
   public filtersClear() {

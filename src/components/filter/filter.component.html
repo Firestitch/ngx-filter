@@ -6,29 +6,28 @@
            *ngIf="config.items.length">
         <mat-form-field class="filter-input">
           <mat-icon matPrefix>search</mat-icon>
-          <input matInput [(ngModel)]="searchinput" name="filter-input"
-                 (ngModelChange)="modelChange(searchinput)">
+          <input matInput [(ngModel)]="searchText" name="filter-input"
+                 (ngModelChange)="modelChange(searchText)">
           <mat-placeholder>Search</mat-placeholder>
         </mat-form-field>
-
         <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
-          <a (click)="clear()" *ngIf="searchinput">
+          <a (click)="clear()" *ngIf="searchText">
             <mat-icon>clear</mat-icon>
-          </a>
-          <a (click)="switchFilterVisibility()" class="action-filter">
-            <mat-icon>filter_list</mat-icon>
           </a>
           <a (click)="reload()" class="action-reload">
             <mat-icon>refresh</mat-icon>
           </a>
+          <a (click)="switchFilterVisibility()" class="action-filter">
+            <mat-icon>filter_list</mat-icon>
+          </a>
+          <span class="active-filters-counter" *ngIf="activeFiltersCount > 0">( {{ activeFiltersCount }} )</span>
         </div>
       </div>
 
       <filters-list [items]="config.items"
                     [inline]="config.inline"
                     (filterChanged)="filterChange($event)"
-                    (search)="search()"
-                    (cancel)="cancel()">
+                    (search)="search()">
       </filters-list>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
       <!--<div class="filters">

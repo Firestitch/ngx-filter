@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FsFilterConfig } from '../../models';
 import { IFilterConfigItem } from '../../classes';
 import { FsStore } from '@firestitch/store';
@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import * as moment from 'moment';
 import { FilterConfig } from '../../classes/filterconfig.interface';
+import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 
 
 @Component({
@@ -20,8 +21,11 @@ export class FilterComponent implements OnInit {
   public config: FsFilterConfig;
   public searchText = '';
   public persists = null;
+  public activeFiltersCount = 0;
 
   public showFilterMenu = false;
+
+  public modelChanged = new EventEmitter();
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -34,10 +38,35 @@ export class FilterComponent implements OnInit {
     this.restorePersistValues();
 
     this.config.initItems(this.filter.items, this.route, this.persists);
+
+    // Set search input value after restore from STORE
+    if (this.config.searchInput && this.config.searchInput.model) {
+      this.searchText = this.config.searchInput.model;
+    }
+
+    // Count active filters after restore
+    this.updateFilledCounter();
+
+    this.watchSearchInput();
+  }
+
+
+  public watchSearchInput() {
+    this.modelChanged
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        // takeWhile(() => !this.destroyed)
+      )
+      .subscribe((value) => {
+        this.config.searchInput.model = value;
+        this.filterChange();
+        this.change();
+      })
   }
 
   public modelChange(text) {
-
+    this.modelChanged.next(text);
   }
 
   public switchFilterVisibility() {
@@ -50,20 +79,48 @@ export class FilterComponent implements OnInit {
   }
 
   public clear() {
+    this.searchText = '';
     this.config.filtersClear();
+    this.activeFiltersCount = 0;
+    this.change();
   }
 
+  /**
+   * Close filter window and do change callback
+   */
   public search() {
     this.switchFilterVisibility();
+    this.change();
+  }
+
+  /**
+   * Call change callback and apply new filter values
+   */
+  public change() {
+    const query = this.config.gets({ flatten: true });
+    this.updateFilledCounter();
 
     if (this.config.change) {
-      const query = this.config.gets({ flatten: true });
       this.config.change(query, this.config);
     }
   }
 
-  public filterChange(event) {
-    console.log(event);
+  /**
+   * Do update count of filled filters
+   */
+  public updateFilledCounter() {
+    this.activeFiltersCount = this.config.countOfFilledItems();
+  }
+
+  /**
+   * Store updated filter data into localstorage
+   * @param {any} changedItem
+   */
+  public filterChange(changedItem = null) {
+    if (changedItem && changedItem === this.config.searchInput) {
+      this.searchText = changedItem.model;
+    }
+
     if (this.config.persist) {
       this.persists[this.config.persist.name] = {
         data: this.config.gets({expand: true, names: false}),
@@ -73,9 +130,16 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  /**
+   * Just reload with same values
+   */
   public reload() {
+    this.change();
   }
 
+  /**
+   * Restoring values from local storage
+   */
   public restorePersistValues() {
     this.persists = this._store.get(this.config.namespace + '-persist', {});
 
@@ -108,7 +172,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public cancel() {
-    this.switchFilterVisibility();
-  }
+  // public cancel() {
+  //   this.switchFilterVisibility();
+  // }
 }
