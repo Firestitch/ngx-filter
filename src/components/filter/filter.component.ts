@@ -128,6 +128,10 @@ export class FilterComponent implements OnInit {
       };
       this._store.set(this.config.namespace + '-persist', this.persists, {});
     }
+
+    if (this.config.inline) {
+      this.change();
+    }
   }
 
   /**

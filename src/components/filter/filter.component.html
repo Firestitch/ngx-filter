@@ -30,31 +30,16 @@
                     (search)="search()">
       </filters-list>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
-      <!--<div class="filters">
-        <div class="wrap">
-          &lt;!&ndash; @TODO
-					  Mobal version of filters
-					  fs-heading
-					  heading-actions
-					&ndash;&gt;
-          <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> &lt;!&ndash; fs-heading &ndash;&gt;
-            Refine Search
-          </div>
 
-          <ng-container *ngFor="let filterItem of config.items">
-            <ng-container
-              *ngTemplateOutlet="filterTemplate; context: { localSk: filterItem }"></ng-container>
-          </ng-container>
-
-          <div class="buttons">
-            <button type="button" mat-button (click)="filterToggle(false,true)"
-                    class="filter-button">Search
-            </button>
-            <button type="button" mat-button (click)="cancel()" class="cancel-button">Cancel</button>
-          </div>
-        </div>
-      </div>-->
       <!--<div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>-->
     </div>
+  </div>
+
+  <div *ngIf="config.inline" class="inline-filter" [ngClass]="{'inline': config.inline}">
+    <filters-list [items]="config.items"
+                  [inline]="config.inline"
+                  (filterChanged)="filterChange($event)"
+                  (search)="search()">
+    </filters-list>
   </div>
 </div>

@@ -15,7 +15,7 @@
                  (itemChanged)="filterChange($event)">
     </filter-item>
 
-    <div class="buttons">
+    <div class="buttons" *ngIf="!inline">
       <button type="button" mat-button (click)="doSearch()"
               class="filter-button">Search
       </button>
