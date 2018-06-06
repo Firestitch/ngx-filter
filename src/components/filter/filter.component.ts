@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FsFilterConfig } from '../../models';
 import { IFilterConfigItem } from '../../classes';
 import { FsStore } from '@firestitch/store';
@@ -13,7 +13,8 @@ import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'filter',
   styleUrls: [ './filter.component.scss' ],
-  templateUrl: './filter.component.html'
+  templateUrl: './filter.component.html',
+  encapsulation: ViewEncapsulation.None
 })
 export class FilterComponent implements OnInit {
   @Input() filter: FilterConfig = null;
@@ -70,7 +71,11 @@ export class FilterComponent implements OnInit {
   }
 
   public switchFilterVisibility() {
-    this.showFilterMenu = !this.showFilterMenu;
+    this.changeVisibility(!this.showFilterMenu);
+  }
+
+  public changeVisibility(state: boolean) {
+    this.showFilterMenu = state;
     if (this.showFilterMenu) {
       window.document.body.classList.add('fs-filters-open')
     } else {
@@ -82,7 +87,9 @@ export class FilterComponent implements OnInit {
     this.searchText = '';
     this.config.filtersClear();
     this.activeFiltersCount = 0;
+    this.filterChange();
     this.change();
+    this.changeVisibility(false);
   }
 
   /**

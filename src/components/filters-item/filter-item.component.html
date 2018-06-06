@@ -1,4 +1,4 @@
-<div class="filter-group" *ngIf="!item.disabled">
+<ng-template ngIf="!item.disabled">
   <div class="filter filter-{{ item.type }}">
     <div class="filter-label" *ngIf="!inline">
       <div class="filter-label-content">
@@ -32,7 +32,7 @@
                                 (itemChanged)="itemChange($event)">
       </filter-item-autocomplete>
       <filter-item-autocompletechips class="interface"
-                                *ngSwitchCase="itemType.autocompletechips"
+                                     *ngSwitchCase="itemType.autocompletechips"
                                      [item]="item"
                                      [inline]="inline"
                                      (itemChanged)="itemChange($event)">
@@ -44,9 +44,9 @@
                         (itemChanged)="itemChange($event)">
       </filter-item-date>
       <filter-item-checkbox class="interface interface-checkbox"
-                        *ngSwitchCase="itemType.checkbox"
-                        [item]="item"
-                        [inline]="inline"
+                            *ngSwitchCase="itemType.checkbox"
+                            [item]="item"
+                            [inline]="inline"
                             (itemChanged)="itemChange($event)">
       </filter-item-checkbox>
     </ng-container>
@@ -61,4 +61,4 @@
       </mat-checkbox>
     </div>
   </div>
-</div>
+</ng-template>

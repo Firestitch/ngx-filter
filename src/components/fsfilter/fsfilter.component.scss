@@ -1,3 +1,4 @@
+/*
 
 .fs-filter {
   position: relative;
@@ -91,18 +92,18 @@
           }
         }
       }
-      /*
+      !*
       .action-filter {
         display: none;
         z-index: 30;
       }
-      */
+      *!
 
       mat-form-field {
         width: 100%;
       }
 
-      /*
+      !*
       TODO
       md-datepicker-container {
         width: 100%;
@@ -110,10 +111,10 @@
             margin-left: 0;
         }
       }
-      */
+      *!
 
       .main-filter-bar {
-        height: 40px; /* Largest height between inputs, buttons, icons */
+        height: 40px; !* Largest height between inputs, buttons, icons *!
 
         .mat-input-prefix {
           align-self: flex-end;
@@ -121,13 +122,13 @@
 
         mat-form-field {
           width: 100%;
-          /*
+          !*
           input {
             padding-right: 26px;
             padding-left: 26px;
             position: relative;
           }
-          */
+          *!
         }
       }
 
@@ -333,14 +334,14 @@
 
     .title {
       display: block;
-      /*
+      !*
       fs-heading {
         margin: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      */
+      *!
     }
   }
 
@@ -400,3 +401,4 @@
     }
   }
 }
+*/

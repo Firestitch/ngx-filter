@@ -27,7 +27,8 @@
       <filters-list [items]="config.items"
                     [inline]="config.inline"
                     (filterChanged)="filterChange($event)"
-                    (search)="search()">
+                    (search)="search()"
+                    (clear)="clear()">
       </filters-list>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
 
