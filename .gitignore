@@ -39,3 +39,4 @@ dist/*
 /.playground/
 /*.code-workspace
 /package
+/demo
