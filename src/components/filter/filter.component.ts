@@ -1,28 +1,31 @@
 import { Component, EventEmitter, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FsFilterConfig } from '../../models';
-import { IFilterConfigItem } from '../../classes';
 import { FsStore } from '@firestitch/store';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import * as moment from 'moment';
-import { FilterConfig } from '../../classes/filterconfig.interface';
+import { FilterConfig } from '../../classes';
 import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'filter',
+  selector: 'fs-filter',
   styleUrls: [ './filter.component.scss' ],
   templateUrl: './filter.component.html',
   encapsulation: ViewEncapsulation.None
 })
 export class FilterComponent implements OnInit {
-  @Input() filter: FilterConfig = null;
+  @Input() public filter: FilterConfig = null;
+  @Input() public sortUpdate: EventEmitter<any> = null;
+  @Input() public showSortBy: any = true;
+  @Input() public showFilterInput = true;
 
   public config: FsFilterConfig;
   public searchText = '';
   public persists = null;
   public activeFiltersCount = 0;
+  public activeFiltersWithInputCount = 0;
 
   public showFilterMenu = false;
 
@@ -49,6 +52,14 @@ export class FilterComponent implements OnInit {
     this.updateFilledCounter();
 
     this.watchSearchInput();
+
+    if (this.sortUpdate) {
+      this.sortUpdate.subscribe((data) => {
+        this.config.updateSorting(data);
+      });
+    }
+
+    this.config.init(this.config)
   }
 
 
@@ -87,6 +98,7 @@ export class FilterComponent implements OnInit {
     this.searchText = '';
     this.config.filtersClear();
     this.activeFiltersCount = 0;
+    this.activeFiltersWithInputCount = 0;
     this.filterChange();
     this.change();
     this.changeVisibility(false);
@@ -98,6 +110,11 @@ export class FilterComponent implements OnInit {
   public search() {
     this.switchFilterVisibility();
     this.change();
+
+    // Send event that sort has been updated
+    if (this.config.sortChange) {
+      this.config.sortChange(this.config);
+    }
   }
 
   /**
@@ -117,6 +134,10 @@ export class FilterComponent implements OnInit {
    */
   public updateFilledCounter() {
     this.activeFiltersCount = this.config.countOfFilledItems();
+
+    if (this.searchText !== '') {
+      this.activeFiltersWithInputCount = this.activeFiltersCount + 1;
+    }
   }
 
   /**
@@ -128,13 +149,13 @@ export class FilterComponent implements OnInit {
       this.searchText = changedItem.model;
     }
 
-    if (this.config.persist) {
-      this.persists[this.config.persist.name] = {
-        data: this.config.gets({expand: true, names: false}),
-        date: new Date()
-      };
-      this._store.set(this.config.namespace + '-persist', this.persists, {});
-    }
+    // if (this.config.persist) {
+    //   this.persists[this.config.persist.name] = {
+    //     data: this.config.gets({expand: true, names: false}),
+    //     date: new Date()
+    //   };
+    //   this._store.set(this.config.namespace + '-persist', this.persists, {});
+    // }
 
     if (this.config.inline) {
       this.change();

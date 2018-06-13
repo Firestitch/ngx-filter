@@ -8,17 +8,24 @@ import * as _clone from 'lodash/clone';
 
 import { FsFilterConfigItem, ItemType } from './fs-filter-item';
 
+export const SORT_BY_FIELD = 'system_sort_by';
+export const SORT_DIRECTION_FIELD = 'system_sort_direction';
 
 export class FsFilterConfig extends Model {
 
   @Alias() public load = true;
   @Alias() public persist: any = false;
   @Alias() public inline = false;
+  @Alias('sorting') public sortingValues: any[] = null;
+  @Alias() public sortingDirection = null;
   @Alias() public namespace = 'filter';
   @Alias() public init: Function;
   @Alias() public change: Function;
+  @Alias() public sortChange: Function;
 
   public items: FsFilterConfigItem[] = [];
+  public sortByItem: FsFilterConfigItem = null;
+  public sortDirectionItem: FsFilterConfigItem = null;
   public searchInput = null;
 
   constructor(data: any = {}) {
@@ -32,7 +39,44 @@ export class FsFilterConfig extends Model {
       this.items = items.map((item) => new FsFilterConfigItem(item, this, route, persists));
     }
 
+    this.initSorting(route, persists);
+
     this.searchInput = this.items.find((item) => item.type === ItemType.text);
+  }
+
+  public initSorting(route, persists) {
+    if (this.sortingValues) {
+      const sortByItem = {
+        name: SORT_BY_FIELD,
+        type: ItemType.select,
+        label: 'Sort By',
+        values: this.sortingValues
+      };
+
+
+      const defaultSortBy = this.sortingValues.find((value: any) => value.default);
+      if (defaultSortBy && defaultSortBy.value) {
+        sortByItem['default'] = defaultSortBy.value;
+      }
+
+      this.sortByItem = new FsFilterConfigItem(sortByItem, this, route, persists);
+
+      const sortDirectionItem = {
+        name: SORT_DIRECTION_FIELD,
+        type: ItemType.select,
+        label: 'Sort Direction',
+        values: [
+          { name: 'Asc', value: 'asc' },
+          { name: 'Desc', value: 'desc' }
+        ]
+      };
+
+      if (this.sortingDirection) {
+        sortDirectionItem['default'] = this.sortingDirection;
+      }
+
+      this.sortDirectionItem = new FsFilterConfigItem(sortDirectionItem, this, route, persists);
+    }
   }
 
   public gets(opts: any = {}) {
@@ -129,12 +173,33 @@ export class FsFilterConfig extends Model {
     return query;
   }
 
+  public getSorting() {
+    return {
+      sortBy: this.sortByItem.model,
+      sortDirection: this.sortDirectionItem.model,
+    }
+  }
+
+  public updateSorting(sorting) {
+    if (sorting.sortBy) {
+      this.sortByItem.model = sorting.sortBy;
+    }
+
+    if (sorting.sortDirection) {
+      this.sortDirectionItem.model = sorting.sortDirection;
+    }
+  }
+
   public countOfFilledItems() {
     return this.items.reduce((counter, filter) => {
 
       switch (filter.type) {
         case ItemType.select: {
-          if (filter.model && filter.model !== '__all') {
+
+          if (
+            (filter.multiple && filter.isolate && Array.isArray(filter.model) && filter.model.length) ||
+            (!filter.multiple && filter.model && filter.model !== '__all')
+          ) {
             counter++;
           }
         } break;
@@ -159,6 +224,7 @@ export class FsFilterConfig extends Model {
 
         default: {
           if (filter.model &&
+            filter !== this.searchInput &&
             (!isEmpty(filter.model, {zero: true}) || !isEmpty(filter.model.value, {zero: true}))
           ) {
             counter++;

@@ -4,7 +4,7 @@
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
            *ngIf="config.items.length">
-        <mat-form-field class="filter-input">
+        <mat-form-field class="filter-input" *ngIf="showFilterInput">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput [(ngModel)]="searchText" name="filter-input"
                  (ngModelChange)="modelChange(searchText)">
@@ -21,10 +21,14 @@
             <mat-icon>filter_list</mat-icon>
           </a>
           <span class="active-filters-counter" *ngIf="activeFiltersCount > 0">( {{ activeFiltersCount }} )</span>
+          <span class="active-filters-counter with-input" *ngIf="activeFiltersWithInputCount > 0">( {{ activeFiltersWithInputCount }} )</span>
         </div>
       </div>
 
       <filters-list [items]="config.items"
+                    [showSortBy]="showSortBy"
+                    [sortBy]="config.sortByItem"
+                    [sortDirection]="config.sortDirectionItem"
                     [inline]="config.inline"
                     (filterChanged)="filterChange($event)"
                     (search)="search()"
@@ -38,6 +42,7 @@
 
   <div *ngIf="config.inline" class="inline-filter" [ngClass]="{'inline': config.inline}">
     <filters-list [items]="config.items"
+                  [sortBy]="config.sortByItem"
                   [inline]="config.inline"
                   (filterChanged)="filterChange($event)"
                   (search)="search()">

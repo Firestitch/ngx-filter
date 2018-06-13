@@ -16,9 +16,7 @@ import {  MatIconModule,
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsCommonModule } from '@firestitch/common';
 import { FsStoreModule } from '@firestitch/store';
-import { FsFilterComponent } from './components/fsfilter/fsfilter.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FsFilter } from './classes/fsfilter.class';
 import { FilterComponent } from './components/filter/filter.component';
 import { FiltersListComponent } from './components/filters-list/filters-list.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -49,7 +47,6 @@ export * from './classes';
     FlexLayoutModule
   ],
   declarations: [
-    FsFilterComponent,
     FilterComponent,
     FiltersListComponent,
     FilterItemComponent,
@@ -62,11 +59,11 @@ export * from './classes';
     CheckboxComponent,
   ],
   providers: [
-    FsFilter,
+    // FsFilter,
     { provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'never' } }
   ],
   exports: [
-    FsFilterComponent,
+    // FsFilterComponent,
     FilterComponent,
   ]
 })

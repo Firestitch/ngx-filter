@@ -7,6 +7,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class FiltersListComponent {
   @Input() public items = [];
+  @Input() public showSortBy;
+  @Input() public sortBy = null;
+  @Input() public sortDirection = null;
   @Input() public inline = false;
 
   @Output() public filterChanged = new EventEmitter();

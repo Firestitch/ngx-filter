@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { nameValue, filter } from '@firestitch/common/array'
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FsFilter } from '../../../../src';
 import 'rxjs/add/operator/map';
-import { FsFilterConfig } from '../../../../src/models';
 import { ItemType } from '../../../../src/models/fs-filter-item';
 
 
@@ -17,8 +15,9 @@ export class SecondExampleComponent {
 
 
   public conf: any;
+  public sortUpdated = new EventEmitter();
 
-    users = [
+  public users = [
       { id: 1, name: 'John Doe' },
       { id: 2, name: 'Jane Doe' },
       { id: 3, name: 'Bob Tom' }
@@ -28,6 +27,11 @@ export class SecondExampleComponent {
     this.conf = {
       persist: 'filter',
       inline: false,
+      sorting: [
+        { name: 'name', value: 'n', default: true},
+        { name: 'two', value: 't'}
+      ],
+      sortingDirection: 'asc',
       items: [
         {
           name: 'keyword',
@@ -115,7 +119,18 @@ export class SecondExampleComponent {
       },
       change: (query, instance) => {
         console.log('Change', query);
+      },
+      sortChange: (instance) => {
+        console.log(instance.getSorting());
       }
     };
+
+    setTimeout(() => {
+      this.sortUpdated.emit({
+        sortBy: 't',
+        sortDirection: 'desc'
+      });
+    }, 6000);
   }
+  // this.sortUpdated.su
 }

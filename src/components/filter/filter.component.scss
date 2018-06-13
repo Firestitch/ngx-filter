@@ -11,7 +11,7 @@
 }
 
 .fs-filter {
-  position: relative;
+  //position: relative;
   margin-bottom: 20px;
 
   .inline-filter {
@@ -23,6 +23,10 @@
 
   .title {
     display: none;
+  }
+
+  .sort {
+    display: none !important;
   }
 
   .results {
@@ -78,13 +82,13 @@
 
     .menu-filter-input {
 
-      position: relative;
+      //position: relative;
 
       .inline-actions {
         white-space: nowrap;
-        position: absolute;
-        right: 0;
-        top: 5px;
+        //position: absolute;
+        //right: 0;
+        //top: 5px;
         z-index: 50;
 
         a {
@@ -145,10 +149,11 @@
       .filters {
         position: absolute;
         min-width: 400px;
-        width: 100%;
+        width: 99%;
         margin-top: -8px;
         display: block;
         visibility: hidden;
+        left: 0.5%;
         //display: none;
 
         .wrap {
@@ -328,10 +333,14 @@
 
 .inline-actions {
   .active-filters-counter {
+    &.with-input {
+      display: none;
+    }
+
     color: #9d9d9d;
     font-size: 14px;
-
   }
+
   a {
     cursor: pointer;
   }
