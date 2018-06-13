@@ -94,6 +94,13 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  public clearSearchInput() {
+    this.searchText = '';
+    if (this.config.searchInput) {
+      this.config.searchInput.model = '';
+    }
+  }
+
   public clear() {
     this.searchText = '';
     this.config.filtersClear();
