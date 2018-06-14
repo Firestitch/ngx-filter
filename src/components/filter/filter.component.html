@@ -11,7 +11,7 @@
           <mat-placeholder>Search</mat-placeholder>
         </mat-form-field>
         <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
-          <a (click)="clearSearchInput()" *ngIf="searchText && showFilterInput">
+          <a class="action-clear" (click)="clearSearchInput()" *ngIf="searchText && showFilterInput">
             <mat-icon>clear</mat-icon>
           </a>
           <a (click)="reload()" class="action-reload">
