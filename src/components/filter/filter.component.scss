@@ -1,6 +1,17 @@
+@keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
 
 .fs-filter {
-  position: relative;
+  //position: relative;
   margin-bottom: 20px;
 
   .inline-filter {
@@ -12,6 +23,10 @@
 
   .title {
     display: none;
+  }
+
+  .sort {
+    display: none !important;
   }
 
   .results {
@@ -67,13 +82,13 @@
 
     .menu-filter-input {
 
-      position: relative;
+      //position: relative;
 
       .inline-actions {
         white-space: nowrap;
-        position: absolute;
-        right: 0;
-        top: 5px;
+        //position: absolute;
+        //right: 0;
+        //top: 5px;
         z-index: 50;
 
         a {
@@ -134,14 +149,17 @@
       .filters {
         position: absolute;
         min-width: 400px;
-        width: 100%;
+        width: 99%;
         margin-top: -8px;
-        display: none;
+        display: block;
+        visibility: hidden;
+        left: 0.5%;
+        //display: none;
 
         .wrap {
           padding: 8px 17px 17px 17px;
           background: #fff;
-          box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
           overflow: auto;
         }
 
@@ -282,7 +300,8 @@
     .main-filter-bar md-input-container input,
     .menu-filter-input .filters {
       z-index: 70;
-      display: block;
+      //display: block;
+      visibility: visible;
     }
   }
 }
@@ -313,6 +332,15 @@
 }
 
 .inline-actions {
+  .active-filters-counter {
+    &.with-input {
+      display: none;
+    }
+
+    color: #9d9d9d;
+    font-size: 14px;
+  }
+
   a {
     cursor: pointer;
   }
@@ -326,6 +354,14 @@
     .inline-actions {
       display: none;
     }
+
+    .wrap {
+      animation: slideInRight 300ms;
+    }
+  }
+
+  .filter-button {
+    display: none;
   }
 
   .fs-filter {
@@ -350,9 +386,19 @@
 
   .filter-by {
     //display: block;
-    margin: 10px 0;
-    font-weight: 600;
-    font-size: 16px;
+    .text {
+      font-weight: 600;
+      font-size: 20px;
+      margin: 25px 0;
+    }
+
+    .actions {
+      display: inherit;
+    }
+
+    button {
+      float: right;
+    }
   }
 
   .menu-filter {
@@ -360,8 +406,8 @@
       .filters {
         .wrap {
           position: fixed;
+          width: 75vw;
           top: 0;
-          left: 0;
           bottom: 0;
           right: 0;
           overflow-y: auto;

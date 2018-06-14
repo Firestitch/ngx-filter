@@ -1,0 +1,9 @@
+<mat-form-field floatLabel="auto">
+  <mat-label>{{item.label}}</mat-label>
+  <input matInput
+         fsDatePicker
+         [(ngModel)]="item.model"
+         (change)="itemChange()"
+         [name]="item.name">
+  <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+</mat-form-field>

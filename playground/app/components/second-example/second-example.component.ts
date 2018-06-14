@@ -1,38 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
+import { nameValue, filter } from '@firestitch/common/array'
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FsFilter } from '../../../../src';
-import { FsArray } from '@firestitch/common';
 import 'rxjs/add/operator/map';
+import { ItemType } from '../../../../src/models/fs-filter-item';
+
 
 @Component({
-  selector: 'first-example',
-  templateUrl: 'first-example.component.html',
-  styleUrls: [ 'first-example.component.css' ]
+  selector: 'second-example',
+  templateUrl: 'second-example.component.html',
+  styleUrls: [ 'second-example.component.css' ]
 })
-export class FirstExampleComponent {
+export class SecondExampleComponent {
 
-  filter = new FsFilter();
 
-    users = [
+  public conf: any;
+  public sortUpdated = new EventEmitter();
+
+  public users = [
       { id: 1, name: 'John Doe' },
       { id: 2, name: 'Jane Doe' },
       { id: 3, name: 'Bob Tom' }
     ];
 
-  constructor(private fsArray: FsArray) {
-    this.filter.fsConfig = {
+  constructor() {
+    this.conf = {
       persist: 'filter',
       inline: false,
+      sorting: [
+        { name: 'name', value: 'n', default: true},
+        { name: 'two', value: 't'}
+      ],
+      sortingDirection: 'asc',
       items: [
         {
           name: 'keyword',
-          type: 'text',
+          type: ItemType.text,
           label: 'Search',
           query: 'keyword'
         },
         {
           name: 'simple_select',
-          type: 'select',
+          type: ItemType.select,
           label: 'Simple Select',
           values: () => {
               return [
@@ -45,56 +54,56 @@ export class FirstExampleComponent {
         },
         {
           name: 'range',
-          type: 'range',
+          type: ItemType.range,
           label: 'Range',
           placeholder: ['Min', 'Max']
         },
         {
           name: 'simple_select',
-          type: 'select',
+          type: ItemType.select,
           label: 'Observable Select',
           values: () => {
             return new BehaviorSubject(this.users)
-            .map(users => this.fsArray.nameValue(users, 'name', 'id'));
+            .map(users => nameValue(users, 'name', 'id'));
           }
         },
         {
           name: 'autocomplete_user_id',
           label: 'Autocomplete User',
-          type: 'autocomplete',
+          type: ItemType.autocomplete,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
-            .map(users => this.fsArray.filter(users, (user) => {
+            .map(users => filter(users, (user) => {
               return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
             }))
-            .map(users => this.fsArray.nameValue(users, 'name', 'id'));
+            .map(users => nameValue(users, 'name', 'id'));
           }
         },
         {
           name: 'autocompletechips_user_id',
           label: 'Autocomplete Chips User',
-          type: 'autocompletechips',
+          type: ItemType.autocompletechips,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
-            .map(users => this.fsArray.filter(users, (user) => {
+            .map(users => filter(users, (user) => {
               return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
             }))
-            .map(users => this.fsArray.nameValue(users, 'name', 'id'));
+            .map(users => nameValue(users, 'name', 'id'));
           }
         },
         {
           name: 'date',
-          type: 'date',
+          type: ItemType.date,
           label: 'Date'
         },
         {
           name: 'checkbox',
-          type: 'checkbox',
+          type: ItemType.checkbox,
           label: 'Checkbox'
         },
         {
           name: 'state',
-          type: 'select',
+          type: ItemType.select,
           label: 'Status',
           multiple: true,
           values: [
@@ -110,7 +119,18 @@ export class FirstExampleComponent {
       },
       change: (query, instance) => {
         console.log('Change', query);
+      },
+      sortChange: (instance) => {
+        console.log(instance.getSorting());
       }
     };
+
+    setTimeout(() => {
+      this.sortUpdated.emit({
+        sortBy: 't',
+        sortDirection: 'desc'
+      });
+    }, 6000);
   }
+  // this.sortUpdated.su
 }

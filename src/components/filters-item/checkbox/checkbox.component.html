@@ -1,0 +1,4 @@
+<mat-checkbox (change)="itemChange()" [(ngModel)]="item.model">
+  {{ inline ? item.label : '' }}
+  <span class="checkbox-label">{{item.label}}</span>
+</mat-checkbox>

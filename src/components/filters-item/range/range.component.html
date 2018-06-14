@@ -1,0 +1,18 @@
+<span fxLayout="row">
+  <mat-form-field class="filter-range-min">
+    <input matInput
+           [(ngModel)]="item.model.min"
+           (change)="itemChange()">
+    <mat-placeholder>
+    {{item.placeholder[0]}}
+    </mat-placeholder>
+  </mat-form-field>
+  <mat-form-field class="filter-range-max">
+    <input matInput
+           [(ngModel)]="item.model.max"
+           (change)="itemChange()">
+    <mat-placeholder>
+    {{item.placeholder[1]}}
+    </mat-placeholder>
+  </mat-form-field>
+</span>

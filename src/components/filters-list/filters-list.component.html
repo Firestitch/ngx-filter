@@ -1,0 +1,51 @@
+<div class="filters">
+  <div class="wrap">
+    <!-- @TODO
+                Mobal version of filters
+                fs-heading
+                heading-actions
+              -->
+    <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->
+      <span class="text" fxFlex="grow">Filter By</span>
+      <div class="actions">
+        <button type="button" mat-button (click)="clearAll()">Clear All</button>
+        <button type="button" mat-button (click)="doSearch()">Done</button>
+      </div>
+    </div>
+
+    <filter-item *ngFor="let filterItem of items"
+                 class="filter-group"
+                 [item]="filterItem"
+                 [inline]="inline"
+                 (itemChanged)="filterChange($event)">
+    </filter-item>
+
+    <ng-container *ngIf="sortBy && sortBy.values && sortBy.values.length > 0 && showSortBy">
+      <filter-item class="filter-group sort"
+                   [item]="sortBy"
+                   [inline]="inline"
+                   (itemChanged)="filterChange($event)">
+      </filter-item>
+      <filter-item class="filter-group sort"
+                   [item]="sortDirection"
+                   [inline]="inline"
+                   (itemChanged)="filterChange($event)">
+      </filter-item>
+    </ng-container>
+
+    <div class="buttons" *ngIf="!inline">
+      <button type="button"
+              class="filter-button"
+              mat-raised-button
+              color="accept"
+              (click)="doSearch()">Search
+      </button>
+      <button type="button"
+              class="filter-button"
+              mat-raised-button
+              color="accept"
+              (click)="clearAll()">Clear
+      </button>
+    </div>
+  </div>
+</div>
