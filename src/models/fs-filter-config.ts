@@ -66,8 +66,8 @@ export class FsFilterConfig extends Model {
         type: ItemType.select,
         label: 'Sort Direction',
         values: [
-          { name: 'Asc', value: 'asc' },
-          { name: 'Desc', value: 'desc' }
+          { name: 'Ascending', value: 'asc' },
+          { name: 'Descending', value: 'desc' }
         ]
       };
 

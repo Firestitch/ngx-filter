@@ -85,26 +85,26 @@
       //position: relative;
 
       .inline-actions {
-        white-space: nowrap;
-        //position: absolute;
-        //right: 0;
-        //top: 5px;
-        z-index: 50;
-
-        a {
-          color: rgba(0, 0, 0, 0.54);
-          background: #fff;
-          height: 22px;
-
-          i {
-            transform: scale(.9);
-            vertical-align: middle;
-          }
-
-          &:hover {
-            color: inherit;
-          }
-        }
+        //white-space: nowrap;
+        ////position: absolute;
+        ////right: 0;
+        ////top: 5px;
+        //z-index: 50;
+        //
+        //a {
+        //  color: rgba(0, 0, 0, 0.54);
+        //  background: #fff;
+        //  height: 22px;
+        //
+        //  i {
+        //    transform: scale(.9);
+        //    vertical-align: middle;
+        //  }
+        //
+        //  &:hover {
+        //    color: inherit;
+        //  }
+        //}
       }
       /*
       .action-filter {
@@ -129,31 +129,57 @@
 
       .main-filter-bar {
         height: 40px; /* Largest height between inputs, buttons, icons */
+        position: relative;
 
-        .mat-input-prefix {
+        .mat-input-infix {
+          padding-bottom: 0.3em;
+        }
+
+        .mat-input-prefix, .mat-input-suffix {
           align-self: flex-end;
+          display: flex;
+          align-items: center;
+
+          white-space: nowrap;
+          z-index: 50;
+
+          mat-icon, span {
+            cursor: pointer;
+            color: rgba(0, 0, 0, 0.54);
+            //background: #fff;
+            //height: 22px;
+            //
+            //i {
+            //  transform: scale(.9);
+            //  vertical-align: middle;
+            //}
+
+            &:hover {
+              color: inherit;
+            }
+          }
         }
 
-        mat-form-field {
-          width: 100%;
-          /*
-          input {
-            padding-right: 26px;
-            padding-left: 26px;
-            position: relative;
-          }
-          */
-        }
+        //mat-form-field {
+        //  width: 100%;
+        //  /*
+        //  input {
+        //    padding-right: 26px;
+        //    padding-left: 26px;
+        //    position: relative;
+        //  }
+        //  */
+        //}
       }
 
       .filters {
         position: absolute;
         min-width: 400px;
-        width: 99%;
-        margin-top: -8px;
+        width: 100%;
+        margin-top: 10px;
         display: block;
         visibility: hidden;
-        left: 0.5%;
+        left: 0%;
         //display: none;
 
         .wrap {
@@ -179,7 +205,11 @@
               }
             }
 
-            &.interface-range input {
+            &.interface-range input, &.interface-range .mat-input-wrapper {
+              text-align: center;
+            }
+
+            &.interface-range {
               text-align: center;
             }
 
@@ -331,19 +361,13 @@
   }
 }
 
-.inline-actions {
-  .active-filters-counter {
-    &.with-input {
-      display: none;
-    }
-
-    color: #9d9d9d;
-    font-size: 14px;
+.active-filters-counter {
+  &.with-input {
+    display: none;
   }
 
-  a {
-    cursor: pointer;
-  }
+  color: #9d9d9d;
+  font-size: 14px;
 }
 
 @media screen and (max-width: 599px) {
@@ -387,6 +411,9 @@
   .filter-by {
     //display: block;
     .text {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
       font-weight: 600;
       font-size: 20px;
       margin: 25px 0;
@@ -394,6 +421,7 @@
 
     .actions {
       display: inherit;
+      margin: 25px 0;
     }
 
     button {

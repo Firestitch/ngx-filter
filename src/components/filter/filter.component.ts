@@ -91,6 +91,7 @@ export class FilterComponent implements OnInit {
       window.document.body.classList.add('fs-filters-open')
     } else {
       window.document.body.classList.remove('fs-filters-open');
+      this.updateFilledCounter();
     }
   }
 
@@ -129,7 +130,7 @@ export class FilterComponent implements OnInit {
    */
   public change() {
     const query = this.config.gets({ flatten: true });
-    this.updateFilledCounter();
+    // this.updateFilledCounter();
 
     if (this.config.change) {
       this.config.change(query, this.config);
@@ -156,13 +157,13 @@ export class FilterComponent implements OnInit {
       this.searchText = changedItem.model;
     }
 
-    // if (this.config.persist) {
-    //   this.persists[this.config.persist.name] = {
-    //     data: this.config.gets({expand: true, names: false}),
-    //     date: new Date()
-    //   };
-    //   this._store.set(this.config.namespace + '-persist', this.persists, {});
-    // }
+    if (this.config.persist) {
+      this.persists[this.config.persist.name] = {
+        data: this.config.gets({expand: true, names: false}),
+        date: new Date()
+      };
+      this._store.set(this.config.namespace + '-persist', this.persists, {});
+    }
 
     if (this.config.inline) {
       this.change();

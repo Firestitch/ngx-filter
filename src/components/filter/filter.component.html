@@ -9,8 +9,37 @@
           <input matInput [(ngModel)]="searchText" name="filter-input"
                  (ngModelChange)="modelChange(searchText)">
           <mat-placeholder>Search</mat-placeholder>
+
+          <mat-icon class="action-clear"
+                    matSuffix
+                    *ngIf="searchText && showFilterInput"
+                    (click)="clearSearchInput()">
+            clear
+          </mat-icon>
+          <mat-icon class="action-reload" matSuffix (click)="reload()">refresh</mat-icon>
+          <mat-icon class="action-filter" matSuffix (click)="switchFilterVisibility()">filter_list</mat-icon>
+          <span class="active-filters-counter"
+                matSuffix
+                *ngIf="activeFiltersCount > 0">
+            ( {{ activeFiltersCount }} )
+          </span>
+          <span class="active-filters-counter with-input"
+                matSuffix
+                *ngIf="activeFiltersWithInputCount > 0">
+            ( {{ activeFiltersWithInputCount }} )
+          </span>
         </mat-form-field>
-        <div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
+
+        <filters-list [items]="config.items"
+                      [showSortBy]="showSortBy"
+                      [sortBy]="config.sortByItem"
+                      [sortDirection]="config.sortDirectionItem"
+                      [inline]="config.inline"
+                      (filterChanged)="filterChange($event)"
+                      (search)="search()"
+                      (clear)="clear()">
+        </filters-list>
+        <!--<div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
           <a class="action-clear" (click)="clearSearchInput()" *ngIf="searchText && showFilterInput">
             <mat-icon>clear</mat-icon>
           </a>
@@ -22,18 +51,8 @@
           </a>
           <span class="active-filters-counter" *ngIf="activeFiltersCount > 0">( {{ activeFiltersCount }} )</span>
           <span class="active-filters-counter with-input" *ngIf="activeFiltersWithInputCount > 0">( {{ activeFiltersWithInputCount }} )</span>
-        </div>
+        </div>-->
       </div>
-
-      <filters-list [items]="config.items"
-                    [showSortBy]="showSortBy"
-                    [sortBy]="config.sortByItem"
-                    [sortDirection]="config.sortDirectionItem"
-                    [inline]="config.inline"
-                    (filterChanged)="filterChange($event)"
-                    (search)="search()"
-                    (clear)="clear()">
-      </filters-list>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
 
       <!--<div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>-->

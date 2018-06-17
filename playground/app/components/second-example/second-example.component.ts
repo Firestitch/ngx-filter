@@ -16,6 +16,7 @@ export class SecondExampleComponent {
 
   public conf: any;
   public sortUpdated = new EventEmitter();
+  public query = null;
 
   public users = [
       { id: 1, name: 'John Doe' },
@@ -59,7 +60,7 @@ export class SecondExampleComponent {
           placeholder: ['Min', 'Max']
         },
         {
-          name: 'simple_select',
+          name: 'observable_select',
           type: ItemType.select,
           label: 'Observable Select',
           values: () => {
@@ -116,9 +117,11 @@ export class SecondExampleComponent {
       ],
       init: (instance) => {
         console.log('Init', instance.gets({ flatten: true }));
+        this.query = instance.gets({ flatten: true });
       },
       change: (query, instance) => {
         console.log('Change', query);
+        this.query = query;
       },
       sortChange: (instance) => {
         console.log(instance.getSorting());
