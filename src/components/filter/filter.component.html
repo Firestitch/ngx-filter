@@ -1,10 +1,15 @@
 <div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="config?.items?.length"
-     [ngClass]="{ 'filters-open': showFilterMenu, loading: loading }">
+     [ngClass]="{
+     'filters-open': showFilterMenu,
+     loading: loading,
+     'no-input': !showFilterInput
+     }"
+>
   <div *ngIf="!config.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
            *ngIf="config.items.length">
-        <mat-form-field class="filter-input" *ngIf="showFilterInput">
+        <mat-form-field class="filter-input">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput [(ngModel)]="searchText" name="filter-input"
                  (ngModelChange)="modelChange(searchText)">

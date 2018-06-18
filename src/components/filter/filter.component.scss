@@ -11,7 +11,7 @@
 }
 
 .fs-filter {
-  //position: relative;
+  position: relative;
   margin-bottom: 20px;
 
   .inline-filter {
@@ -23,6 +23,16 @@
 
   .title {
     display: none;
+  }
+
+  &.no-input {
+    .filter-input {
+      .mat-input-prefix,
+      .mat-input-infix,
+      .mat-input-underline {
+        display: none !important;
+      }
+    }
   }
 
   .sort {
@@ -129,7 +139,6 @@
 
       .main-filter-bar {
         height: 40px; /* Largest height between inputs, buttons, icons */
-        position: relative;
 
         .mat-input-infix {
           padding-bottom: 0.3em;
