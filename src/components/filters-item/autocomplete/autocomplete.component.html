@@ -1,7 +1,7 @@
 <mat-form-field floatLabel="auto">
   <mat-label>{{item.label}}</mat-label>
   <input matInput type="text" [(ngModel)]="item.model"
-         (ngModelChange)="onAutocompleteChange(item)" name="{{ item.name }}"
+         (ngModelChange)="onAutocompleteChange()" name="{{ item.name }}"
          [matAutocomplete]="autocompleteInput">
   <mat-autocomplete #autocompleteInput="matAutocomplete" [displayWith]="displayAutocomplete">
     <mat-option *ngFor="let item of item.values$ | async" [value]="item">{{ item.name }}

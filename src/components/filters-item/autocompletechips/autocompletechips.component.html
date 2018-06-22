@@ -14,7 +14,7 @@
            [matAutocomplete]="autocompleteChipsInput">
   </mat-chip-list>
 
-  <mat-autocomplete #autocompleteChipsInput="matAutocomplete" [displayWith]="displayAutocomplete"
+  <mat-autocomplete #autocompleteChipsInput="matAutocomplete"
                     (optionSelected)="addAutocompleteChipItem( $event)">
     <mat-option *ngFor="let item of item.values$ | async" [value]="item">
       {{ item.name }}

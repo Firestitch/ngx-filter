@@ -27,6 +27,7 @@ import { AutocompleteComponent } from './components/filters-item/autocomplete/au
 import { AutocompletechipsComponent } from './components/filters-item/autocompletechips/autocompletechips.component';
 import { DateComponent } from './components/filters-item/date/date.component';
 import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.component';
+import { BaseItemComponent } from './components/filters-item/base-item/base-item.component';
 export * from './classes';
 
 @NgModule({
@@ -47,6 +48,7 @@ export * from './classes';
     FlexLayoutModule
   ],
   declarations: [
+    BaseItemComponent,
     FilterComponent,
     FiltersListComponent,
     FilterItemComponent,
