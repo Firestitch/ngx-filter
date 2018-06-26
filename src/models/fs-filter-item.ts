@@ -102,10 +102,12 @@ export class FsFilterConfigItem extends Model {
           this.sanitizeItem(values)
         });
       } else {
-        this.sanitizeItem(this.values);
+        const values = Array.isArray(this.values) ? (this.values as any).slice() : this.values;
+        this.sanitizeItem(values);
       }
     } else {
-      this.sanitizeItem(data.values);
+      const values = Array.isArray(data.values) ? data.values.slice() : data.values;
+      this.sanitizeItem(values);
     }
   }
 
