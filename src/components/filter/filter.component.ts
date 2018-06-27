@@ -143,9 +143,9 @@ export class FilterComponent implements OnInit {
   public updateFilledCounter() {
     this.activeFiltersCount = this.config.countOfFilledItems();
 
-    if (this.searchText !== '') {
-      this.activeFiltersWithInputCount = this.activeFiltersCount + 1;
-    }
+    this.activeFiltersWithInputCount = (this.searchText !== '')
+      ? this.activeFiltersCount + 1
+      : this.activeFiltersCount;
   }
 
   /**
