@@ -441,6 +441,7 @@
   .menu-filter {
     .menu-filter-input {
       .filters {
+        z-index: 2000;
         .wrap {
           position: fixed;
           width: 75vw;
