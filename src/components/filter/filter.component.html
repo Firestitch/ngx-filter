@@ -9,7 +9,7 @@
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
            *ngIf="config.items.length">
-        <mat-form-field class="filter-input">
+        <mat-form-field class="filter-input" floatLabel="never">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput [(ngModel)]="searchText" name="filter-input"
                  (ngModelChange)="modelChange(searchText)">
