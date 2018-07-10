@@ -345,6 +345,28 @@
   }
 }
 
+.menu-filter-input .filters {
+  margin-top: 15px;
+}
+
+.main-filter-bar {
+  overflow: hidden; /* Migrate .filter-input styles to fs-filter */
+  .filter-input {
+    .mat-form-field-underline {
+      bottom: auto;
+    }
+    .mat-form-field-infix {
+      border-top: 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .mat-form-field-suffix .mat-icon {
+      margin-left: 2px;
+    }
+  }
+}
+
 @media screen and (max-width: 750px) {
   .fs-filter {
     .saved-filters {

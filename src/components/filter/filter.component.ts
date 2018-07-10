@@ -81,7 +81,11 @@ export class FilterComponent implements OnInit {
     this.modelChanged.next(text);
   }
 
-  public switchFilterVisibility() {
+  public switchFilterVisibility(event = null) {
+    if (event) {
+      event.stopPropagation();
+    }
+
     this.changeVisibility(!this.showFilterMenu);
   }
 

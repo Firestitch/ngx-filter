@@ -22,14 +22,16 @@
             clear
           </mat-icon>
           <mat-icon class="action-reload" matSuffix (click)="reload()">refresh</mat-icon>
-          <mat-icon class="action-filter" matSuffix (click)="switchFilterVisibility()">filter_list</mat-icon>
+          <mat-icon class="action-filter" matSuffix (click)="switchFilterVisibility($event)">filter_list</mat-icon>
           <span class="active-filters-counter"
                 matSuffix
+                (click)="switchFilterVisibility($event)"
                 *ngIf="activeFiltersCount > 0">
             ( {{ activeFiltersCount }} )
           </span>
           <span class="active-filters-counter with-input"
                 matSuffix
+                (click)="switchFilterVisibility($event)"
                 *ngIf="activeFiltersWithInputCount > 0">
             ( {{ activeFiltersWithInputCount }} )
           </span>
