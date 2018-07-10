@@ -99,7 +99,6 @@
         ////position: absolute;
         ////right: 0;
         ////top: 5px;
-        //z-index: 50;
         //
         //a {
         //  color: rgba(0, 0, 0, 0.54);
@@ -119,7 +118,6 @@
       /*
       .action-filter {
         display: none;
-        z-index: 30;
       }
       */
 
@@ -463,6 +461,7 @@
   .menu-filter {
     .menu-filter-input {
       .filters {
+        z-index: 1000 !important;
         .wrap {
           position: fixed;
           width: 75vw;
