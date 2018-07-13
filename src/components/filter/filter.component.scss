@@ -183,7 +183,6 @@
         position: absolute;
         min-width: 400px;
         width: 100%;
-        margin-top: 10px;
         display: block;
         visibility: hidden;
         left: 0%;
@@ -348,7 +347,7 @@
 }
 
 .main-filter-bar {
-  overflow: hidden; /* Migrate .filter-input styles to fs-filter */
+  overflow: hidden;
   .filter-input {
     .mat-form-field-underline {
       bottom: auto;
