@@ -92,9 +92,9 @@ export class FilterComponent implements OnInit {
   public changeVisibility(state: boolean) {
     this.showFilterMenu = state;
     if (this.showFilterMenu) {
-      window.document.body.classList.add('fs-filters-open')
+      window.document.body.classList.add('fs-filter-open')
     } else {
-      window.document.body.classList.remove('fs-filters-open');
+      window.document.body.classList.remove('fs-filter-open');
       this.updateFilledCounter();
     }
   }
