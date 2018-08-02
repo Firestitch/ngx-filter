@@ -123,6 +123,10 @@ export class SecondExampleComponent {
         console.log('Change', query);
         this.query = query;
       },
+      reload: (query, instance) => {
+        console.log('Reload', query);
+        this.query = query;
+      },
       sortChange: (instance) => {
         console.log(instance.getSorting());
       }

@@ -21,6 +21,7 @@ export class FsFilterConfig extends Model {
   @Alias() public namespace = 'filter';
   @Alias() public init: Function;
   @Alias() public change: Function;
+  @Alias() public reload: Function;
   @Alias() public sortChange: Function;
 
   public items: FsFilterConfigItem[] = [];

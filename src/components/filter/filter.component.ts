@@ -178,7 +178,11 @@ export class FilterComponent implements OnInit {
    * Just reload with same values
    */
   public reload() {
-    this.change();
+    const query = this.config.gets({ flatten: true });
+
+    if (this.config.reload) {
+      this.config.reload(query, this.config);
+    }
   }
 
   /**
