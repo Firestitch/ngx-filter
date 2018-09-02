@@ -69,6 +69,9 @@
   }
 
   .menu-filter {
+
+    position: relative;
+    
     .search {
       top: 8px;
       position: absolute;
@@ -348,6 +351,9 @@
 
 .main-filter-bar {
   overflow: hidden;
+  form {
+    width: 100%;
+  }
   .filter-input {
     .mat-form-field-underline {
       bottom: auto;
@@ -458,6 +464,7 @@
   }
 
   .menu-filter {
+
     .menu-filter-input {
       .filters {
         z-index: 1000 !important;

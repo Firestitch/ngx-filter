@@ -32,7 +32,19 @@ export class SecondExampleComponent {
         { name: 'name', value: 'n', default: true},
         { name: 'two', value: 't'}
       ],
-      sortingDirection: 'asc',
+      change: (query) => {
+        console.log('Change',query);
+        this.query = query;
+
+      },
+      init: (query) => {
+        console.log('Init',query);
+        this.query = query;
+      },
+      reload: (query) => {
+        console.log('Reload',query);
+        this.query = query;
+      },
       items: [
         {
           name: 'keyword',
@@ -114,22 +126,7 @@ export class SecondExampleComponent {
           ],
           isolate: { label: 'Show Deleted', value: 'deleted' }
         }
-      ],
-      init: (instance) => {
-        console.log('Init', instance.gets({ flatten: true }));
-        this.query = instance.gets({ flatten: true });
-      },
-      change: (query, instance) => {
-        console.log('Change', query);
-        this.query = query;
-      },
-      reload: (query, instance) => {
-        console.log('Reload', query);
-        this.query = query;
-      },
-      sortChange: (instance) => {
-        console.log(instance.getSorting());
-      }
+      ]
     };
 
     setTimeout(() => {

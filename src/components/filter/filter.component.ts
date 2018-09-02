@@ -59,7 +59,10 @@ export class FilterComponent implements OnInit {
       });
     }
 
-    this.config.init(this.config)
+    if (this.config.init) {
+      const query = this.config.gets({ flatten: true });
+      this.config.init(query, this.config);
+    }
   }
 
 
@@ -99,14 +102,12 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public clearSearchInput() {
-    this.searchText = '';
+  public clear($event) {
+
     if (this.config.searchInput) {
       this.config.searchInput.model = '';
     }
-  }
 
-  public clear() {
     this.searchText = '';
     this.config.filtersClear();
     this.activeFiltersCount = 0;
@@ -177,7 +178,8 @@ export class FilterComponent implements OnInit {
   /**
    * Just reload with same values
    */
-  public reload() {
+  public reload($event) {
+    $event.stopPropagation();
     const query = this.config.gets({ flatten: true });
 
     if (this.config.reload) {

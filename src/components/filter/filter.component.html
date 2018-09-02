@@ -7,36 +7,38 @@
 >
   <div *ngIf="!config.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
     <div class="menu-filter-input" fxFlex="grow">
-      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center"
-           *ngIf="config.items.length">
-        <mat-form-field class="filter-input" floatLabel="never">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput [(ngModel)]="searchText" name="filter-input"
-                 (ngModelChange)="modelChange(searchText)">
-          <mat-placeholder>Search</mat-placeholder>
+      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
+        <form autocomplete="off" role="presentation">
+          <mat-form-field class="filter-input" floatLabel="never">
+            <mat-icon matPrefix>search</mat-icon>
+          
+            <input matInput [(ngModel)]="searchText" name="filter-input"
+                  (ngModelChange)="modelChange(searchText)">
+                  
+            <mat-placeholder>Search</mat-placeholder>
 
-          <mat-icon class="action-clear"
-                    matSuffix
-                    *ngIf="searchText && showFilterInput"
-                    (click)="clearSearchInput()">
-            clear
-          </mat-icon>
-          <mat-icon class="action-reload" matSuffix (click)="reload()">refresh</mat-icon>
-          <mat-icon class="action-filter" matSuffix (click)="switchFilterVisibility($event)">filter_list</mat-icon>
-          <span class="active-filters-counter"
-                matSuffix
-                (click)="switchFilterVisibility($event)"
-                *ngIf="activeFiltersCount > 0">
-            ( {{ activeFiltersCount }} )
-          </span>
-          <span class="active-filters-counter with-input"
-                matSuffix
-                (click)="switchFilterVisibility($event)"
-                *ngIf="activeFiltersWithInputCount > 0">
-            ( {{ activeFiltersWithInputCount }} )
-          </span>
-        </mat-form-field>
-
+            <mat-icon class="action-clear"
+                      matSuffix
+                      *ngIf="searchText && showFilterInput"
+                      (click)="clear($event)">
+              clear
+            </mat-icon>
+            <mat-icon class="action-reload" matSuffix (click)="reload($event)">refresh</mat-icon>
+            <mat-icon class="action-filter" matSuffix (click)="switchFilterVisibility($event)">filter_list</mat-icon>
+            <span class="active-filters-counter"
+                  matSuffix
+                  (click)="switchFilterVisibility($event)"
+                  *ngIf="activeFiltersCount > 0">
+              ( {{ activeFiltersCount }} )
+            </span>
+            <span class="active-filters-counter with-input"
+                  matSuffix
+                  (click)="switchFilterVisibility($event)"
+                  *ngIf="activeFiltersWithInputCount > 0">
+              ( {{ activeFiltersWithInputCount }} )
+            </span>
+          </mat-form-field>
+        </form>
         <filters-list [items]="config.items"
                       [showSortBy]="showSortBy"
                       [sortBy]="config.sortByItem"
