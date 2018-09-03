@@ -97,32 +97,6 @@
 
       //position: relative;
 
-      .inline-actions {
-        //white-space: nowrap;
-        ////position: absolute;
-        ////right: 0;
-        ////top: 5px;
-        //
-        //a {
-        //  color: rgba(0, 0, 0, 0.54);
-        //  background: #fff;
-        //  height: 22px;
-        //
-        //  i {
-        //    transform: scale(.9);
-        //    vertical-align: middle;
-        //  }
-        //
-        //  &:hover {
-        //    color: inherit;
-        //  }
-        //}
-      }
-      /*
-      .action-filter {
-        display: none;
-      }
-      */
 
       mat-form-field {
         width: 100%;
@@ -145,6 +119,11 @@
           padding-bottom: 0.3em;
         }
 
+        .mat-form-field-suffix {
+          align-items: center;
+          display: flex;
+        }
+
         .mat-input-prefix, .mat-input-suffix {
           align-self: flex-end;
           display: flex;
@@ -153,16 +132,10 @@
           white-space: nowrap;
           z-index: 50;
 
-          mat-icon, span {
+          mat-icon, a {
             cursor: pointer;
             color: rgba(0, 0, 0, 0.54);
-            //background: #fff;
-            //height: 22px;
-            //
-            //i {
-            //  transform: scale(.9);
-            //  vertical-align: middle;
-            //}
+           
 
             &:hover {
               color: inherit;
@@ -364,8 +337,9 @@
     .mat-form-field-wrapper {
       padding-bottom: 0;
     }
-    .mat-form-field-suffix .mat-icon {
-      margin-left: 2px;
+
+    .mat-form-field-flex {
+      align-items: center;
     }
   }
 }
@@ -376,6 +350,24 @@
       float: none;
     }
   }
+}
+
+
+.active-filters-counter {
+  &.with-input {
+    display: none;
+  }
+
+  background: #ccc;
+  border-radius: 50%;
+  min-width: 15px;
+  text-align: center;
+  padding: 1px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 14px;
+  margin-left: 2px;
+  cursor: pointer;
 }
 
 @media screen and (min-width: 600px) {
@@ -395,14 +387,6 @@
   }
 }
 
-.active-filters-counter {
-  &.with-input {
-    display: none;
-  }
-
-  color: #9d9d9d;
-  font-size: 14px;
-}
 
 @media screen and (max-width: 599px) {
 
