@@ -16,6 +16,7 @@ export class FsFilterConfig extends Model {
   @Alias() public load = true;
   @Alias() public persist: any = false;
   @Alias() public inline = false;
+  @Alias() public autofocus = false;
   @Alias('sorting') public sortingValues: any[] = null;
   @Alias() public sortingDirection = null;
   @Alias() public namespace = 'filter';
