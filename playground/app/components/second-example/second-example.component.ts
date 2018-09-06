@@ -28,6 +28,7 @@ export class SecondExampleComponent {
     this.conf = {
       persist: 'filter',
       inline: false,
+      autofocus: true,
       sorting: [
         { name: 'name', value: 'n', default: true},
         { name: 'two', value: 't'}

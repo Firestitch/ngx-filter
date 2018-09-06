@@ -78,8 +78,10 @@ export class FilterComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    if (this.config.autofocus) {
-      this.searchTextInput.nativeElement.focus();
+    if (this.config.autofocus && this.searchTextInput) {
+      setTimeout(() => {
+        this.searchTextInput.nativeElement.focus();
+      });
     }
   }
 
