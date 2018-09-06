@@ -13,7 +13,7 @@
             <span matPrefix><mat-icon matPrefix>search</mat-icon></span>
 
             <input matInput [(ngModel)]="searchText" name="filter-input"
-                  [autofocus]="config.autofocus"
+                  #searchTextInput
                   (ngModelChange)="modelChange(searchText)">
 
             <mat-placeholder>Search</mat-placeholder>
