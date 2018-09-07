@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  ViewChild,
+  Input,
+  OnInit,
+  AfterViewInit,
+  ViewEncapsulation
+} from '@angular/core';
+
 import { FsFilterConfig } from '../../models';
 import { FsStore } from '@firestitch/store';
 import { Location } from '@angular/common';
@@ -15,7 +25,7 @@ import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
   templateUrl: './filter.component.html',
   encapsulation: ViewEncapsulation.None
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, AfterViewInit {
   @Input() public filter: FilterConfig = null;
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
@@ -30,6 +40,8 @@ export class FilterComponent implements OnInit {
   public showFilterMenu = false;
 
   public modelChanged = new EventEmitter();
+
+  @ViewChild('searchTextInput') public searchTextInput: ElementRef = null;
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -65,6 +77,13 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  public ngAfterViewInit() {
+    if (this.config.autofocus && this.searchTextInput) {
+      setTimeout(() => {
+        this.searchTextInput.nativeElement.focus();
+      });
+    }
+  }
 
   public watchSearchInput() {
     this.modelChanged
