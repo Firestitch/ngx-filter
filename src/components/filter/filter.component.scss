@@ -234,16 +234,16 @@
           }
         }
 
-        .buttons {
+        .actions {
           padding-top: 15px;
-          .filter-button,
-          .cancel-button {
-            margin: 0;
-          }
+          display: flex;
+          button {
+            margin-right: 6px;
 
-          .cancel-button {
-            margin-left: 8px;
-          }
+            &:last-child {
+              margin-right: 0;
+            }
+          }          
         }
       }
     }
@@ -399,10 +399,6 @@
     .wrap {
       animation: slideInRight 300ms;
     }
-  }
-
-  .filter-button {
-    display: none;
   }
 
   .fs-filter {

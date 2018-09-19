@@ -7,9 +7,9 @@
               -->
     <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->
       <span class="text" fxFlex="grow">Filter By</span>
-      <div class="actions">
-        <button type="button" mat-button (click)="clearAll()">Clear</button>
-        <button type="button" mat-button (click)="doSearch()">Search</button>
+      <div class="actions actions-xs">
+        <button type="button" mat-raised-button color="primary" (click)="doSearch()">Search</button>
+        <button type="button" mat-raised-button (click)="clearAll()">Clear</button>
       </div>
     </div>
 
@@ -33,19 +33,9 @@
       </filter-item>
     </ng-container>
 
-    <div class="buttons" *ngIf="!inline">
-      <button type="button"
-              class="filter-button"
-              mat-raised-button
-              color="primary"
-              (click)="doSearch()">Search
-      </button>
-      <button type="button"
-              class="filter-button"
-              mat-raised-button
-              color="accept"
-              (click)="clearAll()">Clear
-      </button>
+    <div class="actions actions-gt-xs" *ngIf="!inline" [fxShow.gt-xs]="true" fxShow="false">
+      <button type="button" mat-raised-button color="primary" (click)="doSearch()">Search</button>
+      <button type="button" mat-raised-button color="accept" (click)="clearAll()">Clear </button>
     </div>
   </div>
 </div>
