@@ -119,12 +119,7 @@
           padding-bottom: 0.3em;
         }
 
-        .mat-form-field-suffix {
-          align-items: center;
-          display: flex;
-        }
-
-        .mat-input-prefix, .mat-input-suffix {
+        .mat-form-field-prefix, .mat-form-field-suffix {
           align-self: flex-end;
           display: flex;
           align-items: center;
@@ -134,7 +129,7 @@
 
           mat-icon, a {
             cursor: pointer;
-            color: rgba(0, 0, 0, 0.54);
+            color: initial;
            
 
             &:hover {
@@ -235,7 +230,7 @@
         }
 
         .actions {
-          padding-top: 15px;
+          padding-top: 20px;
           display: flex;
           button {
             margin-right: 6px;
@@ -429,12 +424,11 @@
       flex-direction: column;
       font-weight: 600;
       font-size: 20px;
-      margin: 25px 0;
     }
 
     .actions {
       display: inherit;
-      margin: 25px 0;
+      padding-top: 0;
     }
 
     button {
