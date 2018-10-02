@@ -3,6 +3,7 @@ import { nameValue, filter } from '@firestitch/common/array'
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
+
 import { ItemType } from '../../../../src/models/fs-filter-item';
 
 
@@ -121,6 +122,7 @@ export class SecondExampleComponent {
           label: 'Status',
           multiple: true,
           values: [
+            { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' }

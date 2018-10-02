@@ -16,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import * as moment from 'moment';
 import { FilterConfig } from '../../classes';
-import { debounceTime, distinctUntilChanged, takeWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({

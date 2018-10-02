@@ -1,14 +1,16 @@
+import { ActivatedRoute } from '@angular/router';
 import { Alias, Model } from 'tsmodels';
-import { IFilterConfigItem } from '../classes';
-import { Observable } from 'rxjs/Observable';
+
+import { isObservable } from 'rxjs/internal/util/isObservable';
+
 import * as _isFunction from 'lodash/isFunction';
 import * as _isObject from 'lodash/isObject';
 import * as _toString from 'lodash/toString';
 
 import * as moment from 'moment';
 
+import { IFilterConfigItem } from '../classes';
 import { FsFilterConfig } from './fs-filter-config';
-import { ActivatedRoute } from '@angular/router';
 
 export enum ItemType {
   text            = 'text',
@@ -97,7 +99,7 @@ export class FsFilterConfigItem extends Model {
       this.type !== ItemType.autocompletechips) {
       this.values = data.values();
 
-      if (this.values instanceof Observable) {
+      if (isObservable(this.values)) {
         this.values.subscribe((values) => {
           this.sanitizeItem(values)
         });

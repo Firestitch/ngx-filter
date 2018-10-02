@@ -3,19 +3,20 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { MAT_PLACEHOLDER_GLOBAL_OPTIONS } from '@angular/material';
-import {  MatIconModule,
-          MatInputModule,
-          MatSelectModule,
-          MatChipsModule,
-          MatAutocompleteModule,
-          MatButtonModule,
-          MatCheckboxModule
-         } from '@angular/material';
+import {
+  MatIconModule,
+  MatInputModule,
+  MatSelectModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatCheckboxModule,
+  MAT_LABEL_GLOBAL_OPTIONS
+} from '@angular/material';
 
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsCommonModule } from '@firestitch/common';
-import { FsStoreModule, FsStore } from '@firestitch/store';
+import { FsStore, FsStoreModule } from '@firestitch/store';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FilterComponent } from './components/filter/filter.component';
 import { FiltersListComponent } from './components/filters-list/filters-list.component';
@@ -62,7 +63,7 @@ export * from './classes';
   ],
   providers: [
     FsStore,
-    { provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'never' } }
+    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'never' } }
   ],
   exports: [
     // FsFilterComponent,

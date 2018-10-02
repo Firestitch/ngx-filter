@@ -3,8 +3,11 @@
     <mat-label>{{item.label}}</mat-label>
     <mat-select [(ngModel)]="item.model"
                 [multiple]="item.multiple"
+                (selectionChange)="selectItem()"
                 (onClose)="selectChange()">
-      <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
+      <mat-option *ngFor="let item of item.values"
+                  [value]="item.value"
+                  [ngStyle]="item.style">
         {{ item.name }}
       </mat-option>
     </mat-select>

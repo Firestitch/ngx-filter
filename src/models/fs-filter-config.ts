@@ -99,6 +99,10 @@ export class FsFilterConfig extends Model {
             }
           }
 
+          if (filter.model.indexOf('__all') > -1) {
+            value = null;
+          }
+
         } else {
 
           if (filter.isolate) {
