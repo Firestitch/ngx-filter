@@ -71,7 +71,7 @@
   .menu-filter {
 
     position: relative;
-    
+
     .search {
       top: 8px;
       position: absolute;
@@ -125,11 +125,11 @@
           align-items: center;
 
           white-space: nowrap;
-          
+
           mat-icon, a {
             cursor: pointer;
             color: initial;
-           
+
 
             &:hover {
               color: inherit;
@@ -237,7 +237,7 @@
             &:last-child {
               margin-right: 0;
             }
-          }          
+          }
         }
       }
     }
@@ -364,14 +364,14 @@
 }
 
 @media screen and (min-width: 600px) {
-  .mat-input-container {
+  .mat-input-container, .mat-form-field {
     mat-label {
       display: none;
     }
   }
   .inline-filter {
     &.inline {
-      .mat-input-container {
+      .mat-input-container, .mat-form-field {
         mat-label {
           display: inherit;
         }
