@@ -246,19 +246,45 @@ export class FsFilterConfig extends Model {
   public filtersClear() {
     for (const filter of this.items) {
       filter.model = undefined;
-      if (filter.type == 'autocomplete') {
-        filter.model = null;
-        filter.search = '';
-      } else if (filter.type == 'autocompletechips') {
-        filter.model = [];
-        filter.search = '';
-      } else if (filter.type == 'select' && filter.isolate) {
-        filter.model = null;
-        filter.isolate.enabled = false;
-      } else if (filter.type == 'checkbox') {
-        filter.model = false;
-      } else if (filter.type == 'range') {
-        filter.model = {};
+
+      switch (filter.type) {
+        case ItemType.autocomplete: {
+          filter.model = null;
+          filter.search = '';
+        } break;
+
+        case ItemType.autocompletechips: {
+          filter.model = [];
+          filter.search = '';
+        } break;
+
+        case ItemType.checkbox: {
+          filter.model = false;
+        } break;
+
+        case ItemType.select: {
+          if (filter.multiple) {
+            filter.model = [];
+          } else {
+            filter.model = null;
+          }
+
+          if (filter.isolate) {
+            filter.isolate.enabled = false;
+          }
+        } break;
+
+        case ItemType.range: {
+          filter.model = {};
+        } break;
+
+        case ItemType.text: {
+          filter.model = '';
+        } break;
+
+        case ItemType.date: case ItemType.datetime: {
+          filter.model = null;
+        } break;
       }
     }
   }
