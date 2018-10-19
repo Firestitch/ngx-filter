@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/filter",
   "description": "@firestitch/filter",
-  "version": "0.2.37",
+  "version": "0.2.38",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/fs-filter"
