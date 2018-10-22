@@ -83,8 +83,12 @@ export class FsFilterConfigItem extends Model {
             this.type === ItemType.datetime
           ) {
             value = moment(value);
-          } else if (this.type === ItemType.checkbox && this.checked !== undefined) {
+          } else if (
+            this.type === ItemType.checkbox && this.checked !== undefined
+          ) {
             value = value == this.checked;
+          } else if (this.type === ItemType.select && this.multiple) {
+            value = [];
           }
         }
 
