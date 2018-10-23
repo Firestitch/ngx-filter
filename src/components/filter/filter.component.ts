@@ -25,11 +25,20 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './filter.component.html',
   encapsulation: ViewEncapsulation.None
 })
-export class FilterComponent implements OnInit, AfterViewInit {
+export class FilterComponent implements OnInit {
   @Input() public filter: FilterConfig = null;
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
+
+  @ViewChild('searchTextInput')
+  set searchTextInput(value) {
+    this._searchTextInput = value;
+
+    if (this._searchTextInput && this.config.autofocus) {
+      this._searchTextInput.nativeElement.focus();
+    }
+  }
 
   public config: FsFilterConfig;
   public searchText = '';
@@ -41,7 +50,7 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
   public modelChanged = new EventEmitter();
 
-  @ViewChild('searchTextInput') public searchTextInput: ElementRef = null;
+  private _searchTextInput: ElementRef = null;
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -74,14 +83,6 @@ export class FilterComponent implements OnInit, AfterViewInit {
     if (this.config.init) {
       const query = this.config.gets({ flatten: true });
       this.config.init(query, this.config);
-    }
-  }
-
-  public ngAfterViewInit() {
-    if (this.config.autofocus && this.searchTextInput) {
-      setTimeout(() => {
-        this.searchTextInput.nativeElement.focus();
-      });
     }
   }
 
