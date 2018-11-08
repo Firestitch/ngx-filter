@@ -204,6 +204,12 @@ export class FsFilterConfig extends Model {
 
           if (
             (filter.multiple && filter.isolate && Array.isArray(filter.model) && filter.model.length) ||
+            (
+              filter.multiple &&
+              Array.isArray(filter.model) &&
+              filter.model.length &&
+              filter.model.indexOf('__all') === -1
+            ) ||
             (!filter.multiple && filter.model && filter.model !== '__all')
           ) {
             counter++;
