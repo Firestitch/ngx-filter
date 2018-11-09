@@ -363,6 +363,16 @@
   transform: scale(.85);
 }
 
+body.fs-filter-open {
+  /*
+    Allows the fsFilter side drawer to overlay the toolbar
+  */
+  .mat-drawer-container,
+  .mat-drawer-content {
+    z-index: auto !important;
+  }
+}
+
 @media screen and (min-width: 600px) {
   .mat-input-container, .mat-form-field {
     mat-label {
