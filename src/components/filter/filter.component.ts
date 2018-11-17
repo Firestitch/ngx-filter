@@ -35,9 +35,12 @@ export class FilterComponent implements OnInit {
   set searchTextInput(value) {
     this._searchTextInput = value;
 
-    if (this._searchTextInput && this.config.autofocus) {
-      this._searchTextInput.nativeElement.focus();
-    }
+    // Avoid ngChanges error
+    setTimeout(() => {
+      if (this._searchTextInput && this.config.autofocus) {
+        this._searchTextInput.nativeElement.focus();
+      }
+    });
   }
 
   public config: FsFilterConfig;
@@ -115,7 +118,7 @@ export class FilterComponent implements OnInit {
   public changeVisibility(state: boolean) {
     this.showFilterMenu = state;
     if (this.showFilterMenu) {
-      window.document.body.classList.add('fs-filter-open')
+      window.document.body.classList.add('fs-filter-open');
     } else {
       window.document.body.classList.remove('fs-filter-open');
       this.updateFilledCounter();

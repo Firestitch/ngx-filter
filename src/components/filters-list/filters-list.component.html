@@ -5,37 +5,29 @@
                 fs-heading
                 heading-actions
               -->
-    <div class="filter-by" fxLayout="row" [fxHide.gt-xs]="true"> <!-- fs-heading -->
+    <div class="filter-by" fxLayout="row">
       <span class="text" fxFlex="grow">Filter By</span>
       <div class="actions actions-xs">
         <button type="button" mat-raised-button color="primary" (click)="doSearch()">Search</button>
-        <button type="button" mat-raised-button (click)="clearAll()">Clear</button>
+        <button type="button" mat-button color="primary" (click)="clearAll()">Clear</button>
       </div>
     </div>
 
     <filter-item *ngFor="let filterItem of items"
                  class="filter-group"
                  [item]="filterItem"
-                 [inline]="inline"
                  (itemChanged)="filterChange($event)">
     </filter-item>
 
     <ng-container *ngIf="sortBy && sortBy.values && sortBy.values.length > 0 && showSortBy">
       <filter-item class="filter-group sort"
                    [item]="sortBy"
-                   [inline]="inline"
                    (itemChanged)="filterChange($event)">
       </filter-item>
       <filter-item class="filter-group sort"
                    [item]="sortDirection"
-                   [inline]="inline"
                    (itemChanged)="filterChange($event)">
       </filter-item>
     </ng-container>
-
-    <div class="actions actions-gt-xs" *ngIf="!inline" [fxShow.gt-xs]="true" fxShow="false">
-      <button type="button" mat-raised-button color="primary" (click)="doSearch()">Search</button>
-      <button type="button" mat-raised-button color="accept" (click)="clearAll()">Clear </button>
-    </div>
   </div>
 </div>

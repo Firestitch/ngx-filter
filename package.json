@@ -1,10 +1,10 @@
 {
   "name": "@firestitch/filter",
   "description": "@firestitch/filter",
-  "version": "0.2.41",
+  "version": "0.3.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Firestitch/fs-filter"
+    "url": "https://github.com/Firestitch/ngx-filter"
   },
   "author": {
     "name": "Firestitch",
@@ -14,9 +14,6 @@
     "angular"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Firestitch/fs-filter/issues"
-  },
   "main": "package/index.js",
   "typings": "package/index.d.ts",
   "scripts": {
