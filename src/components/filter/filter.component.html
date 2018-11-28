@@ -22,7 +22,7 @@
               (click)="clear($event)">
               <mat-icon>clear</mat-icon>
             </a>
-            <a (click)="reload($event)" matSuffix>
+            <a (click)="reload($event)" matSuffix *ngIf="config.reload !== false">
               <mat-icon>refresh</mat-icon>
             </a>
             <a (click)="switchFilterVisibility($event)" matSuffix>

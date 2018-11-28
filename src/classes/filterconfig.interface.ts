@@ -6,6 +6,7 @@ export interface FilterConfig {
     autofocus?: boolean;
     namespace?: string;
     persist?: any;
+    reload?: (query: any) => void | false;
     items: FilterConfigItem[];
     init?: (any) => void;
     change?: (...any) => void;

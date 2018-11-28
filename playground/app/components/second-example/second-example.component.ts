@@ -44,7 +44,7 @@ export class SecondExampleComponent {
         this.query = query;
       },
       reload: (query) => {
-        console.log('Reload',query);
+        console.log('Reload', query);
         this.query = query;
       },
       items: [
