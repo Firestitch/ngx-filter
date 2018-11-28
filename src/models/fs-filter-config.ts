@@ -29,6 +29,7 @@ export class FsFilterConfig extends Model {
   public sortByItem: FsFilterConfigItem = null;
   public sortDirectionItem: FsFilterConfigItem = null;
   public searchInput = null;
+  public singleTextFilter = false;
 
   constructor(data: any = {}) {
     super();
@@ -44,6 +45,10 @@ export class FsFilterConfig extends Model {
     this.initSorting(route, persists);
 
     this.searchInput = this.items.find((item) => item.type === ItemType.text);
+
+    if (this.items.length === 1 && this.items[0].type === ItemType.text) {
+      this.singleTextFilter = true;
+    }
   }
 
   public initSorting(route, persists) {
