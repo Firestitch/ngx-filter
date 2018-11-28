@@ -14,13 +14,6 @@
   position: relative;
   margin-bottom: 20px;
 
-  .inline-filter {
-    display: inline-block;
-    .filter-group {
-      display: inline-block;
-    }
-  }
-
   .title {
     display: none;
   }
@@ -33,10 +26,6 @@
         display: none !important;
       }
     }
-  }
-
-  .sort {
-    display: none !important;
   }
 
   .results {
@@ -65,12 +54,31 @@
   }
 
   .filter-by {
-    display: none;
+    padding: 10px 0;
+    .actions {
+      display: flex;
+      button {
+        margin-right: 6px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .text {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-weight: 600;
+      font-size: 20px;
+    }
   }
 
   .menu-filter {
 
     position: relative;
+
 
     .search {
       top: 8px;
@@ -156,30 +164,40 @@
         display: block;
         visibility: hidden;
         left: 0%;
-        //display: none;
+        margin-top: 15px;
+        z-index: 1000;
 
         .wrap {
           padding: 8px 17px 17px 17px;
+          animation: slideInRight 300ms;
           background: #fff;
           box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-          overflow: auto;
+          position: fixed;
+          width: 75vw;
+          max-width: 350px;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          overflow-y: auto;
+          z-index: 999;
         }
 
         .filter-group {
-          display: table-row-group;
-          width: 100%;
+          margin: 10px 0 0 0;
+
+          &:first-child {
+            margin: 0;
+          }
         }
 
         .filter {
-          display: table-row;
+
+          &.filter-checkbox {
+            padding-bottom: 1.25em;
+            padding-top: 7px;
+          }
 
           .interface {
-
-            &.interface-checkbox, &.interface {
-              .checkbox-label {
-                display: none;
-              }
-            }
 
             &.interface-range input, &.interface-range .mat-input-wrapper {
               text-align: center;
@@ -199,11 +217,6 @@
             }
           }
 
-          .interface,
-          .filter-label {
-            display: table-cell;
-          }
-
           .filter-label {
             width: 1%;
             white-space: nowrap;
@@ -218,25 +231,14 @@
         }
 
         .isolate {
+          margin-top: -12px;
           .interface {
             line-height: 20px;
-            padding-top: 5px;
+            padding-bottom: 1.25em;
           }
           //TODO
           md-checkbox {
             margin: 0 0 0 2px;
-          }
-        }
-
-        .actions {
-          padding-top: 20px;
-          display: flex;
-          button {
-            margin-right: 6px;
-
-            &:last-child {
-              margin-right: 0;
-            }
           }
         }
       }
@@ -245,8 +247,6 @@
 
   .filter {
 
-    margin-right: 15px;
-    display: inline-block;
     //TODO
     label {
       white-space: nowrap;
@@ -277,11 +277,6 @@
       cursor: pointer;
       padding-left: 4px;
     }
-
-    .saved-filters {
-      float: right;
-      display: flex;
-    }
   }
 
   //TODO
@@ -289,19 +284,7 @@
     margin-left: -10px;
   }
 
-  .saved-filter-menu {
-    padding-top: 0;
-    .my-saved-filters {
-      line-height: 50px;
-      padding: 0 10px;
-      font-weight: bold;
-    }
-  }
-
   &.filters-open {
-    .inline-actions {
-      z-index: 71;
-    }
 
     .main-filter-bar md-input-container input,
     .menu-filter-input .filters {
@@ -312,9 +295,6 @@
   }
 }
 
-.menu-filter-input .filters {
-  margin-top: 15px;
-}
 
 .main-filter-bar {
   overflow: hidden;
@@ -338,15 +318,6 @@
   }
 }
 
-@media screen and (max-width: 750px) {
-  .fs-filter {
-    .saved-filters {
-      float: none;
-    }
-  }
-}
-
-
 .active-filters-counter {
   &.with-input {
     display: none;
@@ -363,122 +334,21 @@
   transform: scale(.85);
 }
 
-@media screen and (min-width: 600px) {
-  .mat-input-container, .mat-form-field {
-    mat-label {
-      display: none;
-    }
-  }
-  .inline-filter {
-    &.inline {
-      .mat-input-container, .mat-form-field {
-        mat-label {
-          display: inherit;
-        }
-      }
-    }
+
+body.fs-filter-open {
+  overflow: hidden !important;
+
+  /*
+    Allows the fsFilter side drawer to overlay the toolbar
+  */
+  .mat-drawer-container,
+  .mat-drawer-content {
+    z-index: auto !important;
   }
 }
 
-
-@media screen and (max-width: 599px) {
-
-  body.fs-filter-open {
-    overflow: hidden !important;
-
-    .inline-actions {
-      display: none;
-    }
-
-    .wrap {
-      animation: slideInRight 300ms;
-    }
-  }
-
-  .fs-filter {
-    margin-top: 0;
-
-    .title {
-      display: block;
-      /*
-      fs-heading {
-        margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      */
-    }
-  }
-
-  .responsive-top-actions {
-    display: block;
-  }
-
-  .filter-by {
-    //display: block;
-    .text {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      font-weight: 600;
-      font-size: 20px;
-    }
-
-    .actions {
-      display: inherit;
-      padding-top: 0;
-    }
-
-    button {
-      float: right;
-    }
-  }
-
-  .menu-filter {
-
-    .menu-filter-input {
-      .filters {
-        z-index: 1000 !important;
-        .wrap {
-          position: fixed;
-          width: 75vw;
-          top: 0;
-          bottom: 0;
-          right: 0;
-          overflow-y: auto;
-          z-index: 999;
-        }
-
-        .filter-group {
-          display: table !important;
-        }
-
-        .filter,
-        .filter .filter-label,
-        .filter .interface {
-          display: block;
-        }
-        .interface-checkbox, .interface {
-          .checkbox-label {
-            display: block !important;
-          }
-        }
-      }
-
-      .filter-group {
-        margin: 10px 0 0 0;
-
-        &:first-child {
-          margin: 0;
-        }
-      }
-
-      .filter {
-        .filter-label {
-          display: none !important;
-        }
-      }
-    }
+@media screen and (max-width: 600px) {
+  .fs-filter .reload {
+    display: none;
   }
 }

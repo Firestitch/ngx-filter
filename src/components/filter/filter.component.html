@@ -3,9 +3,8 @@
      'filters-open': showFilterMenu,
      loading: loading,
      'no-input': !showFilterInput
-     }"
->
-  <div *ngIf="!config.inline" fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
+     }">
+  <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
         <form autocomplete="off" role="presentation">
@@ -19,13 +18,14 @@
             <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
               *ngIf="searchText && showFilterInput"
-              (click)="clear($event)">
+              (click)="clear($event)"
+              class="clear">
               <mat-icon>clear</mat-icon>
             </a>
-            <a (click)="reload($event)" matSuffix *ngIf="config.reload !== false">
+            <a (click)="reload($event)" matSuffix class="reload" *ngIf="config.reload !== false">
               <mat-icon>refresh</mat-icon>
             </a>
-            <a (click)="switchFilterVisibility($event)" matSuffix>
+            <a (click)="switchFilterVisibility($event)" matSuffix class="filter">
               <mat-icon>filter_list</mat-icon>
             </a>
             <span class="active-filters-counter"
@@ -46,37 +46,13 @@
                       [showSortBy]="showSortBy"
                       [sortBy]="config.sortByItem"
                       [sortDirection]="config.sortDirectionItem"
-                      [inline]="config.inline"
                       (filterChanged)="filterChange($event)"
                       (search)="search()"
                       (clear)="clear()">
         </filters-list>
-        <!--<div class="inline-actions" fxLayout="row" fxLayoutAlign="start center">
-          <a class="action-clear" (click)="clearSearchInput()" *ngIf="searchText && showFilterInput">
-            <mat-icon>clear</mat-icon>
-          </a>
-          <a (click)="reload()" class="action-reload">
-            <mat-icon>refresh</mat-icon>
-          </a>
-          <a (click)="switchFilterVisibility()" class="action-filter">
-            <mat-icon>filter_list</mat-icon>
-          </a>
-          <span class="active-filters-counter" *ngIf="activeFiltersCount > 0">( {{ activeFiltersCount }} )</span>
-          <span class="active-filters-counter with-input" *ngIf="activeFiltersWithInputCount > 0">( {{ activeFiltersWithInputCount }} )</span>
-        </div>-->
+
       </div>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
-
-      <!--<div class="backdrop" *ngIf="extendedFilter" (click)="filterToggle(false,true)"></div>-->
     </div>
-  </div>
-
-  <div *ngIf="config.inline" class="inline-filter" [ngClass]="{'inline': config.inline}">
-    <filters-list [items]="config.items"
-                  [sortBy]="config.sortByItem"
-                  [inline]="config.inline"
-                  (filterChanged)="filterChange($event)"
-                  (search)="search()">
-    </filters-list>
   </div>
 </div>

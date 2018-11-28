@@ -14,10 +14,10 @@ import { ItemType } from '../../../../src/models/fs-filter-item';
 })
 export class SecondExampleComponent {
 
-
   public conf: any;
   public sortUpdated = new EventEmitter();
   public query = null;
+  public sort = null;
 
   public users = [
       { id: 1, name: 'John Doe' },
@@ -37,7 +37,10 @@ export class SecondExampleComponent {
       change: (query) => {
         console.log('Change',query);
         this.query = query;
-
+      },
+      sortChange: (sort) => {
+        console.log('Sort',sort);
+        this.sort = sort;
       },
       init: (query) => {
         console.log('Init',query);
@@ -132,12 +135,10 @@ export class SecondExampleComponent {
       ]
     };
 
-    setTimeout(() => {
-      this.sortUpdated.emit({
-        sortBy: 't',
-        sortDirection: 'desc'
-      });
-    }, 6000);
+    this.sortUpdated.emit({
+      sortBy: 't',
+      sortDirection: 'desc'
+    });
   }
   // this.sortUpdated.su
 }

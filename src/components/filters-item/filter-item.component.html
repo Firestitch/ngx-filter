@@ -1,60 +1,47 @@
 <ng-template ngIf="!item.disabled">
   <div class="filter filter-{{ item.type }}">
-    <div class="filter-label" *ngIf="!inline">
-      <div class="filter-label-content">
-        {{ item.label }}
-      </div>
-    </div>
 
     <ng-container [ngSwitch]="item.type">
       <filter-item-text class="interface"
                         *ngSwitchCase="itemType.text"
                         [item]="item"
-                        [inline]="inline"
                         (itemChanged)="itemChange($event)">
       </filter-item-text>
       <filter-item-select class="interface"
                           *ngSwitchCase="itemType.select"
                           [item]="item"
-                          [inline]="inline"
                           (itemChanged)="itemChange($event)">
       </filter-item-select>
       <filter-item-range class="interface interface-range"
                          *ngSwitchCase="itemType.range"
                          [item]="item"
-                         [inline]="inline"
                          (itemChanged)="itemChange($event)">
       </filter-item-range>
       <filter-item-autocomplete class="interface"
                                 *ngSwitchCase="itemType.autocomplete"
                                 [item]="item"
-                                [inline]="inline"
                                 (itemChanged)="itemChange($event)">
       </filter-item-autocomplete>
       <filter-item-autocompletechips class="interface"
                                      *ngSwitchCase="itemType.autocompletechips"
                                      [item]="item"
-                                     [inline]="inline"
                                      (itemChanged)="itemChange($event)">
       </filter-item-autocompletechips>
       <filter-item-date class="interface interface-date"
                         *ngSwitchCase="itemType.date"
                         [item]="item"
-                        [inline]="inline"
                         (itemChanged)="itemChange($event)">
       </filter-item-date>
       <filter-item-checkbox class="interface interface-checkbox"
                             *ngSwitchCase="itemType.checkbox"
                             [item]="item"
-                            [inline]="inline"
                             (itemChanged)="itemChange($event)">
       </filter-item-checkbox>
     </ng-container>
 
   </div>
 
-  <div *ngIf="item.isolate && !inline" class="filter isolate">
-    <div class="filter-label">{{ item.isolate.label }}</div>
+  <div *ngIf="item.isolate" class="filter isolate">
     <div class="interface">
       <mat-checkbox (change)="isolateChange(item)" [(ngModel)]="item.isolate.enabled">
         <span class="checkbox-label">{{ item.isolate.label }}</span>

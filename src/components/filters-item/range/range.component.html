@@ -1,18 +1,14 @@
 <span fxLayout="row">
-  <mat-form-field class="filter-range-min">
+  <mat-form-field class="filter-range-min" floatLabel="auto">
+    <mat-label>{{item.placeholder[0]}}</mat-label>
     <input matInput
            [(ngModel)]="item.model.min"
            (change)="itemChange()">
-    <mat-placeholder>
-    {{item.placeholder[0]}}
-    </mat-placeholder>
   </mat-form-field>
-  <mat-form-field class="filter-range-max">
+  <mat-form-field class="filter-range-max" floatLabel="auto">
+    <mat-label>{{item.placeholder[1]}}</mat-label>
     <input matInput
            [(ngModel)]="item.model.max"
            (change)="itemChange()">
-    <mat-placeholder>
-    {{item.placeholder[1]}}
-    </mat-placeholder>
   </mat-form-field>
 </span>

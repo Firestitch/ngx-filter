@@ -3,3 +3,8 @@
   <legend>Query</legend>
   <pre>{{ query | json }}</pre>
 </fieldset>
+
+<fieldset *ngIf="sort">
+  <legend>Sort</legend>
+  <pre>{{ sort.sortingValues | json }}</pre>
+</fieldset>
