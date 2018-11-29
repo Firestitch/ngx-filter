@@ -1,10 +1,11 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { nameValue, filter } from '@firestitch/common/array'
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
 import { ItemType } from '../../../../src/models/fs-filter-item';
+import { FilterComponent } from '../../../../src/components/filter';
 
 
 @Component({
@@ -13,6 +14,8 @@ import { ItemType } from '../../../../src/models/fs-filter-item';
   styleUrls: [ 'second-example.component.css' ]
 })
 export class SecondExampleComponent {
+
+  @ViewChild('filter') public filterEl: FilterComponent;
 
   public conf: any;
   public sortUpdated = new EventEmitter();
@@ -140,5 +143,4 @@ export class SecondExampleComponent {
       sortDirection: 'desc'
     });
   }
-  // this.sortUpdated.su
 }

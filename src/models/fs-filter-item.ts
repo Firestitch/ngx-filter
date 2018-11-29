@@ -224,16 +224,6 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  private sanitizeRange() {
-    if (!this.placeholder) {
-      this.placeholder = ['Min', 'Max'];
-    }
-
-    if (!this.model) {
-      this.model = {};
-    }
-  }
-
   public sanitizeCheckbox() {
     this.checked = this.checked ? _toString(this.checked) : true;
     this.unchecked = this.unchecked ? _toString(this.unchecked) : false;
@@ -263,5 +253,79 @@ export class FsFilterConfigItem extends Model {
       }
     }
 
+  }
+
+  public updateValue(value) {
+    debugger;
+    switch (this.type) {
+      case ItemType.select: {
+
+        if (value === '__all' || value === null) {
+          this.model = value;
+
+          return;
+        }
+
+        let valueExists = null;
+
+        let isolated = null;
+
+        if (this.multiple) {
+          isolated = this.isolate && Array.isArray(value) && value[0] === this.isolate.value;
+
+          valueExists = Array.isArray(this.values)
+            ? value.every((val) => {
+                return this.values.find((valueItem) => valueItem.value === val)
+              })
+              || isolated
+            : false;
+        } else {
+          valueExists = Array.isArray(this.values)
+            ? this.values.some((valueItem) => valueItem.value === value)
+            : false;
+        }
+
+        if (valueExists) {
+          this.model = value;
+
+          if (this.isolate) {
+            this.isolate.enabled = isolated;
+          }
+          return;
+        }
+      } break;
+
+      case ItemType.range: {
+        this.model = _isObject(value) ? { ...this.model, ...value } : {};
+      } break;
+
+      case ItemType.date: case ItemType.datetime: {
+        this.model = moment(value);
+      } break;
+
+      case ItemType.autocompletechips: {
+        if (Array.isArray(value)) {
+          this.model.push(...value);
+        } else if (_isObject(value)) {
+          this.model.push(value);
+        } else {
+          this.model = [];
+        }
+      } break;
+
+      default: {
+        this.model = value;
+      }
+    }
+  }
+
+  private sanitizeRange() {
+    if (!this.placeholder) {
+      this.placeholder = ['Min', 'Max'];
+    }
+
+    if (!this.model) {
+      this.model = {};
+    }
   }
 }

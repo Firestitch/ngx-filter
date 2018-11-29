@@ -31,6 +31,8 @@ export class FsFilterConfig extends Model {
   public searchInput = null;
   public singleTextFilter = false;
 
+  private _filtersNames = [];
+
   constructor(data: any = {}) {
     super();
 
@@ -39,7 +41,18 @@ export class FsFilterConfig extends Model {
 
   public initItems(items, route, persists) {
     if (items && Array.isArray(items)) {
-      this.items = items.map((item) => new FsFilterConfigItem(item, this, route, persists));
+
+      this.items = items.map((item) => {
+
+        if (item && item.name && this._filtersNames.indexOf(item.name) === -1) {
+          this._filtersNames.push(item.name);
+
+          return new FsFilterConfigItem(item, this, route, persists)
+        } else {
+          throw Error('Filter init error. Items name must be uniq.')
+        }
+
+      });
     }
 
     this.initSorting(route, persists);

@@ -20,7 +20,7 @@ export class FilterItemComponent {
     if (filter.isolate.enabled) {
       filter.model = filter.multiple ? [filter.isolate.value] : filter.isolate.value;
     } else {
-      filter.model = null;
+      filter.model = filter.multiple ? [] : null;
     }
 
     this.itemChanged.next(filter);
