@@ -256,7 +256,6 @@ export class FsFilterConfigItem extends Model {
   }
 
   public updateValue(value) {
-    debugger;
     switch (this.type) {
       case ItemType.select: {
 
