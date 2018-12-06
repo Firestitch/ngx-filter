@@ -320,6 +320,11 @@ export class FilterComponent implements OnInit {
 
     if (changeEvent) {
       this.filterChange();
+
+      // In other case change will be triggered from filterChange method
+      if (!this.config.inline) {
+        this.change();
+      }
     }
   }
 
