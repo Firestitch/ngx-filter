@@ -2,13 +2,19 @@ import './../tools/assets/playground.scss';
 
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AppComponent } from './app/app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { FsFilterModule } from '../src';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppMaterialModule } from './app/material.module';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { FsExampleModule } from '@firestitch/example';
+import { FsMessageModule } from '@firestitch/message';
+
+import { ToastrModule } from 'ngx-toastr';
+
+import { FsFilterModule } from '../src';
+import { AppComponent } from './app/app.component';
+import { AppMaterialModule } from './app/material.module';
+
 import {  SecondExampleComponent,
           NofiltersComponent,
           ExamplesComponent } from './app/components';
@@ -22,7 +28,9 @@ import {  SecondExampleComponent,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
-    FsExampleModule,
+    FsExampleModule.forRoot({ iframeObserveBody: true }),
+    FsMessageModule.forRoot(),
+    ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot([
       { path: '', component: ExamplesComponent, pathMatch: 'full' },
       { path: 'nofilters', component: NofiltersComponent }
