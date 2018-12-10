@@ -290,7 +290,9 @@ export class FsFilterConfig extends Model {
           if (filter.multiple) {
             filter.model = [];
           } else {
-            filter.model = null;
+            filter.model = filter.values.some((val) => val.value === '__all')
+              ? '__all'
+              : null;
           }
 
           if (filter.isolate) {
