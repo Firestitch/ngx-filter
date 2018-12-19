@@ -57,8 +57,10 @@
     padding: 10px 0;
     .actions {
       display: flex;
+
       button {
         margin-right: 6px;
+        text-transform: uppercase;
 
         &:last-child {
           margin-right: 0;
