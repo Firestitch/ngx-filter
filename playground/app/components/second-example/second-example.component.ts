@@ -1,8 +1,8 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { nameValue, filter } from '@firestitch/common/array'
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
+import { BehaviorSubject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { ItemType } from '../../../../src/models/fs-filter-item';
 import { FilterComponent } from '../../../../src/components/filter';
@@ -38,15 +38,15 @@ export class SecondExampleComponent {
         { name: 'two', value: 't'}
       ],
       change: (query) => {
-        console.log('Change',query);
+        console.log('Change', query);
         this.query = query;
       },
       sortChange: (sort) => {
-        console.log('Sort',sort);
+        console.log('Sort', sort);
         this.sort = sort;
       },
       init: (query) => {
-        console.log('Init',query);
+        console.log('Init', query);
         this.query = query;
       },
       reload: (query) => {
@@ -85,7 +85,10 @@ export class SecondExampleComponent {
           label: 'Observable Select',
           values: () => {
             return new BehaviorSubject(this.users)
-            .map(users => nameValue(users, 'name', 'id'));
+              .pipe(
+                map((users) => nameValue(users, 'name', 'id')),
+                tap(() => { console.log('Request')})
+              )
           }
         },
         {
@@ -94,10 +97,10 @@ export class SecondExampleComponent {
           type: ItemType.autocomplete,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
-            .map(users => filter(users, (user) => {
-              return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
-            }))
-            .map(users => nameValue(users, 'name', 'id'));
+              .pipe(
+                map((users) => this._filterUsersByKeyword(users, keyword)),
+                map((users) => nameValue(users, 'name', 'id')),
+              )
           }
         },
         {
@@ -106,10 +109,10 @@ export class SecondExampleComponent {
           type: ItemType.autocompletechips,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
-            .map(users => filter(users, (user) => {
-              return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
-            }))
-            .map(users => nameValue(users, 'name', 'id'));
+              .pipe(
+                map((users) => this._filterUsersByKeyword(users, keyword)),
+                map((users) => nameValue(users, 'name', 'id')),
+              )
           }
         },
         {
@@ -142,5 +145,11 @@ export class SecondExampleComponent {
       sortBy: 't',
       sortDirection: 'desc'
     });
+  }
+
+  private _filterUsersByKeyword(users, keyword) {
+    return filter(users, (user) => {
+      return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
+    })
   }
 }
