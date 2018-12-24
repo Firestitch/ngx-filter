@@ -5,17 +5,19 @@ import {
   ViewChild,
   Input,
   OnInit,
+  OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
-
-import { FsFilterConfig } from '../../models';
-import { FsStore } from '@firestitch/store';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
+import { FsStore } from '@firestitch/store';
+
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
+
+import { FsFilterConfig } from '../../models';
 import { FilterConfig } from '../../classes';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
 @Component({
@@ -24,7 +26,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './filter.component.html',
   encapsulation: ViewEncapsulation.None
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, OnDestroy {
   @Input() public filter: FilterConfig = null;
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
@@ -53,6 +55,7 @@ export class FilterComponent implements OnInit {
   public modelChanged = new EventEmitter();
 
   private _searchTextInput: ElementRef = null;
+  private _firstOpen = true;
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -75,9 +78,13 @@ export class FilterComponent implements OnInit {
     this.watchSearchInput();
 
     if (this.sortUpdate) {
-      this.sortUpdate.subscribe((data) => {
-        this.config.updateSorting(data);
-      });
+      this.sortUpdate
+        .pipe(
+          takeUntil(this.config.destroy$),
+        )
+        .subscribe((data) => {
+          this.config.updateSorting(data);
+        });
     }
 
     if (this.config.init) {
@@ -86,12 +93,18 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  public ngOnDestroy() {
+    if (this.config) {
+      this.config.destroy();
+    }
+  }
+
   public watchSearchInput() {
     this.modelChanged
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        // takeWhile(() => !this.destroyed)
+        takeUntil(this.config.destroy$),
       )
       .subscribe((value) => {
         this.config.searchInput.model = value;
@@ -114,6 +127,12 @@ export class FilterComponent implements OnInit {
 
   public changeVisibility(state: boolean) {
     this.showFilterMenu = state;
+
+    if (this._firstOpen) {
+      this.config.loadValuesForPendingItems();
+      this._firstOpen = false;
+    }
+
     if (this.showFilterMenu) {
       window.document.body.classList.add('fs-filter-open');
     } else {
@@ -122,7 +141,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public clear($event) {
+  public clear() {
 
     if (this.config.searchInput) {
       this.config.searchInput.model = '';

@@ -24,3 +24,5 @@
     <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
   </mat-form-field>
 </ng-template>
+
+<ng-template [ngIf]="item.initialLoading">{{ item.label }} loading...</ng-template>

@@ -2,7 +2,7 @@ import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { nameValue, filter } from '@firestitch/common/array'
 
 import { BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { ItemType } from '../../../../src/models/fs-filter-item';
 import { FilterComponent } from '../../../../src/components/filter';
@@ -87,7 +87,6 @@ export class SecondExampleComponent {
             return new BehaviorSubject(this.users)
               .pipe(
                 map((users) => nameValue(users, 'name', 'id')),
-                tap(() => { console.log('Request')})
               )
           }
         },

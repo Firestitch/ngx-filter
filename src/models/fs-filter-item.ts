@@ -1,6 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
 import { Alias, Model } from 'tsmodels';
 
+import { Observable } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { isObservable } from 'rxjs/internal/util/isObservable';
 
 import * as _isFunction from 'lodash/isFunction';
@@ -48,6 +50,10 @@ export class FsFilterConfigItem extends Model {
   @Alias() public placeholder: any;
   @Alias('default') public defaultValue: any;
 
+  public initialLoading = false;
+
+  private _pendingValues = false;
+
   constructor(data: IFilterConfigItem | any = {},
               private _config: FsFilterConfig,
               private _route: ActivatedRoute,
@@ -55,6 +61,10 @@ export class FsFilterConfigItem extends Model {
     super();
 
     this._fromJSON(data);
+  }
+
+  get hasPendingValues() {
+    return this._pendingValues;
   }
 
   public _fromJSON(data) {
@@ -104,9 +114,7 @@ export class FsFilterConfigItem extends Model {
       this.values = data.values();
 
       if (isObservable(this.values)) {
-        this.values.subscribe((values) => {
-          this.sanitizeItem(values)
-        });
+        this._pendingValues = true;
       } else {
         const values = Array.isArray(this.values) ? (this.values as any).slice() : this.values;
         this.sanitizeItem(values);
@@ -316,6 +324,19 @@ export class FsFilterConfigItem extends Model {
         this.model = value;
       }
     }
+  }
+
+  public loadRemoteValues() {
+    this.initialLoading = true;
+    this.values
+      .pipe(
+        take(1),
+        takeUntil(this._config.destroy$),
+      )
+      .subscribe((values) => {
+        this.sanitizeItem(values);
+        this.initialLoading = false;
+      });
   }
 
   private sanitizeRange() {

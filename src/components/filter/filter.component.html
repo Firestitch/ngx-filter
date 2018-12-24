@@ -1,7 +1,6 @@
 <div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="config?.items?.length"
      [ngClass]="{
      'filters-open': showFilterMenu,
-     loading: loading,
      'no-input': !showFilterInput
      }">
   <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
@@ -46,13 +45,15 @@
             </span>
           </mat-form-field>
         </form>
-        <filters-list [items]="config.items"
-                      [showSortBy]="showSortBy"
-                      [sortBy]="config.sortByItem"
-                      [sortDirection]="config.sortDirectionItem"
-                      (filterChanged)="filterChange($event)"
-                      (search)="search()"
-                      (clear)="clear()">
+        <filters-list
+          [items]="config.items"
+          [showSortBy]="showSortBy"
+          [sortBy]="config.sortByItem"
+          [sortDirection]="config.sortDirectionItem"
+          (filterChanged)="filterChange($event)"
+          (search)="search()"
+          (clear)="clear()"
+        >
         </filters-list>
 
       </div>

@@ -2,6 +2,7 @@ import { isEmpty } from '@firestitch/common/util';
 import { list as arrayList } from '@firestitch/common/array';
 import { Alias, Model } from 'tsmodels';
 
+import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import * as _isObject from 'lodash/isObject';
 import * as _clone from 'lodash/clone';
@@ -32,11 +33,16 @@ export class FsFilterConfig extends Model {
   public singleTextFilter = false;
 
   private _filtersNames = [];
+  private _destroy$ = new Subject<void>();
 
   constructor(data: any = {}) {
     super();
 
     this._fromJSON(data);
+  }
+
+  get destroy$() {
+    return this._destroy$.asObservable();
   }
 
   public initItems(items, route, persists) {
@@ -313,5 +319,16 @@ export class FsFilterConfig extends Model {
         } break;
       }
     }
+  }
+
+  public loadValuesForPendingItems() {
+    this.items
+      .filter((item) => item.hasPendingValues)
+      .forEach((item) => item.loadRemoteValues());
+  }
+
+  public destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 }
