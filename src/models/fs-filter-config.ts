@@ -2,7 +2,7 @@ import { isEmpty } from '@firestitch/common/util';
 import { list as arrayList } from '@firestitch/common/array';
 import { Alias, Model } from 'tsmodels';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import * as moment from 'moment';
 import * as _isObject from 'lodash/isObject';
 import * as _clone from 'lodash/clone';
@@ -41,7 +41,7 @@ export class FsFilterConfig extends Model {
     this._fromJSON(data);
   }
 
-  get destroy$() {
+  get destroy$(): Observable<void> {
     return this._destroy$.asObservable();
   }
 
