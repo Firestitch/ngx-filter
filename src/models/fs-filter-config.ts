@@ -296,7 +296,7 @@ export class FsFilterConfig extends Model {
           if (filter.multiple) {
             filter.model = [];
           } else {
-            filter.model = filter.values.some((val) => val.value === '__all')
+            filter.model = Array.isArray(filter.values) && filter.values.some((val) => val.value === '__all')
               ? '__all'
               : null;
           }
