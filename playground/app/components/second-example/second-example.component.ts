@@ -1,12 +1,11 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
-import { nameValue, filter } from '@firestitch/common/array'
+
+import { ItemType } from '@firestitch/filter';
+import { FilterComponent } from '@firestitch/filter';
+import { nameValue, filter } from '@firestitch/common'
 
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { ItemType } from '../../../../src/models/fs-filter-item';
-import { FilterComponent } from '../../../../src/components/filter';
-
 
 @Component({
   selector: 'second-example',
