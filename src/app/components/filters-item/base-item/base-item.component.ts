@@ -13,6 +13,7 @@ export class BaseItemComponent {
   @Output() public itemChanged = new EventEmitter();
 
   public itemChange() {
+    debugger;
     this.itemChanged.next(this.item);
   }
 }

@@ -5,12 +5,12 @@ import { take, takeUntil } from 'rxjs/operators';
 import { isObservable } from 'rxjs/internal/util/isObservable';
 
 import { isFunction, isObject, toString } from 'lodash-es';
+import { toUTC } from '@firestitch/date';
+import { isDate, isValid, parse } from 'date-fns';
 
-import * as _moment from 'moment';
-const moment = _moment;
-
-import { IFilterConfigItem } from '../interfaces/item-config.interface';
 import { FsFilterConfig } from './filter-config';
+import { IFilterConfigItem } from '../interfaces/item-config.interface';
+
 
 export enum ItemType {
   text            = 'text',
@@ -83,14 +83,17 @@ export class FsFilterConfigItem extends Model {
 
         if (value) {
           if (this.type === ItemType.daterange || this.type === ItemType.datetimerange) {
-            value.from = value.from ? moment.utc(value.from) : null;
-            value.to = value.to ? moment.utc(value.to) : null;
+            value.from = value.from ? toUTC(value.from) : null;
+            value.to = value.to ? toUTC(value.to) : null;
 
           } else if (
             this.type === ItemType.date ||
             this.type === ItemType.datetime
           ) {
-            value = moment(value);
+            debugger;
+            if (!isDate(value) || !isValid(value)) {
+              value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+            }
           } else if (
             this.type === ItemType.checkbox && this.checked !== undefined
           ) {
@@ -251,7 +254,7 @@ export class FsFilterConfigItem extends Model {
           this.model = this.model.split(',');
         } else if (this.type == 'daterange' || this.type == 'datetimerange') {
           const parts = this.model.split(',');
-          this.model = {from: moment(parts[0]), to: moment(parts[1])};
+          this.model = {from: parts[0], to: parts[1]};
         } else if (this.type == 'range') {
           const parts = this.model.split(',');
           this.model = {min: parts[0], max: parts[1]};
@@ -305,7 +308,7 @@ export class FsFilterConfigItem extends Model {
       } break;
 
       case ItemType.date: case ItemType.datetime: {
-        this.model = moment(value);
+        this.model = value;
       } break;
 
       case ItemType.autocompletechips: {

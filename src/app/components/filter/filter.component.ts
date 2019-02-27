@@ -14,9 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FsStore } from '@firestitch/store';
 
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-
-import * as _moment from 'moment';
-const moment = _moment;
+import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
 import { FilterConfig } from '../../interfaces/config.interface';
@@ -256,7 +254,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
         const date = new Date(this.persists[this.config.persist.name].date);
 
-        if (moment(date).subtract(this.config.persist.timeout, 'minutes').isAfter(moment())) {
+        if (isAfter(subMinutes(date, this.config.persist.timeout), new Date())) {
           this.persists[this.config.persist.name] = {data: {}, date: new Date()};
         }
       }

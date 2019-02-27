@@ -3,12 +3,11 @@ import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
 
-import * as _moment from 'moment';
-const moment = _moment;
-
+import { isValid, isDate, format } from 'date-fns';
 import { isObject, clone } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
+import { simpleFormat } from '@firestitch/date';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -155,8 +154,8 @@ export class FsFilterConfig extends Model {
 
       if (filter.type == ItemType.date || filter.type == ItemType.datetime) {
 
-        if (value) {
-          value = moment(value).format();
+        if (value && isValid(value) && isDate(value)) {
+          value = simpleFormat(value);
         }
 
       } else if (filter.type == ItemType.daterange || filter.type == ItemType.datetimerange) {
@@ -166,11 +165,11 @@ export class FsFilterConfig extends Model {
 
         value = {};
         if (from) {
-          value.from = moment(from).format();
+          value.from = format(from, 'yyyy-MM-dd\THH:mm:ssxxxxx');
         }
 
         if (to) {
-          value.to = moment(to).format();
+          value.to = format(to, 'yyyy-MM-dd\THH:mm:ssxxxxx');
         }
 
       } else if (filter.type == ItemType.autocomplete) {
