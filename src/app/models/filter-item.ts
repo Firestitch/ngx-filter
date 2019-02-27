@@ -90,7 +90,6 @@ export class FsFilterConfigItem extends Model {
             this.type === ItemType.date ||
             this.type === ItemType.datetime
           ) {
-            debugger;
             if (!isDate(value) || !isValid(value)) {
               value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
             }
