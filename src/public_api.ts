@@ -7,7 +7,7 @@ export { FilterItemComponent } from './app/components/filters-item/filter-item.c
 export { FiltersListComponent } from './app/components/filters-list/filters-list.component';
 
 // Interfaces
-export { FilterConfigItem, IFilterConfigItem } from './app/interfaces/item-config.interface';
+export { IFilterConfigItem } from './app/interfaces/item-config.interface';
 export { FilterConfig } from './app/interfaces/config.interface';
 
 // Enums/Models

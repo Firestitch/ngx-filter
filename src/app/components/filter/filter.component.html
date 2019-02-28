@@ -1,9 +1,9 @@
-<div class="fs-filter" fxLayout="row" fxLayoutAlign="start stretch" *ngIf="config?.items?.length"
+<div class="fs-filter" fxLayout="column" fxLayoutAlign="start stretch" *ngIf="config?.items?.length"
      [ngClass]="{
      'filters-open': showFilterMenu,
      'no-input': !showFilterInput
      }">
-  <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex>
+  <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex="1 1 0">
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
         <form autocomplete="off" role="presentation">
@@ -37,7 +37,7 @@
                   *ngIf="activeFiltersCount > 0">
               {{ activeFiltersCount }}
             </span>
-            <span class="active-filters-counter with-input"
+            <span class="active-filters-counter"
                   matSuffix
                   (click)="switchFilterVisibility($event)"
                   *ngIf="activeFiltersWithInputCount > 0">
@@ -55,9 +55,13 @@
           (clear)="clear()"
         >
         </filters-list>
-
       </div>
       <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
     </div>
   </div>
+  <fs-filter-chips class="filter-chips"
+                   *ngIf="config.chips"
+                   [filters]="changedFilters"
+                   (remove)="resetFilter($event)">
+  </fs-filter-chips>
 </div>

@@ -1,11 +1,12 @@
 import { ActivatedRoute } from '@angular/router';
+import { toUTC } from '@firestitch/date';
+
 import { Alias, Model } from 'tsmodels';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { isObservable } from 'rxjs/internal/util/isObservable';
 
-import { isFunction, isObject, toString } from 'lodash-es';
-import { toUTC } from '@firestitch/date';
+import { isFunction, isObject, toString, clone } from 'lodash-es';
 import { isDate, isValid, parse } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
@@ -30,6 +31,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public name: string;
   @Alias() public type: ItemType;
   @Alias() public label: string;
+  @Alias() public chipLabel: string;
   @Alias() public multiple: boolean;
   @Alias() public groups: any;
   @Alias() public wait: boolean;
@@ -37,7 +39,6 @@ export class FsFilterConfigItem extends Model {
   @Alias() public values: any;
   @Alias() public values$: any;
   @Alias() public selectedValue: any;
-  @Alias() public model: any;
   @Alias() public isolate: any;
   @Alias() public names: any;
   @Alias() public primary: boolean;
@@ -49,7 +50,10 @@ export class FsFilterConfigItem extends Model {
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
+  public valueChanged = false;
 
+  private _model: any;
+  private _tmpModel: any;
   private _pendingValues = false;
 
   constructor(data: IFilterConfigItem | any = {},
@@ -65,6 +69,24 @@ export class FsFilterConfigItem extends Model {
     return this._pendingValues;
   }
 
+  get model() {
+    return this._model;
+  }
+
+  set model(val) {
+    this._model = val;
+    this._tmpModel = val;
+    this.checkIfValueChanged();
+  }
+
+  get tmpModel() {
+    return this._tmpModel;
+  }
+
+  set tmpModel(val) {
+    this._tmpModel = val;
+  }
+
   public _fromJSON(data) {
     super._fromJSON(data);
 
@@ -74,7 +96,6 @@ export class FsFilterConfigItem extends Model {
     }
 
     if (this._config.persist) {
-
       const persisted = this._persists[this._config.persist.name].data;
 
       if (persisted[this.name]) {
@@ -98,7 +119,7 @@ export class FsFilterConfigItem extends Model {
           ) {
             value = value == this.checked;
           } else if (this.type === ItemType.select && this.multiple) {
-            value = [];
+            value = clone(value);
           }
         }
 
@@ -327,16 +348,119 @@ export class FsFilterConfigItem extends Model {
   }
 
   public loadRemoteValues() {
-    this.initialLoading = true;
-    this.values
-      .pipe(
-        take(1),
-        takeUntil(this._config.destroy$),
-      )
-      .subscribe((values) => {
-        this.sanitizeItem(values);
-        this.initialLoading = false;
-      });
+    if (!this.initialLoading && this._pendingValues) {
+      this.initialLoading = true;
+
+      this.values
+        .pipe(
+          take(1),
+          takeUntil(this._config.destroy$),
+        )
+        .subscribe((values) => {
+          this._pendingValues = false;
+          this.sanitizeItem(values);
+          this.initialLoading = false;
+        });
+
+    }
+  }
+
+  public clear() {
+    this.valueChanged = false;
+    this.model = undefined;
+
+    switch (this.type) {
+      case ItemType.autocomplete: {
+        this.model = null;
+        this.tmpModel = null;
+        this.search = '';
+      } break;
+
+      case ItemType.autocompletechips: {
+        this.model = [];
+        this.tmpModel = [];
+        this.search = '';
+      } break;
+
+      case ItemType.checkbox: {
+        this.model = false;
+        this.tmpModel = false;
+      } break;
+
+      case ItemType.select: {
+        if (this.multiple) {
+          this.model = [];
+          this.tmpModel = [];
+        } else {
+          this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
+            ? '__all'
+            : null;
+          this.tmpModel = this.model;
+        }
+
+        if (this.isolate) {
+          this.isolate.enabled = false;
+        }
+      } break;
+
+      case ItemType.range: {
+        this.model = {};
+        this.tmpModel = {};
+      } break;
+
+      case ItemType.text: {
+        this.model = '';
+        this.tmpModel = '';
+      } break;
+
+      case ItemType.date: case ItemType.datetime: {
+        this.model = null;
+        this.tmpModel = null;
+      } break;
+    }
+  }
+
+  public checkIfValueChanged() {
+    switch (this.type) {
+      case ItemType.autocompletechips: {
+        this.valueChanged = this.model && this.model.length;
+      } break;
+
+      case ItemType.checkbox: {
+        this.valueChanged = this.model && this.model !== false;
+      } break;
+
+      case ItemType.select: {
+        if (this.multiple) {
+          this.valueChanged = this.model && this.model.length;
+        } else {
+          const hasAllOption = Array.isArray(this.values) && this.values.some((val) => val.value === '__all');
+          if (hasAllOption && this.model && this.model !== '__all') {
+            this.valueChanged = true;
+          } else {
+            this.valueChanged = !!this.model;
+          }
+        }
+      } break;
+
+      case ItemType.range: {
+        if (this.model && Object.keys(this.model).length > 0) {
+          this.valueChanged = true;
+        }
+      } break;
+
+      case ItemType.text: {
+        this.valueChanged = this.model && this.model !== '';
+      } break;
+
+      case ItemType.autocomplete: case ItemType.date: case ItemType.datetime: {
+        this.valueChanged = !!this.model;
+      } break;
+
+      default: {
+        this.valueChanged = false;
+      }
+    }
   }
 
   private sanitizeRange() {

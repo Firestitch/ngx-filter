@@ -2,10 +2,10 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  ViewChild,
   Input,
-  OnInit,
   OnDestroy,
+  OnInit,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Location } from '@angular/common';
@@ -13,11 +13,14 @@ import { ActivatedRoute } from '@angular/router';
 
 import { FsStore } from '@firestitch/store';
 
+import { isObject } from 'lodash-es';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
 import { FilterConfig } from '../../interfaces/config.interface';
+import { FsFilterConfigItem } from '../../models/filter-item';
+import { objectsAreEquals } from '../../helpers/compare';
 
 
 @Component({
@@ -31,6 +34,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
+
+  public changedFilters = [];
 
   @ViewChild('searchTextInput')
   set searchTextInput(value) {
@@ -56,6 +61,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
+  private _query = {};
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -87,10 +93,12 @@ export class FilterComponent implements OnInit, OnDestroy {
         });
     }
 
+    this._query = this.config.gets({ flatten: true });
+
     if (this.config.init) {
-      const query = this.config.gets({ flatten: true });
-      this.config.init(query, this.config);
+      this.config.init(this._query, this.config);
     }
+
   }
 
   public ngOnDestroy() {
@@ -128,6 +136,10 @@ export class FilterComponent implements OnInit, OnDestroy {
   public changeVisibility(state: boolean) {
     this.showFilterMenu = state;
 
+    if (!this.showFilterMenu) {
+      this.change();
+    }
+
     if (this._firstOpen) {
       this.config.loadValuesForPendingItems();
       this._firstOpen = false;
@@ -148,6 +160,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     this.searchText = '';
+    this.changedFilters = [];
     this.config.filtersClear();
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
@@ -161,7 +174,6 @@ export class FilterComponent implements OnInit, OnDestroy {
    */
   public search() {
     this.switchFilterVisibility();
-    this.change();
 
     // Send event that sort has been updated
     if (this.config.sortChange) {
@@ -173,11 +185,18 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
+    this.config.updateModelValues();
     const query = this.config.gets({ flatten: true });
-    // this.updateFilledCounter();
 
-    if (this.config.change) {
-      this.config.change(query, this.config);
+    if (!objectsAreEquals(this._query, query)) {
+      this._query = query;
+
+      this.storePersistValues();
+      this.updateFilledCounter();
+
+      if (this.config.change) {
+        this.config.change(query, this.config);
+      }
     }
   }
 
@@ -185,29 +204,31 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Do update count of filled filters
    */
   public updateFilledCounter() {
-    this.activeFiltersCount = this.config.countOfFilledItems();
+    this.changedFilters = this.config.getFilledItems();
+
+    this.changedFilters
+      .filter((item) => item.hasPendingValues)
+      .forEach((item) => item.loadRemoteValues());
 
     this.activeFiltersWithInputCount = (this.searchText !== '')
-      ? this.activeFiltersCount + 1
-      : this.activeFiltersCount;
+      ? this.changedFilters.length + 1
+      : this.changedFilters.length;
   }
 
   /**
    * Store updated filter data into localstorage
-   * @param {any} changedItem
+   * @param changedItem
    */
-  public filterChange(changedItem = null) {
-    if (changedItem && changedItem === this.config.searchInput) {
-      this.searchText = changedItem.model;
+  public filterChange(changedItem: FsFilterConfigItem = null) {
+    if (changedItem) {
+      if (changedItem === this.config.searchInput) {
+        this.searchText = changedItem.model;
+      }
+
+      changedItem.checkIfValueChanged();
     }
 
-    if (this.config.persist) {
-      this.persists[this.config.persist.name] = {
-        data: this.config.gets({expand: true, names: false}),
-        date: new Date()
-      };
-      this._store.set(this.config.namespace + '-persist', this.persists, {});
-    }
+    this.storePersistValues();
 
     if (this.config.inline) {
       this.change();
@@ -258,6 +279,20 @@ export class FilterComponent implements OnInit, OnDestroy {
           this.persists[this.config.persist.name] = {data: {}, date: new Date()};
         }
       }
+    }
+  }
+
+  /**
+   * Store values to local storage
+   */
+  public storePersistValues() {
+    if (this.config.persist) {
+      this.persists[this.config.persist.name] = {
+        data: this.config.gets({expand: true, names: false}),
+        date: new Date()
+      };
+
+      this._store.set(this.config.namespace + '-persist', this.persists, {});
     }
   }
 
@@ -345,6 +380,21 @@ export class FilterComponent implements OnInit, OnDestroy {
         this.change();
       }
     }
+  }
+
+  /**
+   * Reset filter
+   * @param item
+   */
+  public resetFilter(item: FsFilterConfigItem) {
+    const index = this.changedFilters.indexOf(item);
+
+    if (index > -1) {
+      this.changedFilters.splice(index, 1);
+      item.clear();
+    }
+
+    this.change();
   }
 
 

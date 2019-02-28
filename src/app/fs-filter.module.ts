@@ -30,6 +30,8 @@ import { AutocompletechipsComponent } from './components/filters-item/autocomple
 import { DateComponent } from './components/filters-item/date/date.component';
 import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.component';
 import { BaseItemComponent } from './components/filters-item/base-item/base-item.component';
+import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
+import { FsItemToChip } from './filters/item-to-chip.filter';
 
 
 @NgModule({
@@ -47,13 +49,14 @@ import { BaseItemComponent } from './components/filters-item/base-item/base-item
     MatCheckboxModule,
     MatAutocompleteModule,
     MatButtonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   declarations: [
     BaseItemComponent,
     FilterComponent,
     FiltersListComponent,
     FilterItemComponent,
+    FsFilterChipsComponent,
     SelectComponent,
     TextComponent,
     RangeComponent,
@@ -61,6 +64,9 @@ import { BaseItemComponent } from './components/filters-item/base-item/base-item
     AutocompletechipsComponent,
     DateComponent,
     CheckboxComponent,
+
+    // Pipes
+    FsItemToChip,
   ],
   providers: [
     FsStore,
