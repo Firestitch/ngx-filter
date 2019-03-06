@@ -3,8 +3,8 @@ import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
 
-import { isValid, isDate, format } from 'date-fns';
-import { isObject, clone } from 'lodash-es';
+import { format, isDate, isValid } from 'date-fns';
+import { clone, isObject } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
 import { simpleFormat } from '@firestitch/date';
@@ -18,6 +18,7 @@ export class FsFilterConfig extends Model {
   @Alias() public persist: any = false;
   @Alias() public inline = false;
   @Alias() public autofocus = false;
+  @Alias() public chips = false;
   @Alias('sorting') public sortingValues: any[] = null;
   @Alias() public sortingDirection = null;
   @Alias() public namespace = 'filter';
@@ -105,12 +106,17 @@ export class FsFilterConfig extends Model {
     }
   }
 
+  public updateModelValues() {
+    this.items.forEach((filter) => {
+      filter.model = clone(filter.tmpModel);
+    });
+  }
+
   public gets(opts: any = {}) {
 
     const query = {};
 
     for (const filter of this.items) {
-
       let value = clone(filter.model);
 
       if (filter.type == ItemType.select) {
@@ -123,7 +129,7 @@ export class FsFilterConfig extends Model {
             }
           }
 
-          if (filter.model.indexOf('__all') > -1) {
+          if (filter.model && filter.model.indexOf('__all') > -1) {
             value = null;
           }
 
@@ -220,41 +226,44 @@ export class FsFilterConfig extends Model {
     }
   }
 
-  public countOfFilledItems() {
-    return this.items.reduce((counter, filter) => {
+  public getFilledItems() {
+    return this.items.reduce((acc, filter) => {
 
       switch (filter.type) {
         case ItemType.select: {
+          const multipleIsoldated = filter.multiple
+            && filter.isolate
+            && Array.isArray(filter.model)
+            && !!filter.model.length
+            && filter.model.indexOf('__all') === -1;
 
-          if (
-            (filter.multiple && filter.isolate && Array.isArray(filter.model) && filter.model.length) ||
-            (
-              filter.multiple &&
-              Array.isArray(filter.model) &&
-              filter.model.length &&
-              filter.model.indexOf('__all') === -1
-            ) ||
-            (!filter.multiple && filter.model && filter.model !== '__all')
-          ) {
-            counter++;
+          const multipleHasSelectedValues = filter.multiple
+            && Array.isArray(filter.model)
+            && filter.model.length
+            && filter.model.indexOf('__all') === -1;
+
+          const selectedValues = !filter.multiple && filter.model && filter.model !== '__all';
+
+          if (multipleIsoldated || multipleHasSelectedValues || selectedValues) {
+            acc.push(filter);
           }
         } break;
 
         case ItemType.autocompletechips: {
           if (Array.isArray(filter.model) && filter.model.length) {
-            counter++;
+            acc.push(filter);
           }
         } break;
 
         case ItemType.checkbox: {
           if (filter.model) {
-            counter++;
+            acc.push(filter);
           }
         } break;
 
         case ItemType.daterange: case ItemType.datetimerange: {
           if (filter.model.from || filter.model.to) {
-            counter++;
+            acc.push(filter);
           }
         } break;
 
@@ -263,61 +272,19 @@ export class FsFilterConfig extends Model {
             filter !== this.searchInput &&
             (!isEmpty(filter.model, {zero: true}) || !isEmpty(filter.model.value, {zero: true}))
           ) {
-            counter++;
+            acc.push(filter);
           }
         }
 
       }
 
-      return counter;
-    }, 0);
+      return acc;
+    }, []);
   }
 
   public filtersClear() {
     for (const filter of this.items) {
-      filter.model = undefined;
-
-      switch (filter.type) {
-        case ItemType.autocomplete: {
-          filter.model = null;
-          filter.search = '';
-        } break;
-
-        case ItemType.autocompletechips: {
-          filter.model = [];
-          filter.search = '';
-        } break;
-
-        case ItemType.checkbox: {
-          filter.model = false;
-        } break;
-
-        case ItemType.select: {
-          if (filter.multiple) {
-            filter.model = [];
-          } else {
-            filter.model = Array.isArray(filter.values) && filter.values.some((val) => val.value === '__all')
-              ? '__all'
-              : null;
-          }
-
-          if (filter.isolate) {
-            filter.isolate.enabled = false;
-          }
-        } break;
-
-        case ItemType.range: {
-          filter.model = {};
-        } break;
-
-        case ItemType.text: {
-          filter.model = '';
-        } break;
-
-        case ItemType.date: case ItemType.datetime: {
-          filter.model = null;
-        } break;
-      }
+      filter.clear();
     }
   }
 

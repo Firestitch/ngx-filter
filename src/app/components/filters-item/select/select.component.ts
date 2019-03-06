@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  KeyValueDiffers
+} from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
   selector: 'filter-item-select',
-  templateUrl: './select.component.html'
+  templateUrl: './select.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent extends BaseItemComponent {
 
@@ -12,8 +18,11 @@ export class SelectComponent extends BaseItemComponent {
   // If _all has been selected than we must disable all other items
   public allItemsOptionSelected = false;
 
-  constructor() {
-    super();
+  constructor(
+    protected _kvDiffers: KeyValueDiffers,
+    protected _cd: ChangeDetectorRef
+  ) {
+    super(_kvDiffers, _cd);
   }
 
   public selectChange() {
@@ -21,11 +30,11 @@ export class SelectComponent extends BaseItemComponent {
 
       this.item.isolate.enabled = false;
 
-      if (this.item.multiple && Array.isArray(this.item.model)) {
-        const index = this.item.model.indexOf(this.item.isolate.value);
+      if (this.item.multiple && Array.isArray(this.item.tmpModel)) {
+        const index = this.item.tmpModel.indexOf(this.item.isolate.value);
 
         if (index > -1) {
-          this.item.model.splice(index, 1);
+          this.item.tmpModel.splice(index, 1);
         }
       }
     }
@@ -34,18 +43,18 @@ export class SelectComponent extends BaseItemComponent {
   }
 
   public selectItem() {
-    const allKeyPosition = this.item.model.indexOf('__all');
+    const allKeyPosition = this.item.tmpModel.indexOf('__all');
 
     if (
-      Array.isArray(this.item.model)
+      Array.isArray(this.item.tmpModel)
       && allKeyPosition > -1
     ) {
       if (this.allItemsOptionSelected) {
-        this.item.model.splice(allKeyPosition, 1);
-        this.item.model = this.item.model.slice();
+        this.item.tmpModel.splice(allKeyPosition, 1);
+        this.item.tmpModel = this.item.tmpModel.slice();
         this.allItemsOptionSelected = false;
       } else {
-        this.item.model = ['__all'];
+        this.item.tmpModel = ['__all'];
         this.allItemsOptionSelected = true;
       }
     }

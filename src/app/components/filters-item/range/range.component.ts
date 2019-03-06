@@ -1,14 +1,23 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  KeyValueDiffers
+} from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
   selector: 'filter-item-range',
-  templateUrl: './range.component.html'
+  templateUrl: './range.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RangeComponent extends BaseItemComponent {
 
-  constructor() {
-    super();
+  constructor(
+    protected _kvDiffers: KeyValueDiffers,
+    protected _cd: ChangeDetectorRef
+  ) {
+    super(_kvDiffers, _cd);
   }
 }

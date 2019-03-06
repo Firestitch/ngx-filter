@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  KeyValueDiffers
+} from '@angular/core';
 import {
   filter as arrayFilter,
   list as arrayList,
@@ -12,12 +17,16 @@ import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'filter-item-autocompletechips',
-  templateUrl: './autocompletechips.component.html'
+  templateUrl: './autocompletechips.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompletechipsComponent extends BaseItemComponent {
 
-  constructor() {
-    super();
+  constructor(
+    protected _kvDiffers: KeyValueDiffers,
+    protected _cd: ChangeDetectorRef
+  ) {
+    super(_kvDiffers, _cd);
   }
 
   public onAutocompleteChipsChange(input) {

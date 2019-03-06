@@ -31,6 +31,7 @@ export class SecondExampleComponent {
     this.conf = {
       persist: 'filter',
       inline: false,
+      chips: true,
       autofocus: true,
       sorting: [
         { name: 'name', value: 'n', default: true},
@@ -63,6 +64,7 @@ export class SecondExampleComponent {
           name: 'simple_select',
           type: ItemType.select,
           label: 'Simple Select',
+          chipLabel: 'Special Label',
           values: () => {
               return [
                   { name: 'All', value: '__all' },

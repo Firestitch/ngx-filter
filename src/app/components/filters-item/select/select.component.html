@@ -1,7 +1,7 @@
 <ng-template [ngIf]="item.values?.length">
   <mat-form-field floatLabel="auto" *ngIf="item.multiple && !item.groups">
     <mat-label>{{item.label}}</mat-label>
-    <mat-select [(ngModel)]="item.model"
+    <mat-select [(ngModel)]="item.tmpModel"
                 [multiple]="item.multiple"
                 (selectionChange)="selectItem()"
                 (onClose)="selectChange()">
@@ -16,7 +16,7 @@
 
   <mat-form-field floatLabel="auto" *ngIf="!item.multiple && !item.groups">
     <mat-label>{{item.label}}</mat-label>
-    <mat-select [(ngModel)]="item.model" (change)="selectChange()">
+    <mat-select [(ngModel)]="item.tmpModel" (change)="selectChange()">
       <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
         {{ item.name }}
       </mat-option>

@@ -1,13 +1,14 @@
-import { FilterConfigItem } from './item-config.interface';
+import { IFilterConfigItem } from './item-config.interface';
 
 export interface FilterConfig {
   inline?: boolean;
   load?: boolean;
+  chips?: boolean;
   autofocus?: boolean;
   namespace?: string;
   persist?: any;
   reload?: (query: any) => void | false;
-  items: FilterConfigItem[];
+  items: IFilterConfigItem[];
   init?: (any) => void;
   change?: (...any) => void;
 }
