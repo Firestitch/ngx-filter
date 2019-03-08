@@ -1,7 +1,8 @@
 {
   "name": "@firestitch/filter",
+  "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "0.5.1",
+  "version": "7.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -46,8 +47,7 @@
     "@compodoc/compodoc": "^1.1.7",
     "@firestitch/date": "^0.4.1",
     "@firestitch/datepicker": "^0.6.2",
-    "@firestitch/example": "^0.6.0",
-    "@firestitch/iframe": "^0.2.0",
+    "@firestitch/example": "^7.0.0",
     "@firestitch/message": "^0.2.0",
     "@firestitch/common": "^0.5.1",
     "@firestitch/store": "^0.2.0",
@@ -71,7 +71,6 @@
     "node": ">=6.0.0"
   },
   "peerDependencies": {
-    "@angular/flex-layout": ">=^7.0.0-beta.23"
-  },
-  "dependencies": {}
+    "@angular/flex-layout": ">=7.0.0-beta.23"
+  }
 }
