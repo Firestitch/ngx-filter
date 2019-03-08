@@ -12,6 +12,11 @@
                           [item]="item"
                           (itemChanged)="itemChange($event)">
       </filter-item-select>
+      <filter-item-chips class="interface"
+                          *ngSwitchCase="itemType.chips"
+                          [item]="item"
+                          (itemChanged)="itemChange($event)">
+      </filter-item-chips>
       <filter-item-range class="interface interface-range"
                          *ngSwitchCase="itemType.range"
                          [item]="item"

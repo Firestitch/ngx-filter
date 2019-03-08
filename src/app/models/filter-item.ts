@@ -23,7 +23,8 @@ export enum ItemType {
   datetimerange   = 'datetimerange',
   autocomplete    = 'autocomplete',
   autocompletechips = 'autocompletechips',
-  checkbox        = 'checkbox'
+  checkbox        = 'checkbox',
+  chips        = 'chips',
 }
 
 export class FsFilterConfigItem extends Model {
@@ -154,6 +155,9 @@ export class FsFilterConfigItem extends Model {
       case ItemType.select: {
         this.sanitizeSelectItem(values)
       } break;
+      case ItemType.chips: {
+        this.sanitizeChipsItem(values)
+      } break;
       case ItemType.range: {
         this.sanitizeRange();
       } break;
@@ -187,7 +191,7 @@ export class FsFilterConfigItem extends Model {
             this.model = '__all';
           }
         }
-      } else if (this.type == 'autocompletechips') {
+      } else if (this.type == ItemType.autocompletechips || this.type == ItemType.chips) {
         this.model = [];
       }
     }
@@ -252,6 +256,51 @@ export class FsFilterConfigItem extends Model {
       }
     }
   }
+
+  public sanitizeChipsItem(values) {
+    this.values = values;
+    this.groups = null;
+
+    // if (this.isolate) {
+    //   for (const index in this.values) {
+    //     if (this.values.hasOwnProperty(index)) {
+    //       if (!this.values[index]) {
+    //         continue;
+    //       }
+    //
+    //       if (this.values[index].value == this.isolate.value) {
+    //         this.values.splice(index, 1);
+    //       }
+    //     }
+    //   }
+    //
+    //   if (Array.isArray(this.model)) {
+    //     if (this.model.length == this.values.length) {
+    //       this.model = null;
+    //       this.isolate.enabled = false;
+    //     } else if (this.model[0] == this.isolate.value) {
+    //       this.isolate.enabled = true;
+    //     }
+    //   }
+    // }
+    //
+    // for (const value of this.values) {
+    //
+    //   if (value.group) {
+    //
+    //     if (!this.groups) {
+    //       this.groups = {};
+    //     }
+    //
+    //     if (!this.groups[value.group]) {
+    //       this.groups[value.group] = [];
+    //     }
+    //
+    //     this.groups[value.group].push(value);
+    //   }
+    // }
+  }
+
 
   public sanitizeCheckbox() {
     this.checked = this.checked ? toString(this.checked) : true;
@@ -325,6 +374,10 @@ export class FsFilterConfigItem extends Model {
 
       case ItemType.range: {
         this.model = isObject(value) ? { ...this.model, ...value } : {};
+      } break;
+
+      case ItemType.chips: {
+        this.model = [];
       } break;
 
       case ItemType.date: case ItemType.datetime: {

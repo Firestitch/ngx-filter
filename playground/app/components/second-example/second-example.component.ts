@@ -22,10 +22,20 @@ export class SecondExampleComponent {
   public sort = null;
 
   public users = [
-      { id: 1, name: 'John Doe' },
-      { id: 2, name: 'Jane Doe' },
-      { id: 3, name: 'Bob Tom' }
-    ];
+    { id: 1, name: 'John Doe' },
+    { id: 2, name: 'Jane Doe' },
+    { id: 3, name: 'Bob Tom' }
+  ];
+
+  public weekdays = [
+    { id: 1, name: 'Monday' },
+    { id: 2, name: 'Tuesday' },
+    { id: 3, name: 'Wednesday' },
+    { id: 4, name: 'Thursday' },
+    { id: 5, name: 'Friday' },
+    { id: 6, name: 'Saturday' },
+    { id: 7, name: 'Sunday' },
+  ];
 
   constructor() {
     this.conf = {
@@ -112,6 +122,17 @@ export class SecondExampleComponent {
               .pipe(
                 map((users) => this._filterUsersByKeyword(users, keyword)),
                 map((users) => nameValue(users, 'name', 'id')),
+              )
+          }
+        },
+        {
+          name: 'days_chips',
+          label: 'Weekdays',
+          type: ItemType.chips,
+          values: (keyword) => {
+            return new BehaviorSubject(this.weekdays)
+              .pipe(
+                map((weekdays) => nameValue(weekdays, 'name', 'id')),
               )
           }
         },

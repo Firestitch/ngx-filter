@@ -145,7 +145,7 @@ export class FsFilterConfig extends Model {
             }
           }
         }
-      } else if (filter.type == ItemType.autocompletechips) {
+      } else if (filter.type == ItemType.autocompletechips || filter.type === ItemType.chips) {
         if (Array.isArray(filter.model) && filter.model.length && !opts.expand) {
           value = arrayList(filter.model, 'value');
         }

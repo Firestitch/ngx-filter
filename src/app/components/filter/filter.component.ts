@@ -174,7 +174,9 @@ export class FilterComponent implements OnInit, OnDestroy {
    */
   public search() {
     this.switchFilterVisibility();
-
+    this.filterChange();
+    this.change();
+    
     // Send event that sort has been updated
     if (this.config.sortChange) {
       this.config.sortChange(this.config);

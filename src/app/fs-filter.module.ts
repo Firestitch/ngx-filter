@@ -18,11 +18,14 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsCommonModule } from '@firestitch/common';
 import { FsStore, FsStoreModule } from '@firestitch/store';
+import { FsChipModule } from '@firestitch/chip';
+import { FsLabelModule } from '@firestitch/label';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FiltersListComponent } from './components/filters-list/filters-list.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
 import { SelectComponent } from './components/filters-item/select/select.component';
+import { ChipsComponent } from './components/filters-item/chips/chips.component';
 import { TextComponent } from './components/filters-item/text/text.component';
 import { RangeComponent } from './components/filters-item/range/range.component';
 import { AutocompleteComponent } from './components/filters-item/autocomplete/autocomplete.component';
@@ -39,9 +42,6 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     CommonModule,
     RouterModule,
     FormsModule,
-    FsCommonModule,
-    FsStoreModule,
-    FsDatePickerModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
@@ -50,6 +50,11 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     MatAutocompleteModule,
     MatButtonModule,
     FlexLayoutModule,
+    FsChipModule,
+    FsCommonModule,
+    FsStoreModule,
+    FsDatePickerModule,
+    FsLabelModule,
   ],
   declarations: [
     BaseItemComponent,
@@ -58,6 +63,7 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     FilterItemComponent,
     FsFilterChipsComponent,
     SelectComponent,
+    ChipsComponent,
     TextComponent,
     RangeComponent,
     AutocompleteComponent,
