@@ -64,9 +64,9 @@ export class FsFilterConfig extends Model {
 
     this.initSorting(route, persists);
 
-    this.searchInput = this.items.find((item) => item.type === ItemType.text);
+    this.searchInput = this.items.find((item) => item.type === ItemType.Text);
 
-    if (this.items.length === 1 && this.items[0].type === ItemType.text) {
+    if (this.items.length === 1 && this.items[0].type === ItemType.Text) {
       this.singleTextFilter = true;
     }
   }
@@ -75,7 +75,7 @@ export class FsFilterConfig extends Model {
     if (this.sortingValues) {
       const sortByItem = {
         name: SORT_BY_FIELD,
-        type: ItemType.select,
+        type: ItemType.Select,
         label: 'Sort By',
         values: this.sortingValues
       };
@@ -90,7 +90,7 @@ export class FsFilterConfig extends Model {
 
       const sortDirectionItem = {
         name: SORT_DIRECTION_FIELD,
-        type: ItemType.select,
+        type: ItemType.Select,
         label: 'Sort Direction',
         values: [
           { name: 'Ascending', value: 'asc' },
@@ -119,7 +119,7 @@ export class FsFilterConfig extends Model {
     for (const filter of this.items) {
       let value = clone(filter.model);
 
-      if (filter.type == ItemType.select) {
+      if (filter.type == ItemType.Select) {
 
         if (filter.multiple) {
 
@@ -145,11 +145,11 @@ export class FsFilterConfig extends Model {
             }
           }
         }
-      } else if (filter.type == ItemType.autocompletechips || filter.type === ItemType.chips) {
+      } else if (filter.type == ItemType.AutoCompleteChips || filter.type === ItemType.Chips) {
         if (Array.isArray(filter.model) && filter.model.length && !opts.expand) {
           value = arrayList(filter.model, 'value');
         }
-      } else if (filter.type == ItemType.checkbox) {
+      } else if (filter.type == ItemType.Checkbox) {
         value = filter.model ? filter.checked : filter.unchecked;
       }
 
@@ -158,13 +158,13 @@ export class FsFilterConfig extends Model {
         continue;
       }
 
-      if (filter.type == ItemType.date || filter.type == ItemType.datetime) {
+      if (filter.type == ItemType.Date || filter.type == ItemType.DateTime) {
 
         if (value && isValid(value) && isDate(value)) {
           value = simpleFormat(value);
         }
 
-      } else if (filter.type == ItemType.daterange || filter.type == ItemType.datetimerange) {
+      } else if (filter.type == ItemType.DateRange || filter.type == ItemType.DateTimeRange) {
 
         const from = value.from;
         const to = value.to;
@@ -178,7 +178,7 @@ export class FsFilterConfig extends Model {
           value.to = format(to, 'yyyy-MM-dd\THH:mm:ssxxxxx');
         }
 
-      } else if (filter.type == ItemType.autocomplete) {
+      } else if (filter.type == ItemType.AutoComplete) {
 
         if (isEmpty(filter.model.value, {zero: true})) {
           continue;
@@ -230,7 +230,7 @@ export class FsFilterConfig extends Model {
     return this.items.reduce((acc, filter) => {
 
       switch (filter.type) {
-        case ItemType.select: {
+        case ItemType.Select: {
           const multipleIsoldated = filter.multiple
             && filter.isolate
             && Array.isArray(filter.model)
@@ -249,19 +249,19 @@ export class FsFilterConfig extends Model {
           }
         } break;
 
-        case ItemType.autocompletechips: {
+        case ItemType.AutoCompleteChips: {
           if (Array.isArray(filter.model) && filter.model.length) {
             acc.push(filter);
           }
         } break;
 
-        case ItemType.checkbox: {
+        case ItemType.Checkbox: {
           if (filter.model) {
             acc.push(filter);
           }
         } break;
 
-        case ItemType.daterange: case ItemType.datetimerange: {
+        case ItemType.DateRange: case ItemType.DateTimeRange: {
           if (filter.model.from || filter.model.to) {
             acc.push(filter);
           }

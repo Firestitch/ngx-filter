@@ -14,17 +14,17 @@ import { IFilterConfigItem } from '../interfaces/item-config.interface';
 
 
 export enum ItemType {
-  text            = 'text',
-  select          = 'select',
-  range           = 'range',
-  date            = 'date',
-  datetime        = 'datetime',
-  daterange       = 'daterange',
-  datetimerange   = 'datetimerange',
-  autocomplete    = 'autocomplete',
-  autocompletechips = 'autocompletechips',
-  checkbox        = 'checkbox',
-  chips        = 'chips',
+  Text            = 'text',
+  Select          = 'select',
+  Range           = 'range',
+  Date            = 'date',
+  DateTime        = 'datetime',
+  DateRange       = 'daterange',
+  DateTimeRange   = 'datetimerange',
+  AutoComplete    = 'autocomplete',
+  AutoCompleteChips = 'autocompletechips',
+  Checkbox        = 'checkbox',
+  Chips           = 'chips',
 }
 
 export class FsFilterConfigItem extends Model {
@@ -104,22 +104,22 @@ export class FsFilterConfigItem extends Model {
         let value = persisted[this.name];
 
         if (value) {
-          if (this.type === ItemType.daterange || this.type === ItemType.datetimerange) {
+          if (this.type === ItemType.DateRange || this.type === ItemType.DateTimeRange) {
             value.from = value.from ? toUTC(value.from) : null;
             value.to = value.to ? toUTC(value.to) : null;
 
           } else if (
-            this.type === ItemType.date ||
-            this.type === ItemType.datetime
+            this.type === ItemType.Date ||
+            this.type === ItemType.DateTime
           ) {
             if (!isDate(value) || !isValid(value)) {
               value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
             }
           } else if (
-            this.type === ItemType.checkbox && this.checked !== undefined
+            this.type === ItemType.Checkbox && this.checked !== undefined
           ) {
             value = value == this.checked;
-          } else if (this.type === ItemType.select && this.multiple) {
+          } else if (this.type === ItemType.Select && this.multiple) {
             value = clone(value);
           }
         }
@@ -131,8 +131,8 @@ export class FsFilterConfigItem extends Model {
     this.applyDataFromQuery();
 
     if (isFunction(data.values) &&
-      this.type !== ItemType.autocomplete &&
-      this.type !== ItemType.autocompletechips) {
+      this.type !== ItemType.AutoComplete &&
+      this.type !== ItemType.AutoCompleteChips) {
       this.values = data.values();
 
       if (isObservable(this.values)) {
@@ -149,19 +149,19 @@ export class FsFilterConfigItem extends Model {
 
   public sanitizeItem(values) {
     switch (this.type) {
-      case ItemType.text: {
+      case ItemType.Text: {
         //?????
       }break;
-      case ItemType.select: {
+      case ItemType.Select: {
         this.sanitizeSelectItem(values)
       } break;
-      case ItemType.chips: {
+      case ItemType.Chips: {
         this.sanitizeChipsItem(values)
       } break;
-      case ItemType.range: {
+      case ItemType.Range: {
         this.sanitizeRange();
       } break;
-      case ItemType.checkbox: {
+      case ItemType.Checkbox: {
         this.sanitizeCheckbox();
       } break;
     }
@@ -191,7 +191,7 @@ export class FsFilterConfigItem extends Model {
             this.model = '__all';
           }
         }
-      } else if (this.type == ItemType.autocompletechips || this.type == ItemType.chips) {
+      } else if (this.type == ItemType.AutoCompleteChips || this.type == ItemType.Chips) {
         this.model = [];
       }
     }
@@ -335,7 +335,7 @@ export class FsFilterConfigItem extends Model {
 
   public updateValue(value) {
     switch (this.type) {
-      case ItemType.select: {
+      case ItemType.Select: {
 
         if (value === '__all' || value === null) {
           this.model = value;
@@ -372,19 +372,19 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.range: {
+      case ItemType.Range: {
         this.model = isObject(value) ? { ...this.model, ...value } : {};
       } break;
 
-      case ItemType.chips: {
+      case ItemType.Chips: {
         this.model = [];
       } break;
 
-      case ItemType.date: case ItemType.datetime: {
+      case ItemType.Date: case ItemType.DateTime: {
         this.model = value;
       } break;
 
-      case ItemType.autocompletechips: {
+      case ItemType.AutoCompleteChips: {
         if (Array.isArray(value)) {
           this.model.push(...value);
         } else if (isObject(value)) {
@@ -423,24 +423,24 @@ export class FsFilterConfigItem extends Model {
     this.model = undefined;
 
     switch (this.type) {
-      case ItemType.autocomplete: {
+      case ItemType.AutoComplete: {
         this.model = null;
         this.tmpModel = null;
         this.search = '';
       } break;
 
-      case ItemType.autocompletechips: {
+      case ItemType.AutoCompleteChips: {
         this.model = [];
         this.tmpModel = [];
         this.search = '';
       } break;
 
-      case ItemType.checkbox: {
+      case ItemType.Checkbox: {
         this.model = false;
         this.tmpModel = false;
       } break;
 
-      case ItemType.select: {
+      case ItemType.Select: {
         if (this.multiple) {
           this.model = [];
           this.tmpModel = [];
@@ -456,17 +456,17 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.range: {
+      case ItemType.Range: {
         this.model = {};
         this.tmpModel = {};
       } break;
 
-      case ItemType.text: {
+      case ItemType.Text: {
         this.model = '';
         this.tmpModel = '';
       } break;
 
-      case ItemType.date: case ItemType.datetime: {
+      case ItemType.Date: case ItemType.DateTime: {
         this.model = null;
         this.tmpModel = null;
       } break;
@@ -475,15 +475,15 @@ export class FsFilterConfigItem extends Model {
 
   public checkIfValueChanged() {
     switch (this.type) {
-      case ItemType.autocompletechips: {
+      case ItemType.AutoCompleteChips: {
         this.valueChanged = this.model && this.model.length;
       } break;
 
-      case ItemType.checkbox: {
+      case ItemType.Checkbox: {
         this.valueChanged = this.model && this.model !== false;
       } break;
 
-      case ItemType.select: {
+      case ItemType.Select: {
         if (this.multiple) {
           this.valueChanged = this.model && this.model.length;
         } else {
@@ -496,17 +496,17 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.range: {
+      case ItemType.Range: {
         if (this.model && Object.keys(this.model).length > 0) {
           this.valueChanged = true;
         }
       } break;
 
-      case ItemType.text: {
+      case ItemType.Text: {
         this.valueChanged = this.model && this.model !== '';
       } break;
 
-      case ItemType.autocomplete: case ItemType.date: case ItemType.datetime: {
+      case ItemType.AutoComplete: case ItemType.Date: case ItemType.DateTime: {
         this.valueChanged = !!this.model;
       } break;
 

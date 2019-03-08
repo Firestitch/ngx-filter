@@ -66,13 +66,13 @@ export class SecondExampleComponent {
       items: [
         {
           name: 'keyword',
-          type: ItemType.text,
+          type: ItemType.Text,
           label: 'Search',
           query: 'keyword'
         },
         {
           name: 'simple_select',
-          type: ItemType.select,
+          type: ItemType.Select,
           label: 'Simple Select',
           chipLabel: 'Special Label',
           values: () => {
@@ -86,13 +86,13 @@ export class SecondExampleComponent {
         },
         {
           name: 'range',
-          type: ItemType.range,
+          type: ItemType.Range,
           label: 'Range',
           placeholder: ['Min', 'Max']
         },
         {
           name: 'observable_select',
-          type: ItemType.select,
+          type: ItemType.Select,
           label: 'Observable Select',
           values: () => {
             return new BehaviorSubject(this.users)
@@ -104,7 +104,7 @@ export class SecondExampleComponent {
         {
           name: 'autocomplete_user_id',
           label: 'Autocomplete User',
-          type: ItemType.autocomplete,
+          type: ItemType.AutoComplete,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -116,7 +116,7 @@ export class SecondExampleComponent {
         {
           name: 'autocompletechips_user_id',
           label: 'Autocomplete Chips User',
-          type: ItemType.autocompletechips,
+          type: ItemType.AutoCompleteChips,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -128,7 +128,7 @@ export class SecondExampleComponent {
         {
           name: 'days_chips',
           label: 'Weekdays',
-          type: ItemType.chips,
+          type: ItemType.Chips,
           multiple: true,
           values: (keyword) => {
             return new BehaviorSubject(this.weekdays)
@@ -139,17 +139,17 @@ export class SecondExampleComponent {
         },
         {
           name: 'date',
-          type: ItemType.date,
+          type: ItemType.Date,
           label: 'Date'
         },
         {
           name: 'checkbox',
-          type: ItemType.checkbox,
+          type: ItemType.Checkbox,
           label: 'Checkbox'
         },
         {
           name: 'state',
-          type: ItemType.select,
+          type: ItemType.Select,
           label: 'Status',
           multiple: true,
           values: [

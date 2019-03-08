@@ -11,13 +11,13 @@ export class FsItemToChip implements PipeTransform {
     let result = '';
 
     switch (item.type) {
-      case ItemType.date: {
+      case ItemType.Date: {
        result = format(model, 'date');
       } break;
-      case ItemType.checkbox: {
+      case ItemType.Checkbox: {
         result = item.label;
       } break;
-      case ItemType.range: {
+      case ItemType.Range: {
         const min = model.min;
         const minFilled = !!model.min;
         const max = model.max;
@@ -31,19 +31,19 @@ export class FsItemToChip implements PipeTransform {
           result = `Max ${max}`;
         }
       } break;
-      case ItemType.autocomplete: {
+      case ItemType.AutoComplete: {
         result = item.model.name;
       } break;
-      case ItemType.autocompletechips: case ItemType.chips: {
+      case ItemType.AutoCompleteChips: case ItemType.Chips: {
         result = item.model.reduce((acc, item) => {
           acc.push(item.name);
 
           return acc;
         }, []).join(', ');
       } break;
-      case ItemType.daterange:
-      case ItemType.datetimerange: {
-        const formatTo = model.type === ItemType.daterange ? 'date' : 'date-time';
+      case ItemType.DateRange:
+      case ItemType.DateTimeRange: {
+        const formatTo = model.type === ItemType.DateRange ? 'date' : 'date-time';
         const min = model.min;
         const minFilled = model.min !== void 0;
         const max = model.max;
