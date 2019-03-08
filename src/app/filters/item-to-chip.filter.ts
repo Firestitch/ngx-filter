@@ -34,7 +34,7 @@ export class FsItemToChip implements PipeTransform {
       case ItemType.autocomplete: {
         result = item.model.name;
       } break;
-      case ItemType.autocompletechips: {
+      case ItemType.autocompletechips: case ItemType.chips: {
         result = item.model.reduce((acc, item) => {
           acc.push(item.name);
 

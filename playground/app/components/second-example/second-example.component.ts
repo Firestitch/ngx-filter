@@ -129,6 +129,7 @@ export class SecondExampleComponent {
           name: 'days_chips',
           label: 'Weekdays',
           type: ItemType.chips,
+          multiple: true,
           values: (keyword) => {
             return new BehaviorSubject(this.weekdays)
               .pipe(

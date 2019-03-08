@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, KeyValueDiffers } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
@@ -9,8 +9,11 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class ChipsComponent extends BaseItemComponent {
 
-  constructor() {
-    super();
+  constructor(
+    protected _kvDiffers: KeyValueDiffers,
+    protected _cd: ChangeDetectorRef
+  ) {
+    super(_kvDiffers, _cd);
   }
 
   public modelChange() {
