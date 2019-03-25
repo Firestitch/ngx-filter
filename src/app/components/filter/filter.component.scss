@@ -329,15 +329,18 @@
     display: none;
   }
 
+  min-width: 22px;
+  line-height: 22px;
+  height: 22px;
+  transform: scale(.65);
+  font-size: 116%;
+  margin-left: -2px;
   background: #ccc;
   border-radius: 50%;
-  min-width: 15px;
   text-align: center;
   padding: 3px;
   color: #fff;
-  height: 15px;
   cursor: pointer;
-  transform: scale(.85);
 }
 
 
