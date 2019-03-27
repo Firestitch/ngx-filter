@@ -1,0 +1,13 @@
+<mat-form-field floatLabel="auto">
+  <mat-label>{{item.label}}</mat-label>
+  <mat-select [(ngModel)]="item.tmpModel"
+              [multiple]="item.multiple"
+              (selectionChange)="changed($event)">
+    <mat-option *ngFor="let item of item.values"
+                [value]="item.value"
+                [ngStyle]="item.style">
+      {{ item.name }}
+    </mat-option>
+  </mat-select>
+  <!--<mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>-->
+</mat-form-field>

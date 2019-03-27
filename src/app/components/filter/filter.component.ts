@@ -110,8 +110,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   public watchSearchInput() {
     this.modelChanged
       .pipe(
-        debounceTime(500),
         distinctUntilChanged(),
+        debounceTime(500),
         takeUntil(this.config.destroy$),
       )
       .subscribe((value) => {
@@ -159,6 +159,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.config.searchInput.model = '';
     }
 
+    this.modelChange(this.config.searchInput.model);
     this.searchText = '';
     this.changedFilters = [];
     this.config.filtersClear();

@@ -33,6 +33,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public type: ItemType;
   @Alias() public label: string;
   @Alias() public chipLabel: string;
+  @Alias() public children: string;
   @Alias() public multiple: boolean;
   @Alias() public groups: any;
   @Alias() public wait: boolean;
@@ -237,22 +238,6 @@ export class FsFilterConfigItem extends Model {
         } else if (this.model[0] == this.isolate.value) {
           this.isolate.enabled = true;
         }
-      }
-    }
-
-    for (const value of this.values) {
-
-      if (value.group) {
-
-        if (!this.groups) {
-          this.groups = {};
-        }
-
-        if (!this.groups[value.group]) {
-          this.groups[value.group] = [];
-        }
-
-        this.groups[value.group].push(value);
       }
     }
   }

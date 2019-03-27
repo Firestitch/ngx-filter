@@ -37,6 +37,32 @@ export class SecondExampleComponent {
     { id: 7, name: 'Sunday' },
   ];
 
+  public subject = [
+    {
+      value: 1,
+      name: 'Any',
+    },
+    {
+      value: 2,
+      name: 'None',
+    },
+    {
+      value: 3,
+      name: 'Question',
+    },
+    {
+      name: 'Doc',
+      types: [
+        { value: 5, name: 'Prayer Letter 1' },
+        { value: 6, name: 'Prayer Letter 2' },
+        { value: 7, name: 'Prayer Letter 3' },
+        { value: 8, name: 'Prayer Letter 4' },
+        { value: 9, name: 'Prayer Letter 5' },
+        { value: 10, name: 'Prayer Letter 6' },
+      ]
+    },
+  ];
+
   constructor() {
     this.conf = {
       persist: 'filter',
@@ -82,6 +108,15 @@ export class SecondExampleComponent {
                   { name: 'Option 2', value: 2 },
                   { name: 'Option 3', value: 3 }
               ];
+          }
+        },
+        {
+          name: 'group_select',
+          type: ItemType.Select,
+          label: 'Group Select',
+          children: 'types',
+          values: () => {
+            return this.subject;
           }
         },
         {

@@ -25,6 +25,9 @@ import { FilterComponent } from './components/filter/filter.component';
 import { FiltersListComponent } from './components/filters-list/filters-list.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
 import { SelectComponent } from './components/filters-item/select/select.component';
+import { SelectGroupsComponent } from './components/filters-item/select/groups/groups.component';
+import { SelectSimpleComponent } from './components/filters-item/select/simple/simple.component';
+import { SelectMultipleComponent } from './components/filters-item/select/multiple/multiple.component';
 import { ChipsComponent } from './components/filters-item/chips/chips.component';
 import { TextComponent } from './components/filters-item/text/text.component';
 import { RangeComponent } from './components/filters-item/range/range.component';
@@ -63,6 +66,9 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     FilterItemComponent,
     FsFilterChipsComponent,
     SelectComponent,
+    SelectGroupsComponent,
+    SelectSimpleComponent,
+    SelectMultipleComponent,
     ChipsComponent,
     TextComponent,
     RangeComponent,
