@@ -10,6 +10,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-checkbox',
   templateUrl: './checkbox.component.html',
+  styleUrls: ['checkbox.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent extends BaseItemComponent {

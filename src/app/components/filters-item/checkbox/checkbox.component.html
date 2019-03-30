@@ -1,4 +1,8 @@
-<mat-checkbox (change)="itemChange()" [(ngModel)]="item.model">
-  {{ inline ? item.label : '' }}
-  <span class="checkbox-label">{{item.label}}</span>
-</mat-checkbox>
+<fs-label-field>
+  <fs-label>
+    {{item.label}}
+  </fs-label>
+  <mat-checkbox (change)="itemChange()" [(ngModel)]="item.model">
+    <span class="checkbox-label"></span>
+  </mat-checkbox>
+</fs-label-field>
