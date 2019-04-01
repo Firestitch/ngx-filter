@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { format } from '@firestitch/date';
 import { FsFilterConfigItem, ItemType } from '../models/filter-item';
+import { findValue } from '../helpers/find-value';
 
 
 @Pipe({
@@ -59,6 +60,7 @@ export class FsItemToChip implements PipeTransform {
       } break;
 
       default: {
+        debugger;
         if (Array.isArray(model)) {
           const options = model.reduce((acc, key) => {
             const itemValue = item.values.find((val) => val.value === key);
@@ -74,9 +76,15 @@ export class FsItemToChip implements PipeTransform {
 
           result = options.join(', ');
         } else {
-          const itemValue = item.values.find((val) => val.value === model);
+          if (item.children) {
+            const itemValue = findValue(item.values, model, item.children);
 
-          result = itemValue && itemValue.name
+            result = itemValue && itemValue.name
+          } else {
+            const itemValue = item.values.find((val) => val.value === model);
+
+            result = itemValue && itemValue.name
+          }
         }
       }
     }

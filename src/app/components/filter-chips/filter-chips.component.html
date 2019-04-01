@@ -1,17 +1,16 @@
-<mat-chip-list>
-  <mat-chip
-    *ngFor="let item of filters"
-    [selectable]="true"
-    [removable]="true">
+<fs-chip
+  *ngFor="let item of filters"
+  [value]="item"
+  [selectable]="true"
+  [removable]="true"
+  (removed)="removeItem(item)"
+>
+  <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
+    {{ item.model | json }}
+    {{ item.model | fsItemToChip:item }}
+  </ng-container>
 
-    <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
-      {{ item.model | fsItemToChip:item }}
-    </ng-container>
-
-    <ng-template #lodaingValues>
-      loading...
-    </ng-template>
-
-    <mat-icon matChipRemove (click)="removeItem(item)">cancel</mat-icon>
-  </mat-chip>
-</mat-chip-list>
+  <ng-template #lodaingValues>
+    loading...
+  </ng-template>
+</fs-chip>
