@@ -6,7 +6,6 @@
   (removed)="removeItem(item)"
 >
   <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
-    {{ item.model | json }}
     {{ item.model | fsItemToChip:item }}
   </ng-container>
 
