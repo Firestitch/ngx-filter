@@ -1,15 +1,20 @@
-<fs-chip
-  *ngFor="let item of filters"
-  [value]="item"
-  [selectable]="true"
-  [removable]="true"
-  (removed)="removeItem(item)"
->
-  <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
-    {{ item.model | fsItemToChip:item }}
-  </ng-container>
 
-  <ng-template #lodaingValues>
-    loading...
-  </ng-template>
-</fs-chip>
+<fs-chips [(ngModel)]="chips">
+  <fs-chip
+    *ngFor="let item of filters"
+    [value]="item"
+    [selectable]="true"
+    [removable]="true"
+    size="small"
+    (removed)="removeItem(item)">
+      <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
+        {{ item.model | fsItemToChip:item }}
+      </ng-container>
+
+      <ng-template #lodaingValues>
+        loading...
+      </ng-template>
+  </fs-chip>
+</fs-chips>
+
+

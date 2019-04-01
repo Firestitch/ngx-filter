@@ -60,7 +60,6 @@ export class FsItemToChip implements PipeTransform {
       } break;
 
       default: {
-        debugger;
         if (Array.isArray(model)) {
           const options = model.reduce((acc, key) => {
             const itemValue = item.values.find((val) => val.value === key);
