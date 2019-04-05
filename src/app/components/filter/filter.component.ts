@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { FsStore } from '@firestitch/store';
 
-import { isObject } from 'lodash-es';
+import { isObject, cloneDeep } from 'lodash-es';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
@@ -157,9 +157,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     if (this.config.searchInput) {
       this.config.searchInput.model = '';
+      this.modelChange(this.config.searchInput.model);
     }
 
-    this.modelChange(this.config.searchInput.model);
     this.searchText = '';
     this.changedFilters = [];
     this.config.filtersClear();
@@ -180,7 +180,14 @@ export class FilterComponent implements OnInit, OnDestroy {
     
     // Send event that sort has been updated
     if (this.config.sortChange) {
-      this.config.sortChange(this.config);
+      const sorting = this.config.getSorting();
+      const direction = sorting.sortDirection === '__all' ? null : sorting.sortDirection;
+
+      this.config.sortChange(
+        sorting.sortBy,
+        direction,
+        this.config,
+      );
     }
   }
 

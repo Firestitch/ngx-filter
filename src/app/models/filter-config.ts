@@ -1,4 +1,5 @@
 import { isEmpty, list as arrayList } from '@firestitch/common';
+import { simpleFormat } from '@firestitch/date';
 import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
@@ -7,7 +8,7 @@ import { format, isDate, isValid } from 'date-fns';
 import { clone, isObject } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
-import { simpleFormat } from '@firestitch/date';
+import { SortChangeFn, SortDefaults } from '../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -20,12 +21,13 @@ export class FsFilterConfig extends Model {
   @Alias() public autofocus = false;
   @Alias() public chips = false;
   @Alias('sorting') public sortingValues: any[] = null;
+  @Alias('sort') public sortingDefaults: SortDefaults = null;
   @Alias() public sortingDirection = null;
   @Alias() public namespace = 'filter';
   @Alias() public init: Function;
   @Alias() public change: Function;
   @Alias() public reload: Function;
-  @Alias() public sortChange: Function;
+  @Alias() public sortChange: SortChangeFn;
 
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
@@ -81,9 +83,8 @@ export class FsFilterConfig extends Model {
       };
 
 
-      const defaultSortBy = this.sortingValues.find((value: any) => value.default);
-      if (defaultSortBy && defaultSortBy.value) {
-        sortByItem['default'] = defaultSortBy.value;
+      if (this.sortingDefaults.value) {
+        sortByItem['default'] = this.sortingDefaults.value;
       }
 
       this.sortByItem = new FsFilterConfigItem(sortByItem, this, route, persists);
@@ -98,8 +99,8 @@ export class FsFilterConfig extends Model {
         ]
       };
 
-      if (this.sortingDirection) {
-        sortDirectionItem['default'] = this.sortingDirection;
+      if (this.sortingDefaults.direction) {
+        sortDirectionItem['default'] = this.sortingDefaults.direction;
       }
 
       this.sortDirectionItem = new FsFilterConfigItem(sortDirectionItem, this, route, persists);
@@ -110,6 +111,14 @@ export class FsFilterConfig extends Model {
     this.items.forEach((filter) => {
       filter.model = clone(filter.tmpModel);
     });
+
+    if (this.sortByItem) {
+      this.sortByItem.model = clone(this.sortByItem.tmpModel);
+    }
+
+    if (this.sortDirectionItem) {
+      this.sortDirectionItem.model = clone(this.sortDirectionItem.tmpModel);
+    }
   }
 
   public gets(opts: any = {}) {

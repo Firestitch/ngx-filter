@@ -1,6 +1,6 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 
-import { ItemType } from '@firestitch/filter';
+import { FilterConfig, ItemType } from '@firestitch/filter';
 import { FilterComponent } from '@firestitch/filter';
 import { nameValue, filter } from '@firestitch/common'
 
@@ -16,7 +16,7 @@ export class SecondExampleComponent {
 
   @ViewChild('filter') public filterEl: FilterComponent;
 
-  public conf: any;
+  public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
   public query = null;
   public sort = null;
@@ -70,15 +70,19 @@ export class SecondExampleComponent {
       chips: true,
       autofocus: true,
       sorting: [
-        { name: 'name', value: 'n', default: true},
+        { name: 'name', value: 'n'},
         { name: 'two', value: 't'}
       ],
+      sort: {
+        direction: 'desc',
+        value: 't',
+      },
       change: (query) => {
         console.log('Change', query);
         this.query = query;
       },
-      sortChange: (sort) => {
-        console.log('Sort', sort);
+      sortChange: (sort, direction, config) => {
+        console.log('Sort', sort, direction, config.sortingValues);
         this.sort = sort;
       },
       init: (query) => {
