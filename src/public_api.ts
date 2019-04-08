@@ -8,7 +8,13 @@ export { FiltersListComponent } from './app/components/filters-list/filters-list
 
 // Interfaces
 export { IFilterConfigItem } from './app/interfaces/item-config.interface';
-export { FilterConfig } from './app/interfaces/config.interface';
+export {
+  FilterConfig,
+  SortingItem,
+  ChangeFn,
+  FilterSort,
+  SortDefaults
+} from './app/interfaces/config.interface';
 
 // Enums/Models
 export { ItemType } from './app/models/filter-item';

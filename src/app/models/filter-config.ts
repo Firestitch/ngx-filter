@@ -8,7 +8,7 @@ import { format, isDate, isValid } from 'date-fns';
 import { clone, isObject } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
-import { SortChangeFn, SortDefaults } from '../interfaces/config.interface';
+import { SortDefaults } from '../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -27,7 +27,6 @@ export class FsFilterConfig extends Model {
   @Alias() public init: Function;
   @Alias() public change: Function;
   @Alias() public reload: Function;
-  @Alias() public sortChange: SortChangeFn;
 
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
@@ -83,7 +82,7 @@ export class FsFilterConfig extends Model {
       };
 
 
-      if (this.sortingDefaults.value) {
+      if (this.sortingDefaults && this.sortingDefaults.value) {
         sortByItem['default'] = this.sortingDefaults.value;
       }
 
@@ -99,7 +98,7 @@ export class FsFilterConfig extends Model {
         ]
       };
 
-      if (this.sortingDefaults.direction) {
+      if (this.sortingDefaults && this.sortingDefaults.direction) {
         sortDirectionItem['default'] = this.sortingDefaults.direction;
       }
 
@@ -219,10 +218,26 @@ export class FsFilterConfig extends Model {
   }
 
   public getSorting() {
-    return {
-      sortBy: this.sortByItem.model,
-      sortDirection: this.sortDirectionItem.model,
+    const sortBy = this.getSortByValue();
+    let sortDirection = this.getSortDirectionValue();
+    sortDirection = sortDirection === '__all' ? null : sortDirection;
+
+    if (sortBy || sortDirection) {
+      return {
+        sortBy: sortBy,
+        sortDirection: sortDirection,
+      }
+    } else {
+      return null;
     }
+  }
+
+  public getSortByValue() {
+    return this.sortByItem ? this.sortByItem.model : null;
+  }
+
+  public getSortDirectionValue() {
+    return this.sortDirectionItem ? this.sortDirectionItem.model : null;
   }
 
   public updateSorting(sorting) {
@@ -294,6 +309,22 @@ export class FsFilterConfig extends Model {
   public filtersClear() {
     for (const filter of this.items) {
       filter.clear();
+    }
+
+    if (this.sortByItem) {
+      if (this.sortingDefaults) {
+        this.sortByItem.model = this.sortingDefaults.value
+      } else {
+        this.sortByItem.clear();
+      }
+    }
+
+    if (this.sortDirectionItem) {
+      if (this.sortingDefaults) {
+        this.sortDirectionItem.model = this.sortingDefaults.direction
+      } else {
+        this.sortDirectionItem.clear();
+      }
     }
   }
 

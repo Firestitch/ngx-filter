@@ -3,7 +3,7 @@
   <fs-chip
     *ngFor="let item of filters"
     [value]="item"
-    [selectable]="true"
+    [selectable]="false"
     [removable]="true"
     size="small"
     (removed)="removeItem(item)">

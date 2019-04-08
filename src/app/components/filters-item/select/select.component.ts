@@ -1,10 +1,14 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  KeyValueDiffers,
   Component,
-  KeyValueDiffers
+  ViewChild,
+  DoCheck,
 } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { SelectSimpleComponent } from './simple/simple.component';
+import { SelectMultipleComponent } from './multiple/multiple.component';
 
 
 @Component({
@@ -12,8 +16,10 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   templateUrl: './select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent extends BaseItemComponent {
+export class SelectComponent extends BaseItemComponent implements DoCheck {
 
+  @ViewChild('selectItem') public selectedItem:
+    SelectSimpleComponent | SelectMultipleComponent | SelectMultipleComponent;
   // For case when we have multiple selection with __all option
   // If _all has been selected than we must disable all other items
   public allItemsOptionSelected = false;
@@ -42,20 +48,16 @@ export class SelectComponent extends BaseItemComponent {
     this.itemChange();
   }
 
-  public selectItem() {
-    const allKeyPosition = this.item.tmpModel.indexOf('__all');
+  public ngDoCheck() {
+    if (this._kvDiffer) {
+      const changes = this._kvDiffer.diff(this.item);
 
-    if (
-      Array.isArray(this.item.tmpModel)
-      && allKeyPosition > -1
-    ) {
-      if (this.allItemsOptionSelected) {
-        this.item.tmpModel.splice(allKeyPosition, 1);
-        this.item.tmpModel = this.item.tmpModel.slice();
-        this.allItemsOptionSelected = false;
-      } else {
-        this.item.tmpModel = ['__all'];
-        this.allItemsOptionSelected = true;
+      if (changes) {
+        this._cd.detectChanges();
+
+        if (this.selectedItem) {
+          this.selectedItem.cd.markForCheck();
+        }
       }
     }
   }

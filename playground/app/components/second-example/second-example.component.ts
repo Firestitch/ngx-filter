@@ -77,21 +77,20 @@ export class SecondExampleComponent {
         direction: 'desc',
         value: 't',
       },
-      change: (query) => {
-        console.log('Change', query);
+      change: (query, sort) => {
+        console.log('Change', query, sort);
         this.query = query;
-      },
-      sortChange: (sort, direction, config) => {
-        console.log('Sort', sort, direction, config.sortingValues);
         this.sort = sort;
       },
-      init: (query) => {
-        console.log('Init', query);
+      init: (query, sort) => {
+        console.log('Init', query, sort);
         this.query = query;
+        this.sort = sort;
       },
-      reload: (query) => {
-        console.log('Reload', query);
+      reload: (query, sort) => {
+        console.log('Reload', query, sort);
         this.query = query;
+        this.sort = query;
       },
       items: [
         {

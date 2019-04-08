@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 
 @Component({
   selector: 'filter-item-select-groups',
@@ -9,6 +16,8 @@ export class SelectGroupsComponent {
 
   @Input() public item;
   @Output() public change = new EventEmitter();
+
+  constructor(public cd: ChangeDetectorRef) {}
 
   public changed($event) {
     this.change.emit($event);

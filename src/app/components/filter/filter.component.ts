@@ -62,6 +62,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
   private _query = {};
+  private _sorting = {};
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -96,7 +97,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._query = this.config.gets({ flatten: true });
 
     if (this.config.init) {
-      this.config.init(this._query, this.config);
+      this.config.init(this._query, this.config.getSorting());
     }
 
   }
@@ -177,18 +178,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.switchFilterVisibility();
     this.filterChange();
     this.change();
-    
-    // Send event that sort has been updated
-    if (this.config.sortChange) {
-      const sorting = this.config.getSorting();
-      const direction = sorting.sortDirection === '__all' ? null : sorting.sortDirection;
-
-      this.config.sortChange(
-        sorting.sortBy,
-        direction,
-        this.config,
-      );
-    }
   }
 
   /**
@@ -197,15 +186,21 @@ export class FilterComponent implements OnInit, OnDestroy {
   public change() {
     this.config.updateModelValues();
     const query = this.config.gets({ flatten: true });
+    const sorting = this.config.getSorting();
 
-    if (!objectsAreEquals(this._query, query)) {
+    const queryChanged = !objectsAreEquals(this._query, query);
+    const sortingChanged = ((!sorting || !this._sorting) && sorting !== this._sorting)
+      || (sorting && this._sorting && !objectsAreEquals(this._sorting, sorting));
+
+    if (queryChanged || sortingChanged) {
       this._query = query;
+      this._sorting = sorting;
 
       this.storePersistValues();
       this.updateFilledCounter();
 
       if (this.config.change) {
-        this.config.change(query, this.config);
+        this.config.change(query, sorting);
       }
     }
   }
@@ -250,10 +245,11 @@ export class FilterComponent implements OnInit, OnDestroy {
    */
   public reload($event) {
     $event.stopPropagation();
+
     const query = this.config.gets({ flatten: true });
 
     if (this.config.reload) {
-      this.config.reload(query, this.config);
+      this.config.reload(query, this.config.getSorting());
     }
   }
 
@@ -413,8 +409,4 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.searchText = this.config.searchInput.model;
     }
   }
-
-  // public cancel() {
-  //   this.switchFilterVisibility();
-  // }
 }

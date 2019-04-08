@@ -8,12 +8,11 @@ export interface FilterConfig {
   autofocus?: boolean;
   namespace?: string;
   persist?: any;
-  reload?: (query: any, config: any) => void | false;
+  reload?: ChangeFn;
   items: IFilterConfigItem[];
-  init?: (any) => void;
-  change?: (...any) => void;
+  init?: ChangeFn;
+  change?: ChangeFn;
   sorting?: SortingItem[];
-  sortChange?: SortChangeFn;
   sort?: SortDefaults;
 }
 
@@ -27,6 +26,11 @@ export interface SortDefaults {
   value?: string;
 }
 
-export interface SortChangeFn {
-  (value?: string, direction?: string, config?: FsFilterConfig): void;
+export interface ChangeFn {
+  (query?: any, sort?: FilterSort | null): void;
+}
+
+export interface FilterSort {
+  sortBy: string;
+  direction: string;
 }
