@@ -31,6 +31,6 @@ export interface ChangeFn {
 }
 
 export interface FilterSort {
-  sortBy: string;
+  value: string;
   direction: string;
 }

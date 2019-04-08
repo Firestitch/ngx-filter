@@ -219,17 +219,15 @@ export class FsFilterConfig extends Model {
   }
 
   public getSort(): FilterSort | null {
-    const sortBy = this.getSortByValue();
+    let sortBy = this.getSortByValue();
+    sortBy = sortBy === '__all' ? null : sortBy;
+
     let sortDirection = this.getSortDirectionValue();
     sortDirection = sortDirection === '__all' ? null : sortDirection;
 
-    if (sortBy || sortDirection) {
-      return {
-        sortBy: sortBy,
-        direction: sortDirection,
-      }
-    } else {
-      return null;
+    return {
+      value: sortBy,
+      direction: sortDirection,
     }
   }
 
