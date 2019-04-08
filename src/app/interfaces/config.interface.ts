@@ -1,5 +1,4 @@
 import { IFilterConfigItem } from './item-config.interface';
-import { FsFilterConfig } from '../models/filter-config';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -12,16 +11,17 @@ export interface FilterConfig {
   items: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;
-  sorting?: SortingItem[];
-  sort?: SortDefaults;
+  sorts?: SortItem[];
+  sort?: Sort;
+  sortChange?: ChangeFn;
 }
 
-export interface SortingItem {
+export interface SortItem {
   name: string;
   value: string;
 }
 
-export interface SortDefaults {
+export interface Sort {
   direction?: string;
   value?: string;
 }

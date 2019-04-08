@@ -10,10 +10,10 @@ export { FiltersListComponent } from './app/components/filters-list/filters-list
 export { IFilterConfigItem } from './app/interfaces/item-config.interface';
 export {
   FilterConfig,
-  SortingItem,
+  SortItem,
   ChangeFn,
   FilterSort,
-  SortDefaults
+  Sort,
 } from './app/interfaces/config.interface';
 
 // Enums/Models

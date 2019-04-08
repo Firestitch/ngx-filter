@@ -69,7 +69,7 @@ export class SecondExampleComponent {
       inline: false,
       chips: true,
       autofocus: true,
-      sorting: [
+      sorts: [
         { name: 'name', value: 'n'},
         { name: 'two', value: 't'}
       ],
@@ -90,7 +90,12 @@ export class SecondExampleComponent {
       reload: (query, sort) => {
         console.log('Reload', query, sort);
         this.query = query;
-        this.sort = query;
+        this.sort = sort;
+      },
+      sortChange: (query, sort) => {
+        console.log('sortChange', query, sort);
+        this.query = query;
+        this.sort = sort;
       },
       items: [
         {

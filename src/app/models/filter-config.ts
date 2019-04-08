@@ -8,7 +8,7 @@ import { format, isDate, isValid } from 'date-fns';
 import { clone, isObject } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
-import { SortDefaults } from '../interfaces/config.interface';
+import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -20,13 +20,14 @@ export class FsFilterConfig extends Model {
   @Alias() public inline = false;
   @Alias() public autofocus = false;
   @Alias() public chips = false;
-  @Alias('sorting') public sortingValues: any[] = null;
-  @Alias('sort') public sortingDefaults: SortDefaults = null;
-  @Alias() public sortingDirection = null;
+  @Alias('sorts') public sortValues: any[] = null;
+  @Alias() public sort: Sort = null;
+  @Alias() public sortDirection = null;
   @Alias() public namespace = 'filter';
-  @Alias() public init: Function;
-  @Alias() public change: Function;
-  @Alias() public reload: Function;
+  @Alias() public init: ChangeFn;
+  @Alias() public change: ChangeFn;
+  @Alias() public reload: ChangeFn;
+  @Alias() public sortChange: ChangeFn;
 
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
@@ -73,17 +74,17 @@ export class FsFilterConfig extends Model {
   }
 
   public initSorting(route, persists) {
-    if (this.sortingValues) {
+    if (this.sortValues) {
       const sortByItem = {
         name: SORT_BY_FIELD,
         type: ItemType.Select,
         label: 'Sort By',
-        values: this.sortingValues
+        values: this.sortValues
       };
 
 
-      if (this.sortingDefaults && this.sortingDefaults.value) {
-        sortByItem['default'] = this.sortingDefaults.value;
+      if (this.sort && this.sort.value) {
+        sortByItem['default'] = this.sort.value;
       }
 
       this.sortByItem = new FsFilterConfigItem(sortByItem, this, route, persists);
@@ -98,8 +99,8 @@ export class FsFilterConfig extends Model {
         ]
       };
 
-      if (this.sortingDefaults && this.sortingDefaults.direction) {
-        sortDirectionItem['default'] = this.sortingDefaults.direction;
+      if (this.sort && this.sort.direction) {
+        sortDirectionItem['default'] = this.sort.direction;
       }
 
       this.sortDirectionItem = new FsFilterConfigItem(sortDirectionItem, this, route, persists);
@@ -217,7 +218,7 @@ export class FsFilterConfig extends Model {
     return query;
   }
 
-  public getSorting() {
+  public getSort(): FilterSort | null {
     const sortBy = this.getSortByValue();
     let sortDirection = this.getSortDirectionValue();
     sortDirection = sortDirection === '__all' ? null : sortDirection;
@@ -225,7 +226,7 @@ export class FsFilterConfig extends Model {
     if (sortBy || sortDirection) {
       return {
         sortBy: sortBy,
-        sortDirection: sortDirection,
+        direction: sortDirection,
       }
     } else {
       return null;
@@ -240,13 +241,13 @@ export class FsFilterConfig extends Model {
     return this.sortDirectionItem ? this.sortDirectionItem.model : null;
   }
 
-  public updateSorting(sorting) {
-    if (sorting.sortBy) {
-      this.sortByItem.model = sorting.sortBy;
+  public updateSort(sort) {
+    if (sort.sortBy) {
+      this.sortByItem.model = sort.sortBy;
     }
 
-    if (sorting.sortDirection) {
-      this.sortDirectionItem.model = sorting.sortDirection;
+    if (sort.sortDirection) {
+      this.sortDirectionItem.model = sort.sortDirection;
     }
   }
 
@@ -312,16 +313,16 @@ export class FsFilterConfig extends Model {
     }
 
     if (this.sortByItem) {
-      if (this.sortingDefaults) {
-        this.sortByItem.model = this.sortingDefaults.value
+      if (this.sort) {
+        this.sortByItem.model = this.sort.value
       } else {
         this.sortByItem.clear();
       }
     }
 
     if (this.sortDirectionItem) {
-      if (this.sortingDefaults) {
-        this.sortDirectionItem.model = this.sortingDefaults.direction
+      if (this.sort) {
+        this.sortDirectionItem.model = this.sort.direction
       } else {
         this.sortDirectionItem.clear();
       }

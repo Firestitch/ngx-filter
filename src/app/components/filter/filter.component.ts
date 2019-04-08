@@ -62,7 +62,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
   private _query = {};
-  private _sorting = {};
+  private _sort = {};
 
   constructor(private _store: FsStore,
               private route: ActivatedRoute,
@@ -90,14 +90,15 @@ export class FilterComponent implements OnInit, OnDestroy {
           takeUntil(this.config.destroy$),
         )
         .subscribe((data) => {
-          this.config.updateSorting(data);
+          this.config.updateSort(data);
         });
     }
 
     this._query = this.config.gets({ flatten: true });
+    this._sort = this.config.getSort();
 
     if (this.config.init) {
-      this.config.init(this._query, this.config.getSorting());
+      this.config.init(this._query, this.config.getSort());
     }
 
   }
@@ -186,21 +187,29 @@ export class FilterComponent implements OnInit, OnDestroy {
   public change() {
     this.config.updateModelValues();
     const query = this.config.gets({ flatten: true });
-    const sorting = this.config.getSorting();
+    const sort = this.config.getSort();
 
     const queryChanged = !objectsAreEquals(this._query, query);
-    const sortingChanged = ((!sorting || !this._sorting) && sorting !== this._sorting)
-      || (sorting && this._sorting && !objectsAreEquals(this._sorting, sorting));
 
-    if (queryChanged || sortingChanged) {
+    if (queryChanged) {
       this._query = query;
-      this._sorting = sorting;
 
       this.storePersistValues();
       this.updateFilledCounter();
 
       if (this.config.change) {
-        this.config.change(query, sorting);
+        this.config.change(query, sort);
+      }
+    }
+
+    const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
+      || (sort && this._sort && !objectsAreEquals(this._sort, sort));
+
+    if (sortingChanged) {
+      this._sort = sort;
+
+      if (this.config.sortChange) {
+        this.config.sortChange(query, sort);
       }
     }
   }
@@ -249,7 +258,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     const query = this.config.gets({ flatten: true });
 
     if (this.config.reload) {
-      this.config.reload(query, this.config.getSorting());
+      this.config.reload(query, this.config.getSort());
     }
   }
 
