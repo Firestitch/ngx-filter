@@ -8,30 +8,42 @@
     <div class="menu-filter-input" fxFlex="grow">
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
         <form autocomplete="off" role="presentation">
-          <mat-form-field class="filter-input" floatLabel="never">
+          <mat-form-field
+            class="filter-input"
+            (click)="changeVisibility(true)"
+            floatLabel="never">
             <span matPrefix><mat-icon matPrefix>search</mat-icon></span>
 
-            <input matInput [(ngModel)]="searchText" name="filter-input"
+            <input matInput
+                  [(ngModel)]="searchText"
+                  name="filter-input"
                   #searchTextInput
+                  class="filter-search-input"
                   (ngModelChange)="modelChange(searchText)">
 
             <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
               *ngIf="searchText && showFilterInput"
-              (click)="clear()"
+              (click)="clear($event)"
+              href="javascript:void(0)"
               class="clear">
               <mat-icon>clear</mat-icon>
             </a>
-            <a (click)="reload($event)" matSuffix class="reload" *ngIf="config.reload">
+            <a matSuffix
+              (click)="reload($event)"
+              href="javascript:void(0)"
+              class="reload"
+              *ngIf="config.reload">
               <mat-icon>refresh</mat-icon>
             </a>
-            <a (click)="switchFilterVisibility($event)"
+            <!-- <a (click)="switchFilterVisibility($event)"
                matSuffix
+               href="javascript:void(0)"
                class="filter"
                *ngIf="config.singleTextFilter === false"
             >
               <mat-icon>filter_list</mat-icon>
-            </a>
+            </a> -->
             <span class="active-filters-counter"
                   matSuffix
                   (click)="switchFilterVisibility($event)"
@@ -53,11 +65,12 @@
           [sortDirection]="config.sortDirectionItem"
           (filterChanged)="filterChange($event)"
           (search)="search()"
+          (done)="done()"
           (clear)="clear()"
         >
         </filters-list>
       </div>
-      <div class="backdrop" *ngIf="showFilterMenu" (click)="switchFilterVisibility()"></div>
+      <div class="backdrop" *ngIf="showFilterMenu" (click)="backdropClick($event)"></div>
     </div>
   </div>
   <fs-filter-chips class="filter-chips"

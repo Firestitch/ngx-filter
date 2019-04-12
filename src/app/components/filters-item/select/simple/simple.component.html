@@ -1,6 +1,6 @@
 <mat-form-field floatLabel="auto">
   <mat-label>{{item.label}}</mat-label>
-  <mat-select [(ngModel)]="item.tmpModel" (change)="changed($event)">
+  <mat-select [(ngModel)]="item.tmpModel" (ngModelChange)="changed($event)">
     <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
       {{ item.name }}
     </mat-option>

@@ -2,12 +2,12 @@
   <fs-label-field>
     <fs-label>{{item.label}}</fs-label>
     <fs-chips [(ngModel)]="item.model"
-              (ngModelChange)="modelChange()"
               [compare]="compareFn"
               [multiple]="item.multiple">
       <fs-chip *ngFor="let value of item.values"
                [value]="value"
-               [selectable]="true">
+               [selectable]="true"
+               (click)="modelChange()">
         {{ value.name }}
       </fs-chip>
     </fs-chips>

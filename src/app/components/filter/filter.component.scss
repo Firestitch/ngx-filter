@@ -124,9 +124,6 @@
 
     .menu-filter-input {
 
-      //position: relative;
-
-
       mat-form-field {
         width: 100%;
       }
@@ -186,9 +183,8 @@
         visibility: hidden;
         left: 0;
         margin-top: 15px;
-        z-index: 1000;
 
-        .wrap {
+        .filters-wrap {
           animation: slideInRight 300ms;
           background: #fff;
           box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
@@ -321,9 +317,14 @@
 
     .main-filter-bar md-input-container input,
     .menu-filter-input .filters {
-      z-index: 70;
-      //display: block;
       visibility: visible;
+    }
+
+    /* Used to raise the search input and filter chips above the backdrop */
+    .filter-chips,
+    .filter-search-input {
+      z-index: 998;
+      position: relative;
     }
   }
 }

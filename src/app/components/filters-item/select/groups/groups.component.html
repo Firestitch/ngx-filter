@@ -1,6 +1,6 @@
 <mat-form-field floatLabel="auto">
   <mat-label>{{item.label}}</mat-label>
-  <mat-select [(ngModel)]="item.tmpModel" (change)="changed($event)">
+  <mat-select [(ngModel)]="item.tmpModel" (ngModelChange)="changed($event)">
     <ng-container *ngFor="let selectItem of item.values">
       <ng-container *ngIf="selectItem[item.children]; else simpleOption">
         <mat-optgroup [label]="selectItem.name">

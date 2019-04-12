@@ -10,7 +10,6 @@ import {
   Output
 } from '@angular/core';
 
-import { isObject } from 'lodash-es';
 import { FsFilterConfigItem } from '../../../models/filter-item';
 
 

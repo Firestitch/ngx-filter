@@ -24,7 +24,7 @@ export class FiltersListComponent implements DoCheck {
   @Output() public filterChanged = new EventEmitter();
   @Output() public search = new EventEmitter();
   @Output() public clear = new EventEmitter();
-  // @Output() public cancel = new EventEmitter();
+  @Output() public done = new EventEmitter();
 
   protected _differ: IterableDiffer<FsFilterConfigItem>;
 
@@ -52,9 +52,9 @@ export class FiltersListComponent implements DoCheck {
     this.clear.next();
   }
 
-  // public doCancel() {
-  //   this.cancel.next();
-  // }
+  public doneClick() {
+    this.done.next();
+  }
 
   public filterChange(event) {
     this.filterChanged.next(event);
