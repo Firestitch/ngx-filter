@@ -198,7 +198,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.updateFilledCounter();
 
       if (this.config.change) {
-        this.config.change(query, sort);
+        this.config.change(cloneDeep(query), sort);
       }
     }
 
@@ -209,7 +209,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this._sort = sort;
 
       if (this.config.sortChange) {
-        this.config.sortChange(query, sort);
+        this.config.sortChange(cloneDeep(query), sort);
       }
     }
   }
@@ -258,7 +258,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     const query = this.config.gets({ flatten: true });
 
     if (this.config.reload) {
-      this.config.reload(query, this.config.getSort());
+      this.config.reload(cloneDeep(query), this.config.getSort());
     }
   }
 
