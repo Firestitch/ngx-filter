@@ -115,6 +115,86 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   *
+   * Do update value of some field
+   *
+   * @param {any} values - values for update
+   * @param {boolean} changeEvent - should change event to be fired
+   *
+   * To update text value just pass new text value
+   *
+   * public updateSelectValue(val) {
+   *   this.filterEl.updateValues({ keyword: val });
+   * }
+   *
+   * To update select or observable select you could pass suitable value
+   *
+   * public updateSelectValue(val: number) {
+   *   this.filterEl.updateValues({ simple_select: val }, { observable_select: val });
+   * }
+   *
+   * To update checkbox value just pass true/false as value
+   *
+   * public updateCheckox(val: boolean) {
+   *   this.filterEl.updateValues({ checkbox: val });
+   * }
+   *
+   * To update range value just pass object with min&max object or just with one of targets
+   *
+   * Ex.: { min: 10, max 15 }, { min: 5 }, { max 5 }
+   *
+   * public updateRange(val) {
+   *   this.filterEl.updateValues({ range: val });
+   * }
+   *
+   * To update autocomplete just pass object with name/value fields
+   *
+   * Ex.: { name: 'John Doe', value: 1 }
+   *
+   * public updateAutocomplete(val) {
+   *   this.filterEl.updateValues({ autocomplete_user_id: val });
+   * }
+   *
+   * To update autocompletechips just pass:
+   *
+   * 1) object with name/value fields - will be appended to existing set of values
+   *
+   * { name: 'John Doe', value: 1 }
+   *
+   * 2) array of objects - will be appended to existing set of values
+   *
+   * [{ name: 'John Doe', value: 1 }, { name: 'Darya Filipova', value: 2 }]
+   *
+   * 3) null - clear existing set of values
+   *
+   * public updateAutocomplete(val) {
+   *   this.filterEl.updateValues({ autocompletechips_user_id: val });
+   * }
+   *
+   */
+  public updateValues(values, changeEvent = true) {
+    Object.keys(values).forEach((key) => {
+      const filterItem = this.config.items.find((item) => item.name === key);
+
+      if (!filterItem) {
+        return;
+      }
+
+      filterItem.updateValue(values[key]);
+
+      if (filterItem === this.config.searchInput) {
+        this.updateSearchText();
+      }
+    });
+
+    this.updateFilledCounter();
+
+    if (changeEvent) {
+      this.filterChange();
+    }
+  }
+
   public watchSearchInput() {
     this.modelChanged
       .pipe(
@@ -125,7 +205,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       .subscribe((value) => {
         this.config.searchInput.model = value;
         this.filterChange();
-        this.change();
       })
   }
 
@@ -151,7 +230,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public filterInputClick(event: KeyboardEvent) {
 
-    if (['Enter', 'NumpadEnter', 'Escape'].includes(event.code)) {
+    if (['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) >= 0) {
       return this.changeVisibility(false);
     }
 
@@ -191,7 +270,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
     this.filterChange();
-    this.change();
     this.changeVisibility(false);
   }
 
@@ -201,7 +279,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   public search() {
     this.switchFilterVisibility();
     this.filterChange();
-    this.change();
   }
 
   /**

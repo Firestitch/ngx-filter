@@ -37,28 +37,25 @@
               *ngIf="config.reload">
               <mat-icon>refresh</mat-icon>
             </a>
-            <ng-container *ngIf="!config.chips">
-              <a (click)="switchFilterVisibility($event)"
-                matSuffix
-                href="javascript:void(0)"
-                class="filter"
-                *ngIf="config.singleTextFilter === false"
-              >
-                <mat-icon>filter_list</mat-icon>
-              </a>
-              <span class="active-filters-counter"
-                    matSuffix
-                    (click)="switchFilterVisibility($event)"
-                    *ngIf="activeFiltersCount > 0">
-                {{ activeFiltersCount }}
-              </span>
-              <span class="active-filters-counter"
-                    matSuffix
-                    (click)="switchFilterVisibility($event)"
-                    *ngIf="activeFiltersWithInputCount > 0">
-                {{ activeFiltersWithInputCount }}
-              </span>
-            </ng-container>
+            <a (click)="switchFilterVisibility($event)"
+              matSuffix
+              href="javascript:void(0)"
+              class="filter"
+              *ngIf="!config.chips && config.singleTextFilter === false">
+              <mat-icon>filter_list</mat-icon>
+            </a>
+            <span class="active-filters-counter"
+                  matSuffix
+                  (click)="switchFilterVisibility($event)"
+                  *ngIf="!config.chips && activeFiltersCount > 0">
+              {{ activeFiltersCount }}
+            </span>
+            <span class="active-filters-counter"
+                  matSuffix
+                  (click)="switchFilterVisibility($event)"
+                  *ngIf="!config.chips && activeFiltersWithInputCount > 0">
+              {{ activeFiltersWithInputCount }}
+            </span>
           </mat-form-field>
         </form>
         <filters-list

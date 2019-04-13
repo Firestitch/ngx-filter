@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "7.2.4",
+  "version": "7.3.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -77,7 +77,7 @@
   },
   "peerDependencies": {
     "@angular/flex-layout": ">=7.0.0-beta.23",
-    "@firestitch/chip": "=>7.2.3",
+    "@firestitch/chip": ">=7.3.0",
     "@firestitch/datepicker": ">=7.1.4"
   }
 }
