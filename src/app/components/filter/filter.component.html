@@ -9,7 +9,7 @@
       <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
         <form autocomplete="off" role="presentation">
           <mat-form-field
-            class="filter-input"
+            class="filter-input-field"
             (click)="changeVisibility(true)"
             floatLabel="never">
             <span matPrefix><mat-icon matPrefix>search</mat-icon></span>
@@ -18,7 +18,8 @@
                   [(ngModel)]="searchText"
                   name="filter-input"
                   #searchTextInput
-                  class="filter-search-input"
+                  (keydown)="filterInputClick($event)"
+                  class="filter-input"
                   (ngModelChange)="modelChange(searchText)">
 
             <mat-placeholder>Search</mat-placeholder>
@@ -36,26 +37,28 @@
               *ngIf="config.reload">
               <mat-icon>refresh</mat-icon>
             </a>
-            <!-- <a (click)="switchFilterVisibility($event)"
-               matSuffix
-               href="javascript:void(0)"
-               class="filter"
-               *ngIf="config.singleTextFilter === false"
-            >
-              <mat-icon>filter_list</mat-icon>
-            </a> -->
-            <span class="active-filters-counter"
-                  matSuffix
-                  (click)="switchFilterVisibility($event)"
-                  *ngIf="activeFiltersCount > 0">
-              {{ activeFiltersCount }}
-            </span>
-            <span class="active-filters-counter"
-                  matSuffix
-                  (click)="switchFilterVisibility($event)"
-                  *ngIf="activeFiltersWithInputCount > 0">
-              {{ activeFiltersWithInputCount }}
-            </span>
+            <ng-container *ngIf="!config.chips">
+              <a (click)="switchFilterVisibility($event)"
+                matSuffix
+                href="javascript:void(0)"
+                class="filter"
+                *ngIf="config.singleTextFilter === false"
+              >
+                <mat-icon>filter_list</mat-icon>
+              </a>
+              <span class="active-filters-counter"
+                    matSuffix
+                    (click)="switchFilterVisibility($event)"
+                    *ngIf="activeFiltersCount > 0">
+                {{ activeFiltersCount }}
+              </span>
+              <span class="active-filters-counter"
+                    matSuffix
+                    (click)="switchFilterVisibility($event)"
+                    *ngIf="activeFiltersWithInputCount > 0">
+                {{ activeFiltersWithInputCount }}
+              </span>
+            </ng-container>
           </mat-form-field>
         </form>
         <filters-list

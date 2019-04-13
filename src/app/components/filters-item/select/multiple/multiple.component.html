@@ -2,7 +2,7 @@
   <mat-label>{{item.label}}</mat-label>
   <mat-select [(ngModel)]="item.tmpModel"
               [multiple]="item.multiple"
-              (ngModelChange)="changed($event)">
+              (openedChange)="changed($event)">
     <mat-option *ngFor="let item of item.values"
                 [value]="item.value"
                 [ngStyle]="item.style">

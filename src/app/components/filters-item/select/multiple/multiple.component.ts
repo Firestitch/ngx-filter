@@ -19,7 +19,9 @@ export class SelectMultipleComponent {
 
   constructor(public cd: ChangeDetectorRef) {}
 
-  public changed($event) {
-    this.change.emit($event);
+  public changed(opened) {
+    if (!opened) {
+      this.change.emit(this.item.tmpModel);
+    }
   }
 }

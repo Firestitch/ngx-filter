@@ -2,5 +2,5 @@
   <mat-label>{{item.label}}</mat-label>
   <input matInput
          [(ngModel)]="item.model"
-         (change)="itemChange()"/>
+         (ngModelChange)="inputChange$.next(item.model)"/>
 </mat-form-field>

@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  HostListener
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -30,26 +31,32 @@ import { objectsAreEquals } from '../../helpers/compare';
   encapsulation: ViewEncapsulation.None
 })
 export class FilterComponent implements OnInit, OnDestroy {
+
   @Input() public filter: FilterConfig = null;
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
 
-  public changedFilters = [];
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+
+    if (event.code === 'Escape' && this.showFilterMenu) {
+      this.changeVisibility(false);
+    }
+  }
 
   @ViewChild('searchTextInput')
   set searchTextInput(value) {
     this._searchTextInput = value;
   }
 
+  public changedFilters = [];
   public config: FsFilterConfig;
   public searchText = '';
   public persists = null;
   public activeFiltersCount = 0;
   public activeFiltersWithInputCount = 0;
-
   public showFilterMenu = false;
-
   public modelChanged = new EventEmitter();
 
   private _searchTextInput: ElementRef = null;
@@ -142,12 +149,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.changeVisibility(!this.showFilterMenu);
   }
 
+  public filterInputClick(event: KeyboardEvent) {
+
+    if (['Enter', 'NumpadEnter', 'Escape'].includes(event.code)) {
+      return this.changeVisibility(false);
+    }
+
+    this.changeVisibility(true);
+  }
+
   public changeVisibility(state: boolean) {
     this.showFilterMenu = state;
-
-    if (!this.showFilterMenu) {
-      this.change();
-    }
 
     if (this._firstOpen) {
       this.config.loadValuesForPendingItems();

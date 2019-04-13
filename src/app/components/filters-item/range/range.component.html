@@ -3,12 +3,12 @@
     <mat-label>{{item.placeholder[0]}}</mat-label>
     <input matInput
            [(ngModel)]="item.model.min"
-           (change)="itemChange()">
+           (ngModelChange)="itemChange()">
   </mat-form-field>
   <mat-form-field class="filter-range-max" floatLabel="auto">
     <mat-label>{{item.placeholder[1]}}</mat-label>
     <input matInput
            [(ngModel)]="item.model.max"
-           (change)="itemChange()">
+           (ngModelChange)="itemChange()">
   </mat-form-field>
 </span>

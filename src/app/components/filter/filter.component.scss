@@ -24,7 +24,7 @@
   }
 
   &.no-input {
-    .filter-input {
+    .filter-input-field {
       .mat-input-prefix,
       .mat-input-infix,
       .mat-input-underline {
@@ -67,7 +67,7 @@
     flex-direction: row;
     align-items: center;
     box-sizing: border-box;
-    padding: 10px 0;
+    padding: 10px 0 15px;
 
     .text {
       font-weight: 400;
@@ -322,7 +322,7 @@
 
     /* Used to raise the search input and filter chips above the backdrop */
     .filter-chips,
-    .filter-search-input {
+    .filter-input-field {
       z-index: 998;
       position: relative;
     }
@@ -335,7 +335,7 @@
   form {
     width: 100%;
   }
-  .filter-input {
+  .filter-input-field {
     .mat-form-field-underline {
       bottom: auto;
     }
