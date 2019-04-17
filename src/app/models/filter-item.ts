@@ -414,7 +414,7 @@ export class FsFilterConfigItem extends Model {
         this.search = '';
       } break;
 
-      case ItemType.AutoCompleteChips: {
+      case ItemType.AutoCompleteChips: case ItemType.Chips: {
         this.model = [];
         this.tmpModel = [];
         this.search = '';
@@ -450,6 +450,7 @@ export class FsFilterConfigItem extends Model {
         this.model = '';
         this.tmpModel = '';
       } break;
+
 
       case ItemType.Date: case ItemType.DateTime: {
         this.model = null;
