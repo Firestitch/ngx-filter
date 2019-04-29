@@ -5,6 +5,7 @@ export interface FilterConfig {
   load?: boolean;
   chips?: boolean;
   autofocus?: boolean;
+  queryParam?: boolean;
   namespace?: string;
   persist?: any;
   reload?: ChangeFn;

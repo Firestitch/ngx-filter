@@ -69,6 +69,7 @@ export class SecondExampleComponent {
       inline: false,
       chips: true,
       autofocus: true,
+      queryParam: true,
       sorts: [
         { name: 'name', value: 'n'},
         { name: 'two', value: 't'}

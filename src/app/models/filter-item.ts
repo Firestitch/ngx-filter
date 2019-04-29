@@ -101,35 +101,9 @@ export class FsFilterConfigItem extends Model {
       const persisted = this._persists[this._config.persist.name].data;
 
       if (persisted[this.name]) {
-
-        let value = persisted[this.name];
-
-        if (value) {
-          if (this.type === ItemType.DateRange || this.type === ItemType.DateTimeRange) {
-            value.from = value.from ? toUTC(value.from) : null;
-            value.to = value.to ? toUTC(value.to) : null;
-
-          } else if (
-            this.type === ItemType.Date ||
-            this.type === ItemType.DateTime
-          ) {
-            if (!isDate(value) || !isValid(value)) {
-              value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
-            }
-          } else if (
-            this.type === ItemType.Checkbox && this.checked !== undefined
-          ) {
-            value = value == this.checked;
-          } else if (this.type === ItemType.Select && this.multiple) {
-            value = clone(value);
-          }
-        }
-
-        this.model = value;
+        this.parseAndSetValue(persisted[this.name]);
       }
     }
-
-    this.applyDataFromQuery();
 
     if (isFunction(data.values) &&
       this.type !== ItemType.AutoComplete &&
@@ -246,44 +220,13 @@ export class FsFilterConfigItem extends Model {
     this.values = values;
     this.groups = null;
 
-    // if (this.isolate) {
-    //   for (const index in this.values) {
-    //     if (this.values.hasOwnProperty(index)) {
-    //       if (!this.values[index]) {
-    //         continue;
-    //       }
-    //
-    //       if (this.values[index].value == this.isolate.value) {
-    //         this.values.splice(index, 1);
-    //       }
-    //     }
-    //   }
-    //
-    //   if (Array.isArray(this.model)) {
-    //     if (this.model.length == this.values.length) {
-    //       this.model = null;
-    //       this.isolate.enabled = false;
-    //     } else if (this.model[0] == this.isolate.value) {
-    //       this.isolate.enabled = true;
-    //     }
-    //   }
-    // }
-    //
-    // for (const value of this.values) {
-    //
-    //   if (value.group) {
-    //
-    //     if (!this.groups) {
-    //       this.groups = {};
-    //     }
-    //
-    //     if (!this.groups[value.group]) {
-    //       this.groups[value.group] = [];
-    //     }
-    //
-    //     this.groups[value.group].push(value);
-    //   }
-    // }
+    if (this.model && Array.isArray(this.model)) {
+      if (Number.isInteger(this.model[0])) {
+        this.model = this.model.map((id) => {
+          return this.values.find((value) => value.value === id);
+        })
+      }
+    }
   }
 
 
@@ -291,31 +234,6 @@ export class FsFilterConfigItem extends Model {
     this.checked = this.checked ? toString(this.checked) : true;
     this.unchecked = this.unchecked ? toString(this.unchecked) : false;
     this.defaultValue = this.defaultValue === undefined ? this.unchecked : toString(this.defaultValue);
-  }
-
-  public applyDataFromQuery() {
-    if (this.query) {
-
-      let query = this._route.snapshot.queryParams[this.query];
-
-      if (query !== undefined) {
-        query += '';
-        this.model = query;
-
-        if (!query.length) {
-          this.model = undefined;
-        } else if (this.type == 'select' && this.multiple) {
-          this.model = this.model.split(',');
-        } else if (this.type == 'daterange' || this.type == 'datetimerange') {
-          const parts = this.model.split(',');
-          this.model = {from: parts[0], to: parts[1]};
-        } else if (this.type == 'range') {
-          const parts = this.model.split(',');
-          this.model = {min: parts[0], max: parts[1]};
-        }
-      }
-    }
-
   }
 
   public updateValue(value) {
@@ -386,7 +304,7 @@ export class FsFilterConfigItem extends Model {
   }
 
   public loadRemoteValues() {
-    if (!this.initialLoading && this._pendingValues) {
+    if (!this.initialLoading && this.hasPendingValues) {
       this.initialLoading = true;
 
       this.values
@@ -500,6 +418,33 @@ export class FsFilterConfigItem extends Model {
         this.valueChanged = false;
       }
     }
+  }
+
+  public parseAndSetValue(value) {
+    if (value) {
+      if (this.type === ItemType.DateRange || this.type === ItemType.DateTimeRange) {
+        value.from = value.from ? toUTC(value.from) : null;
+        value.to = value.to ? toUTC(value.to) : null;
+
+      } else if (
+        this.type === ItemType.Date ||
+        this.type === ItemType.DateTime
+      ) {
+        if (!isDate(value) || !isValid(value)) {
+          value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        }
+      } else if (
+        this.type === ItemType.Checkbox && this.checked !== undefined
+      ) {
+        value = value == this.checked;
+      } else if (this.type === ItemType.Select && this.multiple) {
+        value = clone(value);
+      } else if (this.type === ItemType.Select || this.type === ItemType.AutoComplete) {
+        value = +value;
+      }
+    }
+
+    this.model = value;
   }
 
   private sanitizeRange() {

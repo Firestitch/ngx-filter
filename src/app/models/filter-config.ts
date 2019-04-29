@@ -23,6 +23,7 @@ export class FsFilterConfig extends Model {
   @Alias('sorts') public sortValues: any[] = null;
   @Alias() public sort: Sort = null;
   @Alias() public sortDirection = null;
+  @Alias() public queryParam = false;
   @Alias() public namespace = 'filter';
   @Alias() public init: ChangeFn;
   @Alias() public change: ChangeFn;

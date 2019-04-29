@@ -10,18 +10,19 @@ import {
   HostListener
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { FsStore } from '@firestitch/store';
 
 import { cloneDeep } from 'lodash-es';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
 import { FilterConfig } from '../../interfaces/config.interface';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
+import { QueryParams } from '../../models/query-params';
 
 
 @Component({
@@ -62,19 +63,26 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
   private _query = {};
+  private _queryParams: QueryParams;
   private _sort = {};
 
-  constructor(private _store: FsStore,
-              private route: ActivatedRoute,
-              private location: Location) {
+  constructor(
+    private _store: FsStore,
+    private _location: Location,
+    private _route: ActivatedRoute,
+    private _router: Router,
+  ) {
 
   }
 
   public ngOnInit() {
     this.config = new FsFilterConfig(this.filter);
     this.restorePersistValues();
+    this.config.initItems(this.filter.items, this._route, this.persists);
 
-    this.config.initItems(this.filter.items, this.route, this.persists);
+    if (this.config.queryParam) {
+      this._queryParams = new QueryParams(this._router, this._route, this.config.items);
+    }
 
     // Set search input value after restore from STORE
     this.updateSearchText();
@@ -94,11 +102,8 @@ export class FilterComponent implements OnInit, OnDestroy {
         });
     }
 
-    this._query = this.config.gets({ flatten: true });
-    this._sort = this.config.getSort();
-
     if (this.config.init) {
-      this.config.init(this._query, this.config.getSort());
+      this.fireInitCallback();
     }
 
     // Avoid ngChanges error
@@ -300,6 +305,10 @@ export class FilterComponent implements OnInit, OnDestroy {
       if (this.config.change) {
         this.config.change(cloneDeep(query), sort);
       }
+
+      if (this.config.queryParam) {
+        this._queryParams.updateQueryParams(query);
+      }
     }
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
@@ -376,7 +385,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       }
 
       if (!this.config.persist.name) {
-        this.config.persist.name = this.location.path();
+        this.config.persist.name = this._location.path();
       }
 
       if (!this.persists[this.config.persist.name] || !this.persists[this.config.persist.name].data) {
@@ -428,5 +437,12 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (this.config.searchInput && this.config.searchInput.model) {
       this.searchText = this.config.searchInput.model;
     }
+  }
+
+  private fireInitCallback() {
+    this._query = this.config.gets({ flatten: true });
+    this._sort = this.config.getSort();
+
+    this.config.init(this._query, this.config.getSort());
   }
 }
