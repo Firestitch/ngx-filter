@@ -22,7 +22,6 @@ export class BaseItemComponent implements DoCheck {
   @Input()
   set item(value) {
     this._item = value;
-    this.item.tmpModel = this.item.model;
   };
 
   @Input() public inline = false;
@@ -53,6 +52,11 @@ export class BaseItemComponent implements DoCheck {
   }
 
   public itemChange() {
+
+    if (this.item.change) {
+      this.item.change(this.item);
+    }
+
     this.itemChanged.next(this.item);
   }
 }

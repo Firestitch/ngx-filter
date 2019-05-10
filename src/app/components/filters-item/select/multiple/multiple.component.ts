@@ -21,7 +21,7 @@ export class SelectMultipleComponent {
 
   public changed(opened) {
     if (!opened) {
-      this.change.emit(this.item.tmpModel);
+      this.change.emit(this.item.model);
     }
   }
 }

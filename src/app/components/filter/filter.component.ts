@@ -290,6 +290,7 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
+
     this.config.updateModelValues();
     const query = this.config.gets({ flatten: true });
     const sort = this.config.getSort();
@@ -331,7 +332,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this.changedFilters
       .filter((item) => item.hasPendingValues)
-      .forEach((item) => item.loadRemoteValues());
+      .forEach((item) => item.loadValues(false));
 
     this.activeFiltersWithInputCount = (this.searchText !== '')
       ? this.changedFilters.length + 1
@@ -343,6 +344,7 @@ export class FilterComponent implements OnInit, OnDestroy {
    * @param changedItem
    */
   public filterChange(changedItem: FsFilterConfigItem = null) {
+
     if (changedItem) {
       if (changedItem === this.config.searchInput) {
         this.searchText = changedItem.model;

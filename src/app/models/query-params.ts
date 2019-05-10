@@ -53,9 +53,9 @@ export class QueryParams {
       if (filterItem) {
         if (filterItem.type === ItemType.Range) {
           acc[filterKey] = [params[filterKey].min, params[filterKey].max].join(',')
-        } else if (filterItem.type === ItemType.Select && filterItem.multiple && filterItem.model.length > 0) {
+        } else if (filterItem.isTypeSelect() && filterItem.multiple && filterItem.model && filterItem.model.length > 0) {
           acc[filterKey] = filterItem.model.join(',');
-        } else if (filterItem.type === ItemType.AutoComplete) {
+        } else if (filterItem.isTypeAutocomplete()) {
           acc[filterKey] = [filterItem.model.value, filterItem.model.name].join(',');
         } else if (filterItem.type === ItemType.AutoCompleteChips) {
           acc[filterKey] = filterItem.model.map((item) => [item.value, item.name].join(',')).join(';');

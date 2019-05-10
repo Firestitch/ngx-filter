@@ -6,7 +6,7 @@ import { Alias, Model } from 'tsmodels';
 import { take, takeUntil } from 'rxjs/operators';
 import { isObservable } from 'rxjs/internal/util/isObservable';
 
-import { isFunction, isObject, toString, clone } from 'lodash-es';
+import { isFunction, isObject, toString, clone, filter } from 'lodash-es';
 import { isDate, isValid, parse } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
@@ -38,7 +38,6 @@ export class FsFilterConfigItem extends Model {
   @Alias() public groups: any;
   @Alias() public wait: boolean;
   @Alias() public query: string;
-  @Alias() public values: any;
   @Alias() public values$: any;
   @Alias() public selectedValue: any;
   @Alias() public isolate: any;
@@ -49,22 +48,22 @@ export class FsFilterConfigItem extends Model {
   @Alias() public checked: any;
   @Alias() public alias: any;
   @Alias() public placeholder: any;
+  @Alias() public change: Function;
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
   public valueChanged = false;
 
   private _model: any;
-  private _tmpModel: any;
   private _pendingValues = false;
+  private _values: any;
 
-  constructor(data: IFilterConfigItem | any = {},
+  constructor(private _configItem: IFilterConfigItem | any = {},
               private _config: FsFilterConfig,
               private _route: ActivatedRoute,
               private _persists: any) {
     super();
-
-    this._fromJSON(data);
+    this._fromJSON(_configItem);
   }
 
   get hasPendingValues() {
@@ -77,16 +76,16 @@ export class FsFilterConfigItem extends Model {
 
   set model(val) {
     this._model = val;
-    this._tmpModel = val;
     this.checkIfValueChanged();
   }
 
-  get tmpModel() {
-    return this._tmpModel;
+  set values(values) {
+    this._values = values;
+    this.sanitize();
   }
 
-  set tmpModel(val) {
-    this._tmpModel = val;
+  get values() {
+    return this._values;
   }
 
   public _fromJSON(data) {
@@ -105,135 +104,22 @@ export class FsFilterConfigItem extends Model {
       }
     }
 
-    if (isFunction(data.values) &&
-      this.type !== ItemType.AutoComplete &&
-      this.type !== ItemType.AutoCompleteChips) {
-      this.values = data.values();
+    this.sanitize();
+  }
 
-      if (isObservable(this.values)) {
+  public initValues() {
+    if (isFunction(this._configItem.values) &&
+        !this.isTypeAutocomplete() &&
+        !this.isTypeAutocompleteChips()) {
+      const obj = this._configItem.values();
+
+      this.values = obj;
+      if (isObservable(obj)) {
         this._pendingValues = true;
-      } else {
-        const values = Array.isArray(this.values) ? (this.values as any).slice() : this.values;
-        this.sanitizeItem(values);
       }
     } else {
-      const values = Array.isArray(data.values) ? data.values.slice() : data.values;
-      this.sanitizeItem(values);
+      this.values = this._configItem.values;
     }
-  }
-
-  public sanitizeItem(values) {
-    switch (this.type) {
-      case ItemType.Text: {
-        //?????
-      }break;
-      case ItemType.Select: {
-        this.sanitizeSelectItem(values)
-      } break;
-      case ItemType.Chips: {
-        this.sanitizeChipsItem(values)
-      } break;
-      case ItemType.Range: {
-        this.sanitizeRange();
-      } break;
-      case ItemType.Checkbox: {
-        this.sanitizeCheckbox();
-      } break;
-    }
-
-    if (this.model === undefined) {
-
-      if (this.type == 'checkbox') {
-        this.model = this.checked == this.defaultValue;
-      } else {
-        this.model = this.defaultValue;
-      }
-    }
-
-    if (this.model === undefined) {
-
-      if (this.type == 'checkbox') {
-        this.model = false;
-
-      } else if (this.type == 'select') {
-
-        if (this.multiple) {
-          if (!Array.isArray(this.defaultValue)) {
-            this.model = [];
-          }
-        } else {
-          if (this.defaultValue === undefined) {
-            this.model = '__all';
-          }
-        }
-      } else if (this.type == ItemType.AutoCompleteChips || this.type == ItemType.Chips) {
-        this.model = [];
-      }
-    }
-  }
-
-  public sanitizeSelectItem(values) {
-    this.values = values;
-    this.groups = null;
-
-    // let data = [];
-
-    // if (this.nested) {
-    //   // generate a list of values from objects that have not been nested.
-    //   if (!this.multiple) {
-    //     data.push({value: '__all', name: 'All', depth: 0});
-    //   }
-    //
-    //   Array.prototype.push.apply(data, this.walkSelectNestedValues(filter, null, this.values));
-    // } else {
-    //
-    //   data = this.walkSelectValues(filter, this.values);
-    // }
-
-    // this.values = data;
-
-    if (this.isolate) {
-      for (const index in this.values) {
-        if (this.values.hasOwnProperty(index)) {
-          if (!this.values[index]) {
-            continue;
-          }
-
-          if (this.values[index].value == this.isolate.value) {
-            this.values.splice(index, 1);
-          }
-        }
-      }
-
-      if (Array.isArray(this.model)) {
-        if (this.model.length == this.values.length) {
-          this.model = null;
-          this.isolate.enabled = false;
-        } else if (this.model[0] == this.isolate.value) {
-          this.isolate.enabled = true;
-        }
-      }
-    }
-  }
-
-  public sanitizeChipsItem(values) {
-    this.values = values;
-    this.groups = null;
-
-    if (this.model && Array.isArray(this.model)) {
-      if (Number.isInteger(this.model[0])) {
-        this.model = this.model.map((id) => {
-          return this.values.find((value) => value.value === id);
-        })
-      }
-    }
-  }
-
-
-  public sanitizeCheckbox() {
-    this.checked = this.checked ? toString(this.checked) : true;
-    this.unchecked = this.unchecked ? toString(this.unchecked) : false;
-    this.defaultValue = this.defaultValue === undefined ? this.unchecked : toString(this.defaultValue);
   }
 
   public updateValue(value) {
@@ -242,12 +128,10 @@ export class FsFilterConfigItem extends Model {
 
         if (value === '__all' || value === null) {
           this.model = value;
-
           return;
         }
 
         let valueExists = null;
-
         let isolated = null;
 
         if (this.multiple) {
@@ -303,21 +187,34 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  public loadRemoteValues() {
-    if (!this.initialLoading && this.hasPendingValues) {
+  public loadValues(reload = true) {
+    if (reload || (!this.initialLoading && this.hasPendingValues)) {
       this.initialLoading = true;
 
-      this.values
-        .pipe(
-          take(1),
-          takeUntil(this._config.destroy$),
-        )
-        .subscribe((values) => {
-          this._pendingValues = false;
-          this.sanitizeItem(values);
-          this.initialLoading = false;
-        });
+      if (isFunction(this._configItem.values) &&
+          !this.isTypeAutocomplete() &&
+          !this.isTypeAutocompleteChips()) {
 
+        const obj = this._configItem.values();
+
+        if (isObservable(obj)) {
+          // Clear out values so the interfaces go into a loading state
+          this.values = [];
+          obj
+          .pipe(
+            take(1),
+            takeUntil(this._config.destroy$)
+          )
+          .subscribe((values) => {
+            this.values = values;
+            this._pendingValues = false;
+            this.initialLoading = false;
+            this.validateModel();
+          });
+        } else {
+          this.values = obj
+        }
+      }
     }
   }
 
@@ -328,30 +225,26 @@ export class FsFilterConfigItem extends Model {
     switch (this.type) {
       case ItemType.AutoComplete: {
         this.model = null;
-        this.tmpModel = null;
         this.search = '';
       } break;
 
-      case ItemType.AutoCompleteChips: case ItemType.Chips: {
+      case ItemType.AutoCompleteChips:
+      case ItemType.Chips: {
         this.model = [];
-        this.tmpModel = [];
         this.search = '';
       } break;
 
       case ItemType.Checkbox: {
         this.model = false;
-        this.tmpModel = false;
       } break;
 
       case ItemType.Select: {
         if (this.multiple) {
           this.model = [];
-          this.tmpModel = [];
         } else {
           this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
             ? '__all'
             : null;
-          this.tmpModel = this.model;
         }
 
         if (this.isolate) {
@@ -361,18 +254,15 @@ export class FsFilterConfigItem extends Model {
 
       case ItemType.Range: {
         this.model = {};
-        this.tmpModel = {};
       } break;
 
       case ItemType.Text: {
         this.model = '';
-        this.tmpModel = '';
       } break;
 
 
       case ItemType.Date: case ItemType.DateTime: {
         this.model = null;
-        this.tmpModel = null;
       } break;
     }
   }
@@ -422,29 +312,204 @@ export class FsFilterConfigItem extends Model {
 
   public parseAndSetValue(value) {
     if (value) {
-      if (this.type === ItemType.DateRange || this.type === ItemType.DateTimeRange) {
+      if (this.isTypeDateRange() || this.isTypeDateTimeRange()) {
         value.from = value.from ? toUTC(value.from) : null;
         value.to = value.to ? toUTC(value.to) : null;
 
-      } else if (
-        this.type === ItemType.Date ||
-        this.type === ItemType.DateTime
-      ) {
+      } else if (this.isTypeDate() || this.isTypeDateTime()) {
         if (!isDate(value) || !isValid(value)) {
           value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }
       } else if (
-        this.type === ItemType.Checkbox && this.checked !== undefined
+        this.isTypeCheckbox() && this.checked !== undefined
       ) {
         value = value == this.checked;
-      } else if (this.type === ItemType.Select && this.multiple) {
+      } else if (this.isTypeSelect() && this.multiple) {
         value = clone(value);
-      } else if (this.type === ItemType.Select || this.type === ItemType.AutoComplete) {
+      } else if (this.isTypeSelect() || this.isTypeAutocomplete()) {
         value = +value;
       }
     }
 
     this.model = value;
+  }
+
+  public isTypeAutocomplete() {
+    return this.type === ItemType.AutoComplete;
+  }
+
+  public isTypeAutocompleteChips() {
+    return this.type === ItemType.AutoCompleteChips;
+  }
+
+  public isTypeChips() {
+    return this.type === ItemType.Chips;
+  }
+
+  public isTypeCheckbox() {
+    return this.type === ItemType.Checkbox;
+  }
+
+  public isTypeSelect() {
+    return this.type === ItemType.Select;
+  }
+
+  public isTypeDate() {
+    return this.type === ItemType.Date;
+  }
+
+  public isTypeDateRange() {
+    return this.type === ItemType.DateRange;
+  }
+
+  public isTypeDateTimeRange() {
+    return this.type === ItemType.DateTimeRange;
+  }
+
+  public isTypeDateTime() {
+    return this.type === ItemType.DateTime;
+  }
+
+  public sanitize() {
+    switch (this.type) {
+      case ItemType.Text: {
+        //?????
+      } break;
+      case ItemType.Select: {
+        this.sanitizeSelect();
+      } break;
+      case ItemType.Chips: {
+        this.sanitizeChips();
+      } break;
+      case ItemType.Range: {
+        this.sanitizeRange();
+      } break;
+      case ItemType.Checkbox: {
+        this.sanitizeCheckbox();
+      } break;
+    }
+
+    if (this.model === undefined) {
+
+      if (this.isTypeCheckbox()) {
+        this.model = this.checked == this.defaultValue;
+      } else {
+        this.model = this.defaultValue;
+      }
+    }
+
+    if (this.model === undefined) {
+
+      if (this.isTypeCheckbox()) {
+        this.model = false;
+
+      } else if (this.isTypeSelect()) {
+
+        if (this.multiple) {
+          if (!Array.isArray(this.defaultValue)) {
+            this.model = [];
+          }
+        } else {
+          if (this.defaultValue === undefined) {
+            this.model = '__all';
+          }
+        }
+      } else if (this.isTypeAutocompleteChips() || this.isTypeChips()) {
+        this.model = [];
+      }
+    }
+  }
+
+  public validateModel() {
+
+    if (this.isTypeSelect()) {
+
+      if (this.multiple) {
+
+        this.model = filter(this.model || [], (item) => {
+          return this.values.find(value => {
+            return value.value === item;
+          });
+        });
+
+      } else {
+        const exists = this.modelValueExists(this.values);
+
+        if (!exists) {
+          this.model = '__all';
+        }
+      }
+    }
+  }
+
+  private modelValueExists(values) {
+
+    for (let i = 0; i < values.length; i++) {
+
+      if (values[i].value === this.model) {
+        return true;
+      }
+
+      if (values[i][this.children]) {
+        const model = this.modelValueExists(values[i][this.children]);
+        if (model) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private sanitizeSelect() {
+
+    if (!Array.isArray(this.values)) {
+      this.values = [];
+    }
+
+    if (this.isolate) {
+      for (const index in this.values) {
+        if (this.values.hasOwnProperty(index)) {
+          if (!this.values[index]) {
+            continue;
+          }
+
+          if (this.values[index].value == this.isolate.value) {
+            this.values.splice(index, 1);
+          }
+        }
+      }
+
+      if (Array.isArray(this.model)) {
+        if (this.model.length == this.values.length) {
+          this.model = null;
+          this.isolate.enabled = false;
+        } else if (this.model[0] == this.isolate.value) {
+          this.isolate.enabled = true;
+        }
+      }
+    }
+  }
+
+  private sanitizeChips() {
+
+    if (!Array.isArray(this.values)) {
+      this.values = [];
+    }
+
+    if (this.model && Array.isArray(this.model) && this.values.length) {
+      if (Number.isInteger(this.model[0])) {
+        this.model = this.model.map((id) => {
+          return this.values.find((value) => value.value === id);
+        })
+      }
+    }
+  }
+
+  private sanitizeCheckbox() {
+    this.checked = this.checked ? toString(this.checked) : true;
+    this.unchecked = this.unchecked ? toString(this.unchecked) : false;
+    this.defaultValue = this.defaultValue === undefined ? this.unchecked : toString(this.defaultValue);
   }
 
   private sanitizeRange() {

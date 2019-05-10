@@ -4,8 +4,11 @@ import { FilterConfig, ItemType } from '@firestitch/filter';
 import { FilterComponent } from '@firestitch/filter';
 import { nameValue, filter } from '@firestitch/common'
 
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, of } from 'rxjs';
+import { map, delay } from 'rxjs/operators';
+import { FsFilterConfigItem } from 'src/app/models/filter-item';
+import { shuffle } from 'lodash-es';
+import { _CdkColumnDefBase } from '@angular/cdk/table';
 
 @Component({
   selector: 'second-example',
@@ -110,13 +113,22 @@ export class SecondExampleComponent {
           type: ItemType.Select,
           label: 'Simple Select',
           chipLabel: 'Special Label',
+          change: (item) => {
+
+            const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
+            filterItem.values = [];
+            filterItem.clear();
+          },
           values: () => {
-              return [
-                  { name: 'All', value: '__all' },
-                  { name: 'Option 1', value: 1 },
-                  { name: 'Option 2', value: 2 },
-                  { name: 'Option 3', value: 3 }
-              ];
+
+            return of([
+              { name: 'All', value: '__all' },
+              { name: 'Option 1', value: 1 },
+              { name: 'Option 2', value: 2 },
+              { name: 'Option 3', value: 3 }
+          ]).pipe(
+            delay(3000)
+          )
           }
         },
         {
@@ -139,9 +151,12 @@ export class SecondExampleComponent {
           type: ItemType.Select,
           label: 'Observable Select',
           values: () => {
+
+            const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('simple_select');
+            console.log(filterItem);
             return new BehaviorSubject(this.users)
               .pipe(
-                map((users) => nameValue(users, 'name', 'id')),
+                map((users) => shuffle(nameValue(users, 'name', 'id'))),
               )
           }
         },
@@ -149,6 +164,7 @@ export class SecondExampleComponent {
           name: 'autocomplete_user_id',
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
+          change: (item) => {},
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -203,6 +219,17 @@ export class SecondExampleComponent {
             { name: 'Deleted', value: 'deleted' }
           ],
           isolate: { label: 'Show Deleted', value: 'deleted' }
+        },
+        {
+          name: 'multiselect',
+          type: ItemType.Select,
+          label: 'Multi Select Status',
+          multiple: true,
+          values: [
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' }
+          ]
         }
       ]
     };

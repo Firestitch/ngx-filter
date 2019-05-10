@@ -12,7 +12,7 @@ import { FsFilterConfigItem } from '../../models/filter-item';
 @Component({
   selector: 'filters-list',
   templateUrl: './filters-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,  Commented out because filter items are not updating when delayed observable. Need to figure this out.
 })
 export class FiltersListComponent implements DoCheck {
   @Input() public items: FsFilterConfigItem[] = [];

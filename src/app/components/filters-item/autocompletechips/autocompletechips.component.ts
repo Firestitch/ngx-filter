@@ -45,7 +45,6 @@ export class AutocompletechipsComponent extends BaseItemComponent {
     }
   }
 
-
   public addAutocompleteChipItem($event) {
     this.item.model.push($event.option.value);
     this.itemChange();

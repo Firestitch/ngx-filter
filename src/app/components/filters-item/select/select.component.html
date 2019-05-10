@@ -15,4 +15,9 @@
   </ng-container>
 </ng-template>
 
-<ng-template [ngIf]="item.initialLoading">{{ item.label }} loading...</ng-template>
+<ng-template [ngIf]="item.initialLoading">
+  <mat-form-field floatLabel="auto">
+    <mat-label>{{item.label}}</mat-label>
+    <mat-select disabled></mat-select>
+  </mat-form-field>
+</ng-template>

@@ -59,9 +59,16 @@ export class FsFilterConfig extends Model {
 
           return new FsFilterConfigItem(item, this, route, persists)
         } else {
-          throw Error('Filter init error. Items name must be uniq.')
+          throw Error('Filter init error. Items name must be unique.')
         }
+      });
 
+
+      // After all the items have been created and added to this.items initalize the values
+      // This is important if some item default values are dependent on others
+      this.items.map((item) => {
+        item.initValues();
+        return item;
       });
     }
 
@@ -72,6 +79,10 @@ export class FsFilterConfig extends Model {
     if (this.items.length === 1 && this.items[0].type === ItemType.Text) {
       this.singleTextFilter = true;
     }
+  }
+
+  public getItem(name) {
+    return this.items.find((item) => item.name === name);
   }
 
   public initSorting(route, persists) {
@@ -110,15 +121,15 @@ export class FsFilterConfig extends Model {
 
   public updateModelValues() {
     this.items.forEach((filter) => {
-      filter.model = clone(filter.tmpModel);
+      filter.model = clone(filter.model);
     });
 
     if (this.sortByItem) {
-      this.sortByItem.model = clone(this.sortByItem.tmpModel);
+      this.sortByItem.model = clone(this.sortByItem.model);
     }
 
     if (this.sortDirectionItem) {
-      this.sortDirectionItem.model = clone(this.sortDirectionItem.tmpModel);
+      this.sortDirectionItem.model = clone(this.sortDirectionItem.model);
     }
   }
 
@@ -258,7 +269,7 @@ export class FsFilterConfig extends Model {
           const multipleIsoldated = filter.multiple
             && filter.isolate
             && Array.isArray(filter.model)
-            && !!filter.model.length
+            && filter.model.length
             && filter.model.indexOf('__all') === -1;
 
           const multipleHasSelectedValues = filter.multiple
@@ -331,7 +342,7 @@ export class FsFilterConfig extends Model {
   public loadValuesForPendingItems() {
     this.items
       .filter((item) => item.hasPendingValues)
-      .forEach((item) => item.loadRemoteValues());
+      .forEach((item) => item.loadValues(false));
   }
 
   public destroy() {
