@@ -69,6 +69,10 @@
     box-sizing: border-box;
     padding: 10px 0 15px;
 
+    mat-icon {
+      margin-right: 5px;
+    }
+
     .text {
       font-weight: 400;
       font-size: 19px;
@@ -185,7 +189,7 @@
         margin-top: 15px;
 
         .filters-wrap {
-          animation: slideInRight 300ms;
+          /* animation: slideInRight 300ms; not working */
           background: #fff;
           box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
           position: fixed;
@@ -349,6 +353,10 @@
     .mat-form-field-flex {
       align-items: center;
     }
+
+    .filter {
+      display: none;
+    }
   }
 }
 
@@ -383,8 +391,22 @@ body.fs-filter-open {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 599px) {
   .fs-filter .reload {
     display: none;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+
+  .main-filter-bar .filter-input-field .filter {
+    display: block;
+  }
+}
+
+
+@media screen and (min-width: 1024px) {
+  body.fs-filter-open {
+    margin-right: 350px;
   }
 }
