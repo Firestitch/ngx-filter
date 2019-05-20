@@ -234,6 +234,7 @@ export class SecondExampleComponent {
       ]
     };
 
+
     this.sortUpdated.emit({
       sortBy: 't',
       sortDirection: 'desc'

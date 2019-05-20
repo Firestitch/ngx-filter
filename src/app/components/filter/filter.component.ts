@@ -20,7 +20,7 @@ import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
 import { FilterConfig } from '../../interfaces/config.interface';
-import { FsFilterConfigItem } from '../../models/filter-item';
+import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
 
@@ -46,6 +46,11 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  updateWindowWidth(event?) {
+    this.windowDesktop = window.innerWidth > 1024;
+  }
+
   @ViewChild('searchTextInput')
   set searchTextInput(value) {
     this._searchTextInput = value;
@@ -59,6 +64,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public activeFiltersWithInputCount = 0;
   public showFilterMenu = false;
   public modelChanged = new EventEmitter();
+  public windowDesktop = false;
 
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
@@ -72,7 +78,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _router: Router,
   ) {
-
+    this.updateWindowWidth();
   }
 
   public ngOnInit() {
@@ -188,9 +194,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
       filterItem.updateValue(values[key]);
 
-      if (filterItem === this.config.searchInput) {
-        this.updateSearchText();
-      }
+      // if (filterItem === this.config.searchInput) {
+      //   this.updateSearchText();
+      // }
     });
 
     this.updateFilledCounter();
@@ -208,7 +214,13 @@ export class FilterComponent implements OnInit, OnDestroy {
         takeUntil(this.config.destroy$),
       )
       .subscribe((value) => {
-        this.config.searchInput.model = value;
+
+        const textItem = this.config.items.find((item) => item.type === ItemType.Text);
+
+        if (textItem) {
+          textItem.model = value;
+        }
+
         this.filterChange();
       })
   }
@@ -218,22 +230,27 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public backdropClick(event) {
-    this.switchFilterVisibility(event);
+    this.changeVisibilityClick(false, event);
   }
 
   public done() {
     this.changeVisibility(false);
   }
 
-  public switchFilterVisibility(event = null) {
+  public changeVisibilityClick(value, event = null) {
+
     if (event) {
       event.stopPropagation();
     }
 
-    this.changeVisibility(!this.showFilterMenu);
+    this.changeVisibility(value);
   }
 
-  public filterInputClick(event: KeyboardEvent) {
+  public filterInputEvent(event: KeyboardEvent) {
+
+    if (!this.windowDesktop) {
+      return;
+    }
 
     if (['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) >= 0) {
       return this.changeVisibility(false);
@@ -243,6 +260,17 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public changeVisibility(state: boolean) {
+
+    if (state === this.showFilterMenu) {
+      return;
+    }
+
+    const notTextItem = this.config.items.find((item) => item.type !== ItemType.Text);
+
+    if (!notTextItem) {
+      return;
+    }
+
     this.showFilterMenu = state;
 
     if (this._firstOpen) {
@@ -258,16 +286,22 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  public clearSearchText(event) {
+    event.stopPropagation();
+    this.searchText = '';
+    this.modelChanged.next('');
+  }
+
   public clear(event = null) {
 
     if (event) {
       event.stopPropagation();
     }
 
-    if (this.config.searchInput) {
-      this.config.searchInput.model = '';
-      this.modelChange(this.config.searchInput.model);
-    }
+    // if (this.config.searchInput) {
+    //   this.config.searchInput.model = '';
+    //   this.modelChange(this.config.searchInput.model);
+    // }
 
     this.searchText = '';
     this.changedFilters = [];
@@ -281,8 +315,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   /**
    * Close filter window and do change callback
    */
-  public search() {
-    this.switchFilterVisibility();
+  public search(event) {
+    this.changeVisibilityClick(false, event);
     this.filterChange();
   }
 
@@ -346,9 +380,9 @@ export class FilterComponent implements OnInit, OnDestroy {
   public filterChange(changedItem: FsFilterConfigItem = null) {
 
     if (changedItem) {
-      if (changedItem === this.config.searchInput) {
-        this.searchText = changedItem.model;
-      }
+      // if (changedItem === this.config.searchInput) {
+      //   this.searchText = changedItem.model;
+      // }
 
       changedItem.checkIfValueChanged();
     }
@@ -436,9 +470,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
 
   private updateSearchText() {
-    if (this.config.searchInput && this.config.searchInput.model) {
-      this.searchText = this.config.searchInput.model;
-    }
+    // if (this.config.searchInput && this.config.searchInput.model) {
+    //   this.searchText = this.config.searchInput.model;
+    // }
   }
 
   private fireInitCallback() {

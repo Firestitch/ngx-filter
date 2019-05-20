@@ -2,11 +2,11 @@
   <div class="filter filter-{{ item.type }}">
 
     <ng-container [ngSwitch]="item.type">
-      <filter-item-text class="interface"
+      <!-- <filter-item-text class="interface"
                         *ngSwitchCase="itemType.Text"
                         [item]="item"
                         (itemChanged)="itemChange($event)">
-      </filter-item-text>
+      </filter-item-text> -->
       <filter-item-select class="interface"
                           *ngSwitchCase="itemType.Select"
                           [item]="item"

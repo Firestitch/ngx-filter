@@ -33,7 +33,7 @@ export class FsFilterConfig extends Model {
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
   public sortDirectionItem: FsFilterConfigItem = null;
-  public searchInput = null;
+  //public searchInput = null;
   public singleTextFilter = false;
 
   private _filtersNames = [];
@@ -74,7 +74,7 @@ export class FsFilterConfig extends Model {
 
     this.initSorting(route, persists);
 
-    this.searchInput = this.items.find((item) => item.type === ItemType.Text);
+   //this.searchInput = this.items.find((item) => item.type === ItemType.Text);
 
     if (this.items.length === 1 && this.items[0].type === ItemType.Text) {
       this.singleTextFilter = true;
@@ -302,10 +302,11 @@ export class FsFilterConfig extends Model {
           }
         } break;
 
+        case ItemType.Text: {} break;
+
         default: {
           if (filter.model &&
-            filter !== this.searchInput &&
-            (!isEmpty(filter.model, {zero: true}) || !isEmpty(filter.model.value, {zero: true}))
+            (!isEmpty(filter.model, { zero: true }) || !isEmpty(filter.model.value, {zero: true}))
           ) {
             acc.push(filter);
           }

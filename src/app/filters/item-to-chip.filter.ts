@@ -35,6 +35,9 @@ export class FsItemToChip implements PipeTransform {
       case ItemType.AutoComplete: {
         result = item.model.name;
       } break;
+      case ItemType.Text: {
+        result = item.model;
+      } break;
       case ItemType.AutoCompleteChips: case ItemType.Chips: {
         result = item.model.reduce((acc, item) => {
           acc.push(item.name);
@@ -75,6 +78,7 @@ export class FsItemToChip implements PipeTransform {
 
           result = options.join(', ');
         } else {
+
           if (item.children) {
             const itemValue = findValue(item.values, model, item.children);
 
