@@ -7,15 +7,19 @@
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
 
-    <input #chipsInput matInput [(ngModel)]="item.selectedValue"
-           (ngModelChange)="onAutocompleteChipsChange(chipsInput)" type="text"
-           name="{{ item.name }}"
+    <input #chipsInput
+           type="text"
+           matInput
+           [(ngModel)]="item.selectedValue"
+           (ngModelChange)="onAutocompleteChipsChange(chipsInput)"
+           [name]="item.name"
            [matChipInputFor]="chipList"
            [matAutocomplete]="autocompleteChipsInput">
   </mat-chip-list>
 
   <mat-autocomplete #autocompleteChipsInput="matAutocomplete"
-                    (optionSelected)="addAutocompleteChipItem( $event)">
+                    (optionSelected)="addAutocompleteChipItem( $event)"
+  >
     <mat-option *ngFor="let item of item.values$ | async" [value]="item">
       {{ item.name }}
     </mat-option>

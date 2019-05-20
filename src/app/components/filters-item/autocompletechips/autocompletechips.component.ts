@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  KeyValueDiffers
+  DoCheck,
+  KeyValueDiffers,
+  ViewChild,
 } from '@angular/core';
 import {
   filter as arrayFilter,
@@ -20,7 +22,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './autocompletechips.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompletechipsComponent extends BaseItemComponent {
+export class AutocompletechipsComponent extends BaseItemComponent implements DoCheck {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -28,6 +30,24 @@ export class AutocompletechipsComponent extends BaseItemComponent {
   ) {
     super(_kvDiffers, _cd);
   }
+
+  @ViewChild('chipsInput')
+  public chipsInput;
+
+  public ngDoCheck(): void {
+    // Hack for reset chips input typed value
+    if (this._kvDiffer) {
+      const changes = this._kvDiffer.diff(this.item);
+
+      if (changes) {
+        if (!this.item.selectedValue) {
+          this.chipsInput.nativeElement.value = '';
+        }
+        this._cd.detectChanges();
+      }
+    }
+  }
+
 
   public onAutocompleteChipsChange(input) {
     if (!isObject(this.item.selectedValue)) {

@@ -221,6 +221,7 @@ export class FsFilterConfigItem extends Model {
   public clear() {
     this.valueChanged = false;
     this.model = undefined;
+    this.selectedValue = '';
 
     switch (this.type) {
       case ItemType.AutoComplete: {

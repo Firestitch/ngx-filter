@@ -8,7 +8,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { FsFilterConfigItem } from 'src/app/models/filter-item';
 import { shuffle } from 'lodash-es';
-import { _CdkColumnDefBase } from '@angular/cdk/table';
+
 
 @Component({
   selector: 'second-example',
