@@ -64,16 +64,6 @@
             </span>
           </mat-form-field>
         </form>
-        <filters-list
-          [items]="config.items"
-          [showSortBy]="showSortBy"
-          [sortBy]="config.sortByItem"
-          [sortDirection]="config.sortDirectionItem"
-          (filterChanged)="filterChange($event)"
-          (search)="search($event)"
-          (done)="done()"
-          (clear)="clear()">
-        </filters-list>
       </div>
       <div class="backdrop" *ngIf="!windowDesktop && showFilterMenu" (click)="backdropClick($event)"></div>
     </div>

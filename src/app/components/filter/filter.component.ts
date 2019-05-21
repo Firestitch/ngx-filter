@@ -7,7 +7,11 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  HostListener
+  HostListener,
+  ComponentFactoryResolver,
+  ApplicationRef,
+  Injector,
+  EmbeddedViewRef
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FsStore } from '@firestitch/store';
 
 import { cloneDeep } from 'lodash-es';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
@@ -23,6 +27,9 @@ import { FilterConfig } from '../../interfaces/config.interface';
 import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
+import { FilterDrawerComponent } from '../filter-drawer/filter-drawer.component';
+import { FILTER_DRAWER_DATA } from 'src/app/injectors/filter-drawer-data';
+import { ComponentRef } from '@angular/core/src/render3';
 
 
 @Component({
@@ -66,6 +73,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public modelChanged = new EventEmitter();
   public windowDesktop = false;
 
+  private _filterDrawerRef;
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
   private _query = {};
@@ -77,6 +85,9 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _location: Location,
     private _route: ActivatedRoute,
     private _router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private appRef: ApplicationRef,
+    private injector: Injector
   ) {
     this.updateWindowWidth();
   }
@@ -265,25 +276,68 @@ export class FilterComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.showFilterMenu = state;
+
+    if (state) {
+      window.document.body.classList.add('fs-filter-open');
+    } else {
+      window.document.body.classList.remove('fs-filter-open');
+      this.updateFilledCounter();
+    }
+
+    if (!state) {
+      this.appRef.detachView(this._filterDrawerRef.hostView);
+      this._filterDrawerRef.destroy();
+      return;
+    }
+
     const notTextItem = this.config.items.find((item) => item.type !== ItemType.Text);
 
     if (!notTextItem) {
       return;
     }
 
-    this.showFilterMenu = state;
+    this.appendComponentToBody(FilterDrawerComponent);
 
     if (this._firstOpen) {
       this.config.loadValuesForPendingItems();
       this._firstOpen = false;
     }
+  }
 
-    if (this.showFilterMenu) {
-      window.document.body.classList.add('fs-filter-open');
-    } else {
-      window.document.body.classList.remove('fs-filter-open');
-      this.updateFilledCounter();
-    }
+  appendComponentToBody(component: any) {
+
+    const data = {
+      items: this.config.items,
+      showSortBy: 'showSortBy',
+      sortBy: this.config.sortByItem,
+      sortDirection: this.config.sortDirectionItem,
+      filterChanged: this.filterChange.bind(this),
+      search: this.search.bind(this),
+      done: this.done.bind(this),
+      clear: this.clear.bind(this)
+    };
+
+    const componentInjector = Injector.create({
+      providers: [
+        {
+          provide: FILTER_DRAWER_DATA,
+          useValue: data,
+        }
+      ],
+      parent: this.injector,
+    })
+
+    this._filterDrawerRef = this.componentFactoryResolver
+      .resolveComponentFactory(component)
+      .create(componentInjector);
+
+    this.appRef.attachView(this._filterDrawerRef.hostView);
+
+    const domElem = (this._filterDrawerRef.hostView as EmbeddedViewRef<any>)
+      .rootNodes[0] as HTMLElement;
+
+    document.body.appendChild(domElem);
   }
 
   public clearSearchText(event) {

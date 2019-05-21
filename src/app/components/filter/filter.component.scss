@@ -1,15 +1,3 @@
-@keyframes slideInRight {
-  from {
-    -webkit-transform: translate3d(100%, 0, 0);
-    transform: translate3d(100%, 0, 0);
-  }
-
-  to {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 .fs-filter {
   flex-direction: column;
   box-sizing: border-box;
@@ -50,60 +38,13 @@
     }
   }
 
-  .full-search {
-    .filter.filter-date {
-      > span {
-        display: inline-block
-      }
-    }
-  }
-
   .filter-chips {
     display: block;
-  }
-
-  .filter-by {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    box-sizing: border-box;
-    padding: 10px 0 15px;
-
-    mat-icon {
-      margin-right: 5px;
-    }
-
-    .text {
-      font-weight: 400;
-      font-size: 19px;
-    }
-  }
-
-  .filter-actions {
-    display: flex;
-    width: 100%;
-    height: 55px;
-    background: #fff;
-    left: 0;
-    box-sizing: border-box;
-    padding-left: 5px;
-    flex-direction: row;
-    align-items: center;
-
-    button {
-      margin-right: 6px;
-      text-transform: uppercase;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
   }
 
   .menu-filter {
 
     position: relative;
-
 
     .search {
       top: 8px;
@@ -128,20 +69,6 @@
 
     .menu-filter-input {
 
-      mat-form-field {
-        width: 100%;
-      }
-
-      /*
-      TODO
-      md-datepicker-container {
-        width: 100%;
-        .md-datepicker-input-container {
-            margin-left: 0;
-        }
-      }
-      */
-
       .main-filter-bar {
         height: 40px; /* Largest height between inputs, buttons, icons */
 
@@ -160,142 +87,15 @@
             cursor: pointer;
             color: initial;
 
-
             &:hover {
               color: inherit;
             }
           }
         }
-
-        //mat-form-field {
-        //  width: 100%;
-        //  /*
-        //  input {
-        //    padding-right: 26px;
-        //    padding-left: 26px;
-        //    position: relative;
-        //  }
-        //  */
-        //}
-      }
-
-      .filters {
-        position: absolute;
-        min-width: 400px;
-        width: 100%;
-        display: block;
-        visibility: hidden;
-        left: 0;
-        margin-top: 15px;
-
-        .filters-wrap {
-          /* animation: slideInRight 300ms; not working */
-          background: #fff;
-          box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-          position: fixed;
-          width: 75vw;
-          max-width: 350px;
-          top: 0;
-          bottom: 0;
-          right: 0;
-          z-index: 999;
-
-          .filter-items {
-            max-height: calc(100% - 55px);
-            overflow-y: auto;
-            padding: 10px 20px 0 20px;
-            box-sizing: border-box;
-          }
-        }
-
-        .filter-group {
-          margin: 10px 0 0 0;
-
-          &:first-child {
-            margin: 0;
-          }
-        }
-
-        .filter {
-
-          &.filter-checkbox {
-            padding-bottom: 1.25em;
-            padding-top: 7px;
-          }
-
-          /*
-            Removed the x scrollbar from the -4px margin from mat-chips
-          */
-          &.filter-autocompletechips .mat-form-field {
-            overflow: hidden;
-          }
-
-          .interface {
-
-            &.interface-range input, &.interface-range .mat-input-wrapper {
-              text-align: center;
-            }
-
-            &.interface-range {
-              text-align: center;
-            }
-
-            //TODO
-            &.interface-datetime fs-datetime.has-time .md-input {
-              width: 100%;
-            }
-            //TODO
-            fs-datetime-range input {
-              text-align: center;
-            }
-          }
-
-          .filter-label {
-            width: 1%;
-            white-space: nowrap;
-            vertical-align: middle;
-            padding-right: 15px;
-          }
-        }
-
-        //TODO
-        md-autocomplete-container md-input-container {
-          margin: 0;
-        }
-
-        .isolate {
-          margin-top: -12px;
-          .interface {
-            line-height: 20px;
-            padding-bottom: 1.25em;
-          }
-          //TODO
-          md-checkbox {
-            margin: 0 0 0 2px;
-          }
-        }
       }
     }
   }
 
-  .filter {
-
-    //TODO
-    label {
-      white-space: nowrap;
-      color: rgba(0, 0, 0, 0.54);
-    }
-
-    &.filter-range {
-      mat-form-field {
-        min-width: initial;
-        width: 50px;
-        &.filter-range-min {
-          margin-right: 5px;
-        }
-      }
-    }
-  }
 
   .infinite-records {
     color: #999;
@@ -310,11 +110,6 @@
       cursor: pointer;
       padding-left: 4px;
     }
-  }
-
-  //TODO
-  .md-datepicker-calendar-pane {
-    margin-left: -10px;
   }
 
   &.filters-open {
@@ -340,6 +135,9 @@
     width: 100%;
   }
   .filter-input-field {
+
+    width: 100%;
+
     .mat-form-field-underline {
       bottom: auto;
     }
