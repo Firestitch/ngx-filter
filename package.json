@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "7.3.15",
+  "version": "7.3.20",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -28,7 +28,7 @@
     "@angular-devkit/build-angular": "^0.13.1",
     "@angular-devkit/build-ng-packagr": "^0.13.1",
     "@angular/animations": "^7.2.2",
-    "@angular/cdk": "^7.3.0",
+    "@angular/cdk": "^7.3.7",
     "@angular/cli": "^7.2.3",
     "@angular/common": "^7.2.2",
     "@angular/compiler": "^7.2.2",
@@ -37,7 +37,7 @@
     "@angular/flex-layout": "^7.0.0-beta.23",
     "@angular/forms": "^7.2.2",
     "@angular/http": "^7.2.2",
-    "@angular/material": "^7.3.0",
+    "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.2",
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.4",
@@ -54,6 +54,7 @@
     "@firestitch/clear": "^7.1.0",
     "@firestitch/drawer": "^7.0.1",
     "@firestitch/menu": "^7.0.1",
+    "@firestitch/autocomplete": "^7.1.0",
     "codelyzer": "^4.5.0",
     "cpx": "^1.5.0",
     "date-fns": "^2.0.0-alpha.27",
@@ -77,6 +78,7 @@
   "peerDependencies": {
     "@angular/flex-layout": ">=7.0.0-beta.23",
     "@firestitch/chip": ">=7.3.0",
-    "@firestitch/datepicker": ">=7.1.4"
+    "@firestitch/datepicker": ">=7.1.4",
+    "@firestitch/autocomplete": ">=7.1.0"
   }
 }

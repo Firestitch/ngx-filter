@@ -20,7 +20,8 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'filter-item-autocompletechips',
   templateUrl: './autocompletechips.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //Commented out because autocomplete not updating properly. Need to figure this out.
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompletechipsComponent extends BaseItemComponent implements DoCheck {
 

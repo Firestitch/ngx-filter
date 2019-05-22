@@ -1,13 +1,24 @@
-<mat-form-field floatLabel="auto">
+<mat-form-field floatLabel="auto" [ngClass]="{ isolate: item.isolate }">
   <mat-label>{{item.label}}</mat-label>
-  <mat-select [(ngModel)]="item.model"
-              [multiple]="item.multiple"
-              (openedChange)="changed($event)">
-    <mat-option *ngFor="let item of item.values"
-                [value]="item.value"
-                [ngStyle]="item.style">
-      {{ item.name }}
+  <mat-select
+    #select
+    [(ngModel)]="item.model"
+    (ngModelChange)="changed()"
+    [multiple]="item.multiple">
+      <mat-option
+        *ngFor="let item of item.values"
+        [value]="item.value"
+        [ngStyle]="item.style">
+          {{ item.name }}
     </mat-option>
   </mat-select>
-  <!--<mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>-->
+
+  <mat-hint>
+    <div *ngIf="item.isolate">
+      <mat-checkbox (change)="isolateChange(item)" [(ngModel)]="item.isolate.enabled">
+        <span class="checkbox-label">{{ item.isolate.label }}</span>
+      </mat-checkbox>
+    </div>
+  </mat-hint>
 </mat-form-field>
+<filter-item-select-backdrop *ngIf="select.panelOpen" (click)="select.close()"></filter-item-select-backdrop>

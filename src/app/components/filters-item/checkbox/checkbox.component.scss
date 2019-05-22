@@ -1,3 +1,9 @@
 fs-label-field {
   margin: 0
 }
+
+:host ::ng-deep {
+  .field-content {
+    height: 30px;
+  }
+}

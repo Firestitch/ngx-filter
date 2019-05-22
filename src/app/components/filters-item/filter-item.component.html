@@ -7,36 +7,43 @@
                         [item]="item"
                         (itemChanged)="itemChange($event)">
       </filter-item-text> -->
+
       <filter-item-select class="interface"
                           *ngSwitchCase="itemType.Select"
                           [item]="item"
                           (itemChanged)="itemChange($event)">
       </filter-item-select>
+
       <filter-item-chips class="interface"
                           *ngSwitchCase="itemType.Chips"
                           [item]="item"
                           (itemChanged)="itemChange($event)">
       </filter-item-chips>
+
       <filter-item-range class="interface interface-range"
                          *ngSwitchCase="itemType.Range"
                          [item]="item"
                          (itemChanged)="itemChange($event)">
       </filter-item-range>
+
       <filter-item-autocomplete class="interface"
                                 *ngSwitchCase="itemType.AutoComplete"
                                 [item]="item"
                                 (itemChanged)="itemChange($event)">
       </filter-item-autocomplete>
+
       <filter-item-autocompletechips class="interface"
                                      *ngSwitchCase="itemType.AutoCompleteChips"
                                      [item]="item"
                                      (itemChanged)="itemChange($event)">
       </filter-item-autocompletechips>
+
       <filter-item-date class="interface interface-date"
                         *ngSwitchCase="itemType.Date"
                         [item]="item"
                         (itemChanged)="itemChange($event)">
       </filter-item-date>
+
       <filter-item-checkbox class="interface interface-checkbox"
                             *ngSwitchCase="itemType.Checkbox"
                             [item]="item"
@@ -44,13 +51,5 @@
       </filter-item-checkbox>
     </ng-container>
 
-  </div>
-
-  <div *ngIf="item.isolate" class="filter isolate">
-    <div class="interface">
-      <mat-checkbox (change)="isolateChange(item)" [(ngModel)]="item.isolate.enabled">
-        <span class="checkbox-label">{{ item.isolate.label }}</span>
-      </mat-checkbox>
-    </div>
   </div>
 </ng-template>

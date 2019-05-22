@@ -28,8 +28,7 @@ import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
 import { FilterDrawerComponent } from '../filter-drawer/filter-drawer.component';
-import { FILTER_DRAWER_DATA } from 'src/app/injectors/filter-drawer-data';
-import { ComponentRef } from '@angular/core/src/render3';
+import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 
 
 @Component({
@@ -55,7 +54,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   updateWindowWidth(event?) {
-    this.windowDesktop = window.innerWidth > 1024;
+    this.windowDesktop = window.innerWidth > 1200;
   }
 
   @ViewChild('searchTextInput')
@@ -134,6 +133,17 @@ export class FilterComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     if (this.config) {
       this.config.destroy();
+    }
+
+    this.destroyFilterDrawer();
+  }
+
+  private destroyFilterDrawer() {
+    window.document.body.classList.remove('fs-filter-open');
+    if (this._filterDrawerRef) {
+      this.appRef.detachView(this._filterDrawerRef.hostView);
+      this._filterDrawerRef.destroy();
+      this._filterDrawerRef = null;
     }
   }
 
@@ -278,23 +288,19 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this.showFilterMenu = state;
 
-    if (state) {
-      window.document.body.classList.add('fs-filter-open');
-    } else {
-      window.document.body.classList.remove('fs-filter-open');
-      this.updateFilledCounter();
-    }
-
     if (!state) {
-      this.appRef.detachView(this._filterDrawerRef.hostView);
-      this._filterDrawerRef.destroy();
-      return;
+      this.updateFilledCounter();
+      return this.destroyFilterDrawer();
     }
 
     const notTextItem = this.config.items.find((item) => item.type !== ItemType.Text);
 
     if (!notTextItem) {
       return;
+    }
+
+    if (state) {
+      window.document.body.classList.add('fs-filter-open');
     }
 
     this.appendComponentToBody(FilterDrawerComponent);

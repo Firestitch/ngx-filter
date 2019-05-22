@@ -11,7 +11,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-autocomplete',
   templateUrl: './autocomplete.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteComponent extends BaseItemComponent {
 
@@ -22,15 +22,15 @@ export class AutocompleteComponent extends BaseItemComponent {
     super(_kvDiffers, _cd);
   }
 
-  public onAutocompleteChange() {
-    if (isObject(this.item.model)) {
-      this.itemChange();
-    } else {
-      this.item.values$ = this.item.values(this.item.model);
-    }
+  public displayWith = (data) => {
+    return data ? data.name : data;
   }
 
-  public displayAutocomplete(data): string {
-    return data ? data.name : data;
+  public ngModelChange() {
+    this.itemChange();
+  }
+
+  public fetch = (keyword) => {
+    return this.item.values(keyword);
   }
 }

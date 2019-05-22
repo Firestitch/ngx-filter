@@ -1,4 +1,4 @@
-<mat-form-field floatLabel="auto">
+<!-- <mat-form-field floatLabel="auto">
   <mat-label>{{item.label}}</mat-label>
   <input matInput type="text" [(ngModel)]="item.model"
          (ngModelChange)="onAutocompleteChange()" name="{{ item.name }}"
@@ -9,3 +9,16 @@
   </mat-autocomplete>
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
 </mat-form-field>
+ -->
+
+<fs-autocomplete
+  [fetch]="fetch"
+  [displayWith]="displayWith"
+  [(ngModel)]="item.model"
+  [placeholder]="item.label"
+  (ngModelChange)="ngModelChange()"
+  name="item.name">
+  <ng-template fsAutocompleteTemplate let-data="data">
+    {{data.name}}
+  </ng-template>
+</fs-autocomplete>

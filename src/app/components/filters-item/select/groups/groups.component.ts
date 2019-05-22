@@ -4,8 +4,10 @@ import {
   Component,
   EventEmitter,
   Input,
-  Output
+  Output,
+  ViewChild
 } from '@angular/core';
+import { MatSelect } from '@angular/material';
 
 @Component({
   selector: 'filter-item-select-groups',
@@ -14,6 +16,7 @@ import {
 })
 export class SelectGroupsComponent {
 
+  @ViewChild('select') select: MatSelect;
   @Input() public item;
   @Output() public change = new EventEmitter();
 

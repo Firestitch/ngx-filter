@@ -116,8 +116,8 @@ export class SecondExampleComponent {
           change: (item) => {
 
             const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
-            filterItem.values = [];
-            filterItem.clear();
+            filterItem.values.pop();
+            //filterItem.clear();
           },
           values: () => {
 
@@ -213,7 +213,6 @@ export class SecondExampleComponent {
           label: 'Status',
           multiple: true,
           values: [
-            { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' }

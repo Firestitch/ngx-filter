@@ -6,16 +6,19 @@ import {
   Input,
   IterableDiffer,
   IterableDiffers,
-  Inject
+  Inject,
+  HostListener
 } from '@angular/core';
 import { FsFilterConfigItem } from '../../models/filter-item';
-import { FILTER_DRAWER_DATA } from 'src/app/injectors/filter-drawer-data';
+import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
+import { Subject } from 'rxjs';
 
 
 @Component({
   templateUrl: './filter-drawer.component.html',
   styleUrls: ['filter-drawer.component.scss']
-  //changeDetection: ChangeDetectionStrategy.OnPush,  Commented out because filter items are not updating when delayed observable. Need to figure this out.
+  //Commented out because filter items are not updating with a delayed observable. Need to figure this out.
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDrawerComponent implements DoCheck {
   @Input() public items: FsFilterConfigItem[] = [];
@@ -29,6 +32,8 @@ export class FilterDrawerComponent implements DoCheck {
   protected _done: Function;
   protected _search: Function;
   protected _filterChanged: Function;
+  protected _click: Function;
+
 
   constructor(protected _differs: IterableDiffers,
               protected _cd: ChangeDetectorRef,
@@ -41,6 +46,7 @@ export class FilterDrawerComponent implements DoCheck {
     this._done = data.done;
     this._search = data.search;
     this._filterChanged = data.filterChanged;
+    this._click = data.click;
     this._differ = this._differs.find(this.items).create<FsFilterConfigItem>((index, item) => {
       return item.model;
     });

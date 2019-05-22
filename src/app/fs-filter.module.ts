@@ -20,6 +20,7 @@ import { FsCommonModule } from '@firestitch/common';
 import { FsStore, FsStoreModule } from '@firestitch/store';
 import { FsChipModule } from '@firestitch/chip';
 import { FsLabelModule } from '@firestitch/label';
+import { FsAutocompleteModule } from '@firestitch/autocomplete';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -38,6 +39,7 @@ import { BaseItemComponent } from './components/filters-item/base-item/base-item
 import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
 import { FsItemToChip } from './filters/item-to-chip.filter';
+import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 
 
 @NgModule({
@@ -58,6 +60,7 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     FsStoreModule,
     FsDatePickerModule,
     FsLabelModule,
+    FsAutocompleteModule
   ],
   declarations: [
     BaseItemComponent,
@@ -76,6 +79,7 @@ import { FsItemToChip } from './filters/item-to-chip.filter';
     DateComponent,
     CheckboxComponent,
     FilterDrawerComponent,
+    SelectBackdropComponent,
 
     // Pipes
     FsItemToChip,

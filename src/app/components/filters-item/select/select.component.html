@@ -1,11 +1,17 @@
 <ng-template [ngIf]="item.values?.length">
   <ng-container *ngIf="item.multiple && !item.children">
-    <filter-item-select-multiple [item]="item" (change)="selectChange()" #selectItem>
+    <filter-item-select-multiple
+      [item]="item"
+      (change)="selectChange()"
+      #selectItem>
     </filter-item-select-multiple>
   </ng-container>
 
   <ng-container *ngIf="!item.multiple && !item.children">
-    <filter-item-select-simple [item]="item" (change)="selectChange()" #selectItem>
+    <filter-item-select-simple
+      [item]="item"
+      (change)="selectChange()"
+      #selectItem>
     </filter-item-select-simple>
   </ng-container>
 

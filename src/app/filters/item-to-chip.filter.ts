@@ -33,7 +33,7 @@ export class FsItemToChip implements PipeTransform {
         }
       } break;
       case ItemType.AutoComplete: {
-        result = item.model.name;
+        result = item.model ? item.model.name : '';
       } break;
       case ItemType.Text: {
         result = item.model;

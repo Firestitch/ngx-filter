@@ -96,7 +96,6 @@
     }
   }
 
-
   .infinite-records {
     color: #999;
     font-size: 13px;
@@ -177,25 +176,13 @@
   cursor: pointer;
 }
 
-body.fs-filter-open {
-  overflow: hidden !important;
-
-  /*
-    Allows the fsFilter side drawer to overlay the toolbar
-  */
-  .mat-drawer-container,
-  .mat-drawer-content {
-    z-index: auto !important;
-  }
-}
-
 @media screen and (max-width: 599px) {
   .fs-filter .reload {
     display: none;
   }
 }
 
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 1199px) {
 
   .main-filter-bar .filter-input-field .filter {
     display: block;
@@ -203,8 +190,26 @@ body.fs-filter-open {
 }
 
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 1200px) {
   body.fs-filter-open {
     margin-right: 350px;
+  }
+}
+
+body.fs-filter-open {
+
+  .cdk-overlay-container {
+    position: absolute;
+    z-index: unset;
+    overflow: hidden;
+  }
+
+  .cdk-overlay-connected-position-bounding-box {
+    z-index: 1003;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
   }
 }
