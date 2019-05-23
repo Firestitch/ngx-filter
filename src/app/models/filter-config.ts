@@ -50,6 +50,7 @@ export class FsFilterConfig extends Model {
   }
 
   public initItems(items, route, persists) {
+
     if (items && Array.isArray(items)) {
 
       this.items = items.map((item) => {
@@ -63,7 +64,6 @@ export class FsFilterConfig extends Model {
         }
       });
 
-
       // After all the items have been created and added to this.items initalize the values
       // This is important if some item default values are dependent on others
       this.items.map((item) => {
@@ -73,8 +73,6 @@ export class FsFilterConfig extends Model {
     }
 
     this.initSorting(route, persists);
-
-   //this.searchInput = this.items.find((item) => item.type === ItemType.Text);
 
     if (this.items.length === 1 && this.items[0].type === ItemType.Text) {
       this.singleTextFilter = true;

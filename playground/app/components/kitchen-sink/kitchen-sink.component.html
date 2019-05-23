@@ -1,4 +1,4 @@
-<fs-filter [filter]="conf" [sortUpdate]="sortUpdated" #filter></fs-filter>
+<fs-filter [config]="conf" #filter></fs-filter>
 <fieldset *ngIf="query">
   <legend>Query</legend>
   <pre>{{ query | json }}</pre>

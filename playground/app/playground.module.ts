@@ -13,7 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { AppMaterialModule } from './material.module';
 
-import { ExamplesComponent, NofiltersComponent, SecondExampleComponent } from './components';
+import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './components';
 
 
 @NgModule({
@@ -35,7 +35,7 @@ import { ExamplesComponent, NofiltersComponent, SecondExampleComponent } from '.
   entryComponents: [],
   declarations: [
     AppComponent,
-    SecondExampleComponent,
+    KitchenSinkComponent,
     NofiltersComponent,
     ExamplesComponent
   ],

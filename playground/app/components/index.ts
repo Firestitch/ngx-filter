@@ -1,3 +1,3 @@
 export * from './nofilters';
-export * from './second-example';
+export * from './kitchen-sink';
 export * from './examples';

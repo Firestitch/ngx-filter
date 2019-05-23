@@ -11,11 +11,11 @@ import { shuffle } from 'lodash-es';
 
 
 @Component({
-  selector: 'second-example',
-  templateUrl: 'second-example.component.html',
-  styleUrls: [ 'second-example.component.css' ]
+  selector: 'kitchen-sink',
+  templateUrl: 'kitchen-sink.component.html',
+  styleUrls: [ 'kitchen-sink.component.css' ]
 })
-export class SecondExampleComponent {
+export class KitchenSinkComponent {
 
   @ViewChild('filter') public filterEl: FilterComponent;
 
@@ -74,12 +74,12 @@ export class SecondExampleComponent {
       autofocus: true,
       queryParam: true,
       sorts: [
-        { name: 'name', value: 'n'},
-        { name: 'two', value: 't'}
+        { name: 'Name', value: 'name'},
+        { name: 'Date', value: 'date'}
       ],
       sort: {
         direction: 'desc',
-        value: 't',
+        value: 'name',
       },
       change: (query, sort) => {
         console.log('Change', query, sort);
@@ -238,6 +238,15 @@ export class SecondExampleComponent {
       sortBy: 't',
       sortDirection: 'desc'
     });
+
+    // setTimeout(() => {
+    //   this.conf = Object.assign({},this.conf);
+
+    //   this.conf.items.pop();
+    //   this.conf.items.pop();
+
+    //   this.conf.items.pop();
+    // },3000)
   }
 
   private _filterUsersByKeyword(users, keyword) {

@@ -37,6 +37,12 @@ export class SelectMultipleComponent {
         }
       }
     }
+
+    this.change.emit(this.item.model);
+  }
+
+  public close() {
+    this.select.close();
   }
 
   public isolateChange(filter) {

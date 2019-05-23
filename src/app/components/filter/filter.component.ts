@@ -23,7 +23,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
-import { FilterConfig } from '../../interfaces/config.interface';
 import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
@@ -39,14 +38,22 @@ import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
-  @Input() public filter: FilterConfig = null;
+  protected _config: FsFilterConfig = null;
+
+  @Input('config') set setConfig(config) {
+    this.config = config;
+  }
+
+  @Input('filter') set setFilter(config) {
+    this.config = config;
+  }
+
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
-
     if (event.code === 'Escape' && this.showFilterMenu) {
       this.changeVisibility(false);
     }
@@ -63,7 +70,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public changedFilters = [];
-  public config: FsFilterConfig;
   public searchText = '';
   public persists = null;
   public activeFiltersCount = 0;
@@ -91,20 +97,29 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.updateWindowWidth();
   }
 
-  public ngOnInit() {
-    this.config = new FsFilterConfig(this.filter);
+  public set config(config) {
+    this._config = new FsFilterConfig(config);
     this.restorePersistValues();
-    this.config.initItems(this.filter.items, this._route, this.persists);
+    this.config.initItems(config.items, this._route, this.persists);
 
     if (this.config.queryParam) {
       this._queryParams = new QueryParams(this._router, this._route, this.config.items);
     }
 
-    // Set search input value after restore from STORE
-    this.updateSearchText();
-
     // Count active filters after restore
     this.updateFilledCounter();
+  }
+
+  public get config() {
+    return this._config;
+  }
+
+  public ngOnInit() {
+
+    // Avoid ngChanges error
+    setTimeout(() => {
+      this.focus();
+    });
 
     this.watchSearchInput();
 
@@ -119,15 +134,14 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.config.init) {
-      this.fireInitCallback();
+      this.init();
     }
+  }
 
-    // Avoid ngChanges error
-    setTimeout(() => {
-      if (this._searchTextInput && this.config.autofocus) {
-         this._searchTextInput.nativeElement.focus();
-       }
-    });
+  public focus() {
+    if (this._searchTextInput && this.config.autofocus) {
+      this._searchTextInput.nativeElement.focus();
+    }
   }
 
   public ngOnDestroy() {
@@ -136,15 +150,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     this.destroyFilterDrawer();
-  }
-
-  private destroyFilterDrawer() {
-    window.document.body.classList.remove('fs-filter-open');
-    if (this._filterDrawerRef) {
-      this.appRef.detachView(this._filterDrawerRef.hostView);
-      this._filterDrawerRef.destroy();
-      this._filterDrawerRef = null;
-    }
   }
 
   /**
@@ -214,10 +219,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       }
 
       filterItem.updateValue(values[key]);
-
-      // if (filterItem === this.config.searchInput) {
-      //   this.updateSearchText();
-      // }
     });
 
     this.updateFilledCounter();
@@ -225,25 +226,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (changeEvent) {
       this.filterChange();
     }
-  }
-
-  public watchSearchInput() {
-    this.modelChanged
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(500),
-        takeUntil(this.config.destroy$),
-      )
-      .subscribe((value) => {
-
-        const textItem = this.config.items.find((item) => item.type === ItemType.Text);
-
-        if (textItem) {
-          textItem.model = value;
-        }
-
-        this.filterChange();
-      })
   }
 
   public modelChange(text) {
@@ -254,8 +236,12 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.changeVisibilityClick(false, event);
   }
 
-  public done() {
+  public hide() {
     this.changeVisibility(false);
+  }
+
+  public show() {
+    this.changeVisibility(true);
   }
 
   public changeVisibilityClick(value, event = null) {
@@ -311,45 +297,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  appendComponentToBody(component: any) {
-
-    const data = {
-      items: this.config.items,
-      showSortBy: 'showSortBy',
-      sortBy: this.config.sortByItem,
-      sortDirection: this.config.sortDirectionItem,
-      filterChanged: this.filterChange.bind(this),
-      search: this.search.bind(this),
-      done: this.done.bind(this),
-      clear: this.clear.bind(this)
-    };
-
-    const componentInjector = Injector.create({
-      providers: [
-        {
-          provide: FILTER_DRAWER_DATA,
-          useValue: data,
-        }
-      ],
-      parent: this.injector,
-    })
-
-    this._filterDrawerRef = this.componentFactoryResolver
-      .resolveComponentFactory(component)
-      .create(componentInjector);
-
-    this.appRef.attachView(this._filterDrawerRef.hostView);
-
-    const domElem = (this._filterDrawerRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    document.body.appendChild(domElem);
-  }
-
   public clearSearchText(event) {
     event.stopPropagation();
     this.searchText = '';
     this.modelChanged.next('');
+  }
+
+  public init() {
+    this._query = this.config.gets({ flatten: true });
+    this._sort = this.config.getSort();
+
+    this.config.init(this._query, this.config.getSort());
   }
 
   public clear(event = null) {
@@ -357,11 +315,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
-
-    // if (this.config.searchInput) {
-    //   this.config.searchInput.model = '';
-    //   this.modelChange(this.config.searchInput.model);
-    // }
 
     this.searchText = '';
     this.changedFilters = [];
@@ -380,6 +333,34 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.filterChange();
   }
 
+  public reload(event = null) {
+
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const query = this.config.gets({ flatten: true });
+
+    if (this.config.reload) {
+      this.config.reload(cloneDeep(query), this.config.getSort());
+    }
+  }
+
+  /**
+   * Reset filter
+   * @param item
+   */
+  public resetFilter(item: FsFilterConfigItem) {
+    const index = this.changedFilters.indexOf(item);
+
+    if (index > -1) {
+      this.changedFilters.splice(index, 1);
+      item.clear();
+    }
+
+    this.change();
+  }
+
   /**
    * Call change callback and apply new filter values
    */
@@ -388,23 +369,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.config.updateModelValues();
     const query = this.config.gets({ flatten: true });
     const sort = this.config.getSort();
-
-    const queryChanged = !objectsAreEquals(this._query, query);
-
-    if (queryChanged) {
-      this._query = query;
-
-      this.storePersistValues();
-      this.updateFilledCounter();
-
-      if (this.config.change) {
-        this.config.change(cloneDeep(query), sort);
-      }
-
-      if (this.config.queryParam) {
-        this._queryParams.updateQueryParams(query);
-      }
-    }
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
       || (sort && this._sort && !objectsAreEquals(this._sort, sort));
@@ -416,12 +380,30 @@ export class FilterComponent implements OnInit, OnDestroy {
         this.config.sortChange(cloneDeep(query), sort);
       }
     }
+
+    // This should be an option or a done with an wrapping helper function
+    // because it restricts functionality ie. reload
+    //const queryChanged = !objectsAreEquals(this._query, query);
+    //if (queryChanged) {
+
+    this._query = query;
+
+    this.storePersistValues();
+    this.updateFilledCounter();
+
+    if (this.config.change) {
+      this.config.change(cloneDeep(query), sort);
+    }
+
+    if (this.config.queryParam) {
+      this._queryParams.updateQueryParams(query);
+    }
   }
 
   /**
    * Do update count of filled filters
    */
-  public updateFilledCounter() {
+  private updateFilledCounter() {
     this.changedFilters = this.config.getFilledItems();
 
     this.changedFilters
@@ -437,7 +419,7 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Store updated filter data into localstorage
    * @param changedItem
    */
-  public filterChange(changedItem: FsFilterConfigItem = null) {
+  private filterChange(changedItem: FsFilterConfigItem = null) {
 
     if (changedItem) {
       // if (changedItem === this.config.searchInput) {
@@ -451,23 +433,38 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.change();
   }
 
-  /**
-   * Just reload with same values
-   */
-  public reload(event) {
-    event.stopPropagation();
-
-    const query = this.config.gets({ flatten: true });
-
-    if (this.config.reload) {
-      this.config.reload(cloneDeep(query), this.config.getSort());
+  private destroyFilterDrawer() {
+    window.document.body.classList.remove('fs-filter-open');
+    if (this._filterDrawerRef) {
+      this.appRef.detachView(this._filterDrawerRef.hostView);
+      this._filterDrawerRef.destroy();
+      this._filterDrawerRef = null;
     }
+  }
+
+  private watchSearchInput() {
+    this.modelChanged
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(500),
+        takeUntil(this.config.destroy$),
+      )
+      .subscribe((value) => {
+
+        const textItem = this.config.items.find((item) => item.type === ItemType.Text);
+
+        if (textItem) {
+          textItem.model = value;
+        }
+
+        this.filterChange();
+      })
   }
 
   /**
    * Restoring values from local storage
    */
-  public restorePersistValues() {
+  private restorePersistValues() {
     this.persists = this._store.get(this.config.namespace + '-persist', {});
 
     if (this.persists === undefined) {
@@ -502,7 +499,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   /**
    * Store values to local storage
    */
-  public storePersistValues() {
+  private storePersistValues() {
     if (this.config.persist) {
       this.persists[this.config.persist.name] = {
         data: this.config.gets({expand: true, names: false}),
@@ -513,32 +510,38 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Reset filter
-   * @param item
-   */
-  public resetFilter(item: FsFilterConfigItem) {
-    const index = this.changedFilters.indexOf(item);
+  private appendComponentToBody(component: any) {
 
-    if (index > -1) {
-      this.changedFilters.splice(index, 1);
-      item.clear();
-    }
+    const data = {
+      items: this.config.items,
+      showSortBy: 'showSortBy',
+      sortBy: this.config.sortByItem,
+      sortDirection: this.config.sortDirectionItem,
+      filterChanged: this.filterChange.bind(this),
+      search: this.search.bind(this),
+      done: this.hide.bind(this),
+      clear: this.clear.bind(this)
+    };
 
-    this.change();
-  }
+    const componentInjector = Injector.create({
+      providers: [
+        {
+          provide: FILTER_DRAWER_DATA,
+          useValue: data,
+        }
+      ],
+      parent: this.injector,
+    })
 
+    this._filterDrawerRef = this.componentFactoryResolver
+      .resolveComponentFactory(component)
+      .create(componentInjector);
 
-  private updateSearchText() {
-    // if (this.config.searchInput && this.config.searchInput.model) {
-    //   this.searchText = this.config.searchInput.model;
-    // }
-  }
+    this.appRef.attachView(this._filterDrawerRef.hostView);
 
-  private fireInitCallback() {
-    this._query = this.config.gets({ flatten: true });
-    this._sort = this.config.getSort();
+    const domElem = (this._filterDrawerRef.hostView as EmbeddedViewRef<any>)
+      .rootNodes[0] as HTMLElement;
 
-    this.config.init(this._query, this.config.getSort());
+    document.body.appendChild(domElem);
   }
 }
