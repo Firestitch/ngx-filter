@@ -20,6 +20,7 @@ import { FsCommonModule } from '@firestitch/common';
 import { FsStore, FsStoreModule } from '@firestitch/store';
 import { FsChipModule } from '@firestitch/chip';
 import { FsLabelModule } from '@firestitch/label';
+import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 
 import { FilterComponent } from './components/filter/filter.component';
@@ -60,7 +61,8 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
     FsStoreModule,
     FsDatePickerModule,
     FsLabelModule,
-    FsAutocompleteModule
+    FsAutocompleteModule,
+    FsScrollModule
   ],
   declarations: [
     BaseItemComponent,

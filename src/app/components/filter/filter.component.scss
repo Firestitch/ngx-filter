@@ -110,21 +110,6 @@
       padding-left: 4px;
     }
   }
-
-  &.filters-open {
-
-    .main-filter-bar md-input-container input,
-    .menu-filter-input .filters {
-      visibility: visible;
-    }
-
-    /* Used to raise the search input and filter chips above the backdrop */
-    .filter-chips,
-    .filter-input-field {
-      z-index: 998;
-      position: relative;
-    }
-  }
 }
 
 

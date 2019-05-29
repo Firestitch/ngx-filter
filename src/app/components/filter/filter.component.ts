@@ -28,6 +28,7 @@ import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
 import { FilterDrawerComponent } from '../filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
+import { FsDocumentScrollService } from '@firestitch/scroll';
 
 
 @Component({
@@ -90,9 +91,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _location: Location,
     private _route: ActivatedRoute,
     private _router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private injector: Injector
+    private _componentFactoryResolver: ComponentFactoryResolver,
+    private _appRef: ApplicationRef,
+    private _injector: Injector,
+    private _documentScrollService: FsDocumentScrollService
   ) {
     this.updateWindowWidth();
   }
@@ -287,6 +289,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     if (state) {
       window.document.body.classList.add('fs-filter-open');
+      this._documentScrollService.disable();
     }
 
     this.appendComponentToBody(FilterDrawerComponent);
@@ -435,8 +438,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private destroyFilterDrawer() {
     window.document.body.classList.remove('fs-filter-open');
+    this._documentScrollService.enable();
     if (this._filterDrawerRef) {
-      this.appRef.detachView(this._filterDrawerRef.hostView);
+      this._appRef.detachView(this._filterDrawerRef.hostView);
       this._filterDrawerRef.destroy();
       this._filterDrawerRef = null;
     }
@@ -530,14 +534,14 @@ export class FilterComponent implements OnInit, OnDestroy {
           useValue: data,
         }
       ],
-      parent: this.injector,
+      parent: this._injector,
     })
 
-    this._filterDrawerRef = this.componentFactoryResolver
+    this._filterDrawerRef = this._componentFactoryResolver
       .resolveComponentFactory(component)
       .create(componentInjector);
 
-    this.appRef.attachView(this._filterDrawerRef.hostView);
+    this._appRef.attachView(this._filterDrawerRef.hostView);
 
     const domElem = (this._filterDrawerRef.hostView as EmbeddedViewRef<any>)
       .rootNodes[0] as HTMLElement;
