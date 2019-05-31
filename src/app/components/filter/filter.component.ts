@@ -60,8 +60,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  updateWindowWidth(event?) {
+  @HostListener('window:resize')
+  updateWindowWidth() {
     this.windowDesktop = window.innerWidth > 1200;
   }
 
@@ -232,10 +232,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public modelChange(text) {
     this.modelChanged.next(text);
-  }
-
-  public backdropClick(event) {
-    this.changeVisibilityClick(false, event);
   }
 
   public hide() {

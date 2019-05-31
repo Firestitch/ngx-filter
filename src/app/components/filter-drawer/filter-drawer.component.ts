@@ -21,6 +21,12 @@ import { Subject } from 'rxjs';
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDrawerComponent implements DoCheck {
+
+  @HostListener('window:resize')
+  updateWindowWidth() {
+    this.windowDesktop = window.innerWidth > 1200;
+  }
+
   @Input() public items: FsFilterConfigItem[] = [];
   @Input() public showSortBy;
   @Input() public sortBy = null;
@@ -33,7 +39,7 @@ export class FilterDrawerComponent implements DoCheck {
   protected _search: Function;
   protected _filterChanged: Function;
   protected _click: Function;
-
+  public windowDesktop = false;
 
   constructor(protected _differs: IterableDiffers,
               protected _cd: ChangeDetectorRef,
@@ -50,6 +56,8 @@ export class FilterDrawerComponent implements DoCheck {
     this._differ = this._differs.find(this.items).create<FsFilterConfigItem>((index, item) => {
       return item.model;
     });
+
+    this.updateWindowWidth();
   }
 
   public ngDoCheck() {
@@ -72,5 +80,9 @@ export class FilterDrawerComponent implements DoCheck {
 
   public filterChanged(event) {
     this._filterChanged(event);
+  }
+
+  public backdropClick() {
+    this.done();
   }
 }

@@ -115,9 +115,9 @@ export class KitchenSinkComponent {
           chipLabel: 'Special Label',
           change: (item) => {
 
-            const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
-            filterItem.values.pop();
-            //filterItem.clear();
+            // const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
+            // filterItem.values.pop();
+            // //filterItem.clear();
           },
           values: () => {
 
