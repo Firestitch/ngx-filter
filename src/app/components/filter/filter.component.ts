@@ -29,13 +29,17 @@ import { QueryParams } from '../../models/query-params';
 import { FilterDrawerComponent } from '../filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FsDocumentScrollService } from '@firestitch/scroll';
+import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 
 
 @Component({
   selector: 'fs-filter',
   styleUrls: [ './filter.component.scss' ],
   templateUrl: './filter.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    FsFilterOverlayService,
+  ]
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
@@ -94,7 +98,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _componentFactoryResolver: ComponentFactoryResolver,
     private _appRef: ApplicationRef,
     private _injector: Injector,
-    private _documentScrollService: FsDocumentScrollService
+    private _documentScrollService: FsDocumentScrollService,
+    private _filterOverlay: FsFilterOverlayService,
   ) {
     this.updateWindowWidth();
   }
@@ -292,7 +297,18 @@ export class FilterComponent implements OnInit, OnDestroy {
       this._documentScrollService.disable();
     }
 
-    this.appendComponentToBody(FilterDrawerComponent);
+    this._filterOverlay.open(this._injector,  {
+      items: this.config.items,
+      showSortBy: 'showSortBy',
+      sortBy: this.config.sortByItem,
+      sortDirection: this.config.sortDirectionItem,
+      filterChanged: this.filterChange.bind(this),
+      search: this.search.bind(this),
+      done: this.hide.bind(this),
+      clear: this.clear.bind(this)
+    });
+
+    // this.appendComponentToBody(FilterDrawerComponent);
 
     if (this._firstOpen) {
       this.config.loadValuesForPendingItems();
@@ -535,7 +551,7 @@ export class FilterComponent implements OnInit, OnDestroy {
         }
       ],
       parent: this._injector,
-    })
+    });
 
     this._filterDrawerRef = this._componentFactoryResolver
       .resolveComponentFactory(component)

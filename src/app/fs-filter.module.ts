@@ -13,6 +13,8 @@ import {
   MatCheckboxModule,
   MAT_LABEL_GLOBAL_OPTIONS
 } from '@angular/material';
+import { PortalModule } from '@angular/cdk/portal';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FsDatePickerModule } from '@firestitch/datepicker';
@@ -62,7 +64,8 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
     FsDatePickerModule,
     FsLabelModule,
     FsAutocompleteModule,
-    FsScrollModule
+    FsScrollModule,
+    PortalModule,
   ],
   declarations: [
     BaseItemComponent,
