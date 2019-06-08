@@ -6,7 +6,8 @@ import {
   Input,
   IterableDiffer,
   IterableDiffers,
-  Inject
+  Inject,
+  HostListener
 } from '@angular/core';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
