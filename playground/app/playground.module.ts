@@ -14,6 +14,8 @@ import { AppComponent } from './app.component';
 import { AppMaterialModule } from './material.module';
 
 import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './components';
+import { DialogExampleComponent } from './components/dialog-example';
+import { DialogComponent } from './components/dialog';
 
 
 @NgModule({
@@ -29,15 +31,20 @@ import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './c
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot([
       { path: '', component: ExamplesComponent, pathMatch: 'full' },
-      { path: 'nofilters', component: NofiltersComponent }
+      { path: 'nofilters', component: NofiltersComponent },
+      { path: 'dialog', component: DialogExampleComponent }
     ])
   ],
-  entryComponents: [],
+  entryComponents: [
+    DialogComponent
+  ],
   declarations: [
     AppComponent,
     KitchenSinkComponent,
     NofiltersComponent,
-    ExamplesComponent
+    ExamplesComponent,
+    DialogExampleComponent,
+    DialogComponent
   ],
   providers: [],
 })

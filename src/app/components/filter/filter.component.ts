@@ -8,10 +8,8 @@ import {
   ViewChild,
   ViewEncapsulation,
   HostListener,
-  ComponentFactoryResolver,
   ApplicationRef,
-  Injector,
-  EmbeddedViewRef
+  Injector
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,16 +24,19 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { QueryParams } from '../../models/query-params';
-import { FilterDrawerComponent } from '../filter-drawer/filter-drawer.component';
-import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FsDocumentScrollService } from '@firestitch/scroll';
+import { FsFilterOverlayService } from '../../services/filter-overlay.service';
+import { Subject } from 'rxjs';
 
 
 @Component({
   selector: 'fs-filter',
   styleUrls: [ './filter.component.scss' ],
   templateUrl: './filter.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [
+    FsFilterOverlayService,
+  ]
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
@@ -85,18 +86,36 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _query = {};
   private _queryParams: QueryParams;
   private _sort = {};
+  private _destroy$ = new Subject();
 
   constructor(
     private _store: FsStore,
     private _location: Location,
     private _route: ActivatedRoute,
     private _router: Router,
-    private _componentFactoryResolver: ComponentFactoryResolver,
     private _appRef: ApplicationRef,
     private _injector: Injector,
-    private _documentScrollService: FsDocumentScrollService
+    private _documentScrollService: FsDocumentScrollService,
+    private _filterOverlay: FsFilterOverlayService,
   ) {
     this.updateWindowWidth();
+
+    this._filterOverlay.attach$
+    .pipe(
+     takeUntil(this._destroy$)
+    )
+    .subscribe(() => {
+      this.showFilterMenu = true;
+    });
+
+    this._filterOverlay.detach$
+    .pipe(
+      takeUntil(this._destroy$)
+    )
+    .subscribe(() => {
+      this.updateFilledCounter();
+      this.showFilterMenu = false;
+    });
   }
 
   public set config(config) {
@@ -147,11 +166,14 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+
+    this.destroyFilterDrawer();
+    this._destroy$.next();
+    this._destroy$.complete();
+
     if (this.config) {
       this.config.destroy();
     }
-
-    this.destroyFilterDrawer();
   }
 
   /**
@@ -270,25 +292,28 @@ export class FilterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.showFilterMenu = state;
-
     if (!state) {
-      this.updateFilledCounter();
       return this.destroyFilterDrawer();
     }
 
-    const notTextItem = this.config.items.find((item) => item.type !== ItemType.Text);
+    const notTextItem = this.config.items.find((item, index) => {
+      return item.type !== ItemType.Keyword;
+    });
 
     if (!notTextItem) {
       return;
     }
 
-    if (state) {
-      window.document.body.classList.add('fs-filter-open');
-      this._documentScrollService.disable();
-    }
-
-    this.appendComponentToBody(FilterDrawerComponent);
+    this._filterOverlay.open(this._injector,  {
+      items: this.config.items,
+      showSortBy: 'showSortBy',
+      sortBy: this.config.sortByItem,
+      sortDirection: this.config.sortDirectionItem,
+      filterChanged: this.filterChange.bind(this),
+      search: this.search.bind(this),
+      done: this.hide.bind(this),
+      clear: this.clear.bind(this)
+    });
 
     if (this._firstOpen) {
       this.config.loadValuesForPendingItems();
@@ -433,13 +458,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private destroyFilterDrawer() {
-    window.document.body.classList.remove('fs-filter-open');
-    this._documentScrollService.enable();
-    if (this._filterDrawerRef) {
-      this._appRef.detachView(this._filterDrawerRef.hostView);
-      this._filterDrawerRef.destroy();
-      this._filterDrawerRef = null;
-    }
+    this._filterOverlay.close();
   }
 
   private watchSearchInput() {
@@ -451,7 +470,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       )
       .subscribe((value) => {
 
-        const textItem = this.config.items.find((item) => item.type === ItemType.Text);
+        const textItem = this.config.items.find((item) => item.type === ItemType.Keyword);
 
         if (textItem) {
           textItem.model = value;
@@ -508,40 +527,5 @@ export class FilterComponent implements OnInit, OnDestroy {
 
       this._store.set(this.config.namespace + '-persist', this.persists, {});
     }
-  }
-
-  private appendComponentToBody(component: any) {
-
-    const data = {
-      items: this.config.items,
-      showSortBy: 'showSortBy',
-      sortBy: this.config.sortByItem,
-      sortDirection: this.config.sortDirectionItem,
-      filterChanged: this.filterChange.bind(this),
-      search: this.search.bind(this),
-      done: this.hide.bind(this),
-      clear: this.clear.bind(this)
-    };
-
-    const componentInjector = Injector.create({
-      providers: [
-        {
-          provide: FILTER_DRAWER_DATA,
-          useValue: data,
-        }
-      ],
-      parent: this._injector,
-    })
-
-    this._filterDrawerRef = this._componentFactoryResolver
-      .resolveComponentFactory(component)
-      .create(componentInjector);
-
-    this._appRef.attachView(this._filterDrawerRef.hostView);
-
-    const domElem = (this._filterDrawerRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    document.body.appendChild(domElem);
   }
 }

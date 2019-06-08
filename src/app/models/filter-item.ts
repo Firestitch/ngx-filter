@@ -14,17 +14,18 @@ import { IFilterConfigItem } from '../interfaces/item-config.interface';
 
 
 export enum ItemType {
-  Text            = 'text',
-  Select          = 'select',
-  Range           = 'range',
-  Date            = 'date',
-  DateTime        = 'datetime',
-  DateRange       = 'daterange',
-  DateTimeRange   = 'datetimerange',
-  AutoComplete    = 'autocomplete',
+  Text              = 'text',
+  Select            = 'select',
+  Range             = 'range',
+  Date              = 'date',
+  DateTime          = 'datetime',
+  DateRange         = 'daterange',
+  DateTimeRange     = 'datetimerange',
+  AutoComplete      = 'autocomplete',
   AutoCompleteChips = 'autocompletechips',
-  Checkbox        = 'checkbox',
-  Chips           = 'chips',
+  Checkbox          = 'checkbox',
+  Chips             = 'chips',
+  Keyword           = 'keyword',
 }
 
 export class FsFilterConfigItem extends Model {
@@ -257,7 +258,8 @@ export class FsFilterConfigItem extends Model {
         this.model = {};
       } break;
 
-      case ItemType.Text: {
+      case ItemType.Text:
+      case ItemType.Keyword: {
         this.model = '';
       } break;
 
@@ -297,7 +299,8 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.Text: {
+      case ItemType.Text:
+      case ItemType.Keyword: {
         this.valueChanged = this.model && this.model !== '';
       } break;
 
@@ -373,7 +376,8 @@ export class FsFilterConfigItem extends Model {
 
   public sanitize() {
     switch (this.type) {
-      case ItemType.Text: {
+      case ItemType.Text:
+      case ItemType.Keyword: {
         //?????
       } break;
       case ItemType.Select: {

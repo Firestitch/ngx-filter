@@ -33,8 +33,8 @@ export class FsFilterConfig extends Model {
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
   public sortDirectionItem: FsFilterConfigItem = null;
-  //public searchInput = null;
-  public singleTextFilter = false;
+  public keywordFilter = false;
+  public nonKeywordFilters = false;
 
   private _filtersNames = [];
   private _destroy$ = new Subject<void>();
@@ -53,7 +53,11 @@ export class FsFilterConfig extends Model {
 
     if (items && Array.isArray(items)) {
 
-      this.items = items.map((item) => {
+      this.items = items.map((item, index) => {
+
+        if (index === 0 && item.type === ItemType.Text) {
+          item.type = ItemType.Keyword;
+        }
 
         if (item && item.name && this._filtersNames.indexOf(item.name) === -1) {
           this._filtersNames.push(item.name);
@@ -74,9 +78,8 @@ export class FsFilterConfig extends Model {
 
     this.initSorting(route, persists);
 
-    if (this.items.length === 1 && this.items[0].type === ItemType.Text) {
-      this.singleTextFilter = true;
-    }
+    this.keywordFilter = !!this.items.find(e => ItemType.Keyword === e.type);
+    this.nonKeywordFilters = !!this.items.find(e => ItemType.Keyword !== e.type);
   }
 
   public getItem(name) {
@@ -300,7 +303,7 @@ export class FsFilterConfig extends Model {
           }
         } break;
 
-        case ItemType.Text: {} break;
+        case ItemType.Keyword: {} break;
 
         default: {
           if (filter.model &&
