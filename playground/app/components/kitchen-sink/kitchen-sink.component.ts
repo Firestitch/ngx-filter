@@ -104,7 +104,7 @@ export class KitchenSinkComponent {
       items: [
         {
           name: 'keyword',
-          type: ItemType.Text,
+          type: ItemType.Keyword,
           label: 'Search',
           query: 'keyword'
         },
@@ -229,6 +229,11 @@ export class KitchenSinkComponent {
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' }
           ]
+        },
+        {
+          name: 'max_price',
+          type: ItemType.Text,
+          label: 'Max Price'
         }
       ]
     };

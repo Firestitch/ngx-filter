@@ -6,12 +6,12 @@ import {
   Input,
   IterableDiffer,
   IterableDiffers,
-  Inject,
-  HostListener
+  Inject
 } from '@angular/core';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
-import { Subject } from 'rxjs';
+import { OverlayRef } from '@angular/cdk/overlay';
+import { FILTER_DRAWER_OVERLAY } from 'src/app/injectors/filter-drawer-overlay';
 
 
 @Component({
@@ -37,7 +37,8 @@ export class FilterDrawerComponent implements DoCheck {
 
   constructor(protected _differs: IterableDiffers,
               protected _cd: ChangeDetectorRef,
-              @Inject(FILTER_DRAWER_DATA) data) {
+              @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
+              @Inject(FILTER_DRAWER_DATA) private data) {
     this.items = data.items;
     this.showSortBy = data.showSortBy;
     this.sortBy = data.sortBy;
@@ -64,10 +65,12 @@ export class FilterDrawerComponent implements DoCheck {
 
   public clear() {
     this._clear();
+    this.overlayRef.detach();
   }
 
   public done() {
     this._done();
+    this.overlayRef.detach();
   }
 
   public filterChanged(event) {

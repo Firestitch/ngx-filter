@@ -3,7 +3,8 @@
      [ngClass]="{
      'filters-open': showFilterMenu,
      'no-input': !showFilterInput,
-     'window-desktop': windowDesktop
+     'window-desktop': windowDesktop,
+     'keyword-filter': config.keywordFilter
      }">
   <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex="1 1 0">
     <div class="menu-filter-input" fxFlex="grow">
@@ -47,7 +48,7 @@
               matSuffix
               href="javascript:void(0)"
               class="filter"
-              *ngIf="config.singleTextFilter === false">
+              *ngIf="config.nonKeywordFilters">
               <mat-icon>filter_list</mat-icon>
             </a>
             <span class="active-filters-counter"
@@ -65,7 +66,6 @@
           </mat-form-field>
         </form>
       </div>
-      <div class="backdrop" *ngIf="!windowDesktop && showFilterMenu" (click)="backdropClick($event)"></div>
     </div>
   </div>
   <fs-filter-chips class="filter-chips"
