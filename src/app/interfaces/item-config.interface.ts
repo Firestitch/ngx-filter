@@ -23,5 +23,6 @@ export interface IFilterConfigItem {
   alias?: any;
   placeholder?: any;
   default?: any;
+  prefix?: any;
   change?(item: IFilterConfigItem): any
 }

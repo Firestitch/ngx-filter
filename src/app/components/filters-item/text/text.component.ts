@@ -13,6 +13,7 @@ import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'filter-item-text',
   templateUrl: './text.component.html',
+  styleUrls: ['./text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextComponent extends BaseItemComponent implements OnDestroy {

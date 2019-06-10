@@ -50,6 +50,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public alias: any;
   @Alias() public placeholder: any;
   @Alias() public change: Function;
+  @Alias() public prefix: string;
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;

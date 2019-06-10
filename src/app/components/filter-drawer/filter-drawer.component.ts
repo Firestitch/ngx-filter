@@ -12,7 +12,7 @@ import {
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { FILTER_DRAWER_OVERLAY } from 'src/app/injectors/filter-drawer-overlay';
+import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 
 
 @Component({
