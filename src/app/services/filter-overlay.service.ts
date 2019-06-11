@@ -22,22 +22,27 @@ export class FsFilterOverlayService implements OnDestroy {
     .pipe(
       takeUntil(this._destroy$)
     )
-    .subscribe(() => {
-      window.document.body.classList.remove('fs-filter-open');
-      //this._documentScrollService.enable();
-    });
+    .subscribe(this.detach.bind(this));
 
     this.attach$
     .pipe(
       takeUntil(this._destroy$)
     )
-    .subscribe(() => {
-      window.document.body.classList.add('fs-filter-open');
-      //this._documentScrollService.disable();
-    });
+    .subscribe(this.attach.bind(this));
+  }
+
+  private detach() {
+    window.document.body.classList.remove('fs-filter-open');
+  }
+
+  private attach() {
+    window.document.body.classList.add('fs-filter-open');
   }
 
   public close() {
+
+    this.detach();
+
     if (this._overlayRef) {
       this._overlayRef.detach();
       this._overlayRef = null;
