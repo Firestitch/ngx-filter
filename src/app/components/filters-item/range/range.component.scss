@@ -1,9 +1,15 @@
+.spacer {
+  width: 15px;
+}
 
+mat-form-field {
+  min-width: initial;
+  display: flex;
+  width: auto;
 
-  mat-form-field {
-    min-width: initial;
-    width: 50px;
-    &.filter-range-min {
-      margin-right: 5px;
+  ::ng-deep {
+    .mat-form-field-infix {
+      width: auto;
     }
   }
+}
