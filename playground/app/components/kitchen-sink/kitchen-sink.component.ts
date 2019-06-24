@@ -179,12 +179,10 @@ export class KitchenSinkComponent {
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           values: (keyword) => {
-            console.log('kw', keyword);
             return new BehaviorSubject(this.users)
               .pipe(
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
                 map((users) => nameValue(users, 'name', 'id')),
-                tap((u) => { console.log('u', u, keyword)})
               )
           }
         },

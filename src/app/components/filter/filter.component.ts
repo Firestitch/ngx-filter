@@ -428,7 +428,6 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Do update count of filled filters
    */
   private updateFilledCounter() {
-    debugger;
     this.changedFilters = this.config.getFilledItems();
 
     this.changedFilters
