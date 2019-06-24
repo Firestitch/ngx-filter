@@ -278,12 +278,15 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (!this.windowDesktop) {
       return;
     }
-
     if (['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) >= 0) {
-      return this.changeVisibility(false);
-    }
+      this.changeVisibility(false);
 
-    this.changeVisibility(true);
+      if (this._searchTextInput) {
+        this._searchTextInput.nativeElement.blur()
+      }
+    } else {
+      this.changeVisibility(true);
+    }
   }
 
   public changeVisibility(state: boolean) {
