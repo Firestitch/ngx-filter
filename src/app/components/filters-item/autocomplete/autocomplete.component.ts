@@ -4,7 +4,6 @@ import {
   Component,
   KeyValueDiffers
 } from '@angular/core';
-import { isObject } from 'lodash-es';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
@@ -24,7 +23,7 @@ export class AutocompleteComponent extends BaseItemComponent {
 
   public displayWith = (data) => {
     return data ? data.name : data;
-  }
+  };
 
   public ngModelChange() {
     this.itemChange();

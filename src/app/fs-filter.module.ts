@@ -24,6 +24,7 @@ import { FsChipModule } from '@firestitch/chip';
 import { FsLabelModule } from '@firestitch/label';
 import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
+import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -64,6 +65,7 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
     FsDatePickerModule,
     FsLabelModule,
     FsAutocompleteModule,
+    FsAutocompleteChipsModule,
     FsScrollModule,
     PortalModule,
   ],
