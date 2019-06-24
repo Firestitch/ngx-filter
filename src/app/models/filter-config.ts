@@ -286,6 +286,7 @@ export class FsFilterConfig extends Model {
         } break;
 
         case ItemType.AutoCompleteChips: {
+          debugger;
           if (Array.isArray(filter.model) && filter.model.length) {
             acc.push(filter);
           }

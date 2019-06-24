@@ -1,4 +1,19 @@
-<mat-form-field floatLabel="auto">
+<fs-autocomplete-chips
+  [fetch]="item.values"
+  [ngModel]="item.selectedValue"
+  (ngModelChange)="setSelectedValue($event)"
+  (selected)="addAutocompleteChipItem($event)"
+  (removed)="removeAutocompleteChipItem($event)"
+  [allowText]="true"
+  [placeholder]="item.label"
+  imageProperty="image"
+  name="model">
+  <ng-template fsAutocompleteObject let-object="object">
+    {{ object.name }}
+  </ng-template>
+</fs-autocomplete-chips>
+
+<!--<mat-form-field floatLabel="auto">
   <mat-label>{{item.label}}</mat-label>
   <mat-chip-list #chipList>
     <mat-chip *ngFor="let item of item.model"
@@ -25,4 +40,4 @@
     </mat-option>
   </mat-autocomplete>
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
-</mat-form-field>
+</mat-form-field>-->
