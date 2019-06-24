@@ -1,6 +1,6 @@
 <fs-autocomplete-chips
   [fetch]="item.values"
-  [ngModel]="item.selectedValue"
+  [ngModel]="item.model"
   (ngModelChange)="setSelectedValue($event)"
   (selected)="addAutocompleteChipItem($event)"
   (removed)="removeAutocompleteChipItem($event)"
