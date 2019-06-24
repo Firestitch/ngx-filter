@@ -6,11 +6,7 @@ import {
   KeyValueDiffers,
   ViewChild,
 } from '@angular/core';
-import {
-  filter as arrayFilter,
-  list as arrayList,
-  remove as arrayRemove
-} from '@firestitch/common';
+import { remove as arrayRemove } from '@firestitch/common';
 
 import { BaseItemComponent } from '../base-item/base-item.component';
 
@@ -64,14 +60,16 @@ export class AutocompletechipsComponent extends BaseItemComponent implements DoC
   // }
 
   public addAutocompleteChipItem(event) {
-    if (this.item.model.indexOf(event.data.value) === -1) {
+    if (event.data && this.item.model.indexOf(event.data.value) === -1) {
       this.item.model.push(event.data);
       this.itemChange();
     }
   }
 
   public setSelectedValue(event) {
-    this.item.selectedValue = event.map((val) => val.data);
+    this.item.selectedValue = event
+      .filter((val) => !!val.data)
+      .map((val) => val.data);
   }
 
   public removeAutocompleteChipItem(event) {
