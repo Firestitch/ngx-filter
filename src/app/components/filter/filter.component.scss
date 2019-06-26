@@ -171,11 +171,12 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 599px) {
+// Commented because of TAD-T1219
+/*@media screen and (max-width: 599px) {
   .fs-filter .reload {
     display: none;
   }
-}
+}*/
 
 @media screen and (max-width: 1199px) {
 
