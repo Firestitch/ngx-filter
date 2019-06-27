@@ -6,11 +6,13 @@ import {
   EventEmitter,
   Input,
   KeyValueDiffer,
-  KeyValueDiffers,
+  KeyValueDiffers, OnDestroy,
   Output
 } from '@angular/core';
 
 import { FsFilterConfigItem } from '../../../models/filter-item';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -18,7 +20,7 @@ import { FsFilterConfigItem } from '../../../models/filter-item';
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseItemComponent implements DoCheck {
+export class BaseItemComponent implements DoCheck, OnDestroy {
   @Input()
   set item(value) {
     this._item = value;
@@ -30,11 +32,15 @@ export class BaseItemComponent implements DoCheck {
   protected _item: FsFilterConfigItem;
   protected _kvDiffer: KeyValueDiffer<string, any>;
 
+  private _debouncer$ = new Subject();
+  private _destroy$ = new Subject();
+
   constructor(
     protected _kvDiffers: KeyValueDiffers,
     protected _cd: ChangeDetectorRef
   ) {
     this._kvDiffer = this._kvDiffers.find(this.item || {}).create();
+    this.listenWithDebounce();
   }
 
   get item() {
@@ -51,12 +57,27 @@ export class BaseItemComponent implements DoCheck {
     }
   }
 
+  public ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+  public listenWithDebounce() {
+    this._debouncer$
+      .pipe(
+        takeUntil(this._destroy$),
+        debounceTime(300),
+      )
+      .subscribe(() => {
+        if (this.item.change) {
+          this.item.change(this.item);
+        }
+
+        this.itemChanged.next(this.item);
+      })
+  }
+
   public itemChange() {
-
-    if (this.item.change) {
-      this.item.change(this.item);
-    }
-
-    this.itemChanged.next(this.item);
+    this._debouncer$.next();
   }
 }
