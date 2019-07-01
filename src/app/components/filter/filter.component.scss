@@ -59,6 +59,8 @@
 
     .menu-filter-input {
 
+      width: 100%;
+
       .main-filter-bar {
         height: 40px; /* Largest height between inputs, buttons, icons */
 
@@ -81,6 +83,10 @@
               color: inherit;
             }
           }
+        }
+
+        .mat-form-field-infix {
+          width: auto;
         }
       }
     }
@@ -122,6 +128,7 @@
 
 .main-filter-bar {
   overflow: hidden;
+
   form {
     width: 100%;
   }
@@ -198,7 +205,7 @@
 
 body.fs-filter-open {
   &::-webkit-scrollbar {
-    width: 0px;
+    width: 0;
     background: transparent;
   }
 }
