@@ -437,9 +437,9 @@ export class FilterComponent implements OnInit, OnDestroy {
       .filter((item) => item.hasPendingValues)
       .forEach((item) => item.loadValues(false));
 
-    this.activeFiltersWithInputCount = (this.searchText !== '')
-      ? this.changedFilters.length + 1
-      : this.changedFilters.length;
+    this.activeFiltersWithInputCount =  this.changedFilters
+                                          .filter((item) => item.type !== ItemType.Keyword)
+                                          .length;
   }
 
   /**
@@ -449,10 +449,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   private filterChange(changedItem: FsFilterConfigItem = null) {
 
     if (changedItem) {
-      // if (changedItem === this.config.searchInput) {
-      //   this.searchText = changedItem.model;
-      // }
-
       changedItem.checkIfValueChanged();
     }
 

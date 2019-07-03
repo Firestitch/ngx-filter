@@ -68,9 +68,11 @@
       </div>
     </div>
   </div>
-  <fs-filter-chips class="filter-chips"
-                   *ngIf="config.chips"
-                   [filters]="changedFilters"
-                   (remove)="resetFilter($event)">
+  <fs-filter-chips
+    class="filter-chips"
+    *ngIf="config.chips"
+    [filters]="changedFilters"
+    (remove)="resetFilter($event)"
+    [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
   </fs-filter-chips>
 </div>
