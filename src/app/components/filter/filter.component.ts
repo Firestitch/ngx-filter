@@ -81,6 +81,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public windowDesktop = false;
 
   private _filterDrawerRef;
+  private _searchTextItem: FsFilterConfigItem;
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
   private _query = {};
@@ -123,12 +124,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.restorePersistValues();
     this.config.initItems(config.items, this._route, this.persists);
 
+    this._searchTextItem = this.config.items.find((item) => item.type === ItemType.Keyword);
+    this.searchText = this._searchTextItem.model;
+
     if (this.config.queryParam) {
       this._queryParams = new QueryParams(this._router, this._route, this.config.items);
     }
 
     // Count active filters after restore
     this.updateFilledCounter();
+
+    this.storePersistValues();
   }
 
   public get config() {
@@ -461,6 +467,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private watchSearchInput() {
+
     this.modelChanged
       .pipe(
         distinctUntilChanged(),
@@ -468,11 +475,8 @@ export class FilterComponent implements OnInit, OnDestroy {
         takeUntil(this.config.destroy$),
       )
       .subscribe((value) => {
-
-        const textItem = this.config.items.find((item) => item.type === ItemType.Keyword);
-
-        if (textItem) {
-          textItem.model = value;
+        if (this._searchTextItem) {
+          this._searchTextItem.model = value;
         }
 
         this.filterChange();
