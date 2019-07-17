@@ -31,9 +31,14 @@ import { DialogComponent } from './components/dialog';
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot([
       { path: '', component: ExamplesComponent, pathMatch: 'full' },
+      { path: 'organizations', component: ExamplesComponent, pathMatch: 'full' },
+      { path: 'item', component: NofiltersComponent, pathMatch: 'full' },
       { path: 'nofilters', component: NofiltersComponent },
       { path: 'dialog', component: DialogExampleComponent }
-    ])
+    ],
+      {
+        enableTracing: true,
+      })
   ],
   entryComponents: [
     DialogComponent
