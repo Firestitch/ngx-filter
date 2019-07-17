@@ -30,6 +30,7 @@ export class QueryParams {
 
     // Update query
     this._router.navigate([], {
+      replaceUrl: true,
       relativeTo: this._route,
       queryParams: newParams,
       queryParamsHandling: 'merge'
