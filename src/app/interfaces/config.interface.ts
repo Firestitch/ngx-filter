@@ -15,6 +15,7 @@ export interface FilterConfig {
   sorts?: SortItem[];
   sort?: Sort;
   sortChange?: ChangeFn;
+  reloadWhenConfigChanged?: boolean;
 }
 
 export interface SortItem {

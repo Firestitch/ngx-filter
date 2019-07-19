@@ -29,6 +29,7 @@ export class FsFilterConfig extends Model {
   @Alias() public change: ChangeFn;
   @Alias() public reload: ChangeFn;
   @Alias() public sortChange: ChangeFn;
+  @Alias() public reloadWhenConfigChanged: boolean;
 
   public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;

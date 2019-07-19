@@ -330,7 +330,15 @@ export class FsFilterConfigItem extends Model {
       ) {
         value = value == this.checked;
       } else if (this.isTypeSelect() && this.multiple) {
-        value = clone(value);
+        if (Array.isArray(value)) {
+          value = value.map((val) => {
+            if (isNaN(val)) {
+              return val;
+            } else {
+              return +val;
+            }
+          })
+        }
       } else if (this.isTypeSelect() || this.isTypeAutocomplete()) {
         value = +value;
       }

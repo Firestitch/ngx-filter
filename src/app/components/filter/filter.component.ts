@@ -124,17 +124,23 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.restorePersistValues();
     this.config.initItems(config.items, this._route, this.persists);
 
-    this._searchTextItem = this.config.items.find((item) => item.type === ItemType.Keyword);
-    this.searchText = this._searchTextItem.model;
-
     if (this.config.queryParam) {
       this._queryParams = new QueryParams(this._router, this._route, this.config.items);
     }
 
+    this._searchTextItem = this.config.items.find((item) => item.type === ItemType.Keyword);
+    this.searchText = this._searchTextItem.model;
+
     // Count active filters after restore
     this.updateFilledCounter();
 
-    this.storePersistValues();
+    if (this.config.persist) {
+      this.storePersistValues();
+    }
+
+    if (!!this.config.reloadWhenConfigChanged) {
+      this.change();
+    }
   }
 
   public get config() {
