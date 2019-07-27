@@ -38,6 +38,7 @@ import { RangeComponent } from './components/filters-item/range/range.component'
 import { AutocompleteComponent } from './components/filters-item/autocomplete/autocomplete.component';
 import { AutocompletechipsComponent } from './components/filters-item/autocompletechips/autocompletechips.component';
 import { DateComponent } from './components/filters-item/date/date.component';
+import { DateRangeComponent } from './components/filters-item/date-range/date-range.component';
 import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.component';
 import { BaseItemComponent } from './components/filters-item/base-item/base-item.component';
 import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
@@ -84,6 +85,7 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
     AutocompleteComponent,
     AutocompletechipsComponent,
     DateComponent,
+    DateRangeComponent,
     CheckboxComponent,
     FilterDrawerComponent,
     SelectBackdropComponent,

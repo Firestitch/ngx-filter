@@ -5,7 +5,7 @@ import { FilterComponent } from '@firestitch/filter';
 import { nameValue, filter } from '@firestitch/common'
 
 import { BehaviorSubject, of } from 'rxjs';
-import { map, delay, tap } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { FsFilterConfigItem } from 'src/app/models/filter-item';
 import { shuffle } from 'lodash-es';
 
@@ -202,6 +202,12 @@ export class KitchenSinkComponent {
           name: 'date',
           type: ItemType.Date,
           label: 'Date'
+        },
+        {
+          name: 'date_range',
+          type: ItemType.DateRange,
+          label: 'Date Range',
+          placeholder: [ 'Date Range From', 'Date Range To'],
         },
         {
           name: 'checkbox',

@@ -15,6 +15,20 @@ export class FsItemToChip implements PipeTransform {
       case ItemType.Date: {
        result = format(model, 'date');
       } break;
+      // case ItemType.DateRange: {
+      //   const from = format(model.from, 'date');
+      //   const fromFilled = !!model.min;
+      //   const to = format(model.to, 'date');
+      //   const toFilled = !!model.to;
+      //
+      //   if (fromFilled && toFilled) {
+      //     result = `${from} to ${to}`;
+      //   } else if (fromFilled && !toFilled) {
+      //     result = `Min ${from}`;
+      //   } else if (!fromFilled && toFilled) {
+      //     result = `Max ${to}`;
+      //   }
+      // } break;
       case ItemType.Checkbox: {
         result = item.label;
       } break;
@@ -49,18 +63,18 @@ export class FsItemToChip implements PipeTransform {
       } break;
       case ItemType.DateRange:
       case ItemType.DateTimeRange: {
-        const formatTo = model.type === ItemType.DateRange ? 'date' : 'date-time';
-        const min = model.min;
-        const minFilled = model.min !== void 0;
-        const max = model.max;
-        const maxFilled = model.max !== void 0;
+        const formatTo = item.type === ItemType.DateRange ? 'date' : 'date-time';
+        const from = model.from;
+        const fromFilled = !!model.from;
+        const to = model.to;
+        const toFilled = !!model.to;
 
-        if (minFilled && maxFilled) {
-          result = `${format(min, formatTo)} - ${format(max, formatTo)}`;
-        } else if (minFilled && !maxFilled) {
-          result = `from ${format(min, formatTo)}`;
-        } else if (!minFilled && maxFilled) {
-          result = `to ${format(max, formatTo)}`;
+        if (fromFilled && toFilled) {
+          result = `${format(from, formatTo)} - ${format(to, formatTo)}`;
+        } else if (fromFilled && !toFilled) {
+          result = `from ${format(from, formatTo)}`;
+        } else if (!fromFilled && toFilled) {
+          result = `to ${format(to, formatTo)}`;
         }
       } break;
 

@@ -1,0 +1,15 @@
+mat-form-field {
+  min-width: initial;
+  display: flex;
+  width: auto;
+
+  ::ng-deep {
+    .mat-form-field-infix {
+      width: auto;
+    }
+  }
+}
+
+.range-container {
+  align-items: baseline;
+}

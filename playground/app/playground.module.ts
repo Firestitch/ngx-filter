@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 import { FsFilterModule } from '@firestitch/filter';
+import { FsDatePickerModule } from '@firestitch/datepicker';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -23,6 +24,7 @@ import { DialogComponent } from './components/dialog';
   imports: [
     BrowserModule,
     FsFilterModule,
+    FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,

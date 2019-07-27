@@ -4,8 +4,8 @@ import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
 
-import { format, isDate, isValid } from 'date-fns';
-import { clone, isObject } from 'lodash-es';
+import { isDate, isValid, parseISO } from 'date-fns';
+import { clone, isObject, isString } from 'lodash-es';
 
 import { FsFilterConfigItem, ItemType } from './filter-item';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
@@ -189,16 +189,29 @@ export class FsFilterConfig extends Model {
 
       } else if (filter.type == ItemType.DateRange || filter.type == ItemType.DateTimeRange) {
 
-        const from = value.from;
-        const to = value.to;
+        let from = value.from;
+        let to = value.to;
 
         value = {};
+
         if (from) {
-          value.from = format(from, 'yyyy-MM-dd\THH:mm:ssxxxxx');
+          if (isString(from)) {
+            from = parseISO(from);
+          }
+
+          if (isValid(from) && isDate(from)) {
+            value.from = simpleFormat(from);
+          }
         }
 
         if (to) {
-          value.to = format(to, 'yyyy-MM-dd\THH:mm:ssxxxxx');
+          if (isString(to)) {
+            to = parseISO(to);
+          }
+
+          if (isValid(to) && isDate(to)) {
+            value.to = simpleFormat(to);
+          }
         }
 
       } else if (filter.type == ItemType.AutoComplete) {
@@ -299,7 +312,7 @@ export class FsFilterConfig extends Model {
         } break;
 
         case ItemType.DateRange: case ItemType.DateTimeRange: {
-          if (filter.model.from || filter.model.to) {
+          if (filter.model && (filter.model.from || filter.model.to)) {
             acc.push(filter);
           }
         } break;

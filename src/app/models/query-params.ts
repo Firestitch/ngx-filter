@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { cloneDeep, isString } from 'lodash-es';
+import { isString } from 'lodash-es';
 import { FsFilterConfigItem, ItemType } from '../models/filter-item';
 
 
@@ -54,6 +54,8 @@ export class QueryParams {
       if (filterItem) {
         if (filterItem.type === ItemType.Range) {
           acc[filterKey] = [params[filterKey].min, params[filterKey].max].join(',')
+        } else if (filterItem.type === ItemType.DateRange) {
+          acc[filterKey] = [params[filterKey].from, params[filterKey].to].join(',')
         } else if (filterItem.isTypeSelect() && filterItem.multiple && filterItem.model && filterItem.model.length > 0) {
           acc[filterKey] = filterItem.model.join(',');
         } else if (filterItem.isTypeAutocomplete()) {
@@ -93,6 +95,14 @@ export class QueryParams {
             filterItem.model = {
               min: filterParts[0],
               max: filterParts[1]
+            };
+          }
+        } else if (filterItem.type === ItemType.DateRange) {
+          if (params[queryKey] && isString(params[queryKey])) {
+            const filterParts = params[queryKey].split(',');
+            filterItem.model = {
+              from: filterParts[0],
+              to: filterParts[1]
             };
           }
         } else if (filterItem.type === ItemType.Chips) {

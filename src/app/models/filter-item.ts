@@ -161,7 +161,7 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.Range: {
+      case ItemType.Range: case ItemType.DateRange: {
         this.model = isObject(value) ? { ...this.model, ...value } : {};
       } break;
 
@@ -255,7 +255,7 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.Range: {
+      case ItemType.Range: case ItemType.DateRange: {
         this.model = {};
       } break;
 
@@ -318,9 +318,12 @@ export class FsFilterConfigItem extends Model {
   public parseAndSetValue(value) {
     if (value) {
       if (this.isTypeDateRange() || this.isTypeDateTimeRange()) {
-        value.from = value.from ? toUTC(value.from) : null;
-        value.to = value.to ? toUTC(value.to) : null;
-
+        if (value.from && (!isDate(value.from) || !isValid(value.from))) {
+          value.from = parse(value.from, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        }
+        if (value.to && (!isDate(value.to) || !isValid(value.to))) {
+          value.to = parse(value.to, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        }
       } else if (this.isTypeDate() || this.isTypeDateTime()) {
         if (!isDate(value) || !isValid(value)) {
           value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
@@ -397,6 +400,9 @@ export class FsFilterConfigItem extends Model {
       } break;
       case ItemType.Range: {
         this.sanitizeRange();
+      } break;
+      case ItemType.DateRange: {
+        this.sanitizeDateRange();
       } break;
       case ItemType.Checkbox: {
         this.sanitizeCheckbox();
@@ -535,4 +541,15 @@ export class FsFilterConfigItem extends Model {
       this.model = {};
     }
   }
+
+  private sanitizeDateRange() {
+    if (!this.placeholder) {
+      this.placeholder = ['Date From', 'Date To'];
+    }
+
+    if (!this.model) {
+      this.model = {};
+    }
+  }
+
 }

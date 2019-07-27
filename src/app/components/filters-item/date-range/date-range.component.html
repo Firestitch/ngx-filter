@@ -1,0 +1,25 @@
+<div class="range-container" fxLayout="row">
+   <mat-form-field>
+    <input
+      matInput
+      [fsDateRangeFrom]="item.name"
+      [(ngModel)]="item.model.from"
+      (ngModelChange)="itemChange()"
+      [placeholder]="item.placeholder[0]"
+      view="date"
+      name="date_from">
+  </mat-form-field>
+
+  <fs-date-range-separator></fs-date-range-separator>
+
+  <mat-form-field>
+    <input
+      matInput
+      [fsDateRangeTo]="item.name"
+      [(ngModel)]="item.model.to"
+      (ngModelChange)="itemChange()"
+      [placeholder]="item.placeholder[1]"
+      view="date"
+      name="date_to">
+  </mat-form-field>
+</div>
