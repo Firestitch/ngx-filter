@@ -318,6 +318,7 @@ export class FsFilterConfigItem extends Model {
   public parseAndSetValue(value) {
     if (value) {
       if (this.isTypeDateRange() || this.isTypeDateTimeRange()) {
+    
         if (value.from && (!isDate(value.from) || !isValid(value.from))) {
           value.from = parse(value.from, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }

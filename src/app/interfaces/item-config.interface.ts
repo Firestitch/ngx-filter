@@ -3,7 +3,7 @@ import { ItemType } from '../models/filter-item';
 export interface IFilterConfigItem {
   name: string;
   type: ItemType;
-  label: string;
+  label: string | string[];
   chipLabel?: string;
   children?: string;
   multiple?: boolean;
