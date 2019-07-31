@@ -32,7 +32,7 @@ export class FsFilterConfigItem extends Model {
 
   @Alias() public name: string;
   @Alias() public type: ItemType;
-  @Alias() public label: string;
+  @Alias() public label: any;
   @Alias() public chipLabel: string;
   @Alias() public children: string;
   @Alias() public multiple: boolean;
@@ -534,8 +534,12 @@ export class FsFilterConfigItem extends Model {
   }
 
   private sanitizeRange() {
-    if (!this.placeholder) {
-      this.placeholder = ['Min', 'Max'];
+    if (!this.label) {
+      this.label = ['Min', 'Max'];
+    }
+
+    if (this.placeholder) {
+      this.label = this.placeholder;
     }
 
     if (!this.model) {
@@ -544,8 +548,12 @@ export class FsFilterConfigItem extends Model {
   }
 
   private sanitizeDateRange() {
-    if (!this.placeholder) {
-      this.placeholder = ['Date From', 'Date To'];
+    if (!this.label) {
+      this.label = ['Date From', 'Date To'];
+    }
+
+    if (this.placeholder) {
+      this.label = this.placeholder;
     }
 
     if (!this.model) {

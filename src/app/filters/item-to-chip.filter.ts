@@ -30,7 +30,7 @@ export class FsItemToChip implements PipeTransform {
       //   }
       // } break;
       case ItemType.Checkbox: {
-        result = item.label;
+        result = item.label as string;
       } break;
       case ItemType.Range: {
         const min = model.min;
