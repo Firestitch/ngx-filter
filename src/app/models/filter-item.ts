@@ -1,32 +1,19 @@
 import { ActivatedRoute } from '@angular/router';
-import { toUTC } from '@firestitch/date';
+import { isEmpty, list as arrayList } from '@firestitch/common';
 
 import { Alias, Model } from 'tsmodels';
 
 import { take, takeUntil } from 'rxjs/operators';
 import { isObservable } from 'rxjs/internal/util/isObservable';
 
-import { isFunction, isObject, toString, clone, filter } from 'lodash-es';
-import { isDate, isValid, parse } from 'date-fns';
+import { isFunction, isObject, toString, isString, clone, filter } from 'lodash-es';
+import { isDate, isValid, parse, parseISO } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
 import { IFilterConfigItem } from '../interfaces/item-config.interface';
+import { simpleFormat } from '@firestitch/date';
+import { ItemType } from '../enums/item-type-enum';
 
-
-export enum ItemType {
-  Text              = 'text',
-  Select            = 'select',
-  Range             = 'range',
-  Date              = 'date',
-  DateTime          = 'datetime',
-  DateRange         = 'daterange',
-  DateTimeRange     = 'datetimerange',
-  AutoComplete      = 'autocomplete',
-  AutoCompleteChips = 'autocompletechips',
-  Checkbox          = 'checkbox',
-  Chips             = 'chips',
-  Keyword           = 'keyword',
-}
 
 export class FsFilterConfigItem extends Model {
 
@@ -76,8 +63,8 @@ export class FsFilterConfigItem extends Model {
     return this._model;
   }
 
-  set model(val) {
-    this._model = val;
+  set model(value) {
+    this._setModel(value);
     this.checkIfValueChanged();
   }
 
@@ -88,6 +75,173 @@ export class FsFilterConfigItem extends Model {
 
   get values() {
     return this._values;
+  }
+
+  get value() {
+
+    const opts: any = {};
+
+    let value = clone(this.model) || null;
+
+    if (this.isTypeSelect) {
+
+      if (this.multiple) {
+
+        if (this.isolate) {
+          if (!Array.isArray(this.model) || !this.model.length) {
+            value = this.values.map(item => {
+              return isObject(item) ? item.value : null;
+            });
+          }
+        }
+
+        if (this.model && this.model.indexOf('__all') > -1) {
+          value = null;
+        }
+
+      } else {
+
+        if (this.isolate) {
+          if (this.model == '__all') {
+            value = this.values.map(item => {
+              return isObject(item) ? item.value : null;
+            });
+          }
+        } else {
+          if (this.model == '__all') {
+            value = null;
+          }
+        }
+      }
+    } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
+      if (Array.isArray(this.model) && this.model.length) {
+        value = this.model;
+      }
+
+    } else if (this.isTypeCheckbox) {
+      value = this.model ? this.checked : this.unchecked;
+
+    } else if (this.isTypeRange) {
+      if (!isObject(this.model) ||
+          (isEmpty(this.model.max, { zero: true }) && isEmpty(this.model.min, { zero: true }))) {
+        value = null;
+      }
+    } else if (this.isTypeDateRange || this.isTypeDateTimeRange) {
+      if (!isObject(this.model) ||
+          (isEmpty(this.model.from, { zero: true }) && isEmpty(this.model.to, { zero: true }))) {
+        value = null;
+      }
+    }
+
+    // @TODO What is TODO?
+    if (isEmpty(value, { zero: true })) {
+      return null;
+    }
+
+    if (this.isTypeDate || this.isTypeDateTime) {
+
+      if (value && isValid(value) && isDate(value)) {
+        value = simpleFormat(value);
+      }
+
+    } else if (this.isTypeDateRange || this.isTypeDateTimeRange) {
+
+      let from = value.from;
+      let to = value.to;
+
+      value = {};
+
+      if (from) {
+        if (isString(from)) {
+          from = parseISO(from);
+        }
+
+        if (isValid(from) && isDate(from)) {
+          value.from = simpleFormat(from);
+        }
+      }
+
+      if (to) {
+        if (isString(to)) {
+          to = parseISO(to);
+        }
+
+        if (isValid(to) && isDate(to)) {
+          value.to = simpleFormat(to);
+        }
+      }
+
+    } else if (this.isTypeAutocomplete) {
+
+      if (isEmpty(this.model.value, { zero: true })) {
+        return null;
+      }
+
+      value = opts.expand ? this.model : this.model.value;
+    }
+
+    if (isObject(this.names) && opts.names !== false) {
+      // What are names for?
+      // for (const key in this.names) {
+      //   if (value[this.names[key]]) {
+      //     query[key] = value[filter.names[key]];
+      //   }
+      // }
+    }
+
+    return value;
+  }
+
+  public get flattenedParams() {
+
+    const value = this.value;
+    const name = this.name;
+    const params = [];
+
+    if (this.isTypeRange) {
+      if (isObject(value)) {
+        const values = [];
+        if (!isEmpty(value.min, { zero: true })) {
+          params[name + '_min'] = value.min;
+          values.push(value.min);
+        }
+
+        if (!isEmpty(value.max, { zero: true })) {
+          params[name + '_max'] = value.max;
+          values.push(value.max);
+        }
+
+        // Legacy support
+        if (values.length) {
+          params[name] = values.join(',');
+        }
+      }
+    } else if (this.isTypeDateRange || this.isTypeDateTimeRange) {
+      if (isObject(value)) {
+        if (value.from) {
+          params[name + '_from'] = value.from;
+        }
+
+        if (value.to) {
+          params[name + '_to'] = value.to;
+        }
+      }
+    } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
+      if (Array.isArray(value)) {
+
+        params[name] = this.model.map(item => {
+          return isObject(item) ? item.value : null;
+        }).join(',');
+      }
+
+    } else if (Array.isArray(value)) {
+      params[name] = value.join(',');
+
+    } else {
+      params[name] = value;
+    }
+
+    return params;
   }
 
   public _fromJSON(data) {
@@ -102,7 +256,7 @@ export class FsFilterConfigItem extends Model {
       const persisted = this._persists[this._config.persist.name].data;
 
       if (persisted[this.name]) {
-        this.parseAndSetValue(persisted[this.name]);
+        this.model = persisted[this.name];
       }
     }
 
@@ -111,20 +265,27 @@ export class FsFilterConfigItem extends Model {
 
   public initValues() {
     if (isFunction(this._configItem.values) &&
-        !this.isTypeAutocomplete() &&
-        !this.isTypeAutocompleteChips()) {
+        !this.isTypeAutocomplete &&
+        !this.isTypeAutocompleteChips) {
       const obj = this._configItem.values();
 
       this.values = obj;
       if (isObservable(obj)) {
         this._pendingValues = true;
       }
+
     } else {
       this.values = this._configItem.values;
     }
   }
 
+  /*
+   * This function seems redundent and the logic should be merged into _setModel()
+   * Also we have to be careful with setting models that have values because of timing and
+   * also values need names for human readably lists.
+   */
   public updateValue(value) {
+
     switch (this.type) {
       case ItemType.Select: {
 
@@ -161,7 +322,8 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.Range: case ItemType.DateRange: {
+      case ItemType.Range:
+      case ItemType.DateRange: {
         this.model = isObject(value) ? { ...this.model, ...value } : {};
       } break;
 
@@ -169,7 +331,8 @@ export class FsFilterConfigItem extends Model {
         this.model = [];
       } break;
 
-      case ItemType.Date: case ItemType.DateTime: {
+      case ItemType.Date:
+      case ItemType.DateTime: {
         this.model = value;
       } break;
 
@@ -194,8 +357,8 @@ export class FsFilterConfigItem extends Model {
       this.initialLoading = true;
 
       if (isFunction(this._configItem.values) &&
-          !this.isTypeAutocomplete() &&
-          !this.isTypeAutocompleteChips()) {
+          !this.isTypeAutocomplete &&
+          !this.isTypeAutocompleteChips) {
 
         const obj = this._configItem.values();
 
@@ -214,7 +377,8 @@ export class FsFilterConfigItem extends Model {
             this.validateModel();
           });
         } else {
-          this.values = obj
+          this.values = obj;
+          this.validateModel();
         }
       }
     }
@@ -315,84 +479,97 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  public parseAndSetValue(value) {
+  private _setModel(value) {
     if (value) {
-      if (this.isTypeDateRange() || this.isTypeDateTimeRange()) {
-    
+      if (this.isTypeDateRange || this.isTypeDateTimeRange) {
+
         if (value.from && (!isDate(value.from) || !isValid(value.from))) {
           value.from = parse(value.from, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }
         if (value.to && (!isDate(value.to) || !isValid(value.to))) {
           value.to = parse(value.to, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }
-      } else if (this.isTypeDate() || this.isTypeDateTime()) {
+
+      } else if (this.isTypeDate || this.isTypeDateTime) {
         if (!isDate(value) || !isValid(value)) {
           value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }
-      } else if (
-        this.isTypeCheckbox() && this.checked !== undefined
-      ) {
-        value = value == this.checked;
-      } else if (this.isTypeSelect() && this.multiple) {
-        if (Array.isArray(value)) {
-          value = value.map((val) => {
-            if (isNaN(val)) {
-              return val;
-            } else {
-              return +val;
-            }
-          })
+
+      } else if (this.isTypeCheckbox && this.checked !== undefined) {
+        value = this.checked;
+
+      } else if (this.isTypeSelect) {
+
+        if (this.multiple) {
+
+          if (Array.isArray(value)) {
+            value = value.map((val) => {
+              if (isNaN(val)) {
+                return val;
+              } else {
+                return +val;
+              }
+            })
+          }
+        } else {
+          if (!isNaN(value)) {
+            value = +value;
+          }
         }
-      } else if (this.isTypeSelect() || this.isTypeAutocomplete()) {
-        value = +value;
+
       }
     }
 
-    this.model = value;
+    this._model = value;
   }
 
-  public isTypeAutocomplete() {
+  public get isTypeAutocomplete() {
     return this.type === ItemType.AutoComplete;
   }
 
-  public isTypeAutocompleteChips() {
+  public get isTypeAutocompleteChips() {
     return this.type === ItemType.AutoCompleteChips;
   }
 
-  public isTypeChips() {
+  public get isTypeChips() {
     return this.type === ItemType.Chips;
   }
 
-  public isTypeCheckbox() {
+  public get isTypeCheckbox() {
     return this.type === ItemType.Checkbox;
   }
 
-  public isTypeSelect() {
+  public get isTypeSelect() {
     return this.type === ItemType.Select;
   }
 
-  public isTypeDate() {
+  public get isTypeDate() {
     return this.type === ItemType.Date;
   }
 
-  public isTypeDateRange() {
+  public get isTypeDateRange() {
     return this.type === ItemType.DateRange;
   }
 
-  public isTypeDateTimeRange() {
+  public get isTypeRange() {
+    return this.type === ItemType.Range;
+  }
+
+  public get isTypeDateTimeRange() {
     return this.type === ItemType.DateTimeRange;
   }
 
-  public isTypeDateTime() {
+  public get isTypeDateTime() {
     return this.type === ItemType.DateTime;
   }
 
+  public get isTypeKeyword() {
+    return this.type === ItemType.Keyword;
+  }
+
   public sanitize() {
+
     switch (this.type) {
-      case ItemType.Text:
-      case ItemType.Keyword: {
-        //?????
-      } break;
       case ItemType.Select: {
         this.sanitizeSelect();
       } break;
@@ -412,7 +589,7 @@ export class FsFilterConfigItem extends Model {
 
     if (this.model === undefined) {
 
-      if (this.isTypeCheckbox()) {
+      if (this.isTypeCheckbox) {
         this.model = this.checked == this.defaultValue;
       } else {
         this.model = this.defaultValue;
@@ -421,10 +598,10 @@ export class FsFilterConfigItem extends Model {
 
     if (this.model === undefined) {
 
-      if (this.isTypeCheckbox()) {
+      if (this.isTypeCheckbox) {
         this.model = false;
 
-      } else if (this.isTypeSelect()) {
+      } else if (this.isTypeSelect) {
 
         if (this.multiple) {
           if (!Array.isArray(this.defaultValue)) {
@@ -435,7 +612,7 @@ export class FsFilterConfigItem extends Model {
             this.model = '__all';
           }
         }
-      } else if (this.isTypeAutocompleteChips() || this.isTypeChips()) {
+      } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
         this.model = [];
       }
     }
@@ -443,22 +620,22 @@ export class FsFilterConfigItem extends Model {
 
   public validateModel() {
 
-    if (this.isTypeSelect()) {
+    if (this.isTypeSelect) {
 
       if (this.multiple) {
 
         this.model = filter(this.model || [], (item) => {
           return this.values.find(value => {
-            return value.value === item;
+            return value.value == item;
           });
         });
 
       } else {
-        const exists = this.modelValueExists(this.values);
+        const item = this.values.find(value => {
+            return value.value == this.model;
+        });
 
-        if (!exists) {
-          this.model = '__all';
-        }
+        this.model = item ? item.value : '__all';
       }
     }
   }

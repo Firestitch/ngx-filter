@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FsFilterConfigItem, ItemType } from '../../models/filter-item';
+import { FsFilterConfigItem } from '../../models/filter-item';
+import { ItemType } from '../../enums/item-type-enum';
 
 
 @Component({

@@ -16,7 +16,10 @@
   </ng-container>
 
   <ng-container *ngIf="item.children">
-    <filter-item-select-groups [item]="item" (change)="selectChange()" #selectItem>
+    <filter-item-select-groups
+      [item]="item"
+      (change)="selectChange()"
+      #selectItem>
     </filter-item-select-groups>
   </ng-container>
 </ng-template>

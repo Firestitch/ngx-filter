@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { format } from '@firestitch/date';
-import { FsFilterConfigItem, ItemType } from '../models/filter-item';
+import { FsFilterConfigItem } from '../models/filter-item';
 import { findValue } from '../helpers/find-value';
+import { ItemType } from '../enums/item-type-enum';
 
 
 @Pipe({

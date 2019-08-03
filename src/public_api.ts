@@ -16,4 +16,4 @@ export {
 } from './app/interfaces/config.interface';
 
 // Enums/Models
-export { ItemType } from './app/models/filter-item';
+export { ItemType } from './app/enums/item-type-enum';

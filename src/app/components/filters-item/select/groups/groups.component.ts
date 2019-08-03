@@ -25,4 +25,8 @@ export class SelectGroupsComponent {
   public changed($event) {
     this.change.emit($event);
   }
+
+  public compare(o1, o2) {
+    return o1 == o2;
+  }
 }

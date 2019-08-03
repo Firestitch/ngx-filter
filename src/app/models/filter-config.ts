@@ -4,11 +4,11 @@ import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
 
-import { isDate, isValid, parseISO } from 'date-fns';
-import { clone, isObject, isString } from 'lodash-es';
+import { clone } from 'lodash-es';
 
-import { FsFilterConfigItem, ItemType } from './filter-item';
+import { FsFilterConfigItem } from './filter-item';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
+import { ItemType } from '../enums/item-type-enum';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -135,114 +135,9 @@ export class FsFilterConfig extends Model {
     }
   }
 
-  public gets(opts: any = {}) {
-
-    const query = {};
-
-    for (const filter of this.items) {
-      let value = clone(filter.model);
-
-      if (filter.type == ItemType.Select) {
-
-        if (filter.multiple) {
-
-          if (filter.isolate) {
-            if (!Array.isArray(filter.model) || !filter.model.length) {
-              value = arrayList(filter.values, 'value');
-            }
-          }
-
-          if (filter.model && filter.model.indexOf('__all') > -1) {
-            value = null;
-          }
-
-        } else {
-
-          if (filter.isolate) {
-            if (filter.model == '__all') {
-              value = arrayList(filter.values, 'value');
-            }
-          } else {
-            if (filter.model == '__all') {
-              value = null;
-            }
-          }
-        }
-      } else if (filter.type == ItemType.AutoCompleteChips || filter.type === ItemType.Chips) {
-        if (Array.isArray(filter.model) && filter.model.length && !opts.expand) {
-          value = arrayList(filter.model, 'value');
-        }
-      } else if (filter.type == ItemType.Checkbox) {
-        value = filter.model ? filter.checked : filter.unchecked;
-      }
-
-      // @TODO
-      if (isEmpty(value, { zero: true })) {
-        continue;
-      }
-
-      if (filter.type == ItemType.Date || filter.type == ItemType.DateTime) {
-
-        if (value && isValid(value) && isDate(value)) {
-          value = simpleFormat(value);
-        }
-
-      } else if (filter.type == ItemType.DateRange || filter.type == ItemType.DateTimeRange) {
-
-        let from = value.from;
-        let to = value.to;
-
-        value = {};
-
-        if (from) {
-          if (isString(from)) {
-            from = parseISO(from);
-          }
-
-          if (isValid(from) && isDate(from)) {
-            value.from = simpleFormat(from);
-          }
-        }
-
-        if (to) {
-          if (isString(to)) {
-            to = parseISO(to);
-          }
-
-          if (isValid(to) && isDate(to)) {
-            value.to = simpleFormat(to);
-          }
-        }
-
-      } else if (filter.type == ItemType.AutoComplete) {
-
-        if (isEmpty(filter.model.value, {zero: true})) {
-          continue;
-        }
-
-        value = opts.expand ? filter.model : filter.model.value;
-      }
-
-      if (isObject(filter.names) && opts.names !== false) {
-        for (const key in filter.names) {
-          if (value[filter.names[key]]) {
-            query[key] = value[filter.names[key]];
-          }
-        }
-      } else {
-        query[filter.name] = value;
-      }
-    }
-
-    if (opts.flatten) {
-      for (const name in query) {
-        if (Array.isArray(query[name])) {
-          query[name] = query[name].join(',');
-        }
-      }
-    }
-
-    return query;
+  public sgets(opts: any = {}) {
+    console.info('FilterConfig.gets() is deprecated');
+    return [];
   }
 
   public getSort(): FilterSort | null {
@@ -299,7 +194,8 @@ export class FsFilterConfig extends Model {
           }
         } break;
 
-        case ItemType.AutoCompleteChips: {
+        case ItemType.AutoCompleteChips:
+        case ItemType.Chips: {
           if (Array.isArray(filter.model) && filter.model.length) {
             acc.push(filter);
           }
@@ -307,6 +203,12 @@ export class FsFilterConfig extends Model {
 
         case ItemType.Checkbox: {
           if (filter.model) {
+            acc.push(filter);
+          }
+        } break;
+
+        case ItemType.Range: {
+          if (filter.model && (filter.model.min || filter.model.max)) {
             acc.push(filter);
           }
         } break;

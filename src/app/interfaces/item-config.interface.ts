@@ -1,4 +1,5 @@
-import { ItemType } from '../models/filter-item';
+import { ItemType } from '../enums/item-type-enum';
+
 
 export interface IFilterConfigItem {
   name: string;
