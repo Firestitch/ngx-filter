@@ -5,7 +5,7 @@ export interface IFilterConfigItem {
   name: string;
   type: ItemType;
   label: string | string[];
-  chipLabel?: string;
+  chipLabel?: string | string[];
   children?: string;
   multiple?: boolean;
   groups?: any;

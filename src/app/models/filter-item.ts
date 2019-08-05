@@ -384,6 +384,14 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
+  public partialClear(type: string) {
+    if (this.isTypeRange) {
+      this.particalClearRange(type);
+    } else {
+      this.partialClearDateRange(type);
+    }
+  }
+
   public clear() {
     this.valueChanged = false;
     this.model = undefined;
@@ -738,4 +746,27 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
+  private particalClearRange(type) {
+    if (type === 'from') {
+      delete this.model.min;
+
+      this.valueChanged = !!this.model.max;
+    } else if (type === 'to') {
+      delete this.model.max;
+
+      this.valueChanged = !!this.model.min;
+    }
+  }
+
+  private partialClearDateRange(type) {
+    if (type === 'from') {
+      delete this.model.from;
+
+      this.valueChanged = !!this.model.to;
+    } else if (type === 'to') {
+      delete this.model.to;
+
+      this.valueChanged = !!this.model.from;
+    }
+  }
 }

@@ -6,7 +6,7 @@ import { FsFilterConfigItem } from '../models/filter-item';
 
 export class FilterParams {
 
-  private _preserveParams = {}
+  private _preserveParams = {};
 
   constructor(
     private _router: Router,
@@ -24,7 +24,7 @@ export class FilterParams {
     return values;
   }
 
-  public getFlattenedParams(options: any = {}) {
+  public getFlattenedParams() {
 
     const params = {};
     this._filterItems.forEach((filterItem: FsFilterConfigItem) => {
@@ -79,7 +79,6 @@ export class FilterParams {
   /**
    * Parse query and update filter values
    * @param params
-   * @param items
    */
   public updateFromQueryParams(params: Params) {
 

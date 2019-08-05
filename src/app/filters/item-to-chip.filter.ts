@@ -9,7 +9,7 @@ import { ItemType } from '../enums/item-type-enum';
   name: 'fsItemToChip'
 })
 export class FsItemToChip implements PipeTransform {
-  transform(model: any, item: FsFilterConfigItem) {
+  transform(model: any, item: FsFilterConfigItem, type: string = null) {
     let result = '';
 
     switch (item.type) {
@@ -34,17 +34,12 @@ export class FsItemToChip implements PipeTransform {
         result = item.label as string;
       } break;
       case ItemType.Range: {
-        const min = model.min;
-        const minFilled = !!model.min;
-        const max = model.max;
-        const maxFilled = !!model.max;
-
-        if (minFilled && maxFilled) {
-          result = `${min} to ${max}`;
-        } else if (minFilled && !maxFilled) {
-          result = `Min ${min}`;
-        } else if (!minFilled && maxFilled) {
-          result = `Max ${max}`;
+        if (type === 'from') {
+          const min = model.min;
+          result = `${min}`;
+        } else if (type === 'to') {
+          const max = model.max;
+          result = `${max}`;
         }
       } break;
       case ItemType.AutoComplete: {
@@ -65,17 +60,13 @@ export class FsItemToChip implements PipeTransform {
       case ItemType.DateRange:
       case ItemType.DateTimeRange: {
         const formatTo = item.type === ItemType.DateRange ? 'date' : 'date-time';
-        const from = model.from;
-        const fromFilled = !!model.from;
-        const to = model.to;
-        const toFilled = !!model.to;
 
-        if (fromFilled && toFilled) {
-          result = `${format(from, formatTo)} - ${format(to, formatTo)}`;
-        } else if (fromFilled && !toFilled) {
-          result = `from ${format(from, formatTo)}`;
-        } else if (!fromFilled && toFilled) {
-          result = `to ${format(to, formatTo)}`;
+        if (type === 'from') {
+          const from = model.from;
+          result = `${format(from, formatTo)}`;
+        } else if (type === 'to') {
+          const to = model.to;
+          result = `${format(to, formatTo)}`;
         }
       } break;
 
@@ -113,10 +104,31 @@ export class FsItemToChip implements PipeTransform {
       if (item.chipLabel === '') {
         return `${result}`;
       } else {
-        return `${item.chipLabel}: ${result}`;
+        if (Array.isArray(item.chipLabel)) {
+          const label = getLabelFromArray(item.chipLabel, type);
+          return `${label}: ${result}`;
+        } else {
+          return `${item.chipLabel}: ${result}`;
+        }
       }
     } else {
-      return `${item.label}: ${result}`;
+      if (Array.isArray(item.label)) {
+        const label = getLabelFromArray(item.label, type);
+        return `${label}: ${result}`;
+      } else {
+        return `${item.label}: ${result}`;
+      }
     }
+  }
+}
+
+
+function getLabelFromArray(labelArr, type) {
+  if (type === 'from' && labelArr[0]) {
+    return `${labelArr[0]}`;
+  } else if (type === 'to' && labelArr[1]) {
+    return `${labelArr[1]}`;
+  } else {
+    return '';
   }
 }

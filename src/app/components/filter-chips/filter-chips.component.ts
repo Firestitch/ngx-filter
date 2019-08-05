@@ -10,12 +10,12 @@ import { ItemType } from '../../enums/item-type-enum';
 })
 export class FsFilterChipsComponent {
   @Input() public filters: FsFilterConfigItem[];
-  @Output() public remove = new EventEmitter<FsFilterConfigItem>();
+  @Output() public remove = new EventEmitter<{ item: FsFilterConfigItem, type: string }>();
 
   public itemType = ItemType;
   public chips = [];
 
-  public removeItem(item) {
-    this.remove.next(item);
+  public removeItem(item, type = null) {
+    this.remove.next({ item: item, type: type });
   }
 }

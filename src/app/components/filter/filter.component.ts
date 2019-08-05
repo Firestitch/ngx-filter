@@ -14,9 +14,10 @@ import {
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { FsDocumentScrollService } from '@firestitch/scroll';
 import { FsStore } from '@firestitch/store';
 
-import { cloneDeep } from 'lodash-es';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
@@ -24,9 +25,7 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { FilterParams } from '../../models/filter-params';
-import { FsDocumentScrollService } from '@firestitch/scroll';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
-import { Subject } from 'rxjs';
 import { ItemType } from '../../enums/item-type-enum';
 
 
@@ -81,7 +80,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   public modelChanged = new EventEmitter();
   public windowDesktop = false;
 
-  private _filterDrawerRef;
   private _searchTextItem: FsFilterConfigItem;
   private _searchTextInput: ElementRef = null;
   private _firstOpen = true;
@@ -314,7 +312,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       return this._destroyFilterDrawer();
     }
 
-    const notTextItem = this.config.items.find((item, index) => {
+    const notTextItem = this.config.items.find((item) => {
       return item.type !== ItemType.Keyword;
     });
 
@@ -391,14 +389,25 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   /**
    * Reset filter
-   * @param item
+   * @param event
    */
-  public resetFilter(item: FsFilterConfigItem) {
+  public resetFilter(event: { item: FsFilterConfigItem, type: string }) {
+    const item = event.item;
+    const type = event.type;
+
     const index = this.changedFilters.indexOf(item);
 
     if (index > -1) {
-      this.changedFilters.splice(index, 1);
-      item.clear();
+      if (type) {
+        item.partialClear(type);
+
+        if (!item.valueChanged) {
+          this.changedFilters.splice(index, 1);
+        }
+      } else {
+        this.changedFilters.splice(index, 1);
+        item.clear();
+      }
     }
 
     this.change();
@@ -426,8 +435,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     // This should be an option or a done with an wrapping helper function
     // because it restricts functionality ie. reload
-    //const queryChanged = !objectsAreEquals(this._query, query);
-    //if (queryChanged) {
+    // const queryChanged = !objectsAreEquals(this._query, query);
+    // if (queryChanged) {
 
     this._storePersistValues();
     this.updateFilledCounter();
