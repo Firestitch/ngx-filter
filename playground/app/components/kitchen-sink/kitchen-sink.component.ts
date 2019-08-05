@@ -145,7 +145,7 @@ export class KitchenSinkComponent {
           type: ItemType.Range,
           prefix: '$&nbsp;',
           label: ['Min Price', 'Max Price'],
-          chipLabel: ['Min', 'Max'],
+          chipLabel: ['Custom Min Price', 'Custom Max Price'],
         },
         {
           name: 'observable_select',
