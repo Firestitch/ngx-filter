@@ -1,5 +1,5 @@
 <span fxLayout="row">
-  <mat-form-field class="filter-range-min" floatLabel="auto">
+  <mat-form-field class="filter-range-min">
     <mat-label>{{item.label[0]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
@@ -7,7 +7,7 @@
            (ngModelChange)="itemChange()">
   </mat-form-field>
   <div class="spacer"></div>
-  <mat-form-field class="filter-range-max" floatLabel="auto">
+  <mat-form-field class="filter-range-max">
     <mat-label>{{item.label[1]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
