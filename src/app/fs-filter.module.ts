@@ -95,7 +95,6 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
   ],
   providers: [
     FsStore,
-    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'never' } }
   ],
   exports: [
     FilterComponent,

@@ -17,6 +17,7 @@ import { AppMaterialModule } from './material.module';
 import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './components';
 import { DialogExampleComponent } from './components/dialog-example';
 import { DialogComponent } from './components/dialog';
+import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material';
 
 
 @NgModule({
@@ -48,7 +49,9 @@ import { DialogComponent } from './components/dialog';
     DialogExampleComponent,
     DialogComponent
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' } }
+  ],
 })
 export class PlaygroundModule {
 }
