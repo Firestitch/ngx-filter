@@ -4,6 +4,7 @@
          fsDatePicker
          [(ngModel)]="item.model"
          (change)="itemChange()"
+         [view]="viewType"
          [name]="item.name">
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
 </mat-form-field>

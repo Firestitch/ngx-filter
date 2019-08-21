@@ -323,7 +323,8 @@ export class FsFilterConfigItem extends Model {
       } break;
 
       case ItemType.Range:
-      case ItemType.DateRange: {
+      case ItemType.DateRange:
+      case ItemType.DateTimeRange: {
         this.model = isObject(value) ? { ...this.model, ...value } : {};
       } break;
 
@@ -427,7 +428,7 @@ export class FsFilterConfigItem extends Model {
         }
       } break;
 
-      case ItemType.Range: case ItemType.DateRange: {
+      case ItemType.Range: case ItemType.DateRange: case ItemType.DateTimeRange: {
         this.model = {};
       } break;
 
@@ -587,7 +588,7 @@ export class FsFilterConfigItem extends Model {
       case ItemType.Range: {
         this.sanitizeRange();
       } break;
-      case ItemType.DateRange: {
+      case ItemType.DateRange: case ItemType.DateTimeRange: {
         this.sanitizeDateRange();
       } break;
       case ItemType.Checkbox: {

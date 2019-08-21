@@ -44,10 +44,22 @@
                         (itemChanged)="itemChange($event)">
       </filter-item-date>
 
+      <filter-item-date class="interface interface-date"
+                        *ngSwitchCase="itemType.DateTime"
+                        [item]="item"
+                        (itemChanged)="itemChange($event)">
+      </filter-item-date>
+
       <filter-item-date-range class="interface interface-date"
                         *ngSwitchCase="itemType.DateRange"
                         [item]="item"
                         (itemChanged)="itemChange($event)">
+      </filter-item-date-range>
+
+      <filter-item-date-range class="interface interface-date"
+                              *ngSwitchCase="itemType.DateTimeRange"
+                              [item]="item"
+                              (itemChanged)="itemChange($event)">
       </filter-item-date-range>
 
       <filter-item-checkbox class="interface interface-checkbox"

@@ -209,6 +209,11 @@ export class KitchenSinkComponent {
           label: [ 'From Date', 'To Date'],
         },
         {
+          name: 'date_time_range',
+          type: ItemType.DateTimeRange,
+          label: [ 'From Date Time', 'To Date Time'],
+        },
+        {
           name: 'checkbox',
           type: ItemType.Checkbox,
           label: 'Checkbox'
