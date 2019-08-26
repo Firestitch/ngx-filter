@@ -6,7 +6,8 @@ import {
   OnInit
 } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
-import { ItemType } from '../../../enums/item-type-enum';
+import { ItemType } from '../../../enums/item-type.enum';
+import { ItemDateMode } from '../../../enums/item-date-mode.enum';
 
 
 @Component({
@@ -17,6 +18,10 @@ import { ItemType } from '../../../enums/item-type-enum';
 export class DateComponent extends BaseItemComponent implements OnInit {
 
   public viewType = 'date';
+  public itemDateMode = ItemDateMode;
+  public showYear = true;
+  public showMonth = true;
+  public showDay = true;
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -30,6 +35,10 @@ export class DateComponent extends BaseItemComponent implements OnInit {
       this.viewType = 'datetime';
     } else {
       this.viewType = 'date'
+    }
+
+    if (this.item.mode === ItemDateMode.ScrollMonthYear) {
+      this.showDay = false;
     }
   }
 }

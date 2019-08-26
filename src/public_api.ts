@@ -16,4 +16,5 @@ export {
 } from './app/interfaces/config.interface';
 
 // Enums/Models
-export { ItemType } from './app/enums/item-type-enum';
+export { ItemType } from './app/enums/item-type.enum';
+export { ItemDateMode } from './app/enums/item-date-mode.enum';

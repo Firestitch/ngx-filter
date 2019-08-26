@@ -43,7 +43,7 @@ import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.c
 import { BaseItemComponent } from './components/filters-item/base-item/base-item.component';
 import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
-import { FsItemToChip } from './filters/item-to-chip.filter';
+import { FsItemToChip } from './pipes/item-to-chip.pipe';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 
 

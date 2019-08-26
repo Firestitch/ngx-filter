@@ -5,7 +5,7 @@ import {
   KeyValueDiffers, OnInit
 } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
-import { ItemType } from '../../../enums/item-type-enum';
+import { ItemType } from '../../../enums/item-type.enum';
 
 
 @Component({

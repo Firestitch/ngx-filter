@@ -1,10 +1,27 @@
-<mat-form-field>
+<mat-form-field *ngIf="item.mode===itemDateMode.Calendar; else elseMode">
   <mat-label>{{item.label}}</mat-label>
   <input matInput
-         fsDatePicker
+        fsDatePicker
          [(ngModel)]="item.model"
          (change)="itemChange()"
+         [maxYear]="item.maxYear"
          [view]="viewType"
          [name]="item.name">
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
 </mat-form-field>
+
+<ng-template #elseMode>
+  <mat-form-field>
+    <mat-label>{{item.label}}</mat-label>
+    <input matInput
+          fsDateScrollPicker
+          [(ngModel)]="item.model"
+          (change)="itemChange()"
+          [maxYear]="item.maxYear"
+          [showMonth]="showMonth"
+          [showDay]="showDay"
+          [showYear]="showYear"
+          [name]="item.name">
+    <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+  </mat-form-field>
+</ng-template>

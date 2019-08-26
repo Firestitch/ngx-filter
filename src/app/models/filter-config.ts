@@ -8,7 +8,7 @@ import { clone } from 'lodash-es';
 
 import { FsFilterConfigItem } from './filter-item';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
-import { ItemType } from '../enums/item-type-enum';
+import { ItemType } from '../enums/item-type.enum';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';

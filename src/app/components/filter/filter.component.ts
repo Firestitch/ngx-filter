@@ -26,7 +26,7 @@ import { FsFilterConfigItem } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { FilterParams } from '../../models/filter-params';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
-import { ItemType } from '../../enums/item-type-enum';
+import { ItemType } from '../../enums/item-type.enum';
 
 
 @Component({

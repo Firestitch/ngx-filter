@@ -12,7 +12,8 @@ import { isDate, isValid, parse, parseISO } from 'date-fns';
 import { FsFilterConfig } from './filter-config';
 import { IFilterConfigItem } from '../interfaces/item-config.interface';
 import { simpleFormat } from '@firestitch/date';
-import { ItemType } from '../enums/item-type-enum';
+import { ItemType } from '../enums/item-type.enum';
+import { ItemDateMode } from '../enums/item-date-mode.enum';
 
 
 export class FsFilterConfigItem extends Model {
@@ -38,6 +39,8 @@ export class FsFilterConfigItem extends Model {
   @Alias() public placeholder: any;
   @Alias() public change: Function;
   @Alias() public prefix: string;
+  @Alias() public mode: string;
+  @Alias() public maxYear: string;
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
@@ -70,7 +73,7 @@ export class FsFilterConfigItem extends Model {
 
   set values(values) {
     this._values = values;
-    this.sanitize();
+    this.init();
   }
 
   get values() {
@@ -260,7 +263,7 @@ export class FsFilterConfigItem extends Model {
       }
     }
 
-    this.sanitize();
+    this.init();
   }
 
   public initValues() {
@@ -576,23 +579,26 @@ export class FsFilterConfigItem extends Model {
     return this.type === ItemType.Keyword;
   }
 
-  public sanitize() {
+  public init() {
 
     switch (this.type) {
       case ItemType.Select: {
-        this.sanitizeSelect();
+        this._initSelect();
       } break;
       case ItemType.Chips: {
-        this.sanitizeChips();
+        this._initChips();
       } break;
       case ItemType.Range: {
-        this.sanitizeRange();
+        this._initRange();
+      } break;
+      case ItemType.Date: {
+        this._initDate();
       } break;
       case ItemType.DateRange: case ItemType.DateTimeRange: {
-        this.sanitizeDateRange();
+        this._initDateRange();
       } break;
       case ItemType.Checkbox: {
-        this.sanitizeCheckbox();
+        this._initCheckbox();
       } break;
     }
 
@@ -668,7 +674,7 @@ export class FsFilterConfigItem extends Model {
     return false;
   }
 
-  private sanitizeSelect() {
+  private _initSelect() {
 
     if (!Array.isArray(this.values)) {
       this.values = [];
@@ -698,7 +704,7 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  private sanitizeChips() {
+  private _initChips() {
 
     if (!Array.isArray(this.values)) {
       this.values = [];
@@ -713,13 +719,20 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  private sanitizeCheckbox() {
+  private _initDate() {
+
+    if (!this.mode) {
+      this.mode = ItemDateMode.Calendar;
+    }
+  }
+
+  private _initCheckbox() {
     this.checked = this.checked ? toString(this.checked) : true;
     this.unchecked = this.unchecked ? toString(this.unchecked) : false;
     this.defaultValue = this.defaultValue === undefined ? this.unchecked : toString(this.defaultValue);
   }
 
-  private sanitizeRange() {
+  private _initRange() {
     if (!this.label) {
       this.label = ['Min', 'Max'];
     }
@@ -733,7 +746,7 @@ export class FsFilterConfigItem extends Model {
     }
   }
 
-  private sanitizeDateRange() {
+  private _initDateRange() {
     if (!this.label) {
       this.label = ['Date From', 'Date To'];
     }

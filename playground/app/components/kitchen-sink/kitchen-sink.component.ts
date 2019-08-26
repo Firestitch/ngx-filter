@@ -8,6 +8,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { FsFilterConfigItem } from 'src/app/models/filter-item';
 import { shuffle } from 'lodash-es';
+import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
 
 
 @Component({
@@ -204,14 +205,16 @@ export class KitchenSinkComponent {
           label: 'Date'
         },
         {
+          name: 'scroll-date',
+          type: ItemType.Date,
+          label: 'Scroll Date',
+          maxYear: (new Date()).getFullYear(),
+          mode: ItemDateMode.ScrollMonthYear
+        },
+        {
           name: 'date_range',
           type: ItemType.DateRange,
           label: [ 'From Date', 'To Date'],
-        },
-        {
-          name: 'date_time_range',
-          type: ItemType.DateTimeRange,
-          label: [ 'From Date Time', 'To Date Time'],
         },
         {
           name: 'checkbox',

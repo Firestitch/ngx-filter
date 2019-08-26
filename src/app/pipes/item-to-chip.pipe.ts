@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { format } from '@firestitch/date';
 import { FsFilterConfigItem } from '../models/filter-item';
 import { findValue } from '../helpers/find-value';
-import { ItemType } from '../enums/item-type-enum';
+import { ItemType } from '../enums/item-type.enum';
+import { ItemDateMode } from '../enums/item-date-mode.enum';
 
 
 @Pipe({
@@ -14,22 +15,15 @@ export class FsItemToChip implements PipeTransform {
 
     switch (item.type) {
       case ItemType.Date: {
-       result = format(model, 'date');
+
+        let dateFormat = 'date';
+
+        if (item.mode == ItemDateMode.ScrollMonthYear) {
+          dateFormat = 'full-date-dayless';
+        }
+
+       result = format(model, dateFormat);
       } break;
-      // case ItemType.DateRange: {
-      //   const from = format(model.from, 'date');
-      //   const fromFilled = !!model.min;
-      //   const to = format(model.to, 'date');
-      //   const toFilled = !!model.to;
-      //
-      //   if (fromFilled && toFilled) {
-      //     result = `${from} to ${to}`;
-      //   } else if (fromFilled && !toFilled) {
-      //     result = `Min ${from}`;
-      //   } else if (!fromFilled && toFilled) {
-      //     result = `Max ${to}`;
-      //   }
-      // } break;
       case ItemType.Checkbox: {
         result = item.label as string;
       } break;
