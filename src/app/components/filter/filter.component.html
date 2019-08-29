@@ -37,6 +37,13 @@
               class="clear">
               <mat-icon>clear</mat-icon>
             </a>
+            <a matSuffix
+              (click)="reload($event)"
+              href="javascript:void(0)"
+              class="reload"
+              *ngIf="config.reload">
+              <mat-icon>refresh</mat-icon>
+            </a>
             <!-- <a (click)="changeVisibilityClick(true, $event)"
               matSuffix
               href="javascript:void(0)"
@@ -61,17 +68,11 @@
       </div>
     </div>
     <div class="filter-actions">
-      <button (click)="reload($event)"
-        mat-icon-button
-        class="reload">
-        <mat-icon>refresh</mat-icon>
-      </button>
-
       <button (click)="changeVisibilityClick(true, $event)"
         mat-raised-button
         class="filter">
         <mat-icon>tune</mat-icon>
-        FILTERS
+        Filter
       </button>
     </div>
   </div>
