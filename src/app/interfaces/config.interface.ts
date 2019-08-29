@@ -9,7 +9,7 @@ export interface FilterConfig {
   namespace?: string;
   persist?: any;
   reload?: ChangeFn;
-  items: IFilterConfigItem | IFilterConfigDateItem[];
+  items: IFilterConfigItem[] | IFilterConfigDateItem[];
   init?: ChangeFn;
   change?: ChangeFn;
   sorts?: SortItem[];
