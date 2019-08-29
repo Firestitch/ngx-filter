@@ -37,14 +37,7 @@
               class="clear">
               <mat-icon>clear</mat-icon>
             </a>
-            <a matSuffix
-              (click)="reload($event)"
-              href="javascript:void(0)"
-              class="reload"
-              *ngIf="config.reload">
-              <mat-icon>refresh</mat-icon>
-            </a>
-            <a (click)="changeVisibilityClick(true, $event)"
+            <!-- <a (click)="changeVisibilityClick(true, $event)"
               matSuffix
               href="javascript:void(0)"
               class="filter"
@@ -62,12 +55,27 @@
                   (click)="changeVisibilityClick(true,$event)"
                   *ngIf="!config.chips && activeFiltersWithInputCount > 0">
               {{ activeFiltersWithInputCount }}
-            </span>
+            </span> -->
           </mat-form-field>
         </form>
       </div>
     </div>
+    <div class="filter-actions">
+      <button (click)="reload($event)"
+        mat-icon-button
+        class="reload">
+        <mat-icon>refresh</mat-icon>
+      </button>
+
+      <button (click)="changeVisibilityClick(true, $event)"
+        mat-raised-button
+        class="filter">
+        <mat-icon>tune</mat-icon>
+        FILTERS
+      </button>
+    </div>
   </div>
+
   <fs-filter-chips
     class="filter-chips"
     *ngIf="config.chips"

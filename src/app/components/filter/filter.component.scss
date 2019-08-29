@@ -178,12 +178,26 @@
   cursor: pointer;
 }
 
-// Commented because of TAD-T1219
-/*@media screen and (max-width: 599px) {
+button.filter {
+  margin-left: 10px;
+}
+
+button.reload {
+  margin-left: -40px;
+  right: -9px;
+}
+
+@media screen and (max-width: 1199px) {
   .fs-filter .reload {
     display: none;
   }
-}*/
+}
+
+@media screen and (min-width: 1200px) {
+  button.filter {
+    display: none;
+  }
+}
 
 @media screen and (max-width: 1199px) {
 
