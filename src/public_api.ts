@@ -6,7 +6,7 @@ export { FilterComponent } from './app/components/filter/filter.component';
 export { FilterItemComponent } from './app/components/filters-item/filter-item.component';
 
 // Interfaces
-export { IFilterConfigItem } from './app/interfaces/item-config.interface';
+export { IFilterConfigItem, IFilterConfigDateItem } from './app/interfaces/item-config.interface';
 export {
   FilterConfig,
   SortItem,
