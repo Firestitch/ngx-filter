@@ -7,18 +7,18 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  HostListener,
   ApplicationRef,
-  Injector
+  Injector, NgZone, AfterViewInit
 } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { FsDocumentScrollService } from '@firestitch/scroll';
 import { FsStore } from '@firestitch/store';
 
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
@@ -38,7 +38,7 @@ import { ItemType } from '../../enums/item-type.enum';
     FsFilterOverlayService,
   ]
 })
-export class FilterComponent implements OnInit, OnDestroy {
+export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected _config: FsFilterConfig = null;
 
@@ -54,21 +54,14 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
 
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.code === 'Escape' && this.showFilterMenu) {
-      this.changeVisibility(false);
-    }
-  }
-
-  @HostListener('window:resize')
-  updateWindowWidth() {
-    this.windowDesktop = window.innerWidth > 1200;
-  }
-
   @ViewChild('searchTextInput')
   set searchTextInput(value) {
     this._searchTextInput = value;
+  }
+
+  @ViewChild('searchTextInput', { read: NgModel })
+  set searchTextNgModel(value) {
+    this._searchTextNgModel = value;
   }
 
   public changedFilters = [];
@@ -77,14 +70,15 @@ export class FilterComponent implements OnInit, OnDestroy {
   public activeFiltersCount = 0;
   public activeFiltersWithInputCount = 0;
   public showFilterMenu = false;
-  public modelChanged = new EventEmitter();
   public windowDesktop = false;
 
   private _searchTextItem: FsFilterConfigItem;
   private _searchTextInput: ElementRef = null;
+  private _searchTextNgModel: NgModel = null;
   private _firstOpen = true;
   private _filterParams: FilterParams;
   private _sort = {};
+  private _closed$ = new Subject();
   private _destroy$ = new Subject();
 
   constructor(
@@ -96,8 +90,9 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _injector: Injector,
     private _documentScrollService: FsDocumentScrollService,
     private _filterOverlay: FsFilterOverlayService,
+    private _zone: NgZone,
   ) {
-    this.updateWindowWidth();
+    this._updateWindowWidth();
 
     this._filterOverlay.attach$
     .pipe(
@@ -115,6 +110,8 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.updateFilledCounter();
       this.showFilterMenu = false;
     });
+
+    this._listenWindowResize();
   }
 
   public set config(config) {
@@ -155,8 +152,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.focus();
     });
 
-    this._watchSearchInput();
-
     if (this.sortUpdate) {
       this.sortUpdate
         .pipe(
@@ -172,6 +167,11 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  public ngAfterViewInit(): void {
+    this._listenInputKeyEvents();
+    this._listenInputChanges();
+  }
+
   public focus() {
     if (this._searchTextInput && this.config.autofocus) {
       this._searchTextInput.nativeElement.focus();
@@ -181,6 +181,10 @@ export class FilterComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
 
     this._destroyFilterDrawer();
+
+    this._closed$.next();
+    this._closed$.complete();
+
     this._destroy$.next();
     this._destroy$.complete();
 
@@ -265,10 +269,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  public modelChange(text) {
-    this.modelChanged.next(text);
-  }
-
   public hide() {
     this.changeVisibility(false);
   }
@@ -309,8 +309,11 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     if (!state) {
+      this._closed$.next();
       return this._destroyFilterDrawer();
     }
+
+    this._listenEscButton();
 
     const notTextItem = this.config.items.find((item) => {
       return item.type !== ItemType.Keyword;
@@ -340,7 +343,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   public clearSearchText(event) {
     event.stopPropagation();
     this.searchText = '';
-    this.modelChanged.next('');
   }
 
   public init() {
@@ -483,23 +485,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._filterOverlay.close();
   }
 
-  private _watchSearchInput() {
-
-    this.modelChanged
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(500),
-        takeUntil(this.config.destroy$),
-      )
-      .subscribe((value) => {
-        if (this._searchTextItem) {
-          this._searchTextItem.model = value;
-        }
-
-        this._filterChange();
-      })
-  }
-
   /**
    * Restoring values from local storage
    */
@@ -547,5 +532,87 @@ export class FilterComponent implements OnInit, OnDestroy {
 
       this._store.set(this.config.namespace + '-persist', this.persists, {});
     }
+  }
+
+  private _updateWindowWidth() {
+    this.windowDesktop = window.innerWidth > 1200;
+  }
+
+  private _listenEscButton() {
+    this._zone.runOutsideAngular(() => {
+      fromEvent(window, 'keyup')
+        .pipe(
+          debounceTime(300),
+          filter((event: KeyboardEvent) => event.code === 'Escape'),
+          takeUntil(this._closed$),
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this._zone.run(() => {
+            this.changeVisibility(false);
+          });
+        });
+    });
+  }
+
+  private _listenInputKeyEvents() {
+    if (!this._searchTextInput) {
+      return;
+    }
+
+    this._zone.runOutsideAngular(() => {
+      fromEvent(this._searchTextInput.nativeElement, 'keydown')
+        .pipe(
+          debounceTime(500),
+          filter((event: KeyboardEvent) => {
+            return ['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) > -1;
+          }),
+          takeUntil(this._destroy$),
+        )
+        .subscribe((event: KeyboardEvent) => {
+          this._zone.run(() => {
+            this.filterInputEvent(event)
+          });
+        });
+    });
+  }
+
+  private _listenWindowResize() {
+    this._zone.runOutsideAngular(() => {
+      fromEvent(window, 'resize')
+        .pipe(
+          debounceTime(100),
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this._zone.run(() => {
+            this._updateWindowWidth();
+          });
+        });
+    })
+  }
+
+  private _listenInputChanges() {
+    if (!this._searchTextNgModel) {
+      return;
+    }
+
+    this._zone.runOutsideAngular(() => {
+      this._searchTextNgModel.valueChanges
+        .pipe(
+          debounceTime(50),
+          takeUntil(this._destroy$),
+        )
+        .subscribe((value) => {
+          this._zone.run(() => {
+            if (this._searchTextItem) {
+              this._searchTextItem.model = value;
+            }
+
+            this._filterChange();
+          })
+        });
+
+    });
   }
 }

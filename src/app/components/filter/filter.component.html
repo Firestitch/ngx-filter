@@ -12,7 +12,6 @@
         <form autocomplete="off" role="presentation">
           <mat-form-field
             class="filter-input-field"
-            (click)="($event)"
             floatLabel="never">
             <span matPrefix>
               <mat-icon
@@ -24,10 +23,8 @@
                   [(ngModel)]="searchText"
                   name="filter-input"
                   #searchTextInput
-                  (keydown)="filterInputEvent($event)"
                   (click)="filterInputEvent($event)"
-                  class="filter-input"
-                  (ngModelChange)="modelChange(searchText)">
+                  class="filter-input">
 
             <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
