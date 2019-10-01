@@ -40,7 +40,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public change: Function;
   @Alias() public prefix: string;
   @Alias() public mode: string;
-  @Alias() public maxYear: string;
+  @Alias() public maxYear: number;
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
