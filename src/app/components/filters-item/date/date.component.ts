@@ -8,7 +8,6 @@ import {
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { ItemType } from '../../../enums/item-type.enum';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
-import { FsFilterConfigItem } from '../../../models/filter-item';
 
 
 @Component({

@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, KeyValueDiffers } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  KeyValueDiffers
+} from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
@@ -6,6 +11,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   selector: 'filter-item-chips',
   templateUrl: './chips.component.html',
   styleUrls: [ './chips.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChipsComponent extends BaseItemComponent {
 

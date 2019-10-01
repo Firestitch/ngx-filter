@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { ItemType } from '../../enums/item-type.enum';
 
 
 @Component({
   selector: 'filter-item',
-  templateUrl: './filter-item.component.html'
+  templateUrl: './filter-item.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterItemComponent {
 

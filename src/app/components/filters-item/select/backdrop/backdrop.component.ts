@@ -1,12 +1,10 @@
-import {
-  Component,
-} from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, } from '@angular/core';
 
 @Component({
   selector: 'filter-item-select-backdrop',
   styleUrls: ['./backdrop.component.scss'],
-  templateUrl: './backdrop.component.html'
+  templateUrl: './backdrop.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectBackdropComponent {
   constructor() {}

@@ -1,14 +1,17 @@
 import {
+  AfterViewInit,
+  ApplicationRef,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
+  Injector,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  ApplicationRef,
-  Injector, NgZone, AfterViewInit
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -36,7 +39,8 @@ import { ItemType } from '../../enums/item-type.enum';
   encapsulation: ViewEncapsulation.None,
   providers: [
     FsFilterOverlayService,
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -91,6 +95,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _documentScrollService: FsDocumentScrollService,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
+    private _cdRef: ChangeDetectorRef,
   ) {
     this._updateWindowWidth();
 
@@ -465,6 +470,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.activeFiltersWithInputCount =  this.changedFilters
                                           .filter((item) => item.type !== ItemType.Keyword)
                                           .length;
+
+    this._cdRef.markForCheck();
   }
 
   /**

@@ -14,8 +14,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-autocompletechips',
   templateUrl: './autocompletechips.component.html',
-  //Commented out because autocomplete not updating properly. Need to figure this out.
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  // Commented out because autocomplete not updating properly. Need to figure this out.
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompletechipsComponent extends BaseItemComponent implements DoCheck {
 

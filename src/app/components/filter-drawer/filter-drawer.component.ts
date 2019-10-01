@@ -17,9 +17,9 @@ import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 
 @Component({
   templateUrl: './filter-drawer.component.html',
-  styleUrls: ['filter-drawer.component.scss']
-  //Commented out because filter items are not updating with a delayed observable. Need to figure this out.
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['filter-drawer.component.scss'],
+  // Commented out because filter items are not updating with a delayed observable. Need to figure this out.
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDrawerComponent implements DoCheck {
 

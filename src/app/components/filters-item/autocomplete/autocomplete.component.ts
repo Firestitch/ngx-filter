@@ -10,7 +10,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-autocomplete',
   templateUrl: './autocomplete.component.html',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteComponent extends BaseItemComponent {
 
