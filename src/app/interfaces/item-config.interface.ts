@@ -33,3 +33,8 @@ export interface IFilterConfigDateItem extends IFilterConfigItem {
   maxYear?: number,
   mode?: ItemDateMode
 }
+
+export interface IFilterConfigAutocompleteItem extends IFilterConfigItem {
+  type: ItemType.AutoComplete | ItemType.AutoCompleteChips
+  fetchOnFocus?: boolean
+}

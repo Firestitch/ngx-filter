@@ -10,7 +10,11 @@ import { isFunction, isObject, toString, isString, clone, filter } from 'lodash-
 import { isDate, isValid, parse, parseISO } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
-import { IFilterConfigItem } from '../interfaces/item-config.interface';
+import {
+  IFilterConfigAutocompleteItem,
+  IFilterConfigDateItem,
+  IFilterConfigItem
+} from '../interfaces/item-config.interface';
 import { simpleFormat } from '@firestitch/date';
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
@@ -41,6 +45,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public prefix: string;
   @Alias() public mode: string;
   @Alias() public maxYear: number;
+  @Alias() public fetchOnFocus: boolean;
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
@@ -50,10 +55,12 @@ export class FsFilterConfigItem extends Model {
   private _pendingValues = false;
   private _values: any;
 
-  constructor(private _configItem: IFilterConfigItem | any = {},
-              private _config: FsFilterConfig,
-              private _route: ActivatedRoute,
-              private _persists: any) {
+  constructor(
+    private _configItem: IFilterConfigItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem,
+    private _config: FsFilterConfig,
+    private _route: ActivatedRoute,
+    private _persists: any)
+  {
     super();
     this._fromJSON(_configItem);
   }
@@ -263,10 +270,18 @@ export class FsFilterConfigItem extends Model {
       }
     }
 
+    if (this.fetchOnFocus === void 0) {
+      this.fetchOnFocus = false;
+    }
+
     this.init();
   }
 
   public initValues() {
+    if (!this._configItem) {
+      return;
+    }
+
     if (isFunction(this._configItem.values) &&
         !this.isTypeAutocomplete &&
         !this.isTypeAutocompleteChips) {
@@ -360,7 +375,7 @@ export class FsFilterConfigItem extends Model {
     if (reload || (!this.initialLoading && this.hasPendingValues)) {
       this.initialLoading = true;
 
-      if (isFunction(this._configItem.values) &&
+      if (this._configItem && isFunction(this._configItem.values) &&
           !this.isTypeAutocomplete &&
           !this.isTypeAutocompleteChips) {
 

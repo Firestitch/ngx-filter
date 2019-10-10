@@ -1,4 +1,8 @@
-import { IFilterConfigItem, IFilterConfigDateItem } from './item-config.interface';
+import {
+  IFilterConfigItem,
+  IFilterConfigDateItem,
+  IFilterConfigAutocompleteItem
+} from './item-config.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -9,7 +13,7 @@ export interface FilterConfig {
   namespace?: string;
   persist?: any;
   reload?: ChangeFn;
-  items: (IFilterConfigItem | IFilterConfigDateItem)[];
+  items: (IFilterConfigItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem)[];
   init?: ChangeFn;
   change?: ChangeFn;
   sorts?: SortItem[];
