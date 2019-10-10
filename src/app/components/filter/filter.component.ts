@@ -58,12 +58,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
 
-  @ViewChild('searchTextInput')
+  @ViewChild('searchTextInput', { static: false })
   set searchTextInput(value) {
     this._searchTextInput = value;
   }
 
-  @ViewChild('searchTextInput', { read: NgModel })
+  @ViewChild('searchTextInput', { read: NgModel, static: false })
   set searchTextNgModel(value) {
     this._searchTextNgModel = value;
   }
@@ -202,8 +202,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    *
    * Do update value of some field
    *
-   * @param {any} values - values for update
-   * @param {boolean} changeEvent - should change event to be fired
+   * @param values - values for update
+   * @param changeEvent - should change event to be fired
    *
    * To update text value just pass new text value
    *

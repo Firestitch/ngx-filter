@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { MatSelect } from '@angular/material';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'filter-item-select-multiple',
@@ -17,7 +17,7 @@ import { MatSelect } from '@angular/material';
 })
 export class SelectMultipleComponent {
 
-  @ViewChild('select') select: MatSelect;
+  @ViewChild('select', { static: true }) select: MatSelect;
   @Input() public item;
   @Output() public change = new EventEmitter();
 

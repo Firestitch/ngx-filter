@@ -18,7 +18,7 @@ import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
 })
 export class KitchenSinkComponent {
 
-  @ViewChild('filter') public filterEl: FilterComponent;
+  @ViewChild('filter', { static: true }) public filterEl: FilterComponent;
 
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();

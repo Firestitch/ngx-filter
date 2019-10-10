@@ -3,16 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgModule } from '@angular/core';
-import {
-  MatIconModule,
-  MatInputModule,
-  MatSelectModule,
-  MatChipsModule,
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatCheckboxModule,
-  MAT_LABEL_GLOBAL_OPTIONS
-} from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { PortalModule } from '@angular/cdk/portal';
 
 import { FlexLayoutModule } from '@angular/flex-layout';

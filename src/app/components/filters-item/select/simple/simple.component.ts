@@ -5,13 +5,10 @@ import {
   EventEmitter,
   Input,
   Output,
-  OnInit,
   ViewChild,
-  OnDestroy
 } from '@angular/core';
-import { Subject } from 'rxjs';
-import { MatSelect } from '@angular/material';
-import { takeUntil } from 'rxjs/operators';
+import { MatSelect } from '@angular/material/select';
+
 
 @Component({
   selector: 'filter-item-select-simple',
@@ -20,7 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class SelectSimpleComponent {
 
-  @ViewChild('select') select: MatSelect;
+  @ViewChild('select', { static: true }) select: MatSelect;
   @Input() public item;
   @Output() public change = new EventEmitter();
 

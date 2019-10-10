@@ -18,7 +18,7 @@ import { SelectMultipleComponent } from './multiple/multiple.component';
 })
 export class SelectComponent extends BaseItemComponent implements DoCheck {
 
-  @ViewChild('selectItem') public selectedItem:
+  @ViewChild('selectItem', { static: false }) public selectedItem:
     SelectSimpleComponent | SelectMultipleComponent | SelectMultipleComponent;
   // For case when we have multiple selection with __all option
   // If _all has been selected than we must disable all other items

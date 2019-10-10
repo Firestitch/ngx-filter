@@ -17,7 +17,7 @@ import { AppMaterialModule } from './material.module';
 import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './components';
 import { DialogExampleComponent } from './components/dialog-example';
 import { DialogComponent } from './components/dialog';
-import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material';
+import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
 
 
 @NgModule({
