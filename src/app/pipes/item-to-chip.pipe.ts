@@ -88,7 +88,11 @@ export class FsItemToChip implements PipeTransform {
           } else {
             const itemValue = item.values.find((val) => val.value === model);
 
-            result = itemValue && itemValue.name
+            if (itemValue) {
+              result = itemValue.name
+            } else if (item.isolate) {
+              result = item.isolate.label
+            }
           }
         }
       }

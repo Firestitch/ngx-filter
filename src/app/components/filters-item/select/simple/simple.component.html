@@ -8,4 +8,12 @@
       {{ item.name }}
     </mat-option>
   </mat-select>
+
+  <mat-hint>
+    <div *ngIf="item.isolate">
+      <mat-checkbox (change)="isolateChange(item)" [(ngModel)]="item.isolate.enabled">
+        <span class="checkbox-label">{{ item.isolate.label }}</span>
+      </mat-checkbox>
+    </div>
+  </mat-hint>
 </mat-form-field>

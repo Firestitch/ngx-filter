@@ -41,12 +41,13 @@ export class FilterParams {
     this._filterItems.forEach(filterItem => {
 
       if (filterItem.isTypeSelect && filterItem.isolate) {
+        if (filterItem.multiple) {
+          const isolated = arrayList(filterItem.values, 'value').sort();
+          const value = filterItem.value.sort();
 
-        const isolated = arrayList(filterItem.values, 'value').sort();
-        const value = filterItem.value.sort();
-
-        if (isEqual(value, isolated)) {
-          flattenedParams[filterItem.name] = null;
+          if (isEqual(value, isolated)) {
+            flattenedParams[filterItem.name] = null;
+          }
         }
       }
 

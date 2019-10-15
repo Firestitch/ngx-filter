@@ -26,4 +26,16 @@ export class SelectSimpleComponent {
   public changed($event) {
     this.change.emit($event);
   }
+
+  public isolateChange(filter) {
+
+    if (filter.isolate.enabled) {
+      filter.model = filter.isolate.value;
+    } else {
+      filter.model = null;
+    }
+
+    this.change.next(filter);
+  }
+
 }
