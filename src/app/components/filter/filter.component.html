@@ -2,29 +2,24 @@
      *ngIf="config?.items?.length"
      [ngClass]="{
      'filters-open': showFilterMenu,
-     'no-input': !showFilterInput,
-     'window-desktop': windowDesktop,
-     'keyword-filter': config.keywordFilter
-     }">
-  <div fxLayou="row" fxLayoutAlign="start center" class="menu-filter" fxFlex="1 1 0">
-    <div class="menu-filter-input" fxFlex="grow">
-      <div class="main-filter-bar" fxLayout="row" fxLayoutAlign="start center">
+     'window-desktop': windowDesktop }">
+  <ng-container *ngIf="config.keywordFilter; else noKeywordFilter">
+    <div class="filter-search-container">
+      <div class="filter-input-field">
         <form autocomplete="off" role="presentation">
           <mat-form-field
-            class="filter-input-field"
             floatLabel="never">
             <span matPrefix>
-              <mat-icon
-                matPrefix
-                (click)="changeVisibilityClick(true, $event)">search</mat-icon>
+              <mat-icon matPrefix>search</mat-icon>
             </span>
 
-            <input matInput
-                  [(ngModel)]="searchText"
-                  name="filter-input"
-                  #searchTextInput
-                  (click)="filterInputEvent($event)"
-                  class="filter-input">
+            <input
+              matInput
+              [(ngModel)]="searchText"
+              name="filter-input"
+              #searchTextInput
+              (click)="filterInputEvent($event)"
+              class="filter-input">
 
             <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
@@ -34,6 +29,7 @@
               class="clear">
               <mat-icon>clear</mat-icon>
             </a>
+
             <a matSuffix
               (click)="reload($event)"
               href="javascript:void(0)"
@@ -41,39 +37,34 @@
               *ngIf="config.reload">
               <mat-icon>refresh</mat-icon>
             </a>
-            <!-- <a (click)="changeVisibilityClick(true, $event)"
-              matSuffix
-              href="javascript:void(0)"
-              class="filter"
-              *ngIf="config.nonKeywordFilters">
-              <mat-icon>filter_list</mat-icon>
-            </a>
-            <span class="active-filters-counter"
-                  matSuffix
-                  (click)="changeVisibilityClick(true,$event)"
-                  *ngIf="!config.chips && activeFiltersCount > 0">
-              {{ activeFiltersCount }}
-            </span>
-            <span class="active-filters-counter"
-                  matSuffix
-                  (click)="changeVisibilityClick(true,$event)"
-                  *ngIf="!config.chips && activeFiltersWithInputCount > 0">
-              {{ activeFiltersWithInputCount }}
-            </span> -->
           </mat-form-field>
         </form>
       </div>
+      <ng-container *ngTemplateOutlet="filterActions"></ng-container>
     </div>
-    <div class="filter-actions">
-      <button (click)="changeVisibilityClick(true, $event)"
-        mat-raised-button
-        class="filter">
-        <mat-icon>tune</mat-icon>
-        Filter
-      </button>
-    </div>
-  </div>
+    <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+  </ng-container>
 
+  <ng-template #noKeywordFilter>
+    <div class="filter-searchless-container">
+      <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+      <ng-container *ngTemplateOutlet="filterActions"></ng-container>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #filterActions>
+  <div class="filter-actions">
+    <button (click)="changeVisibilityClick(!showFilterMenu, $event)"
+      mat-raised-button
+      class="filter">
+      <mat-icon>tune</mat-icon>
+      Filters
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #filterChips>
   <fs-filter-chips
     class="filter-chips"
     *ngIf="config.chips"
@@ -81,4 +72,4 @@
     (remove)="resetFilter($event)"
     [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
   </fs-filter-chips>
-</div>
+</ng-template>

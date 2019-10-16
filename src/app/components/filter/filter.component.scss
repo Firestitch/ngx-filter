@@ -7,20 +7,6 @@
   position: relative;
   margin-bottom: 20px;
 
-  .title {
-    display: none;
-  }
-
-  &.no-input {
-    .filter-input-field {
-      .mat-input-prefix,
-      .mat-input-infix,
-      .mat-input-underline {
-        display: none !important;
-      }
-    }
-  }
-
   .results {
     min-height: 90px;
     position: relative;
@@ -42,8 +28,21 @@
     display: block;
   }
 
-  .menu-filter {
+  .filter-searchless-container {
+    display: flex;
 
+    .filter-chips {
+      flex: 1;
+    }
+  }
+
+  .filter-search-container {
+    place-content: center flex-start;
+    align-items: center;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 0%;
     position: relative;
 
     .search {
@@ -57,37 +56,57 @@
       }
     }
 
-    .menu-filter-input {
-
+    form {
       width: 100%;
+    }
 
-      .main-filter-bar {
-        height: 40px; /* Largest height between inputs, buttons, icons */
+    .filter-input-field {
+      flex-direction: row;
+      box-sizing: border-box;
+      display: flex;
+      place-content: center flex-start;
+      align-items: center;
+      flex: 1;
+      overflow: hidden;
 
-        .mat-input-infix {
-          padding-bottom: 0.3em;
+      .mat-form-field {
+        width: 100%;
+
+        .mat-form-field-underline {
+          bottom: auto;
+        }
+        .mat-form-field-infix {
+          border-top: 0;
+        }
+        .mat-form-field-wrapper {
+          padding-bottom: 0;
         }
 
-        .mat-form-field-prefix, .mat-form-field-suffix {
-          align-self: flex-end;
-          display: flex;
+        .mat-form-field-flex {
           align-items: center;
+        }
+      }
 
-          white-space: nowrap;
+      .mat-form-field-prefix,
+      .mat-form-field-suffix {
+        align-self: flex-end;
+        display: flex;
+        align-items: center;
 
-          mat-icon, a {
-            cursor: pointer;
-            color: initial;
+        white-space: nowrap;
 
-            &:hover {
-              color: inherit;
-            }
+        mat-icon, a {
+          cursor: pointer;
+          color: initial;
+
+          &:hover {
+            color: inherit;
           }
         }
+      }
 
-        .mat-form-field-infix {
-          width: auto;
-        }
+      .mat-form-field-infix {
+        width: auto;
       }
     }
   }
@@ -106,106 +125,23 @@
       padding-left: 4px;
     }
   }
-}
 
-
-.fs-filter.keyword-filter {
-
-  .filter-input-field {
-    .filter {
-      display: none;
-    }
+  button.filter {
+    margin-left: 10px;
   }
 
-  .filter-input-field {
-    .mat-form-field-prefix,
-    .mat-form-field-infix,
-    .mat-form-field-underline {
-      visibility: visible;
-    }
+  button.reload {
+    margin-left: -40px;
+    right: -9px;
   }
 }
 
-.main-filter-bar {
-  overflow: hidden;
-
-  form {
-    width: 100%;
-  }
-
-  .filter-input-field {
-
-    width: 100%;
-
-    .mat-form-field-prefix,
-    .mat-form-field-infix,
-    .mat-form-field-underline {
-      visibility: hidden;
-    }
-
-    .mat-form-field-underline {
-      bottom: auto;
-    }
-    .mat-form-field-infix {
-      border-top: 0;
-    }
-    .mat-form-field-wrapper {
-      padding-bottom: 0;
-    }
-
-    .mat-form-field-flex {
-      align-items: center;
-    }
-  }
-}
-
-.active-filters-counter {
-  &.with-input {
-    display: none;
-  }
-
-  min-width: 22px;
-  line-height: 22px;
-  height: 22px;
-  transform: scale(.65);
-  font-size: 116%;
-  margin-left: -2px;
-  background: #ccc;
-  border-radius: 50%;
-  text-align: center;
-  padding: 3px;
-  color: #fff;
-  cursor: pointer;
-}
-
-button.filter {
-  margin-left: 10px;
-}
-
-button.reload {
-  margin-left: -40px;
-  right: -9px;
-}
 
 @media screen and (max-width: 1199px) {
   .fs-filter .reload {
     display: none;
   }
 }
-
-@media screen and (min-width: 1200px) {
-  button.filter {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 1199px) {
-
-  .main-filter-bar .filter-input-field .filter {
-    display: block !important;
-  }
-}
-
 
 @media screen and (min-width: 1200px) {
   body.fs-filter-open {

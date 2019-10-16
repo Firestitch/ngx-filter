@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
-  ApplicationRef,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -12,12 +12,12 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
+  Output
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FsDocumentScrollService } from '@firestitch/scroll';
 import { FsStore } from '@firestitch/store';
 
 import { fromEvent, Subject } from 'rxjs';
@@ -57,6 +57,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
+  @Output() public closed = new EventEmitter<any>();
+  @Output() public opened = new EventEmitter<any>();
 
   @ViewChild('searchTextInput', { static: false })
   set searchTextInput(value) {
@@ -82,7 +84,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _firstOpen = true;
   private _filterParams: FilterParams;
   private _sort = {};
-  private _closed$ = new Subject();
   private _destroy$ = new Subject();
 
   constructor(
@@ -90,9 +91,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _location: Location,
     private _route: ActivatedRoute,
     private _router: Router,
-    private _appRef: ApplicationRef,
     private _injector: Injector,
-    private _documentScrollService: FsDocumentScrollService,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
@@ -117,6 +116,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._listenWindowResize();
+    this._listenEscButton();
   }
 
   public set config(config) {
@@ -186,9 +186,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnDestroy() {
 
     this._destroyFilterDrawer();
-
-    this._closed$.next();
-    this._closed$.complete();
 
     this._destroy$.next();
     this._destroy$.complete();
@@ -302,8 +299,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this._searchTextInput) {
         this._searchTextInput.nativeElement.blur()
       }
-    } else {
-      this.changeVisibility(true);
     }
   }
 
@@ -314,11 +309,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (!state) {
-      this._closed$.next();
+      this.closed.emit();
       return this._destroyFilterDrawer();
     }
-
-    this._listenEscButton();
 
     const notTextItem = this.config.items.find((item) => {
       return item.type !== ItemType.Keyword;
@@ -327,6 +320,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!notTextItem) {
       return;
     }
+
+    this.opened.next();
 
     this._filterOverlay.open(this._injector,  {
       items: this.config.items,
@@ -549,9 +544,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._zone.runOutsideAngular(() => {
       fromEvent(window, 'keyup')
         .pipe(
-          debounceTime(300),
           filter((event: KeyboardEvent) => event.code === 'Escape'),
-          takeUntil(this._closed$),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
