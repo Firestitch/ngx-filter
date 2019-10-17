@@ -54,10 +54,10 @@
 </div>
 
 <ng-template #filterActions>
-  <div class="filter-actions">
-    <button (click)="changeVisibilityClick(!showFilterMenu, $event)"
-      mat-raised-button
-      class="filter">
+  <div class="filter-actions" *ngIf="config.nonKeywordFilters">
+    <button
+      (click)="changeVisibilityClick(!showFilterMenu, $event)"
+      mat-raised-button>
       <mat-icon>tune</mat-icon>
       Filters
     </button>
