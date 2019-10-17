@@ -28,6 +28,8 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.listenValueChangesForRanges();
+
     if (this.item.hasPendingValues) {
       this.item.values$
         .pipe(
@@ -46,5 +48,17 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   public removeItem(item, type = null) {
     this.remove.next({ item: item, type: type });
+  }
+
+  public listenValueChangesForRanges() {
+    if (this.item.isTypeDateRange || this.item.isTypeRange || this.item.isTypeDateTimeRange) {
+      this.item.valueChanged$
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this._cdRef.markForCheck();
+        });
+    }
   }
 }
