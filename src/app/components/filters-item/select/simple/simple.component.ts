@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
+import { FsFilterConfigItem } from '../../../../models/filter-item';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { MatSelect } from '@angular/material/select';
 export class SelectSimpleComponent {
 
   @ViewChild('select', { static: true }) select: MatSelect;
-  @Input() public item;
+  @Input() public item: FsFilterConfigItem;
   @Output() public change = new EventEmitter();
 
   constructor(public cd: ChangeDetectorRef) {}

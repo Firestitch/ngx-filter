@@ -18,6 +18,7 @@ import {
 import { simpleFormat } from '@firestitch/date';
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
+import { BehaviorSubject } from 'rxjs';
 
 
 export class FsFilterConfigItem extends Model {
@@ -31,7 +32,6 @@ export class FsFilterConfigItem extends Model {
   @Alias() public groups: any;
   @Alias() public wait: boolean;
   @Alias() public query: string;
-  @Alias() public values$: any;
   @Alias() public selectedValue: any;
   @Alias() public isolate: any;
   @Alias() public names: any;
@@ -53,14 +53,14 @@ export class FsFilterConfigItem extends Model {
 
   private _model: any;
   private _pendingValues = false;
-  private _values: any;
+  private _values$ = new BehaviorSubject(null);
 
   constructor(
     private _configItem: IFilterConfigItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem,
     private _config: FsFilterConfig,
     private _route: ActivatedRoute,
-    private _persists: any)
-  {
+    private _persists: any
+  ) {
     super();
     this._fromJSON(_configItem);
   }
@@ -79,12 +79,16 @@ export class FsFilterConfigItem extends Model {
   }
 
   set values(values) {
-    this._values = values;
+    this._values$.next(values);
     this.init();
   }
 
   get values() {
-    return this._values;
+    return this._values$.getValue();
+  }
+
+  get values$() {
+    return this._values$.pipe(takeUntil(this._config.destroy$));
   }
 
   get value() {

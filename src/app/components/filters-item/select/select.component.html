@@ -1,4 +1,4 @@
-<ng-template [ngIf]="item.values?.length">
+<ng-template [ngIf]="(item.values$ | async).length">
   <ng-container *ngIf="item.multiple && !item.children">
     <filter-item-select-multiple
       [item]="item"
