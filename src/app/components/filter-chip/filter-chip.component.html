@@ -1,0 +1,55 @@
+
+<ng-container *ngIf="item.isTypeDateRange || item.isTypeRange || item.isTypeDateTimeRange; else defaultChip">
+  <fs-chip
+    *ngIf="item.model?.min || item.model?.from"
+    [value]="item"
+    [selectable]="false"
+    [removable]="true"
+    size="small"
+    (removed)="removeItem(item, 'from')">
+    <ng-template
+      [ngTemplateOutlet]="chipContent"
+      [ngTemplateOutletContext]="{ item: item, type: 'from' }"
+    ></ng-template>
+  </fs-chip>
+
+  <fs-chip
+    *ngIf="item.model?.max || item.model?.to"
+    [value]="item"
+    [selectable]="false"
+    [removable]="true"
+    size="small"
+    (removed)="removeItem(item, 'to')">
+    <ng-template
+      [ngTemplateOutlet]="chipContent"
+      [ngTemplateOutletContext]="{ item: item, type: 'to' }"
+    ></ng-template>
+  </fs-chip>
+
+</ng-container>
+
+<ng-template #defaultChip>
+  <fs-chip
+    [value]="item"
+    [selectable]="false"
+    [removable]="true"
+    size="small"
+    (removed)="removeItem(item)">
+    <ng-template
+      [ngTemplateOutlet]="chipContent"
+      [ngTemplateOutletContext]="{ item: item }"
+    ></ng-template>
+  </fs-chip>
+</ng-template>
+
+<ng-template #chipContent let-item="item" let-type="type">
+  <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
+    {{ item.model | fsItemToChip:item:type }}
+  </ng-container>
+
+  <ng-template #lodaingValues>
+    loading...
+  </ng-template>
+</ng-template>
+
+

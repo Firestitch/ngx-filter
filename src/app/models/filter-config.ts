@@ -264,6 +264,8 @@ export class FsFilterConfig extends Model {
   }
 
   public destroy() {
+    this.items.forEach((item) => item.destroy());
+
     this._destroy$.next();
     this._destroy$.complete();
   }

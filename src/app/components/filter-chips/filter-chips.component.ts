@@ -13,10 +13,9 @@ export class FsFilterChipsComponent {
   @Input() public filters: FsFilterConfigItem[];
   @Output() public remove = new EventEmitter<{ item: FsFilterConfigItem, type: string }>();
 
-  public itemType = ItemType;
   public chips = [];
 
-  public removeItem(item, type = null) {
-    this.remove.next({ item: item, type: type });
+  public removeItem(event) {
+    this.remove.next(event);
   }
 }

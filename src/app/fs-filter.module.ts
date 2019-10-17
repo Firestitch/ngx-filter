@@ -43,6 +43,7 @@ import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.c
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
 import { FsItemToChip } from './pipes/item-to-chip.pipe';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
+import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { SelectBackdropComponent } from './components/filters-item/select/backdr
     CheckboxComponent,
     FilterDrawerComponent,
     SelectBackdropComponent,
+    FsFilterChipComponent,
 
     // Pipes
     FsItemToChip,

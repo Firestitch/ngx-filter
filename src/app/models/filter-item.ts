@@ -49,10 +49,10 @@ export class FsFilterConfigItem extends Model {
   @Alias('default') public defaultValue: any;
 
   public initialLoading = false;
-  public valueChanged = false;
 
   private _model: any;
   private _pendingValues = false;
+  private _valueChanged$ = new BehaviorSubject(false);
   private _values$ = new BehaviorSubject(null);
 
   constructor(
@@ -85,6 +85,18 @@ export class FsFilterConfigItem extends Model {
 
   get values() {
     return this._values$.getValue();
+  }
+
+  get valueChanged$() {
+    return this._valueChanged$.pipe(takeUntil(this._config.destroy$));
+  }
+
+  get valueChanged() {
+    return this._valueChanged$.getValue();
+  }
+
+  set valueChanged(value: boolean) {
+    this._valueChanged$.next(value);
   }
 
   get values$() {
@@ -672,6 +684,11 @@ export class FsFilterConfigItem extends Model {
         this.model = item ? item.value : '__all';
       }
     }
+  }
+
+  public destroy() {
+    this._valueChanged$.complete();
+    this._values$.complete();
   }
 
   private modelValueExists(values) {

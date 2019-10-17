@@ -40,7 +40,7 @@ export class SelectComponent extends BaseItemComponent implements DoCheck {
       const changes = this._kvDiffer.diff(this.item);
 
       if (changes) {
-        this._cd.detectChanges();
+        this._cd.markForCheck();
 
         if (this.selectedItem) {
           this.selectedItem.cd.markForCheck();
