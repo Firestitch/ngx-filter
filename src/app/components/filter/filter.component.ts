@@ -116,7 +116,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._listenWindowResize();
-    this._listenEscButton();
   }
 
   public set config(config) {
@@ -320,6 +319,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!notTextItem) {
       return;
     }
+
+    this._listenEscButton();
 
     this.opened.next();
 
@@ -545,6 +546,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       fromEvent(window, 'keyup')
         .pipe(
           filter((event: KeyboardEvent) => event.code === 'Escape'),
+          takeUntil(this.closed),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
