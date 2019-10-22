@@ -13,13 +13,13 @@
                    (itemChanged)="filterChanged($event)">
       </filter-item>
 
-      <ng-container *ngIf="sortBy && sortBy.values && sortBy.values.length > 0 && showSortBy">
+      <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0 && showSortBy">
         <filter-item class="filter-group sort"
-                     [item]="sortBy"
+                     [item]="sortItem"
                      (itemChanged)="filterChanged($event)">
         </filter-item>
         <filter-item class="filter-group sort"
-                     [item]="sortDirection"
+                     [item]="sortDirectionItem"
                      (itemChanged)="filterChanged($event)">
         </filter-item>
       </ng-container>

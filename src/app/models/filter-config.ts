@@ -1,5 +1,4 @@
-import { isEmpty, list as arrayList } from '@firestitch/common';
-import { simpleFormat } from '@firestitch/date';
+import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
 
 import { Observable, Subject } from 'rxjs';
@@ -102,6 +101,7 @@ export class FsFilterConfig extends Model {
       }
 
       this.sortByItem = new FsFilterConfigItem(sortByItem, this, route, persists);
+      this.sortByItem.initValues();
 
       const sortDirectionItem = {
         name: SORT_DIRECTION_FIELD,
@@ -118,6 +118,7 @@ export class FsFilterConfig extends Model {
       }
 
       this.sortDirectionItem = new FsFilterConfigItem(sortDirectionItem, this, route, persists);
+      this.sortDirectionItem.initValues();
     }
   }
 

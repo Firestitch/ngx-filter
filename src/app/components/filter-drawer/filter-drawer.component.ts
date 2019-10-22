@@ -13,6 +13,7 @@ import { FsFilterConfigItem } from '../../models/filter-item';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
+import { ItemType } from 'src/app/enums/item-type.enum';
 
 
 @Component({
@@ -30,8 +31,8 @@ export class FilterDrawerComponent implements DoCheck {
 
   @Input() public items: FsFilterConfigItem[] = [];
   @Input() public showSortBy;
-  @Input() public sortBy = null;
-  @Input() public sortDirection = null;
+  @Input() public sortItem: FsFilterConfigItem;
+  @Input() public sortDirectionItem: FsFilterConfigItem;
   @Input() public inline = false;
 
   protected _differ: IterableDiffer<FsFilterConfigItem>;
@@ -48,8 +49,8 @@ export class FilterDrawerComponent implements DoCheck {
               @Inject(FILTER_DRAWER_DATA) private data) {
     this.items = data.items;
     this.showSortBy = data.showSortBy;
-    this.sortBy = data.sortBy;
-    this.sortDirection = data.sortDirection;
+    this.sortItem = data.sortItem;
+    this.sortDirectionItem = data.sortDirectionItem;
     this._clear = data.clear;
     this._done = data.done;
     this._search = data.search;

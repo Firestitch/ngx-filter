@@ -3,6 +3,7 @@
     <mat-label>{{item.label[0]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
+           type="number"
            [(ngModel)]="item.model.min"
            (ngModelChange)="itemChange()">
   </mat-form-field>
@@ -11,6 +12,7 @@
     <mat-label>{{item.label[1]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
+           type="number"
            [(ngModel)]="item.model.max"
            (ngModelChange)="itemChange()">
   </mat-form-field>
