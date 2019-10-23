@@ -14,6 +14,7 @@ import { FsFilterConfigItem } from '../../../../models/filter-item';
 @Component({
   selector: 'filter-item-select-simple',
   templateUrl: './simple.component.html',
+  styleUrls: ['./simple.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectSimpleComponent {
@@ -25,6 +26,7 @@ export class SelectSimpleComponent {
   constructor(public cd: ChangeDetectorRef) {}
 
   public changed($event) {
+    this.item.isolate.enabled = false;
     this.change.emit($event);
   }
 
@@ -38,5 +40,4 @@ export class SelectSimpleComponent {
 
     this.change.next(filter);
   }
-
 }
