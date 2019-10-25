@@ -26,7 +26,10 @@ export class SelectSimpleComponent {
   constructor(public cd: ChangeDetectorRef) {}
 
   public changed($event) {
-    this.item.isolate.enabled = false;
+    if (this.item.isolate) {
+      this.item.isolate.enabled = false;
+    }
+
     this.change.emit($event);
   }
 
