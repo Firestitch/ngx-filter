@@ -30,6 +30,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public children: string;
   @Alias() public multiple: boolean;
   @Alias() public groups: any;
+  @Alias() public hide: boolean;
   @Alias() public wait: boolean;
   @Alias() public query: string;
   @Alias() public selectedValue: any;

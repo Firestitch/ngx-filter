@@ -110,6 +110,15 @@ export class KitchenSinkComponent {
           query: 'keyword'
         },
         {
+          name: 'payment_method_id',
+          label: 'Payment Method',
+          type: ItemType.AutoComplete,
+          hide: true,
+          values: (keyword) => {
+            return of([]);
+          }
+        },
+        {
           name: 'simple_select',
           type: ItemType.Select,
           label: 'Simple Select',

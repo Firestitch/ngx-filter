@@ -30,12 +30,13 @@ export class FsFilterConfig extends Model {
   @Alias() public sortChange: ChangeFn;
   @Alias() public reloadWhenConfigChanged: boolean;
 
-  public items: FsFilterConfigItem[] = [];
   public sortByItem: FsFilterConfigItem = null;
   public sortDirectionItem: FsFilterConfigItem = null;
   public keywordFilter = false;
   public nonKeywordFilters = false;
 
+  private _items: FsFilterConfigItem[] = [];
+  private _visibleItems: FsFilterConfigItem[] = [];
   private _filtersNames = [];
   private _destroy$ = new Subject<void>();
 
@@ -43,6 +44,14 @@ export class FsFilterConfig extends Model {
     super();
 
     this._fromJSON(data);
+  }
+
+  get items() {
+    return this._items;
+  }
+
+  get visibleItems() {
+    return this._visibleItems;
   }
 
   get destroy$(): Observable<void> {
@@ -53,7 +62,7 @@ export class FsFilterConfig extends Model {
 
     if (items && Array.isArray(items)) {
 
-      this.items = items.map((item, index) => {
+      this._items = items.map((item, index) => {
 
         if (index === 0 && item.type === ItemType.Text) {
           item.type = ItemType.Keyword;
@@ -67,6 +76,8 @@ export class FsFilterConfig extends Model {
           throw Error('Filter init error. Items name must be unique.')
         }
       });
+
+      this._visibleItems = this.items.filter((item) => !item.hide);
 
       // After all the items have been created and added to this.items initalize the values
       // This is important if some item default values are dependent on others

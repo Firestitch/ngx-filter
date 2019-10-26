@@ -9,6 +9,7 @@ export interface IFilterConfigItem {
   children?: string;
   multiple?: boolean;
   groups?: any;
+  hide?: boolean;
   wait?: boolean;
   query?: string;
   values?: any;
