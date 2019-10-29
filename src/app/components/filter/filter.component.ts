@@ -325,7 +325,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.opened.next();
 
     this._filterOverlay.open(this._injector,  {
-      items: this.config.items,
+      items: this.config.visibleItems,
       showSortBy: 'showSortBy',
       sortItem: this.config.sortByItem,
       sortDirectionItem: this.config.sortDirectionItem,
