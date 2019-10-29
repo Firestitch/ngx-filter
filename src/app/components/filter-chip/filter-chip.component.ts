@@ -51,19 +51,12 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   }
 
   public listenValueChangesForRanges() {
-    const shouldListenChanges = this.item.isTypeDateRange
-      || this.item.isTypeRange
-      || this.item.isTypeChips
-      || this.item.isTypeDateTimeRange;
-
-    if (shouldListenChanges) {
-      this.item.valueChanged$
-        .pipe(
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this._cdRef.markForCheck();
-        });
-    }
+    this.item.valueChanged$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._cdRef.markForCheck();
+      });
   }
 }
