@@ -1,5 +1,7 @@
 .fs-filter {
+  display: flex;
   flex-direction: column;
+  height: 100%;
   box-sizing: border-box;
   place-content: stretch flex-start;
   align-items: stretch;
@@ -38,11 +40,10 @@
 
   .filter-search-container {
     place-content: center flex-start;
-    align-items: center;
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
-    flex: 1 1 0%;
+    flex: 1 1 0;
     position: relative;
 
     .search {
