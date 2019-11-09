@@ -1,11 +1,4 @@
 .fs-filter {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-sizing: border-box;
-  align-items: stretch;
-  max-width: 100%;
-  position: relative;
   margin-bottom: 20px;
 
   .results {
@@ -65,6 +58,7 @@
       display: flex;
       align-items: center;
       flex: 1;
+      height: 36px;
 
       .mat-form-field {
         width: 100%;
