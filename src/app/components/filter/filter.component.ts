@@ -301,6 +301,16 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  public getItemValue(name: string) {
+    const item = this.config.items.find((item) => item.name === name);
+
+    if (item) {
+      return item.model;
+    } else {
+      return null;
+    }
+  }
+
   public changeVisibility(state: boolean) {
 
     if (state === this.showFilterMenu) {
