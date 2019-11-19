@@ -20,8 +20,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { FsStore } from '@firestitch/store';
 
-import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { debounceTime, filter, map, mapTo, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
@@ -306,6 +306,22 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (item) {
       return item.model;
+    } else {
+      return null;
+    }
+  }
+
+  public getItemValueChange$(name: string): Observable<any> | null {
+    const item = this.config.items.find((i) => i.name === name);
+
+    if (item) {
+      return item.valueChanged$
+        .pipe(
+          filter((value) => !!value),
+          map(() => {
+            return this.getItemValue(name);
+          }),
+        );
     } else {
       return null;
     }
