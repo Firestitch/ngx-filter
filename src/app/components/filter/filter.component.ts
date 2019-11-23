@@ -78,6 +78,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public showFilterMenu = false;
   public windowDesktop = false;
 
+  private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;
   private _searchTextInput: ElementRef = null;
   private _searchTextNgModel: NgModel = null;
@@ -174,6 +175,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit(): void {
     this._listenInputKeyEvents();
     this._listenInputChanges();
+    this._listenFilterChanges();
   }
 
   public focus() {
@@ -266,7 +268,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.updateFilledCounter();
 
     if (changeEvent) {
-      this._filterChange();
+      this._filterChanged$.next();
+      // this._filterChange();
     }
   }
 
@@ -355,7 +358,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       showSortBy: 'showSortBy',
       sortItem: this.config.sortByItem,
       sortDirectionItem: this.config.sortDirectionItem,
-      filterChanged: this._filterChange.bind(this),
+      filterChanged: this._filterChanged$,
       search: this.search.bind(this),
       done: this.hide.bind(this),
       clear: this.clear.bind(this)
@@ -392,7 +395,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.config.filtersClear();
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
-    this._filterChange();
+    this._filterChanged$.next();
+    // this._filterChange();
     this.changeVisibility(false);
   }
 
@@ -401,7 +405,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public search(event) {
     this.changeVisibilityClick(false, event);
-    this._filterChange();
+    this._filterChanged$.next();
+    // this._filterChange();
   }
 
   public reload(event = null) {
@@ -501,14 +506,19 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Store updated filter data into localstorage
    * @param changedItem
    */
-  private _filterChange(changedItem: FsFilterConfigItem = null) {
+  private _listenFilterChanges() {
+    this._filterChanged$.pipe(
+      debounceTime(200),
+      takeUntil(this._destroy$),
+    )
+      .subscribe((changedItem: FsFilterConfigItem) => {
+        if (changedItem) {
+          changedItem.checkIfValueChanged();
+        }
 
-    if (changedItem) {
-      changedItem.checkIfValueChanged();
-    }
-
-    this._storePersistValues();
-    this.change();
+        this._storePersistValues();
+        this.change();
+      })
   }
 
   private _destroyFilterDrawer() {
@@ -638,7 +648,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
               this._searchTextItem.model = value;
             }
 
-            this._filterChange();
+            this._filterChanged$.next();
+            // this._filterChange();
           })
         });
 

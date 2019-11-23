@@ -14,6 +14,7 @@ import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { ItemType } from 'src/app/enums/item-type.enum';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class FilterDrawerComponent implements DoCheck {
   protected _clear: Function;
   protected _done: Function;
   protected _search: Function;
-  protected _filterChanged: Function;
+  protected _filterChanged$: Subject<FsFilterConfigItem>;
   protected _click: Function;
   public windowDesktop = false;
 
@@ -54,7 +55,7 @@ export class FilterDrawerComponent implements DoCheck {
     this._clear = data.clear;
     this._done = data.done;
     this._search = data.search;
-    this._filterChanged = data.filterChanged;
+    this._filterChanged$ = data.filterChanged;
     this._click = data.click;
     this._differ = this._differs.find(this.items).create<FsFilterConfigItem>((index, item) => {
       return item.model;
@@ -84,7 +85,7 @@ export class FilterDrawerComponent implements DoCheck {
   }
 
   public filterChanged(event) {
-    this._filterChanged(event);
+    this._filterChanged$.next(event);
   }
 
   public backdropClick() {
