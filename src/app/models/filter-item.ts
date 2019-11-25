@@ -81,7 +81,6 @@ export class FsFilterConfigItem extends Model {
 
   set values(values) {
     this._values$.next(values);
-    this.init();
   }
 
   get values() {
