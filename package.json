@@ -43,13 +43,13 @@
     "@angular/router": "^8.2.10",
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/autocomplete": "^8.0.0",
-    "@firestitch/autocomplete-chips": "^8.0.0",
-    "@firestitch/chip": "^7.3.2",
+    "@firestitch/autocomplete-chips": "^8.0.1",
+    "@firestitch/chip": "^7.3.6",
     "@firestitch/clear": "^7.1.1",
     "@firestitch/common": "^7.0.2",
-    "@firestitch/date": "^7.1.0",
-    "@firestitch/datepicker": "^8.0.2",
-    "@firestitch/drawer": "^8.0.0",
+    "@firestitch/date": "^8.0.1",
+    "@firestitch/datepicker": "^8.0.7",
+    "@firestitch/drawer": "^8.0.1",
     "@firestitch/example": "^8.0.0",
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/label": "^7.1.9",
@@ -78,6 +78,11 @@
     "node": ">=6.0.0"
   },
   "peerDependencies": {
-    "@firestitch/scroll": ">=7.0.2"
+    "@firestitch/scroll": ">=7.0.2",
+    "@firestitch/date": "^8.0.1",
+    "@firestitch/datepicker": "^8.0.7",
+    "@firestitch/drawer": "^8.0.1",
+    "@firestitch/autocomplete-chips": "^8.0.1",
+    "@firestitch/chip": "^7.3.6"
   }
 }
