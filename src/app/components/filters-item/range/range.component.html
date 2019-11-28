@@ -5,7 +5,8 @@
     <input matInput
            type="number"
            [(ngModel)]="item.model.min"
-           (ngModelChange)="itemChange()">
+           #from
+    >
   </mat-form-field>
   <div class="spacer"></div>
   <mat-form-field class="filter-range-max">
@@ -14,6 +15,7 @@
     <input matInput
            type="number"
            [(ngModel)]="item.model.max"
-           (ngModelChange)="itemChange()">
+           #to
+    >
   </mat-form-field>
 </span>

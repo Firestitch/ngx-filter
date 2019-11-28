@@ -31,9 +31,9 @@ export class BaseItemComponent implements DoCheck, OnDestroy {
 
   protected _item: FsFilterConfigItem;
   protected _kvDiffer: KeyValueDiffer<string, any>;
+  protected _destroy$ = new Subject();
 
   private _debouncer$ = new Subject();
-  private _destroy$ = new Subject();
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
