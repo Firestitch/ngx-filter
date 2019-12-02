@@ -41,7 +41,7 @@ export class FilterParams {
     this._filterItems.forEach(filterItem => {
 
       if (filterItem.isTypeSelect && filterItem.isolate) {
-        if (filterItem.multiple) {
+        if (filterItem.multiple && filterItem.value) {
           const isolated = arrayList(filterItem.values, 'value').sort();
           const value = filterItem.value.sort();
 
