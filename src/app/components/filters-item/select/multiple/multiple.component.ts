@@ -46,7 +46,6 @@ export class SelectMultipleComponent {
   }
 
   public isolateChange(filter) {
-
     if (filter.isolate.enabled) {
       filter.model = filter.multiple ? [filter.isolate.value] : filter.isolate.value;
     } else {

@@ -4,7 +4,10 @@
     #select
     [(ngModel)]="item.model"
     (ngModelChange)="changed($event)">
-    <mat-option *ngFor="let item of item.values" [value]="item.value" [ngStyle]="item.style">
+    <mat-option *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"
+                [value]="item.value"
+                [ngStyle]="item.style"
+    >
       {{ item.name }}
     </mat-option>
   </mat-select>

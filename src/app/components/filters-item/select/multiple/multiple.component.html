@@ -6,7 +6,7 @@
     (ngModelChange)="changed()"
     [multiple]="item.multiple">
       <mat-option
-        *ngFor="let item of item.values"
+        *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"
         [value]="item.value"
         [ngStyle]="item.style">
           {{ item.name }}

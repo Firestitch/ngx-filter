@@ -114,10 +114,8 @@ export class FsFilterConfigItem extends Model {
       if (this.multiple) {
 
         if (this.isolate) {
-          if (!Array.isArray(this.model) || !this.model.length) {
-            value = this.values.map(item => {
-              return isObject(item) ? item.value : null;
-            });
+          if (Array.isArray(this.model) && this.model.length) {
+            value = this.model;
           }
         }
 

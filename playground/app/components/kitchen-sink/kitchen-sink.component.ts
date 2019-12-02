@@ -234,7 +234,8 @@ export class KitchenSinkComponent {
           name: 'state',
           type: ItemType.Select,
           label: 'Status',
-          multiple: false,
+          multiple: true,
+          default: null,
           values: [
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },

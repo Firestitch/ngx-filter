@@ -7,7 +7,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -44,6 +43,7 @@ import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.
 import { FsItemToChip } from './pipes/item-to-chip.pipe';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
+import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 
 
 @NgModule({
@@ -92,6 +92,7 @@ import { FsFilterChipComponent } from './components/filter-chip/filter-chip.comp
 
     // Pipes
     FsItemToChip,
+    FsFilterIsolateValues,
   ],
   providers: [
     FsStore,
