@@ -31,7 +31,9 @@ export class FilterParams {
       Object.assign(params, filterItem.flattenedParams);
     });
 
-    return pickBy(params);
+    return pickBy(params, (val) => {
+      return val !== null && val !== void 0;
+    });
   }
 
   public updateQueryParams() {
