@@ -124,17 +124,8 @@ export class FsFilterConfigItem extends Model {
         }
 
       } else {
-
-        if (this.isolate) {
-          if (this.model == '__all') {
-            value = this.values.map(item => {
-              return isObject(item) ? item.value : null;
-            });
-          }
-        } else {
-          if (this.model == '__all') {
-            value = null;
-          }
+        if (this.model == '__all') {
+          value = null;
         }
       }
     } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
