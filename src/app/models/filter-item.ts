@@ -1,10 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
-import { isEmpty, list as arrayList } from '@firestitch/common';
+import { isEmpty } from '@firestitch/common';
 
 import { Alias, Model } from 'tsmodels';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { isObservable } from 'rxjs/internal/util/isObservable';
+import { isObservable } from 'rxjs';
 
 import { isFunction, isObject, toString, isString, clone, filter } from 'lodash-es';
 import { isDate, isValid, parse, parseISO } from 'date-fns';
