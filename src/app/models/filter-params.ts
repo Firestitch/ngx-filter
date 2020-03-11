@@ -2,7 +2,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
 import { list as arrayList } from '@firestitch/common';
 import { FsFilterConfigItem } from '../models/filter-item';
-import { ItemType } from '@firestitch/filter';
+import { ItemType } from '../enums/item-type.enum';
 
 
 export class FilterParams {
