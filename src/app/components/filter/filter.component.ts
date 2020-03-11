@@ -126,6 +126,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._filterParams = new FilterParams(this._router, this._route, this.config.items);
     if (this.config.queryParam) {
+      // To fill query params with default values
+      this._filterParams.updateQueryParams();
+
+      // Read from query params
       this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
     }
 

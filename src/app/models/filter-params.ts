@@ -1,7 +1,8 @@
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { pickBy, isEqual, isObject, isArray } from 'lodash-es';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
 import { list as arrayList } from '@firestitch/common';
 import { FsFilterConfigItem } from '../models/filter-item';
+import { ItemType } from '@firestitch/filter';
 
 
 export class FilterParams {
@@ -87,7 +88,7 @@ export class FilterParams {
 
     Object.keys(params).forEach((name) => {
 
-      const found = this._filterItems.some(filterItem => {
+      const foundItem = this._filterItems.find(filterItem => {
 
         if (filterItem.isTypeRange) {
           return  name === filterItem.name.concat('_min') ||
@@ -101,75 +102,81 @@ export class FilterParams {
         return filterItem.name === name;
       });
 
-      if (!found) {
+      if (!foundItem) {
         this._preserveParams[name] = params[name];
+      } else {
+        this._fillFilterItemWithQueryValue(foundItem, params);
       }
     });
+  }
 
-    this._filterItems.forEach(filterItem => {
+  private _fillFilterItemWithQueryValue(item, params) {
+    const param = params[name];
 
-      const param = params[filterItem.name];
+    switch (item.type) {
+      case ItemType.Range: {
+        const min = params[item.name + '_min'];
+        const max = params[item.name + '_max'];
 
-      if (filterItem.isTypeRange) {
+        item.model = { min: min, max: max };
+      } break;
 
-        const min = params[filterItem.name + '_min'];
-        const max = params[filterItem.name + '_max'];
+      case ItemType.DateRange: case ItemType.DateTimeRange: {
+        const from = params[item.name + '_from'];
+        const to = params[item.name + '_to'];
 
-        filterItem.model = { min: min, max: max };
+        item.model = { from: from, to: to };
+      } break;
 
-      } else if (filterItem.isTypeDateRange || filterItem.isTypeDateTimeRange) {
-
-        const from = params[filterItem.name + '_from'];
-        const to = params[filterItem.name + '_to'];
-
-        filterItem.model = { from: from, to: to };
-
-      } else if (param) {
-
-        if (filterItem.isTypeSelect && filterItem.multiple) {
-
-          if (filterItem.isolate && param === filterItem.isolate.value) {
-            filterItem.model = [param];
-            filterItem.isolate.enabled = true;
+      case ItemType.Select: {
+        if (item.multiple) {
+          if (item.isolate && param === item.isolate.value) {
+            item.model = [param];
+            item.isolate.enabled = true;
           } else {
-            filterItem.model = param.split(',');
+            item.model = param.split(',');
           }
-
-        } else if (filterItem.isTypeChips) {
-
-            filterItem.model = param
-                                .split(',')
-                                .map((value) => +value);
-
-        } else if (filterItem.isTypeCheckbox) {
-          filterItem.model = param;
-
-        } else if (filterItem.isTypeAutocomplete) {
-          const filterParts = param.split(':');
-
-          filterItem.model = {
-            name: filterParts[1],
-            value: +filterParts[0]
-          }
-        } else if (filterItem.isTypeAutocompleteChips) {
-          const filterParts = param.split(',');
-
-          filterItem.model = filterParts.reduce((arry, value) => {
-
-            const chipParts = value.split(':');
-
-            arry.push({
-              name: chipParts[1],
-              value: +chipParts[0],
-            });
-
-            return arry;
-          }, [])
-
-        } else {
-          filterItem.model = param;
         }
+      } break;
+
+      case ItemType.Chips: {
+        item.model = param
+          .split(',')
+          .map((value) => +value);
+      } break;
+
+      case ItemType.Checkbox: {
+        item.model = param;
+      } break;
+
+      case ItemType.AutoComplete: {
+        const filterParts = param.split(':');
+
+        item.model = {
+          name: filterParts[1],
+          value: +filterParts[0]
+        }
+      } break;
+
+      case ItemType.AutoCompleteChips: {
+        const filterParts = param.split(',');
+
+        item.model = filterParts.reduce((arry, value) => {
+
+          const chipParts = value.split(':');
+
+          arry.push({
+            name: chipParts[1],
+            value: +chipParts[0],
+          });
+
+          return arry;
+        }, [])
+      } break;
+
+      default: {
+        item.model = param;
       }
-    });
+    }
   }
 }

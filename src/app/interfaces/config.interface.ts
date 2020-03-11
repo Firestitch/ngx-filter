@@ -1,7 +1,9 @@
 import {
-  IFilterConfigItem,
+  IFilterConfigBaseItem,
   IFilterConfigDateItem,
-  IFilterConfigAutocompleteItem
+  IFilterConfigAutocompleteItem,
+  IFilterConfigRangeItem,
+  IFilterConfigDateRangeItem,
 } from './item-config.interface';
 
 export interface FilterConfig {
@@ -13,7 +15,7 @@ export interface FilterConfig {
   namespace?: string;
   persist?: any;
   reload?: ChangeFn;
-  items: (IFilterConfigItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem)[];
+  items: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;
   sorts?: SortItem[];
@@ -21,6 +23,15 @@ export interface FilterConfig {
   sortChange?: ChangeFn;
   reloadWhenConfigChanged?: boolean;
 }
+
+export type IFilterConfigItem =
+  (
+    IFilterConfigBaseItem
+    | IFilterConfigDateItem
+    | IFilterConfigAutocompleteItem
+    | IFilterConfigRangeItem
+    | IFilterConfigDateRangeItem
+  );
 
 export interface SortItem {
   name: string;

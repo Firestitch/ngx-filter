@@ -7,9 +7,13 @@ export { FilterItemComponent } from './app/components/filters-item/filter-item.c
 
 // Interfaces
 export {
-  IFilterConfigItem,
+  IFilterConfigBaseItem,
   IFilterConfigDateItem,
   IFilterConfigAutocompleteItem,
+  IFilterItemDefaultRange,
+  IFilterConfigDateRangeItem,
+  IFilterConfigRangeItem,
+  IFilterItemDefaultDateRange
 } from './app/interfaces/item-config.interface';
 
 export {
@@ -18,6 +22,7 @@ export {
   ChangeFn,
   FilterSort,
   Sort,
+  IFilterConfigItem,
 } from './app/interfaces/config.interface';
 
 // Enums/Models

@@ -4,21 +4,21 @@ import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
 
 import { take, takeUntil } from 'rxjs/operators';
-import { isObservable } from 'rxjs';
+import { BehaviorSubject, isObservable } from 'rxjs';
 
-import { isFunction, isObject, toString, isString, clone, filter } from 'lodash-es';
+import { clone, filter, isFunction, isObject, isString, toString } from 'lodash-es';
 import { isDate, isValid, parse, parseISO } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
 import {
   IFilterConfigAutocompleteItem,
+  IFilterConfigBaseItem,
   IFilterConfigDateItem,
-  IFilterConfigItem
+  IFilterItemDefaultRange,
 } from '../interfaces/item-config.interface';
 import { simpleFormat } from '@firestitch/date';
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
-import { BehaviorSubject } from 'rxjs';
 
 
 export class FsFilterConfigItem extends Model {
@@ -47,7 +47,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public mode: string;
   @Alias() public maxYear: number;
   @Alias() public fetchOnFocus: boolean;
-  @Alias('default') public defaultValue: any;
+  @Alias('default') public defaultValue: any | IFilterItemDefaultRange;
 
   public initialLoading = false;
 
@@ -57,7 +57,7 @@ export class FsFilterConfigItem extends Model {
   private _values$ = new BehaviorSubject(null);
 
   constructor(
-    private _configItem: IFilterConfigItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem,
+    private _configItem: IFilterConfigBaseItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem,
     private _config: FsFilterConfig,
     private _route: ActivatedRoute,
     private _persists: any
@@ -767,7 +767,7 @@ export class FsFilterConfigItem extends Model {
     }
 
     if (!this.model) {
-      this.model = {};
+      this.model = this.defaultValue || {};
     }
   }
 
@@ -781,7 +781,7 @@ export class FsFilterConfigItem extends Model {
     }
 
     if (!this.model) {
-      this.model = {};
+      this.model = this.defaultValue || {};
     }
   }
 
