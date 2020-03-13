@@ -1,10 +1,14 @@
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
 
-export interface IFilterConfigBaseItem {
+type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange;
+type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange;
+type FilterAutoCompleteType = ItemType.AutoComplete | ItemType.AutoCompleteChips;
+
+export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   name: string;
-  type: ItemType;
-  label: string;
+  type: T;
+  label: U;
   chipLabel?: string | string[];
   children?: string;
   multiple?: boolean;
@@ -29,27 +33,20 @@ export interface IFilterConfigBaseItem {
   change?(item: IFilterConfigBaseItem): any
 }
 
-export interface IFilterConfigDateItem extends IFilterConfigBaseItem {
-  type: ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange,
-  maxYear?: number,
-  mode?: ItemDateMode
+export interface IFilterConfigDateItem extends IFilterConfigBaseItem<FilterConfigDateType> {
+    maxYear?: number,
+    mode?: ItemDateMode
 }
 
-export interface IFilterConfigAutocompleteItem extends IFilterConfigBaseItem {
-  type: ItemType.AutoComplete | ItemType.AutoCompleteChips
+export interface IFilterConfigAutocompleteItem extends IFilterConfigBaseItem<FilterAutoCompleteType> {
   fetchOnFocus?: boolean
 }
 
-
-export interface IFilterConfigRangeItem {
-  type: ItemType.Range;
-  label?: string[];
+export interface IFilterConfigRangeItem extends IFilterConfigBaseItem<ItemType.Range, string[]> {
   default?: IFilterItemDefaultRange;
 }
 
-export interface IFilterConfigDateRangeItem {
-  type: ItemType.DateRange | ItemType.DateTimeRange;
-  label?: string[];
+export interface IFilterConfigDateRangeItem extends IFilterConfigBaseItem<FilterDateRangeType, string[]> {
   default?: IFilterItemDefaultDateRange;
 }
 
