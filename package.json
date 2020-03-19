@@ -80,10 +80,10 @@
   },
   "peerDependencies": {
     "@firestitch/scroll": ">=7.0.2",
-    "@firestitch/date": "^8.0.1",
-    "@firestitch/datepicker": "^8.0.7",
-    "@firestitch/drawer": "^8.0.1",
-    "@firestitch/autocomplete-chips": "^8.0.1",
-    "@firestitch/chip": "^7.3.6"
+    "@firestitch/date": ">=8.0.1",
+    "@firestitch/datepicker": ">=8.0.7",
+    "@firestitch/drawer": ">=8.0.1",
+    "@firestitch/autocomplete-chips": ">=8.0.1",
+    "@firestitch/chip": ">=7.3.6"
   }
 }
