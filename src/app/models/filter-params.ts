@@ -76,7 +76,8 @@ export class FilterParams {
     this._router.navigate([], {
       replaceUrl: true,
       relativeTo: this._route,
-      queryParams: params
+      queryParams: params,
+      queryParamsHandling: 'merge',
     }).then(() => {});
   }
 
