@@ -230,6 +230,10 @@ export class FsFilterConfigItem extends Model {
         if (values.length) {
           params[name] = values.join(',');
         }
+      } else {
+        params[name] = null;
+        params[name + '_min'] = null;
+        params[name + '_max'] = null;
       }
     } else if (this.isTypeDateRange || this.isTypeDateTimeRange) {
       if (isObject(value)) {
@@ -240,6 +244,10 @@ export class FsFilterConfigItem extends Model {
         if (value.to) {
           params[name + '_to'] = value.to;
         }
+      } else {
+        params[name] = null;
+        params[name + '_from'] = null;
+        params[name + '_to'] = null;
       }
     } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
       if (Array.isArray(value)) {
@@ -247,11 +255,12 @@ export class FsFilterConfigItem extends Model {
         params[name] = this.model.map(item => {
           return isObject(item) ? item.value : null;
         }).join(',');
+      } else {
+        params[name] = null;
       }
 
     } else if (Array.isArray(value)) {
       params[name] = value.join(',');
-
     } else {
       params[name] = value;
     }

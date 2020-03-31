@@ -1,13 +1,12 @@
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
 import { list as arrayList } from '@firestitch/common';
+
 import { FsFilterConfigItem } from '../models/filter-item';
 import { ItemType } from '../enums/item-type.enum';
 
 
 export class FilterParams {
-
-  private _preserveParams = {};
 
   constructor(
     private _router: Router,
@@ -26,20 +25,26 @@ export class FilterParams {
   }
 
   public getFlattenedParams() {
-
-    const params = {};
-    this._filterItems.forEach((filterItem: FsFilterConfigItem) => {
-      Object.assign(params, filterItem.flattenedParams);
-    });
+    const params = this.getRawFlattenedParams();
 
     return pickBy(params, (val) => {
       return val !== null && val !== void 0;
     });
   }
 
+  public getRawFlattenedParams() {
+    const params = {};
+
+    this._filterItems.forEach((filterItem: FsFilterConfigItem) => {
+      Object.assign(params, filterItem.flattenedParams);
+    });
+
+    return params;
+  }
+
   public updateQueryParams() {
 
-    const flattenedParams = this.getFlattenedParams();
+    const flattenedParams = this.getRawFlattenedParams();
 
     this._filterItems.forEach(filterItem => {
 
@@ -67,16 +72,11 @@ export class FilterParams {
       }
     });
 
-    const params = Object.assign(
-        {},
-        this._preserveParams,
-        flattenedParams);
-
     // Update query
     this._router.navigate([], {
       replaceUrl: true,
       relativeTo: this._route,
-      queryParams: params,
+      queryParams: flattenedParams,
       queryParamsHandling: 'merge',
     }).then(() => {});
   }
@@ -86,7 +86,6 @@ export class FilterParams {
    * @param params
    */
   public updateFromQueryParams(params: Params) {
-
     Object.keys(params).forEach((name) => {
 
       const foundItem = this._filterItems.find(filterItem => {
@@ -103,9 +102,7 @@ export class FilterParams {
         return filterItem.name === name;
       });
 
-      if (!foundItem) {
-        this._preserveParams[name] = params[name];
-      } else {
+      if (foundItem) {
         this._fillFilterItemWithQueryValue(foundItem, params);
       }
     });
