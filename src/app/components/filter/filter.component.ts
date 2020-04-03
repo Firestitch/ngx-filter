@@ -12,7 +12,8 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  Output
+  Output,
+  Optional,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -21,7 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FsStore } from '@firestitch/store';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, mapTo, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
 import { FsFilterConfig } from '../../models/filter-config';
@@ -30,6 +31,8 @@ import { objectsAreEquals } from '../../helpers/compare';
 import { FilterParams } from '../../models/filter-params';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { ItemType } from '../../enums/item-type.enum';
+import { MatDialogRef } from '@angular/material/dialog';
+import { removeQueryParams } from '../../helpers/remove-query-params';
 
 
 @Component({
@@ -96,6 +99,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
+    @Optional() private _dialogRef: MatDialogRef<any>,
   ) {
     this._updateWindowWidth();
 
@@ -121,6 +125,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public set config(config) {
     this._config = new FsFilterConfig(config);
+
+    if (!this._config.namespace) {
+      const path = this._location.prepareExternalUrl(this._location.path());
+      this.config.namespace = removeQueryParams(path);
+    }
+
     this._restorePersistValues();
     this.config.initItems(config.items, this._route, this.persists);
 
@@ -533,6 +543,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Restoring values from local storage
    */
   private _restorePersistValues() {
+    // if filter in dialog - we should disable persistance
+    if (this._dialogRef && !this.config.namespace) {
+      return;
+    }
+
     this.persists = this._store.get(this.config.namespace + '-persist', {});
 
     if (this.persists === undefined) {
@@ -568,6 +583,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Store values to local storage
    */
   private _storePersistValues() {
+    // if filter in dialog - we should disable persistance
+    if (this._dialogRef && !this.config.namespace) {
+      return;
+    }
+
     if (this.config.persist) {
       this.persists[this.config.persist.name] = {
         data: this._filterParams.getValues(),
