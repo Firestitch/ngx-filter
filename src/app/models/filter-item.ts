@@ -285,7 +285,7 @@ export class FsFilterConfigItem extends Model {
     }
 
     if (this.fetchOnFocus === void 0) {
-      this.fetchOnFocus = false;
+      this.fetchOnFocus = true;
     }
 
     this.init();
