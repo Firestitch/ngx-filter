@@ -28,3 +28,6 @@ export {
 // Enums/Models
 export { ItemType } from './app/enums/item-type.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
+
+// Injectors
+export { FS_FILTER_CONFIG } from './app/injectors/filter-config';

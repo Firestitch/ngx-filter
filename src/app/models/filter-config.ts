@@ -28,6 +28,7 @@ export class FsFilterConfig extends Model {
   @Alias() public change: ChangeFn;
   @Alias() public reload: ChangeFn;
   @Alias() public sortChange: ChangeFn;
+  @Alias() public case: 'snake' | 'camel' = 'snake';
   @Alias() public reloadWhenConfigChanged: boolean;
 
   public sortByItem: FsFilterConfigItem = null;
@@ -42,7 +43,6 @@ export class FsFilterConfig extends Model {
 
   constructor(data: any = {}) {
     super();
-
     this._fromJSON(data);
   }
 

@@ -14,6 +14,7 @@ import {
   ViewEncapsulation,
   Output,
   Optional,
+  Inject,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -25,6 +26,7 @@ import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { isAfter, subMinutes } from 'date-fns';
 
+import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
 import { FsFilterConfigItem } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
@@ -100,6 +102,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
     @Optional() private _dialogRef: MatDialogRef<any>,
+    @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._updateWindowWidth();
 
@@ -124,6 +127,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public set config(config) {
+
+    config = Object.assign(this._defaultConfig || {}, config);
+
     this._config = new FsFilterConfig(config);
 
     if (!this._config.namespace) {
@@ -131,10 +137,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.config.namespace = removeQueryParams(path);
     }
 
+    if (!this._config.case) {
+      this._config.case = 'snake';
+    }
+
     this._restorePersistValues();
     this.config.initItems(config.items, this._route, this.persists);
 
-    this._filterParams = new FilterParams(this._router, this._route, this.config.items);
+    this._filterParams = new FilterParams(this._router, this._route, this.config);
     if (this.config.queryParam) {
       // Read from query params
       this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);

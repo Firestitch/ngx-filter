@@ -15,13 +15,14 @@ export interface FilterConfig {
   namespace?: string;
   persist?: any;
   reload?: ChangeFn;
-  items: IFilterConfigItem[];
+  items?: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;
   sorts?: SortItem[];
   sort?: Sort;
   sortChange?: ChangeFn;
   reloadWhenConfigChanged?: boolean;
+  case?: 'snake' | 'camel';
 }
 
 export type IFilterConfigItem =

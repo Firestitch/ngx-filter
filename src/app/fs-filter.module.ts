@@ -1,8 +1,10 @@
+import { FilterConfig } from './interfaces/config.interface';
+import { FS_FILTER_CONFIG } from './injectors/filter-config';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -105,4 +107,12 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
   ]
 })
 export class FsFilterModule {
+  static forRoot(config: FilterConfig = {}): ModuleWithProviders {
+    return {
+      ngModule: FsFilterModule,
+      providers: [
+        { provide: FS_FILTER_CONFIG, useValue: config || {} }
+      ]
+    };
+  }
 }

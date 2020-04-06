@@ -24,7 +24,7 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    FsFilterModule,
+    FsFilterModule.forRoot(),
     FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
     AppMaterialModule,

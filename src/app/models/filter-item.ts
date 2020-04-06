@@ -207,6 +207,17 @@ export class FsFilterConfigItem extends Model {
     return value;
   }
 
+  public getRangeName(range) {
+
+    if (this._config.case === 'snake') {
+      return this.name.concat('_').concat(range);
+    }
+
+    if (this._config.case === 'camel') {
+      return this.name.concat(range.charAt(0).toUpperCase()).concat(range.slice(1));
+    }
+  }
+
   public get flattenedParams() {
 
     const value = this.value;
@@ -217,12 +228,12 @@ export class FsFilterConfigItem extends Model {
       if (isObject(value)) {
         const values = [];
         if (!isEmpty(value.min, { zero: true })) {
-          params[name + '_min'] = value.min;
+          params[this.getRangeName('min')] = value.min;
           values.push(value.min);
         }
 
         if (!isEmpty(value.max, { zero: true })) {
-          params[name + '_max'] = value.max;
+          params[this.getRangeName('max')] = value.max;
           values.push(value.max);
         }
 
@@ -232,22 +243,22 @@ export class FsFilterConfigItem extends Model {
         }
       } else {
         params[name] = null;
-        params[name + '_min'] = null;
-        params[name + '_max'] = null;
+        params[this.getRangeName('min')] = null;
+        params[this.getRangeName('max')] = null;
       }
     } else if (this.isTypeDateRange || this.isTypeDateTimeRange) {
       if (isObject(value)) {
         if (value.from) {
-          params[name + '_from'] = value.from;
+          params[this.getRangeName('from')] = value.from;
         }
 
         if (value.to) {
-          params[name + '_to'] = value.to;
+          params[this.getRangeName('to')] = value.to;
         }
       } else {
         params[name] = null;
-        params[name + '_from'] = null;
-        params[name + '_to'] = null;
+        params[this.getRangeName('from')] = null;
+        params[this.getRangeName('to')] = null;
       }
     } else if (this.isTypeAutocompleteChips || this.isTypeChips) {
       if (Array.isArray(value)) {

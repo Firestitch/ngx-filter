@@ -1,3 +1,4 @@
+import { FsFilterConfig } from './filter-config';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
 import { list as arrayList } from '@firestitch/common';
@@ -11,13 +12,13 @@ export class FilterParams {
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
-    private _filterItems: FsFilterConfigItem[],
+    private _config: FsFilterConfig
   ) {}
 
   public getValues() {
 
     const values = {};
-    this._filterItems.forEach(filter => {
+    this._config.items.forEach(filter => {
       values[filter.name] = filter.value;
     });
 
@@ -35,7 +36,7 @@ export class FilterParams {
   public getRawFlattenedParams() {
     const params = {};
 
-    this._filterItems.forEach((filterItem: FsFilterConfigItem) => {
+    this._config.items.forEach((filterItem: FsFilterConfigItem) => {
       Object.assign(params, filterItem.flattenedParams);
     });
 
@@ -46,7 +47,7 @@ export class FilterParams {
 
     const flattenedParams = this.getRawFlattenedParams();
 
-    this._filterItems.forEach(filterItem => {
+    this._config.items.forEach(filterItem => {
 
       if (filterItem.isTypeSelect && filterItem.isolate) {
         if (filterItem.multiple && filterItem.value) {
@@ -88,15 +89,16 @@ export class FilterParams {
   public updateFromQueryParams(params: Params) {
     Object.keys(params).forEach((name) => {
 
-      const foundItem = this._filterItems.find(filterItem => {
+      const foundItem = this._config.items.find(filterItem => {
 
         if (filterItem.isTypeRange) {
-          return  name === filterItem.name.concat('_min') ||
-                  name === filterItem.name.concat('_max') ||
+          return  name === filterItem.getRangeName('min') ||
+                  name === filterItem.getRangeName('max') ||
                   name === filterItem.name;
 
         } else if (filterItem.isTypeDateRange || filterItem.isTypeDateTimeRange) {
-          return name === filterItem.name.concat('_from') || name === filterItem.name.concat('_to');
+          return name === filterItem.getRangeName('from') ||
+                 name ===  filterItem.getRangeName('to');
         }
 
         return filterItem.name === name;
@@ -109,19 +111,19 @@ export class FilterParams {
   }
 
   private _fillFilterItemWithQueryValue(item, params) {
-    const param = params[name];
+    const param = params[item.name];
 
     switch (item.type) {
       case ItemType.Range: {
-        const min = params[item.name + '_min'];
-        const max = params[item.name + '_max'];
+        const min = params[item.getRangeName('min')];
+        const max = params[item.getRangeName('max')];
 
         item.model = { min: min, max: max };
       } break;
 
       case ItemType.DateRange: case ItemType.DateTimeRange: {
-        const from = params[item.name + '_from'];
-        const to = params[item.name + '_to'];
+        const from = params[item.getRangeName('from')];
+        const to = params[item.getRangeName('to')];
 
         item.model = { from: from, to: to };
       } break;
@@ -134,6 +136,8 @@ export class FilterParams {
           } else {
             item.model = param.split(',');
           }
+        } else {
+          item.model = param;
         }
       } break;
 
