@@ -45,33 +45,7 @@ export class FilterParams {
 
   public updateQueryParams() {
 
-    const flattenedParams = this.getRawFlattenedParams();
-
-    this._config.items.forEach(filterItem => {
-
-      if (filterItem.isTypeSelect && filterItem.isolate) {
-        if (filterItem.multiple && filterItem.value) {
-          const isolated = arrayList(filterItem.values, 'value').sort();
-          const value = filterItem.value.sort();
-
-          if (isEqual(value, isolated)) {
-            flattenedParams[filterItem.name] = null;
-          }
-        }
-      }
-
-      if (filterItem.isTypeAutocomplete) {
-        if (isObject(filterItem.model)) {
-          flattenedParams[filterItem.name] = filterItem.model.value + ':' + filterItem.model.name;
-        }
-      } else if (filterItem.isTypeAutocompleteChips) {
-        if (isArray(filterItem.model) && filterItem.model.length) {
-          flattenedParams[filterItem.name] = filterItem.model.map((item) => {
-            return item.value + ':' + item.name;
-          }).join(',');
-        }
-      }
-    });
+    const flattenedParams = this.buildQueryParams();
 
     // Update query
     this._router.navigate([], {
@@ -108,6 +82,38 @@ export class FilterParams {
         this._fillFilterItemWithQueryValue(foundItem, params);
       }
     });
+  }
+
+  public buildQueryParams() {
+    const flattenedParams = this.getRawFlattenedParams();
+
+    this._config.items.forEach(filterItem => {
+
+      if (filterItem.isTypeSelect && filterItem.isolate) {
+        if (filterItem.multiple && filterItem.value) {
+          const isolated = arrayList(filterItem.values, 'value').sort();
+          const value = filterItem.value.sort();
+
+          if (isEqual(value, isolated)) {
+            flattenedParams[filterItem.name] = null;
+          }
+        }
+      }
+
+      if (filterItem.isTypeAutocomplete) {
+        if (isObject(filterItem.model)) {
+          flattenedParams[filterItem.name] = filterItem.model.value + ':' + filterItem.model.name;
+        }
+      } else if (filterItem.isTypeAutocompleteChips) {
+        if (isArray(filterItem.model) && filterItem.model.length) {
+          flattenedParams[filterItem.name] = filterItem.model.map((item) => {
+            return item.value + ':' + item.name;
+          }).join(',');
+        }
+      }
+    });
+
+    return flattenedParams;
   }
 
   private _fillFilterItemWithQueryValue(item, params) {

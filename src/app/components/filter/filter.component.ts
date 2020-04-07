@@ -170,8 +170,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public get config() {
+  public get config(): FsFilterConfig {
     return this._config;
+  }
+
+  public get filterParams(): FilterParams {
+    return this._filterParams;
   }
 
   public ngOnInit() {
