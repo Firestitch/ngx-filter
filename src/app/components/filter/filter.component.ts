@@ -15,6 +15,9 @@ import {
   Output,
   Optional,
   Inject,
+  ContentChild,
+  TemplateRef,
+  HostBinding,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -35,7 +38,7 @@ import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { removeQueryParams } from '../../helpers/remove-query-params';
-
+import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 
 @Component({
   selector: 'fs-filter',
@@ -45,11 +48,13 @@ import { removeQueryParams } from '../../helpers/remove-query-params';
   providers: [
     FsFilterOverlayService,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  protected _config: FsFilterConfig = null;
+  @HostBinding('class.filters-open') showFilterMenu = false;
+  @HostBinding('class.window-desktop') windowDesktop = false;
+  @HostBinding('class.fs-filter') fsFilterClass = true;
 
   @Input('config') set setConfig(config) {
     this.config = config;
@@ -64,6 +69,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public showFilterInput = true;
   @Output() public closed = new EventEmitter<any>();
   @Output() public opened = new EventEmitter<any>();
+
+  @ContentChild(FilterStatusBarDirective, { static: false, read: TemplateRef })
+  public statusBar;
 
   @ViewChild('searchTextInput', { static: false })
   set searchTextInput(value) {
@@ -80,8 +88,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public persists = null;
   public activeFiltersCount = 0;
   public activeFiltersWithInputCount = 0;
-  public showFilterMenu = false;
-  public windowDesktop = false;
+
+  protected _config: FsFilterConfig = null;
 
   private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;

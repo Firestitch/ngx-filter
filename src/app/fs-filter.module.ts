@@ -46,7 +46,7 @@ import { FsItemToChip } from './pipes/item-to-chip.pipe';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
 import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
-
+import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
 
 @NgModule({
   imports: [
@@ -92,6 +92,8 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     SelectBackdropComponent,
     FsFilterChipComponent,
 
+    FilterStatusBarDirective,
+
     // Pipes
     FsItemToChip,
     FsFilterIsolateValues,
@@ -101,6 +103,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
   ],
   exports: [
     FilterComponent,
+    FilterStatusBarDirective
   ],
   entryComponents: [
     FilterDrawerComponent

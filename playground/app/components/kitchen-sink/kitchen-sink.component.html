@@ -1,4 +1,8 @@
-<fs-filter [config]="conf" #filter></fs-filter>
+<fs-filter [config]="conf" #filter>
+  <ng-template fsFilterStatusBar>
+    Showing 4 of 4 results sorted by Name, Ascending
+  </ng-template>
+</fs-filter>
 <fieldset *ngIf="query">
   <legend>Flattened Filter Values</legend>
   <pre>{{ query | json }}</pre>

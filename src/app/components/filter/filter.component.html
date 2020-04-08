@@ -1,8 +1,4 @@
-<div class="fs-filter"
-     *ngIf="config?.items?.length"
-     [ngClass]="{
-     'filters-open': showFilterMenu,
-     'window-desktop': windowDesktop }">
+<ng-container *ngIf="config?.items?.length">
   <ng-container *ngIf="config.keywordFilter; else noKeywordFilter">
     <div class="filter-search-container">
       <div class="filter-input-field">
@@ -42,16 +38,22 @@
       </div>
       <ng-container *ngTemplateOutlet="filterActions"></ng-container>
     </div>
-    <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+    <div class="status-actions">
+      <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
+      <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+    </div>
   </ng-container>
 
   <ng-template #noKeywordFilter>
     <div class="filter-searchless-container">
-      <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+      <div class="status-actions">
+        <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
+        <ng-container *ngTemplateOutlet="filterChips"></ng-container>
+      </div>
       <ng-container *ngTemplateOutlet="filterActions"></ng-container>
     </div>
   </ng-template>
-</div>
+</ng-container>
 
 <ng-template #filterActions>
   <div class="filter-actions" *ngIf="config.nonKeywordFilters">
@@ -73,4 +75,10 @@
     (remove)="resetFilter($event)"
     [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
   </fs-filter-chips>
+</ng-template>
+
+<ng-template #statusBarContainer>
+  <div class="status-bar" *ngIf="statusBar">
+    <small><ng-container *ngTemplateOutlet="statusBar"></ng-container></small>
+  </div>
 </ng-template>

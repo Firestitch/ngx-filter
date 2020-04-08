@@ -5,6 +5,9 @@ export { FsFilterModule } from './app/fs-filter.module';
 export { FilterComponent } from './app/components/filter/filter.component';
 export { FilterItemComponent } from './app/components/filters-item/filter-item.component';
 
+// Directives
+export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
+
 // Interfaces
 export {
   IFilterConfigBaseItem,
