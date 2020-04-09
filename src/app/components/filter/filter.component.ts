@@ -434,6 +434,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterChanged$.next();
     // this._filterChange();
     this.changeVisibility(false);
+
+    if (this.config.clear) {
+      this.config.clear();
+    }
   }
 
   /**

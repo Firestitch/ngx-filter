@@ -259,7 +259,12 @@ export class KitchenSinkComponent {
           label: 'Max Price',
           prefix: '$&nbsp;'
         }
-      ]
+      ],
+      //clear: false,
+      // button: {
+      //   label: '',
+      //   style: 'icon',
+      // }
     };
 
 

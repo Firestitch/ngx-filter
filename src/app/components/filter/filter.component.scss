@@ -103,6 +103,7 @@ fs-filter {
         white-space: nowrap;
 
         mat-icon, a {
+          display: flex;
           cursor: pointer;
           color: initial;
 
@@ -135,6 +136,12 @@ fs-filter {
 
   .filter-actions {
     margin-left: 10px;
+
+    button.mat-icon-button {
+      height: 36px;
+      line-height: 36px;
+      width: 36px;
+    }
   }
 
   button.reload {

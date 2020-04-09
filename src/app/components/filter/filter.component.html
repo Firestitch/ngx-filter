@@ -19,7 +19,7 @@
 
             <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
-              *ngIf="searchText && showFilterInput"
+              *ngIf="searchText && showFilterInput && config.clear"
               (click)="clearSearchText($event)"
               href="javascript:void(0)"
               class="clear">
@@ -58,13 +58,21 @@
 <ng-template #filterActions>
   <div class="filter-actions" *ngIf="config.nonKeywordFilters">
     <button
+      mat-button
+      [ngClass]="{  'mat-raised-button': config.button.style == 'raised',
+                    'mat-button': config.button.style == 'basic',
+                    'mat-icon-button': config.button.style == 'icon'  }"
       (click)="changeVisibilityClick(!showFilterMenu, $event)"
       type="button"
-      mat-raised-button>
-      <mat-icon>tune</mat-icon>
-      Filters
+      [color]="config.button.color">
+      <ng-container *ngTemplateOutlet="filterButton"></ng-container>
     </button>
   </div>
+</ng-template>
+
+<ng-template #filterButton>
+  <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
+  {{config.button.label}}
 </ng-template>
 
 <ng-template #filterChips>

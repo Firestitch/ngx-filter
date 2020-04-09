@@ -1,3 +1,4 @@
+import { FilterButton } from './../interfaces/config.interface';
 import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
 
@@ -27,9 +28,11 @@ export class FsFilterConfig extends Model {
   @Alias() public init: ChangeFn;
   @Alias() public change: ChangeFn;
   @Alias() public reload: ChangeFn;
+  @Alias() public clear: ChangeFn;
   @Alias() public sortChange: ChangeFn;
   @Alias() public case: 'snake' | 'camel' = 'snake';
   @Alias() public reloadWhenConfigChanged: boolean;
+  @Alias() public button: FilterButton;
 
   public sortByItem: FsFilterConfigItem = null;
   public sortDirectionItem: FsFilterConfigItem = null;
@@ -88,6 +91,30 @@ export class FsFilterConfig extends Model {
     }
 
     this.initSorting(route, persists);
+
+    if (!this.button) {
+      this.button = {};
+    }
+
+    if (this.button.label === undefined) {
+      this.button.label = 'Filters';
+    }
+
+    if (this.button.icon === undefined) {
+      this.button.icon = 'tune';
+    }
+
+    if (this.button.style === undefined) {
+      this.button.style = 'raised';
+    }
+
+    if (this.button.color === undefined) {
+      this.button.color = 'default';
+    }
+
+    if (this.clear === undefined) {
+      this.clear = () => {}
+    }
 
     this.keywordFilter = !!this.items.find(e => ItemType.Keyword === e.type);
     this.nonKeywordFilters = !!this.items.find(e => ItemType.Keyword !== e.type);

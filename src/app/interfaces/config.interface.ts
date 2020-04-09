@@ -14,7 +14,8 @@ export interface FilterConfig {
   queryParam?: boolean;
   namespace?: string;
   persist?: any;
-  reload?: ChangeFn;
+  reload?: ChangeFn | boolean;
+  clear?: ChangeFn | boolean;
   items?: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;
@@ -23,6 +24,7 @@ export interface FilterConfig {
   sortChange?: ChangeFn;
   reloadWhenConfigChanged?: boolean;
   case?: 'snake' | 'camel';
+  button?: FilterButton
 }
 
 export type IFilterConfigItem =
@@ -42,6 +44,13 @@ export interface SortItem {
 export interface Sort {
   direction?: string;
   value?: string;
+}
+
+export interface FilterButton {
+  style?: 'raised' | 'basic' | 'icon';
+  color?: 'primary' | 'default',
+  icon?: string,
+  label?: string
 }
 
 export interface ChangeFn {
