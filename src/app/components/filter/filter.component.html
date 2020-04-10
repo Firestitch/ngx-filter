@@ -10,10 +10,10 @@
             </span>
 
             <input
+              #searchTextInput
               matInput
               [(ngModel)]="searchText"
               name="filter-input"
-              #searchTextInput
               (click)="filterInputEvent($event)"
               class="filter-input">
 

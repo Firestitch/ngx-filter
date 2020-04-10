@@ -39,6 +39,7 @@ import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { removeQueryParams } from '../../helpers/remove-query-params';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'fs-filter',
@@ -73,10 +74,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ContentChild(FilterStatusBarDirective, { static: false, read: TemplateRef })
   public statusBar;
 
-  @ViewChild('searchTextInput', { static: false })
-  set searchTextInput(value) {
-    this._searchTextInput = value;
-  }
+  @ViewChild('searchTextInput', { static: false }) public searchTextInput: ElementRef;
+  @ViewChild('searchTextInput', { static: false, read: MatInput }) public searchTextMatInput: MatInput;
 
   @ViewChild('searchTextInput', { read: NgModel, static: false })
   set searchTextNgModel(value) {
@@ -93,7 +92,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;
-  private _searchTextInput: ElementRef = null;
   private _searchTextNgModel: NgModel = null;
   private _firstOpen = true;
   private _filterParams: FilterParams;
@@ -190,7 +188,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Avoid ngChanges error
     setTimeout(() => {
-      this.focus();
+      if (this.config.autofocus) {
+        this.focus();
+      }
     });
 
     if (this.sortUpdate) {
@@ -215,8 +215,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public focus() {
-    if (this._searchTextInput && this.config.autofocus) {
-      this._searchTextInput.nativeElement.focus();
+    if (this.searchTextMatInput) {
+      this.searchTextMatInput.focus();
     }
   }
 
@@ -334,8 +334,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) >= 0) {
       this.changeVisibility(false);
 
-      if (this._searchTextInput) {
-        this._searchTextInput.nativeElement.blur()
+      if (this.searchTextInput) {
+        this.searchTextInput.nativeElement.blur()
       }
     }
   }
@@ -409,7 +409,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public clearSearchText(event) {
     event.stopPropagation();
     this.searchText = '';
-    this._searchTextInput.nativeElement.focus();
+    this.searchTextInput.nativeElement.focus();
   }
 
   public init() {
@@ -645,12 +645,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _listenInputKeyEvents() {
-    if (!this._searchTextInput) {
+    if (!this.searchTextInput) {
       return;
     }
 
     this._zone.runOutsideAngular(() => {
-      fromEvent(this._searchTextInput.nativeElement, 'keydown')
+      fromEvent(this.searchTextInput.nativeElement, 'keydown')
         .pipe(
           debounceTime(500),
           filter((event: KeyboardEvent) => {
