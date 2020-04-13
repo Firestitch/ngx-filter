@@ -22,6 +22,7 @@ import {
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
 
@@ -39,7 +40,9 @@ import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { removeQueryParams } from '../../helpers/remove-query-params';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
-import { MatInput } from '@angular/material/input';
+import { PersistanceStore } from '../../classes/persistance-store';
+import { FilterConfig } from '../../interfaces/config.interface';
+
 
 @Component({
   selector: 'fs-filter',
@@ -58,11 +61,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.fs-filter') fsFilterClass = true;
 
   @Input('config') set setConfig(config) {
-    this.config = config;
+    this._initFilterWithConfig(config);
   }
 
   @Input('filter') set setFilter(config) {
-    this.config = config;
+    this._initFilterWithConfig(config);
   }
 
   @Input() public sortUpdate: EventEmitter<any> = null;
@@ -89,6 +92,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public activeFiltersWithInputCount = 0;
 
   protected _config: FsFilterConfig = null;
+
+  private _persistanceStore = new PersistanceStore(this._store);
 
   private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;
@@ -130,50 +135,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._listenWindowResize();
-  }
-
-  public set config(config) {
-
-    config = Object.assign(this._defaultConfig || {}, config);
-
-    this._config = new FsFilterConfig(config);
-
-    if (!this._config.namespace) {
-      const path = this._location.prepareExternalUrl(this._location.path());
-      this.config.namespace = removeQueryParams(path);
-    }
-
-    if (!this._config.case) {
-      this._config.case = 'snake';
-    }
-
-    this._restorePersistValues();
-    this.config.initItems(config.items, this._route, this.persists);
-
-    this._filterParams = new FilterParams(this._router, this._route, this.config);
-    if (this.config.queryParam) {
-      // Read from query params
-      this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
-
-      // To fill query params with default values
-      this._filterParams.updateQueryParams();
-    }
-
-    this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
-    if (this._searchTextItem) {
-      this.searchText = this._searchTextItem.model;
-    }
-
-    // Count active filters after restore
-    this.updateFilledCounter();
-
-    if (this.config.persist) {
-      this._storePersistValues();
-    }
-
-    if (!!this.config.reloadWhenConfigChanged) {
-      this.change();
-    }
   }
 
   public get config(): FsFilterConfig {
@@ -513,7 +474,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // const queryChanged = !objectsAreEquals(this._query, query);
     // if (queryChanged) {
 
-    this._storePersistValues();
     this.updateFilledCounter();
 
     if (this.config.change) {
@@ -542,6 +502,53 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._cdRef.markForCheck();
   }
 
+  private _initFilterWithConfig(config: FilterConfig) {
+    config = Object.assign(this._defaultConfig || {}, config);
+
+    this._config = new FsFilterConfig(config);
+
+    if (!this._config.namespace) {
+      const path = this._location.prepareExternalUrl(this._location.path());
+      this.config.namespace = removeQueryParams(path);
+    }
+
+    if (!this._config.case) {
+      this._config.case = 'snake';
+    }
+
+    this._persistanceStore.configUpdated(this._config, !!this._dialogRef);
+    this._persistanceStore.restore(this._location.path())
+    // this._restorePersistValues();
+
+    this.config.initItems(config.items, this._route, this._persistanceStore);
+
+    this._filterParams = new FilterParams(this._router, this._route, this.config);
+    if (this.config.queryParam) {
+      // Read from query params
+      this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
+
+      // To fill query params with default values
+      this._filterParams.updateQueryParams();
+    }
+
+    this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
+    if (this._searchTextItem) {
+      this.searchText = this._searchTextItem.model;
+    }
+
+    // Count active filters after restore
+    this.updateFilledCounter();
+
+    this._persistanceStore.save(this._filterParams.buildQueryParams());
+    if (this.config.persist) {
+      // this._storePersistValues();
+    }
+
+    if (!!this.config.reloadWhenConfigChanged) {
+      this.change();
+    }
+  }
+
   /**
    * Store updated filter data into localstorage
    * @param changedItem
@@ -556,7 +563,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
           changedItem.checkIfValueChanged();
         }
 
-        this._storePersistValues();
+        this._persistanceStore.save(this._filterParams.buildQueryParams());
+        // this._storePersistValues();
         this.change();
       })
   }
