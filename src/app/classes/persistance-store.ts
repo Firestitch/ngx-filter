@@ -3,6 +3,7 @@ import { pickBy } from 'lodash-es';
 
 import { isAfter, subMinutes } from 'date-fns';
 import { FsFilterConfig } from '../models/filter-config';
+import { FsFilterPersistanceConfig } from '../interfaces/config.interface';
 
 
 export class PersistanceStore {
@@ -12,7 +13,7 @@ export class PersistanceStore {
   private _enabled = false;
   private _namespace: string;
   private _openedInDialog = false;
-  private _persistConfig: any;
+  private _persistConfig: FsFilterPersistanceConfig;
 
   constructor(
     private _store: FsStore,
@@ -43,11 +44,15 @@ export class PersistanceStore {
     this._namespace = filterConfig.namespace;
     this._openedInDialog = inDialog;
     this._enabled = filterConfig.persist !== false;
-    this._persistConfig = typeof filterConfig.persist === 'object' || {};
+
+    if (typeof filterConfig.persist === 'object') {
+      this._persistConfig = filterConfig.persist;
+    } else {
+      this._persistConfig = {};
+    }
   }
 
   public save(data) {
-    debugger;
     data = pickBy(data, (val) => {
       return val !== null && val !== void 0;
     });
@@ -70,7 +75,7 @@ export class PersistanceStore {
   /**
    * Restoring values from local storage
    */
-  public restore(path: string) {
+  public restore() {
     // if filter in dialog - we should disable persistance
     if (this._openedInDialog && !this._namespace) {
       return;

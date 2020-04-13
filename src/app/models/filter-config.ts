@@ -1,4 +1,8 @@
-import { FilterButton, IFilterConfigItem } from './../interfaces/config.interface';
+import {
+  FilterButton,
+  IFilterConfigItem,
+  FsFilterPersistance
+} from './../interfaces/config.interface';
 import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
 
@@ -18,7 +22,7 @@ export const SORT_DIRECTION_FIELD = 'system_sort_direction';
 export class FsFilterConfig extends Model {
 
   @Alias() public load = true;
-  @Alias() public persist: any = false;
+  @Alias() public persist: FsFilterPersistance = false;
   @Alias() public inline = false;
   @Alias() public autofocus = false;
   @Alias() public chips = false;
@@ -94,7 +98,7 @@ export class FsFilterConfig extends Model {
       });
     }
 
-    this.initSorting(route, persistanceStore.value);
+    this.initSorting(route, persistanceStore.value && persistanceStore.value.data);
 
     if (!this.button) {
       this.button = {};
