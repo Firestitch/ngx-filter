@@ -31,12 +31,6 @@ export function parseItemValueFromStored(item, params) {
       }
     } break;
 
-    case ItemType.Chips: {
-      item.model = param
-        .split(',')
-        .map((value) => +value);
-    } break;
-
     case ItemType.Checkbox: {
       item.model = param;
     } break;
@@ -50,7 +44,7 @@ export function parseItemValueFromStored(item, params) {
       }
     } break;
 
-    case ItemType.AutoCompleteChips: {
+    case ItemType.AutoCompleteChips: case ItemType.Chips: {
       const filterParts = param.split(',');
 
       item.model = filterParts.reduce((arry, value) => {
