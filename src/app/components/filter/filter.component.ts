@@ -22,12 +22,12 @@ import {
 import { NgModel } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
-import { isAfter, subMinutes } from 'date-fns';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
@@ -39,7 +39,9 @@ import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { removeQueryParams } from '../../helpers/remove-query-params';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
-import { MatInput } from '@angular/material/input';
+import { PersistanceStore } from '../../classes/persistance-store';
+import { FilterConfig } from '../../interfaces/config.interface';
+
 
 @Component({
   selector: 'fs-filter',
@@ -58,11 +60,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.fs-filter') fsFilterClass = true;
 
   @Input('config') set setConfig(config) {
-    this.config = config;
+    this._initFilterWithConfig(config);
   }
 
   @Input('filter') set setFilter(config) {
-    this.config = config;
+    this._initFilterWithConfig(config);
   }
 
   @Input() public sortUpdate: EventEmitter<any> = null;
@@ -84,11 +86,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public changedFilters = [];
   public searchText = '';
-  public persists = null;
   public activeFiltersCount = 0;
   public activeFiltersWithInputCount = 0;
 
   protected _config: FsFilterConfig = null;
+
+  private _persistanceStore = new PersistanceStore(this._store);
 
   private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;
@@ -130,50 +133,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._listenWindowResize();
-  }
-
-  public set config(config) {
-
-    config = Object.assign(this._defaultConfig || {}, config);
-
-    this._config = new FsFilterConfig(config);
-
-    if (!this._config.namespace) {
-      const path = this._location.prepareExternalUrl(this._location.path());
-      this.config.namespace = removeQueryParams(path);
-    }
-
-    if (!this._config.case) {
-      this._config.case = 'snake';
-    }
-
-    this._restorePersistValues();
-    this.config.initItems(config.items, this._route, this.persists);
-
-    this._filterParams = new FilterParams(this._router, this._route, this.config);
-    if (this.config.queryParam) {
-      // Read from query params
-      this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
-
-      // To fill query params with default values
-      this._filterParams.updateQueryParams();
-    }
-
-    this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
-    if (this._searchTextItem) {
-      this.searchText = this._searchTextItem.model;
-    }
-
-    // Count active filters after restore
-    this.updateFilledCounter();
-
-    if (this.config.persist) {
-      this._storePersistValues();
-    }
-
-    if (!!this.config.reloadWhenConfigChanged) {
-      this.change();
-    }
   }
 
   public get config(): FsFilterConfig {
@@ -513,7 +472,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // const queryChanged = !objectsAreEquals(this._query, query);
     // if (queryChanged) {
 
-    this._storePersistValues();
     this.updateFilledCounter();
 
     if (this.config.change) {
@@ -542,6 +500,49 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._cdRef.markForCheck();
   }
 
+  private _initFilterWithConfig(config: FilterConfig) {
+    config = Object.assign(this._defaultConfig || {}, config);
+
+    this._config = new FsFilterConfig(config);
+
+    if (!this._config.namespace) {
+      const path = this._location.prepareExternalUrl(this._location.path());
+      this.config.namespace = removeQueryParams(path);
+    }
+
+    if (!this._config.case) {
+      this._config.case = 'snake';
+    }
+
+    this._persistanceStore.configUpdated(this._config, !!this._dialogRef);
+    this._persistanceStore.restore()
+
+    this.config.initItems(config.items, this._route, this._persistanceStore);
+
+    this._filterParams = new FilterParams(this._router, this._route, this.config);
+    if (this.config.queryParam) {
+      // Read from query params
+      this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
+
+      // To fill query params with default values
+      this._filterParams.updateQueryParams();
+    }
+
+    this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
+    if (this._searchTextItem) {
+      this.searchText = this._searchTextItem.model;
+    }
+
+    // Count active filters after restore
+    this.updateFilledCounter();
+
+    this._persistanceStore.save(this._filterParams.buildQueryParams());
+
+    if (!!this.config.reloadWhenConfigChanged) {
+      this.change();
+    }
+  }
+
   /**
    * Store updated filter data into localstorage
    * @param changedItem
@@ -556,72 +557,13 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
           changedItem.checkIfValueChanged();
         }
 
-        this._storePersistValues();
+        this._persistanceStore.save(this._filterParams.buildQueryParams());
         this.change();
       })
   }
 
   private _destroyFilterDrawer() {
     this._filterOverlay.close();
-  }
-
-  /**
-   * Restoring values from local storage
-   */
-  private _restorePersistValues() {
-    // if filter in dialog - we should disable persistance
-    if (this._dialogRef && !this.config.namespace) {
-      return;
-    }
-
-    this.persists = this._store.get(this.config.namespace + '-persist', {});
-
-    if (this.persists === undefined) {
-      this.persists = {};
-    }
-
-    if (this.config.persist) {
-
-      if (typeof this.config.persist.persist !== 'object') {
-        this.config.persist = {name: this.config.persist};
-      }
-
-      if (!this.config.persist.name) {
-        this.config.persist.name = this._location.path();
-      }
-
-      if (!this.persists[this.config.persist.name] || !this.persists[this.config.persist.name].data) {
-        this.persists[this.config.persist.name] = {data: {}, date: new Date()};
-      }
-
-      if (this.config.persist.timeout) {
-
-        const date = new Date(this.persists[this.config.persist.name].date);
-
-        if (isAfter(subMinutes(date, this.config.persist.timeout), new Date())) {
-          this.persists[this.config.persist.name] = {data: {}, date: new Date()};
-        }
-      }
-    }
-  }
-
-  /**
-   * Store values to local storage
-   */
-  private _storePersistValues() {
-    // if filter in dialog - we should disable persistance
-    if (this._dialogRef && !this.config.namespace) {
-      return;
-    }
-
-    if (this.config.persist) {
-      this.persists[this.config.persist.name] = {
-        data: this._filterParams.getValues(),
-        date: new Date()
-      };
-
-      this._store.set(this.config.namespace + '-persist', this.persists, {});
-    }
   }
 
   private _updateWindowWidth() {

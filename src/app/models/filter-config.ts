@@ -1,4 +1,8 @@
-import { FilterButton } from './../interfaces/config.interface';
+import {
+  FilterButton,
+  IFilterConfigItem,
+  FsFilterPersistance
+} from './../interfaces/config.interface';
 import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
 
@@ -9,6 +13,8 @@ import { clone } from 'lodash-es';
 import { FsFilterConfigItem } from './filter-item';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
+import { PersistanceStore } from '../classes/persistance-store';
+import { ActivatedRoute } from '@angular/router';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -16,7 +22,7 @@ export const SORT_DIRECTION_FIELD = 'system_sort_direction';
 export class FsFilterConfig extends Model {
 
   @Alias() public load = true;
-  @Alias() public persist: any = false;
+  @Alias() public persist: FsFilterPersistance = false;
   @Alias() public inline = false;
   @Alias() public autofocus = false;
   @Alias() public chips = false;
@@ -61,7 +67,7 @@ export class FsFilterConfig extends Model {
     return this._destroy$.asObservable();
   }
 
-  public initItems(items, route, persists) {
+  public initItems(items: IFilterConfigItem[], route: ActivatedRoute, persistanceStore: PersistanceStore) {
 
     if (items && Array.isArray(items)) {
 
@@ -74,7 +80,9 @@ export class FsFilterConfig extends Model {
         if (item && item.name && this._filtersNames.indexOf(item.name) === -1) {
           this._filtersNames.push(item.name);
 
-          return new FsFilterConfigItem(item, this, route, persists)
+          const persistedValue = persistanceStore.enabled && persistanceStore.value.data;
+
+          return new FsFilterConfigItem(item, this, route, persistedValue)
         } else {
           throw Error('Filter init error. Items name must be unique.')
         }
@@ -90,7 +98,7 @@ export class FsFilterConfig extends Model {
       });
     }
 
-    this.initSorting(route, persists);
+    this.initSorting(route, persistanceStore.value && persistanceStore.value.data);
 
     if (!this.button) {
       this.button = {};

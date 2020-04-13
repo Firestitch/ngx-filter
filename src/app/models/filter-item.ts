@@ -10,15 +10,12 @@ import { clone, filter, isFunction, isObject, isString, toString } from 'lodash-
 import { isDate, isValid, parse, parseISO } from 'date-fns';
 
 import { FsFilterConfig } from './filter-config';
-import {
-  IFilterConfigAutocompleteItem,
-  IFilterConfigBaseItem,
-  IFilterConfigDateItem,
-  IFilterItemDefaultRange,
-} from '../interfaces/item-config.interface';
+import { IFilterItemDefaultRange, } from '../interfaces/item-config.interface';
 import { simpleFormat } from '@firestitch/date';
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
+import { IFilterConfigItem } from '../interfaces/config.interface';
+import { parseItemValueFromStored } from '../helpers/parse-item-value-from-stored';
 
 
 export class FsFilterConfigItem extends Model {
@@ -57,10 +54,10 @@ export class FsFilterConfigItem extends Model {
   private _values$ = new BehaviorSubject(null);
 
   constructor(
-    private _configItem: IFilterConfigBaseItem | IFilterConfigDateItem | IFilterConfigAutocompleteItem,
+    private _configItem: IFilterConfigItem,
     private _config: FsFilterConfig,
     private _route: ActivatedRoute,
-    private _persists: any
+    private _persistedValues: any
   ) {
     super();
     this._fromJSON(_configItem);
@@ -287,12 +284,8 @@ export class FsFilterConfigItem extends Model {
       this.name = Object.keys(this.names).join('-');
     }
 
-    if (this._config.persist) {
-      const persisted = this._persists[this._config.persist.name].data;
-
-      if (persisted[this.name]) {
-        this.model = persisted[this.name];
-      }
+    if (this._persistedValues[this.name]) {
+      parseItemValueFromStored(this, this._persistedValues);
     }
 
     if (this.fetchOnFocus === void 0) {

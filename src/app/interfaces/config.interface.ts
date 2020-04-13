@@ -13,7 +13,7 @@ export interface FilterConfig {
   autofocus?: boolean;
   queryParam?: boolean;
   namespace?: string;
-  persist?: any;
+  persist?: FsFilterPersistance;
   reload?: ChangeFn | boolean;
   clear?: ChangeFn | boolean;
   items?: IFilterConfigItem[];
@@ -61,3 +61,10 @@ export interface FilterSort {
   value: string;
   direction: string;
 }
+
+export interface FsFilterPersistanceConfig {
+  name?: string;
+  timeout?: number;
+}
+
+export type FsFilterPersistance = boolean | FsFilterPersistanceConfig;
