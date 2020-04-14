@@ -150,10 +150,15 @@ fs-filter {
   }
 }
 
-
-@media screen and (max-width: 1199px) {
-  .fs-filter .reload {
-    display: none;
+@media screen and (max-width: 600px) {
+  .fs-filter .filter-actions .filters-button {
+    font-size: 0;
+    padding: 0;
+    min-width: unset;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    box-shadow: unset !important;
   }
 }
 

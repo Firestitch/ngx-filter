@@ -59,20 +59,17 @@
   <div class="filter-actions" *ngIf="config.nonKeywordFilters">
     <button
       mat-button
+      class="filters-button"
       [ngClass]="{  'mat-raised-button': config.button.style == 'raised',
                     'mat-button': config.button.style == 'basic',
                     'mat-icon-button': config.button.style == 'icon'  }"
       (click)="changeVisibilityClick(!showFilterMenu, $event)"
       type="button"
       [color]="config.button.color">
-      <ng-container *ngTemplateOutlet="filterButton"></ng-container>
+      <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
+      {{config.button.label}}
     </button>
   </div>
-</ng-template>
-
-<ng-template #filterButton>
-  <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
-  {{config.button.label}}
 </ng-template>
 
 <ng-template #filterChips>
