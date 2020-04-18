@@ -1,13 +1,8 @@
 @import '../tools/assets/playground.scss';
 @import '~@firestitch/datepicker/styles';
+@import "~@firestitch/scrollbar/styles.scss";
 @import '~@firestitch/chip/styles';
 @import '../src/app/styles';
 
 @include mat-core();
 @include fs-date-picker($mat-blue);
-
-
-// .cdk-overlay-transparent-backdrop, .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
-//   background: rgba(245, 245, 220, .5);
-//   opacity: 1;
-// }

@@ -56,6 +56,7 @@
     "@firestitch/menu": "^7.0.11",
     "@firestitch/message": "^8.0.1",
     "@firestitch/scroll": "^7.0.2",
+    "@firestitch/scrollbar": "^7.0.4",
     "@firestitch/scroll-picker": "^7.0.3",
     "@firestitch/store": "^7.0.0",
     "codelyzer": "^5.0.1",

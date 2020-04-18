@@ -8,6 +8,7 @@ import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 import { FsFilterModule } from '@firestitch/filter';
 import { FsDatePickerModule } from '@firestitch/datepicker';
+import { FsScrollbarModule } from '@firestitch/scrollbar';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -28,6 +29,7 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
     FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
     AppMaterialModule,
+    FsScrollbarModule,
     FormsModule,
     FsExampleModule.forRoot({ iframeObserveBody: true }),
     FsMessageModule.forRoot(),
