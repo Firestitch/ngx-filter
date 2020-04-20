@@ -5,6 +5,7 @@ import { isAfter, subMinutes } from 'date-fns';
 import { FsFilterConfig } from '../models/filter-config';
 import { FsFilterPersistanceConfig } from '../interfaces/config.interface';
 
+const FILTER_STORE_KEY = 'fs-filter-persist';
 
 export class PersistanceStore {
 
@@ -18,6 +19,10 @@ export class PersistanceStore {
   constructor(
     private _store: FsStore,
   ) {
+    // Initialize store
+    if (!this._store.get(FILTER_STORE_KEY)) {
+      this._store.set(FILTER_STORE_KEY, {});
+    }
   }
 
   public get name(): string {
@@ -33,11 +38,14 @@ export class PersistanceStore {
   }
 
   private get _persists() {
-    return this._store.get(this._storeKey, {}) || {};
+    return this._store.get(FILTER_STORE_KEY)[this._storeKey] || {};
   }
 
   private set _persists(value) {
-    this._store.set(this._storeKey, value, {});
+    const storeData = this._store.get(FILTER_STORE_KEY);
+    storeData[this._storeKey] = value;
+
+    this._store.set(FILTER_STORE_KEY, storeData);
   }
 
   public configUpdated(filterConfig: FsFilterConfig, inDialog: boolean) {
