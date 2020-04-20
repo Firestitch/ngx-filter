@@ -1,12 +1,16 @@
+import { Injectable } from '@angular/core';
 import { FsStore } from '@firestitch/store';
 import { pickBy } from 'lodash-es';
 
 import { isAfter, subMinutes } from 'date-fns';
 import { FsFilterConfig } from '../models/filter-config';
 import { FsFilterPersistanceConfig } from '../interfaces/config.interface';
+import { ActivatedRoute } from '@angular/router';
 
 const FILTER_STORE_KEY = 'fs-filter-persist';
 
+
+@Injectable()
 export class PersistanceStore {
 
   public value: { data: any[], date: Date };
@@ -18,6 +22,7 @@ export class PersistanceStore {
 
   constructor(
     private _store: FsStore,
+    private _route: ActivatedRoute,
   ) {
     // Initialize store
     if (!this._store.get(FILTER_STORE_KEY)) {
@@ -51,21 +56,38 @@ export class PersistanceStore {
   public configUpdated(filterConfig: FsFilterConfig, inDialog: boolean) {
     this._namespace = filterConfig.namespace;
     this._openedInDialog = inDialog;
-    this._enabled = filterConfig.persist !== false;
 
     if (typeof filterConfig.persist === 'object') {
       this._persistConfig = filterConfig.persist;
     } else {
       this._persistConfig = {};
     }
+
+    // If special name wasn't defined - use current path
+    if (!this._persistConfig.name) {
+      this._persistConfig.name = 'default';
+    }
+
+    if (this._route.snapshot.queryParams.persist === 'clear') {
+      this.save({}, true);
+    }
+
+    if (this._route.snapshot.queryParams.persist !== 'disabled' && filterConfig.persist !== false) {
+      this._enabled = true;
+    }
   }
 
-  public save(data) {
+  public save(data, force = false) {
+    if (!this._enabled && !force) {
+      return;
+    }
+
     data = pickBy(data, (val) => {
       return val !== null && val !== void 0;
     });
+
     // if filter in dialog - we should disable persistance
-    if ((this._openedInDialog && !this._namespace) || !this._enabled) {
+    if ((this._openedInDialog && !this._namespace) || !this._enabled && !force) {
       return;
     }
 
@@ -87,11 +109,6 @@ export class PersistanceStore {
     // if filter in dialog - we should disable persistance
     if (this._openedInDialog && !this._namespace) {
       return;
-    }
-
-    // If special name wasn't defined - use current path
-    if (!this._persistConfig.name) {
-      this._persistConfig.name = 'default';
     }
 
     let value = this._persists[this.name];

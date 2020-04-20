@@ -50,6 +50,7 @@ import { FilterConfig } from '../../interfaces/config.interface';
   encapsulation: ViewEncapsulation.None,
   providers: [
     FsFilterOverlayService,
+    PersistanceStore,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -91,8 +92,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected _config: FsFilterConfig = null;
 
-  private _persistanceStore = new PersistanceStore(this._store);
-
   private _filterChanged$ = new Subject<FsFilterConfigItem>();
   private _searchTextItem: FsFilterConfigItem;
   private _searchTextNgModel: NgModel = null;
@@ -110,6 +109,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
+    private _persistanceStore: PersistanceStore,
     @Optional() private _dialogRef: MatDialogRef<any>,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
