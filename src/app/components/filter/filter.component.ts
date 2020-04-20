@@ -481,6 +481,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.queryParam) {
       this._filterParams.updateQueryParams();
     }
+
+    this._persistanceStore.save(this._filterParams.queryParams);
   }
 
   /**
@@ -536,7 +538,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // Count active filters after restore
     this.updateFilledCounter();
 
-    this._persistanceStore.save(this._filterParams.buildQueryParams());
+    this._persistanceStore.save(this._filterParams.queryParams);
 
     if (!!this.config.reloadWhenConfigChanged) {
       this.change();
@@ -557,7 +559,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
           changedItem.checkIfValueChanged();
         }
 
-        this._persistanceStore.save(this._filterParams.buildQueryParams());
         this.change();
       })
   }

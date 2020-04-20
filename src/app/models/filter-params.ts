@@ -9,11 +9,19 @@ import { parseItemValueFromStored } from '../helpers/parse-item-value-from-store
 
 export class FilterParams {
 
+  private _queryParams: Record<string, any>;
+
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
     private _config: FsFilterConfig
   ) {}
+
+  public get queryParams() {
+    this._queryParams = this._queryParams || this.buildQueryParams();
+
+    return this._queryParams;
+  }
 
   public getValues() {
 
@@ -45,13 +53,13 @@ export class FilterParams {
 
   public updateQueryParams() {
 
-    const flattenedParams = this.buildQueryParams();
+    this._queryParams = this.buildQueryParams();
 
     // Update query
     this._router.navigate([], {
       replaceUrl: true,
       relativeTo: this._route,
-      queryParams: flattenedParams,
+      queryParams: this.queryParams,
       queryParamsHandling: 'merge',
     }).then(() => {});
   }
