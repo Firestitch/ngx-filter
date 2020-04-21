@@ -39,7 +39,7 @@ export class PersistanceStore {
   }
 
   private get _storeKey(): string {
-    return this._namespace + '-persist';
+    return this._namespace;
   }
 
   private get _persists() {
@@ -72,7 +72,7 @@ export class PersistanceStore {
       this.save({}, true);
     }
 
-    if (this._route.snapshot.queryParams.persist !== 'disabled' && filterConfig.persist !== false) {
+    if (this._route.snapshot.queryParams.persist !== 'disable' && filterConfig.persist !== false) {
       this._enabled = true;
     }
   }
