@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FsFilterConfigItem } from '../../models/filter-item';
-import { ItemType } from '../../enums/item-type.enum';
 
 
 @Component({

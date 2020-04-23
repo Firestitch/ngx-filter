@@ -132,7 +132,6 @@ export class FsFilterConfigItem extends Model {
 
     } else if (this.isTypeCheckbox) {
       value = this.model ? this.checked : this.unchecked;
-
     } else if (this.isTypeRange) {
       if (!isObject(this.model) ||
           (isEmpty(this.model.max, { zero: true }) && isEmpty(this.model.min, { zero: true }))) {
@@ -284,6 +283,8 @@ export class FsFilterConfigItem extends Model {
       this.name = Object.keys(this.names).join('-');
     }
 
+    this.init();
+
     if (this._persistedValues[this.name]) {
       parseItemValueFromStored(this, this._persistedValues);
     }
@@ -291,8 +292,6 @@ export class FsFilterConfigItem extends Model {
     if (this.fetchOnFocus === void 0) {
       this.fetchOnFocus = true;
     }
-
-    this.init();
   }
 
   public initValues() {
@@ -487,7 +486,11 @@ export class FsFilterConfigItem extends Model {
       } break;
 
       case ItemType.Checkbox: {
-        this.valueChanged = this.model && this.model !== false;
+        if (this.unchecked) {
+          this.valueChanged = this.model !== this.unchecked;
+        } else {
+          this.valueChanged = this.model && this.model !== false;
+        }
       } break;
 
       case ItemType.Select: {
@@ -539,10 +542,6 @@ export class FsFilterConfigItem extends Model {
         if (!isDate(value) || !isValid(value)) {
           value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
         }
-
-      } else if (this.isTypeCheckbox && this.checked !== undefined) {
-        value = this.checked;
-
       } else if (this.isTypeSelect) {
 
         if (this.multiple) {
