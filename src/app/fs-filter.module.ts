@@ -24,6 +24,7 @@ import { FsLabelModule } from '@firestitch/label';
 import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FsMaskModule } from '@firestitch/mask';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -70,6 +71,7 @@ import { FilterStatusBarDirective } from './directives/status-bar/status-bar.dir
     FsAutocompleteChipsModule,
     FsScrollModule,
     PortalModule,
+    FsMaskModule,
   ],
   declarations: [
     BaseItemComponent,
