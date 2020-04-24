@@ -4,6 +4,7 @@
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
            type="text"
+           inputmode="decimal"
            [(ngModel)]="item.model.min"
            fsMaskNumber
            scale="5"
@@ -16,6 +17,7 @@
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
            type="text"
+           inputmode="decimal"
            [(ngModel)]="item.model.max"
            fsMaskNumber
            scale="5"
