@@ -38,6 +38,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public unchecked: any;
   @Alias() public checked: any;
   @Alias() public alias: any;
+  @Alias() public options: any;
   @Alias() public placeholder: any;
   @Alias() public change: Function;
   @Alias() public prefix: string;

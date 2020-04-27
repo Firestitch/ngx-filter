@@ -7,7 +7,7 @@
            inputmode="decimal"
            [(ngModel)]="item.model.min"
            fsMaskNumber
-           scale="5"
+           [scale]="item.options?.scale || 2"
            #from
     >
   </mat-form-field>
@@ -20,7 +20,7 @@
            inputmode="decimal"
            [(ngModel)]="item.model.max"
            fsMaskNumber
-           scale="5"
+           [scale]="item.options?.scale || 2"
            #to
     >
   </mat-form-field>

@@ -44,6 +44,7 @@ export interface IFilterConfigAutocompleteItem extends IFilterConfigBaseItem<Fil
 
 export interface IFilterConfigRangeItem extends IFilterConfigBaseItem<ItemType.Range, string[]> {
   default?: IFilterItemDefaultRange;
+  options?: { scale?: number }
 }
 
 export interface IFilterConfigDateRangeItem extends IFilterConfigBaseItem<FilterDateRangeType, string[]> {
