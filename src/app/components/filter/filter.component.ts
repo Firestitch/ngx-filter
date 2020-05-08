@@ -444,6 +444,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
+    if (item.change) {
+      item.change(item);
+    }
     this.change();
   }
 
