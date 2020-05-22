@@ -40,7 +40,7 @@ export function parseItemValueFromStored(item, params) {
     } break;
 
     case ItemType.AutoComplete: {
-      const filterParts = param.split(':');
+      const filterParts = param.split('||');
 
       item.model = {
         name: filterParts[1],
@@ -53,7 +53,7 @@ export function parseItemValueFromStored(item, params) {
 
       item.model = filterParts.reduce((arry, value) => {
 
-        const chipParts = value.split(':');
+        const chipParts = value.split('||');
 
         arry.push({
           name: chipParts[1],
