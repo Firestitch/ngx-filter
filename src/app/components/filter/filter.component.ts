@@ -635,7 +635,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._zone.runOutsideAngular(() => {
       this._searchTextNgModel.valueChanges
         .pipe(
-          debounceTime(50),
+          debounceTime(200),
           filter((value) => value !== void 0),
           takeUntil(this._destroy$),
         )
@@ -646,8 +646,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
             }
 
             this._filterChanged$.next();
-            // this._filterChange();
-          })
+          });
         });
 
     });
