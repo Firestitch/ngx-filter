@@ -5,6 +5,7 @@ import { list as arrayList } from '@firestitch/common';
 
 import { FsFilterConfigItem } from '../models/filter-item';
 import { parseItemValueFromStored } from '../helpers/parse-item-value-from-stored';
+import { filterToQueryParam } from '../helpers/query-param-transformers';
 
 
 export class FilterParams {
@@ -115,7 +116,7 @@ export class FilterParams {
       } else if (filterItem.isTypeAutocompleteChips || filterItem.isTypeChips) {
         if (isArray(filterItem.model) && filterItem.model.length) {
           flattenedParams[filterItem.name] = filterItem.model.map((item) => {
-            return item.value + '||' + item.name;
+            return filterToQueryParam(item.value, item.name);
           }).join(',');
         }
       }

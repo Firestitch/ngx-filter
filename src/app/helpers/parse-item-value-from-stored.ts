@@ -1,4 +1,5 @@
 import { ItemType } from '../enums/item-type.enum';
+import { filterFromQueryParam } from './query-param-transformers';
 
 export function parseItemValueFromStored(item, params) {
   const param = params[item.name];
@@ -40,7 +41,7 @@ export function parseItemValueFromStored(item, params) {
     } break;
 
     case ItemType.AutoComplete: {
-      const filterParts = param.split('||');
+      const filterParts = filterFromQueryParam(param);
 
       item.model = {
         name: filterParts[1],
@@ -53,7 +54,7 @@ export function parseItemValueFromStored(item, params) {
 
       item.model = filterParts.reduce((arry, value) => {
 
-        const chipParts = value.split('||');
+        const chipParts = filterFromQueryParam(value);
 
         arry.push({
           name: chipParts[1],
