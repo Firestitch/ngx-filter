@@ -11,7 +11,6 @@ import { ItemType } from '../../../enums/item-type.enum';
 @Component({
   selector: 'filter-item-date-range',
   templateUrl: './date-range.component.html',
-  styleUrls: ['./date-range.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateRangeComponent extends BaseItemComponent implements OnInit {

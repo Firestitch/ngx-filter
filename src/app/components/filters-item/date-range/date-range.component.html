@@ -1,25 +1,21 @@
-<div class="range-container" fxLayout="row">
-   <mat-form-field>
-      <mat-label>{{item.label[0]}}</mat-label>
-      <input
-        matInput
-        [fsDateRangeFrom]="item.name"
-        [(ngModel)]="item.model.from"
-        (ngModelChange)="itemChange()"
-        [view]="viewType"
-        name="date_from">
-  </mat-form-field>
+<mat-form-field>
+  <mat-label>{{item.label[0]}}</mat-label>
+  <input
+    matInput
+    [fsDateRangeFrom]="item.name"
+    [(ngModel)]="item.model.from"
+    (ngModelChange)="itemChange()"
+    [view]="viewType"
+    name="date_from">
+</mat-form-field>
 
-  <fs-date-range-separator></fs-date-range-separator>
-
-  <mat-form-field>
-    <mat-label>{{item.label[1]}}</mat-label>
-    <input
-      matInput
-      [fsDateRangeTo]="item.name"
-      [(ngModel)]="item.model.to"
-      (ngModelChange)="itemChange()"
-      [view]="viewType"
-      name="date_to">
-  </mat-form-field>
-</div>
+<mat-form-field>
+  <mat-label>{{item.label[1]}}</mat-label>
+  <input
+    matInput
+    [fsDateRangeTo]="item.name"
+    [(ngModel)]="item.model.to"
+    (ngModelChange)="itemChange()"
+    [view]="viewType"
+    name="date_to">
+</mat-form-field>
