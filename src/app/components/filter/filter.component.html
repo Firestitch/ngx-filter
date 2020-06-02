@@ -13,11 +13,11 @@
               #searchTextInput
               matInput
               [(ngModel)]="searchText"
+              [placeholder]="searchPlaceholder"
               name="filter-input"
               (click)="filterInputEvent($event)"
               class="filter-input">
 
-            <mat-placeholder>Search</mat-placeholder>
             <a matSuffix
               *ngIf="searchText && showFilterInput && config.clear"
               (click)="clearSearchText($event)"

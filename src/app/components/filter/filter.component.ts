@@ -87,6 +87,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public changedFilters = [];
   public searchText = '';
+  public searchPlaceholder = 'Search';
   public activeFiltersCount = 0;
   public activeFiltersWithInputCount = 0;
 
@@ -536,6 +537,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
     if (this._searchTextItem) {
       this.searchText = this._searchTextItem.model;
+      this.searchPlaceholder = this._searchTextItem.label || 'Search';
     }
 
     // Count active filters after restore
