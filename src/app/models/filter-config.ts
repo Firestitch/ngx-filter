@@ -15,6 +15,7 @@ import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
 import { PersistanceStore } from '../classes/persistance-store';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -48,6 +49,7 @@ export class FsFilterConfig extends Model {
   private _items: FsFilterConfigItem[] = [];
   private _visibleItems: FsFilterConfigItem[] = [];
   private _filtersNames = [];
+  private _itemsChanged$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
 
   constructor(data: any = {}) {
@@ -61,6 +63,10 @@ export class FsFilterConfig extends Model {
 
   get visibleItems() {
     return this._visibleItems;
+  }
+
+  get itemsChanged$(): Observable<void> {
+    return this._itemsChanged$.pipe(takeUntil(this._destroy$));
   }
 
   get destroy$(): Observable<void> {
@@ -308,6 +314,10 @@ export class FsFilterConfig extends Model {
     this.items
       .filter((item) => item.hasPendingValues)
       .forEach((item) => item.loadValues(false));
+  }
+
+  public itemsChanged() {
+    this._itemsChanged$.next();
   }
 
   public destroy() {

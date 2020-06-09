@@ -45,7 +45,8 @@ export class FsFilterConfigItem extends Model {
   @Alias() public mode: string;
   @Alias() public maxYear: number;
   @Alias() public fetchOnFocus: boolean;
-  @Alias('default') public defaultValue: any | IFilterItemDefaultRange;
+
+  public defaultValue: any | IFilterItemDefaultRange;
 
   public initialLoading = false;
 
@@ -284,7 +285,20 @@ export class FsFilterConfigItem extends Model {
       this.name = Object.keys(this.names).join('-');
     }
 
-    this.init();
+    if (isObservable(data.default)) {
+      data.default
+        .pipe(
+          takeUntil(this._config.destroy$),
+        )
+        .subscribe((value) => {
+          this.defaultValue = value;
+
+          this.init();
+          this._config.itemsChanged();
+        });
+    } else {
+      this.init();
+    }
 
     if (this._persistedValues[this.name]) {
       parseItemValueFromStored(this, this._persistedValues);
