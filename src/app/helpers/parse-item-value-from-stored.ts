@@ -1,5 +1,6 @@
 import { ItemType } from '../enums/item-type.enum';
 import { filterFromQueryParam } from './query-param-transformers';
+import { tryConvertToNumber } from './try-convert-to-number';
 
 export function parseItemValueFromStored(item, params) {
   const param = params[item.name];
@@ -45,7 +46,7 @@ export function parseItemValueFromStored(item, params) {
 
       item.model = {
         name: filterParts[1],
-        value: +filterParts[0]
+        value: tryConvertToNumber(filterParts[0])
       }
     } break;
 
@@ -58,7 +59,7 @@ export function parseItemValueFromStored(item, params) {
 
         arry.push({
           name: chipParts[1],
-          value: +chipParts[0],
+          value: tryConvertToNumber(chipParts[0]),
         });
 
         return arry;

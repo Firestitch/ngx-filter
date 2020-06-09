@@ -111,7 +111,7 @@ export class FilterParams {
 
       if (filterItem.isTypeAutocomplete) {
         if (isObject(filterItem.model)) {
-          flattenedParams[filterItem.name] = filterItem.model.value + '||' + filterItem.model.name;
+          flattenedParams[filterItem.name] = filterToQueryParam(filterItem.model.value, filterItem.model.name);
         }
       } else if (filterItem.isTypeAutocompleteChips || filterItem.isTypeChips) {
         if (isArray(filterItem.model) && filterItem.model.length) {
