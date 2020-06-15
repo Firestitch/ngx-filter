@@ -297,6 +297,7 @@ export class FsFilterConfigItem extends Model {
           this._config.itemsChanged();
         });
     } else {
+      this.defaultValue = data.default;
       this.init();
     }
 
