@@ -16,7 +16,8 @@ export {
   IFilterItemDefaultRange,
   IFilterConfigDateRangeItem,
   IFilterConfigRangeItem,
-  IFilterItemDefaultDateRange
+  IFilterItemDefaultDateRange,
+  IFilterConfigTextItem,
 } from './app/interfaces/item-config.interface';
 
 export {

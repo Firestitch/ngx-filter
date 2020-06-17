@@ -257,7 +257,8 @@ export class KitchenSinkComponent {
           name: 'max_price',
           type: ItemType.Text,
           label: 'Max Price',
-          prefix: '$&nbsp;'
+          prefix: '$&nbsp;',
+          suffix: '%',
         }
       ],
       //clear: false,

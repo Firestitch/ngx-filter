@@ -42,6 +42,7 @@ export class FsFilterConfigItem extends Model {
   @Alias() public placeholder: any;
   @Alias() public change: Function;
   @Alias() public prefix: string;
+  @Alias() public suffix: string;
   @Alias() public mode: string;
   @Alias() public maxYear: number;
   @Alias() public fetchOnFocus: boolean;

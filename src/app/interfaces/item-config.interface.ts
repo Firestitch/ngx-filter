@@ -29,7 +29,6 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   alias?: any;
   placeholder?: any;
   default?: any;
-  prefix?: any;
   change?(item: IFilterConfigBaseItem): any
 }
 
@@ -42,13 +41,18 @@ export interface IFilterConfigAutocompleteItem extends IFilterConfigBaseItem<Fil
   fetchOnFocus?: boolean
 }
 
-export interface IFilterConfigRangeItem extends IFilterConfigBaseItem<ItemType.Range, string[]> {
+export interface IFilterConfigRangeItem
+  extends IFilterConfigBaseItem<ItemType.Range, string[]>, IFilterItemWithPrefixSuffix {
   default?: IFilterItemDefaultRange;
   options?: { scale?: number }
 }
 
 export interface IFilterConfigDateRangeItem extends IFilterConfigBaseItem<FilterDateRangeType, string[]> {
   default?: IFilterItemDefaultDateRange;
+}
+
+export interface IFilterConfigTextItem
+  extends IFilterConfigBaseItem<ItemType.Text>, IFilterItemWithPrefixSuffix {
 }
 
 export interface IFilterItemDefaultRange {
@@ -59,4 +63,9 @@ export interface IFilterItemDefaultRange {
 export interface IFilterItemDefaultDateRange {
   from?: any;
   to?: any;
+}
+
+export interface IFilterItemWithPrefixSuffix {
+  prefix?: string;
+  suffix?: string;
 }

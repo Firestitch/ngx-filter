@@ -4,6 +4,7 @@ import {
   IFilterConfigAutocompleteItem,
   IFilterConfigRangeItem,
   IFilterConfigDateRangeItem,
+  IFilterConfigTextItem,
 } from './item-config.interface';
 
 export interface FilterConfig {
@@ -30,6 +31,7 @@ export interface FilterConfig {
 export type IFilterConfigItem =
   (
     IFilterConfigBaseItem
+    | IFilterConfigTextItem
     | IFilterConfigDateItem
     | IFilterConfigAutocompleteItem
     | IFilterConfigRangeItem

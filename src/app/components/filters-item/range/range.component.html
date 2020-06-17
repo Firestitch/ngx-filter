@@ -10,6 +10,7 @@
            [scale]="item.options?.scale || 2"
            #from
     >
+    <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
   <div class="spacer"></div>
   <mat-form-field class="filter-range-max">
@@ -23,5 +24,6 @@
            [scale]="item.options?.scale || 2"
            #to
     >
+    <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
 </span>

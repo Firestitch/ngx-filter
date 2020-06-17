@@ -4,4 +4,5 @@
   <input matInput
          [(ngModel)]="item.model"
          (ngModelChange)="inputChange$.next(item.model)"/>
+  <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
 </mat-form-field>
