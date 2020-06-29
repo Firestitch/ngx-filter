@@ -412,6 +412,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public reload(event = null) {
 
     if (event) {
+      event.preventDefault();
       event.stopPropagation();
     }
 
@@ -511,7 +512,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.config.destroy();
     }
 
-    config = Object.assign(this._defaultConfig || {}, config);
+    config = {
+      ...(this._defaultConfig || {}),
+      ...config,
+    };
 
     this._config = new FsFilterConfig(config);
 
