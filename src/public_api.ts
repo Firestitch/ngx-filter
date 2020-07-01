@@ -27,6 +27,7 @@ export {
   FilterSort,
   Sort,
   IFilterConfigItem,
+  FsFilterPersistance,
 } from './app/interfaces/config.interface';
 
 // Enums/Models

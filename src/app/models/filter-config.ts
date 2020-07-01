@@ -31,7 +31,6 @@ export class FsFilterConfig extends Model {
   @Alias() public sort: Sort = null;
   @Alias() public sortDirection = null;
   @Alias() public queryParam = false;
-  @Alias() public namespace = 'filter';
   @Alias() public init: ChangeFn;
   @Alias() public change: ChangeFn;
   @Alias() public reload: ChangeFn;
@@ -45,6 +44,7 @@ export class FsFilterConfig extends Model {
   public sortDirectionItem: FsFilterConfigItem = null;
   public keywordFilter = false;
   public nonKeywordFilters = false;
+  public namespace: string; // for persistance
 
   private _items: FsFilterConfigItem[] = [];
   private _visibleItems: FsFilterConfigItem[] = [];

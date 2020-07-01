@@ -30,10 +30,6 @@ export class PersistanceStore {
     }
   }
 
-  public get name(): string {
-    return this._persistConfig.name;
-  }
-
   public get enabled(): boolean {
     return this._enabled;
   }
@@ -63,11 +59,6 @@ export class PersistanceStore {
       this._persistConfig = {};
     }
 
-    // If special name wasn't defined - use current path
-    if (!this._persistConfig.name) {
-      this._persistConfig.name = 'default';
-    }
-
     if (this._route.snapshot.queryParams.persist === 'clear') {
       this.save({}, true);
     }
@@ -92,13 +83,10 @@ export class PersistanceStore {
     }
 
     if (this._persistConfig) {
-      const persists = this._persists;
-      persists[this.name] = {
+      this._persists = {
         data,
         date: new Date()
       };
-
-      this._persists = persists;
     }
   }
 
@@ -111,7 +99,7 @@ export class PersistanceStore {
       return;
     }
 
-    let value = this._persists[this.name];
+    let value = this._persists;
 
     // Default value if data doesn't exists
     if (!value || !value.data) {
@@ -119,7 +107,7 @@ export class PersistanceStore {
     } else if (value) {
       // Check if data is too old
       if (this._persistConfig.timeout) {
-        const date = new Date(value[this.name].date);
+        const date = new Date(value.date);
 
         if (isAfter(subMinutes(date, this._persistConfig.timeout), new Date())) {
           value = { data: {}, date: new Date() };

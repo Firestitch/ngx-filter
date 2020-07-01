@@ -520,10 +520,16 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._config = new FsFilterConfig(config);
 
     this._listenInternalItemsChange();
+    if (this._config.persist) {
+      if (typeof this._config.persist === 'object') {
+        if (this._config.persist.name) {
+          this._config.namespace = this._config.persist.name;
+        }
+      }
+    }
 
-    if (!this._config.namespace) {
-      const path = this._location.prepareExternalUrl(this._location.path());
-      this.config.namespace = removeQueryParams(path);
+    if (!this.config.namespace) {
+      this.config.namespace = this._getCurrentPath();
     }
 
     if (!this._config.case) {
@@ -672,5 +678,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.change();
       });
+  }
+
+  private _getCurrentPath() {
+    const path = this._location.prepareExternalUrl(this._location.path());
+    return removeQueryParams(path);
   }
 }
