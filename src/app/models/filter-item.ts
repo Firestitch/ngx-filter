@@ -302,7 +302,7 @@ export class FsFilterConfigItem extends Model {
       this.init();
     }
 
-    if (this._persistedValues[this.name]) {
+    if (this._persistedValues && this._persistedValues[this.name]) {
       parseItemValueFromStored(this, this._persistedValues);
     }
 
