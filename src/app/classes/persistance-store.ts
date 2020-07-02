@@ -63,7 +63,7 @@ export class PersistanceStore {
       this.save({}, true);
     }
 
-    if (this._route.snapshot.queryParams.persist !== 'disable' && filterConfig.persist !== false) {
+    if (this._route.snapshot.queryParams.persist !== 'disable' && filterConfig.persist) {
       this._enabled = true;
     }
   }
@@ -95,7 +95,7 @@ export class PersistanceStore {
    */
   public restore() {
     // if filter in dialog - we should disable persistance
-    if (this._openedInDialog && !this._namespace) {
+    if (this._openedInDialog || !this.enabled) {
       return;
     }
 
