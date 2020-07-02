@@ -63,7 +63,10 @@ export class PersistanceStore {
       this.save({}, true);
     }
 
-    if (this._route.snapshot.queryParams.persist !== 'disable' && filterConfig.persist) {
+    if (this._route.snapshot.queryParams.persist !== 'disable'
+      && filterConfig.persist
+      && !this._openedInDialog // if filter in dialog - we should disable persistance
+    ) {
       this._enabled = true;
     }
   }
@@ -78,7 +81,7 @@ export class PersistanceStore {
     });
 
     // if filter in dialog - we should disable persistance
-    if ((this._openedInDialog && !this._namespace) || !this._enabled && !force) {
+    if (!this._namespace || !this._enabled && !force) {
       return;
     }
 
@@ -94,8 +97,7 @@ export class PersistanceStore {
    * Restoring values from local storage
    */
   public restore() {
-    // if filter in dialog - we should disable persistance
-    if (this._openedInDialog || !this.enabled) {
+    if (!this.enabled) {
       return;
     }
 
