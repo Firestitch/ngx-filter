@@ -27,7 +27,7 @@ import { MatInput } from '@angular/material/input';
 import { FsStore } from '@firestitch/store';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil, timeout } from 'rxjs/operators';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
@@ -170,7 +170,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this._listenInputKeyEvents();
-    this._listenInputChanges();
+    // FIXME prevent fire change after init
+    setTimeout(() => {
+      this._listenInputChanges();
+    });
     this._listenFilterChanges();
   }
 
