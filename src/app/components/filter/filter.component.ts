@@ -37,10 +37,10 @@ import { FilterParams } from '../../models/filter-params';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
-import { removeQueryParams } from '../../helpers/remove-query-params';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { PersistanceStore } from '../../classes/persistance-store';
 import { FilterConfig } from '../../interfaces/config.interface';
+import { getNormalizedPath } from '../../helpers/get-normalized-path';
 
 
 @Component({
@@ -528,15 +528,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    if (!this.config.namespace) {
-      this.config.namespace = this._getCurrentPath();
-    }
-
     if (!this._config.case) {
       this._config.case = 'snake';
     }
 
-    this._persistanceStore.configUpdated(this._config, !!this._dialogRef);
+    const namespace = this.config.namespace || getNormalizedPath(this._location);
+    this._persistanceStore.configUpdated(this._config.persist, namespace, !!this._dialogRef);
     this._persistanceStore.restore()
 
     this.config.initItems(config.items, this._route, this._persistanceStore);
@@ -678,10 +675,5 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.change();
       });
-  }
-
-  private _getCurrentPath() {
-    const path = this._location.prepareExternalUrl(this._location.path());
-    return removeQueryParams(path);
   }
 }
