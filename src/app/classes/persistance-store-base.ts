@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FsStore } from '@firestitch/store';
 import { isAfter, subMinutes } from 'date-fns';
@@ -6,7 +7,8 @@ import { pickBy } from 'lodash-es';
 import { FsFilterPersistance, FsFilterPersistanceConfig } from '../interfaces/config.interface';
 
 
-export abstract class PersistanceStoreBase<T extends FsFilterPersistance> {
+@Injectable()
+export class PersistanceStoreBase<T extends FsFilterPersistance> {
 
   protected _value: { data: any[], date: Date };
   protected _enabled = false;
