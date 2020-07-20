@@ -25,9 +25,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
+import { getNormalizedPath } from '@firestitch/common';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, takeUntil, timeout } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
@@ -40,7 +41,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { PersistanceStore } from '../../classes/persistance-store';
 import { FilterConfig } from '../../interfaces/config.interface';
-import { getNormalizedPath } from '../../helpers/get-normalized-path';
 
 
 @Component({
@@ -536,7 +536,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const namespace = this.config.namespace || getNormalizedPath(this._location);
-    this._persistanceStore.configUpdated(this._config.persist, namespace, !!this._dialogRef);
+    this._persistanceStore.setConfig(this._config.persist, namespace, !!this._dialogRef);
     this._persistanceStore.restore()
 
     this.config.initItems(config.items, this._route, this._persistanceStore);

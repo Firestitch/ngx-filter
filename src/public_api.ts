@@ -8,9 +8,6 @@ export { FilterItemComponent } from './app/components/filters-item/filter-item.c
 // Directives
 export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
 
-// Classes
-export { PersistanceStoreBase } from './app/classes/persistance-store-base';
-
 // Interfaces
 export {
   IFilterConfigBaseItem,
@@ -43,7 +40,6 @@ export { FS_FILTER_CONFIG } from './app/injectors/filter-config';
 
 // Helpers
 export { filterToQueryParam, filterFromQueryParam } from './app/helpers/query-param-transformers';
-export { getNormalizedPath } from './app/helpers/get-normalized-path';
 
 // Const
 export { QUERY_PARAM_DELIMITER } from './app/consts/query-param-delimiter';
