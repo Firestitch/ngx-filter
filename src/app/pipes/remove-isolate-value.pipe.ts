@@ -7,7 +7,6 @@ import { FsFilterConfigItem } from '../models/filter-item';
 })
 export class FsFilterIsolateValues implements PipeTransform {
   transform(values: FsFilterConfigItem[], isolate) {
-    console.log(isolate);
     if (!isolate) {
       return values;
     } else {
