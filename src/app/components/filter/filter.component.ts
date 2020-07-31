@@ -513,6 +513,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
       this.config.destroy();
+      this._firstOpen = true;
     }
 
     config = {
