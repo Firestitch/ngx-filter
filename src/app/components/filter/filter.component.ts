@@ -26,6 +26,7 @@ import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
 import { getNormalizedPath } from '@firestitch/common';
+import { DrawerRef } from '@firestitch/drawer';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
@@ -112,6 +113,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _cdRef: ChangeDetectorRef,
     private _persistanceStore: PersistanceStore,
     @Optional() private _dialogRef: MatDialogRef<any>,
+    @Optional() private _drawerRef: DrawerRef<any>,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._updateWindowWidth();
@@ -537,7 +539,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const namespace = this.config.namespace || getNormalizedPath(this._location);
-    this._persistanceStore.setConfig(this._config.persist, namespace, !!this._dialogRef);
+    const persistanceDisabled = !!this._dialogRef || !!this._drawerRef;
+    this._persistanceStore.setConfig(this._config.persist, namespace, persistanceDisabled);
     this._persistanceStore.restore()
 
     this.config.initItems(config.items, this._route, this._persistanceStore);
