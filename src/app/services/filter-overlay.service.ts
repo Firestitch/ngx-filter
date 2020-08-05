@@ -1,11 +1,15 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
-import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
+import { Inject, Injectable, Injector, OnDestroy } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
-import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
+import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
+import { FS_FILTER_META, FsFilterMeta } from '../providers/filter-meta';
+
 
 @Injectable()
 export class FsFilterOverlayService implements OnDestroy {
@@ -16,33 +20,45 @@ export class FsFilterOverlayService implements OnDestroy {
   private _destroy$ = new Subject();
   private _overlayRef: OverlayRef;
 
-  constructor(private _overlay: Overlay) {
+  constructor(
+    @Inject(FS_FILTER_META) private _filterMeta: FsFilterMeta,
+    private _overlay: Overlay
+  ) {
 
     this.detach$
     .pipe(
       takeUntil(this._destroy$)
     )
-    .subscribe(this.detach.bind(this));
+    .subscribe(() => {
+      this.detach();
+    });
 
     this.attach$
     .pipe(
       takeUntil(this._destroy$)
     )
-    .subscribe(this.attach.bind(this));
+    .subscribe(() => {
+      this.attach();
+    });
   }
 
   private detach() {
-    window.document.body.classList.remove('fs-filter-open');
+    if (this._filterMeta.openedFilters === 1) {
+      window.document.body.classList.remove('fs-filter-open');
+    }
+
+    this._filterMeta.openedFilters--;
   }
 
   private attach() {
-    window.document.body.classList.add('fs-filter-open');
+    if (this._filterMeta.openedFilters === 0) {
+      window.document.body.classList.add('fs-filter-open');
+    }
+
+    this._filterMeta.openedFilters++;
   }
 
   public close() {
-
-    this.detach();
-
     if (this._overlayRef) {
       this._overlayRef.detach();
       this._overlayRef = null;
