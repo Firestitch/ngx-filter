@@ -25,43 +25,45 @@ export class FsFilterOverlayService implements OnDestroy {
     private _overlay: Overlay
   ) {
 
-    this.detach$
-    .pipe(
-      takeUntil(this._destroy$)
-    )
-    .subscribe(() => {
-      this.detach();
-    });
-
-    this.attach$
-    .pipe(
-      takeUntil(this._destroy$)
-    )
-    .subscribe(() => {
-      this.attach();
-    });
+    // this.detach$
+    // .pipe(
+    //   takeUntil(this._destroy$)
+    // )
+    // .subscribe(() => {
+    //   this.detach();
+    // });
+    //
+    // this.attach$
+    // .pipe(
+    //   takeUntil(this._destroy$)
+    // )
+    // .subscribe(() => {
+    //   this.attach();
+    // });
   }
 
-  private detach() {
-    if (this._filterMeta.openedFilters === 1) {
+  private removeFilterClass() {
+    this._filterMeta.openedFilters--;
+
+    if (this._filterMeta.openedFilters === 0) {
       window.document.body.classList.remove('fs-filter-open');
     }
-
-    this._filterMeta.openedFilters--;
   }
 
-  private attach() {
-    if (this._filterMeta.openedFilters === 0) {
+  private addFilterClass() {
+    this._filterMeta.openedFilters++;
+
+    if (this._filterMeta.openedFilters === 1) {
       window.document.body.classList.add('fs-filter-open');
     }
-
-    this._filterMeta.openedFilters++;
   }
 
   public close() {
     if (this._overlayRef) {
       this._overlayRef.detach();
       this._overlayRef = null;
+
+      this.removeFilterClass();
     }
   }
 
@@ -92,6 +94,8 @@ export class FsFilterOverlayService implements OnDestroy {
     .subscribe(() => {
       this.attach$.next();
     });
+
+    this.addFilterClass();
 
     return this.openPortalPreview(injector, this._overlayRef, data);
   }
