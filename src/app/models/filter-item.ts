@@ -281,10 +281,10 @@ export class FsFilterConfigItem extends Model {
   public _fromJSON(data) {
     super._fromJSON(data);
 
-    if (this.name && isObject(this.name)) {
-      this.names = this.name;
-      this.name = Object.keys(this.names).join('-');
-    }
+    // if (this.name && isObject(this.name)) {
+    //   this.names = this.name;
+    //   this.name = Object.keys(this.names).join('-');
+    // }
 
     if (isObservable(data.default)) {
       data.default

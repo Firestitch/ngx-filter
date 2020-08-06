@@ -8,11 +8,11 @@ type FilterAutoCompleteType = ItemType.AutoComplete | ItemType.AutoCompleteChips
 export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   name: string;
   type: T;
-  label: U;
+  label: string | string[];
   chipLabel?: string | string[];
   children?: string;
   multiple?: boolean;
-  groups?: any;
+  // groups?: any;
   hide?: boolean;
   wait?: boolean;
   query?: string;

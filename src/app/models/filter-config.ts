@@ -1,7 +1,7 @@
 import {
   FilterButton,
-  IFilterConfigItem,
-  FsFilterPersistance
+  FsFilterPersistance,
+  IFilterConfigItem
 } from './../interfaces/config.interface';
 import { isEmpty } from '@firestitch/common';
 import { Alias, Model } from 'tsmodels';
@@ -16,6 +16,7 @@ import { ItemType } from '../enums/item-type.enum';
 import { PersistanceStore } from '../classes/persistance-store';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
+import { SelectItem } from './items/select-item';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -46,7 +47,7 @@ export class FsFilterConfig extends Model {
   public nonKeywordFilters = false;
   public namespace: string; // for persistance
 
-  private _items: FsFilterConfigItem[] = [];
+  private _items: any = [];
   private _visibleItems: FsFilterConfigItem[] = [];
   private _filtersNames = [];
   private _itemsChanged$ = new Subject<void>();
@@ -88,7 +89,11 @@ export class FsFilterConfig extends Model {
 
           const persistedValue = persistanceStore.enabled && persistanceStore.value.data;
 
-          return new FsFilterConfigItem(item, this, route, persistedValue)
+          if (item.type === ItemType.Select) {
+            return SelectItem.create(item);
+          } else {
+            return new FsFilterConfigItem(item, this, route, persistedValue)
+          }
         } else {
           throw Error('Filter init error. Items name must be unique.')
         }

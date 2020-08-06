@@ -6,6 +6,7 @@ import {
   IFilterConfigDateRangeItem,
   IFilterConfigTextItem,
 } from './item-config.interface';
+import { IFilterConfigSelectItem } from './items/select.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -31,6 +32,7 @@ export interface FilterConfig {
 export type IFilterConfigItem =
   (
     IFilterConfigBaseItem
+    | IFilterConfigSelectItem
     | IFilterConfigTextItem
     | IFilterConfigDateItem
     | IFilterConfigAutocompleteItem
