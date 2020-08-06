@@ -7,6 +7,7 @@ import {
   IFilterConfigTextItem,
 } from './item-config.interface';
 import { IFilterConfigSelectItem } from './items/select.interface';
+import { IFilterConfigChipsItem } from './items/chips.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -33,6 +34,7 @@ export type IFilterConfigItem =
   (
     IFilterConfigBaseItem
     | IFilterConfigSelectItem
+    | IFilterConfigChipsItem
     | IFilterConfigTextItem
     | IFilterConfigDateItem
     | IFilterConfigAutocompleteItem

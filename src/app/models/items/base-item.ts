@@ -167,6 +167,9 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
         this._observableValues = valuesResult;
       } else {
         this.values = valuesResult;
+
+        // Move to some other place
+        this._init();
       }
 
     }

@@ -10,8 +10,6 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   type: T;
   label: string | string[];
   chipLabel?: string | string[];
-  children?: string;
-  multiple?: boolean;
   // groups?: any;
   hide?: boolean;
   wait?: boolean;

@@ -17,6 +17,7 @@ import { PersistanceStore } from '../classes/persistance-store';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { SelectItem } from './items/select-item';
+import { ChipsItem } from './items/chips-item';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -91,6 +92,8 @@ export class FsFilterConfig extends Model {
 
           if (item.type === ItemType.Select) {
             return SelectItem.create(item);
+          } else if (item.type === ItemType.Chips) {
+            return ChipsItem.create(item as any);
           } else {
             return new FsFilterConfigItem(item, this, route, persistedValue)
           }
