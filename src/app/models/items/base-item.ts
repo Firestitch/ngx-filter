@@ -89,6 +89,11 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this.type === ItemType.Keyword;
   }
   ////
+
+  public get destroy$() {
+    return this._destroy$.asObservable();
+  }
+
   public get type(): ItemType {
     return this._type;
   }
