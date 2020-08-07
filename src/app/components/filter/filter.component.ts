@@ -43,6 +43,7 @@ import { PersistanceStore } from '../../classes/persistance-store';
 import { FilterConfig } from '../../interfaces/config.interface';
 import { TextItem } from '../../models/items/text-item';
 import { BaseItem } from '../../models/items/base-item';
+import { FsFilterItemsStore } from '../../classes/items-store';
 
 
 @Component({
@@ -53,6 +54,7 @@ import { BaseItem } from '../../models/items/base-item';
   providers: [
     FsFilterOverlayService,
     PersistanceStore,
+    FsFilterItemsStore,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -87,7 +89,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._searchTextNgModel = value;
   }
 
-  public changedFilters = [];
+  // public changedFilters = [];
   public searchText = '';
   public searchPlaceholder = 'Search';
   public activeFiltersCount = 0;
@@ -113,6 +115,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
     private _persistanceStore: PersistanceStore,
+    private _filterItems: FsFilterItemsStore,
     @Optional() private _dialogRef: MatDialogRef<any>,
     @Optional() private _drawerRef: DrawerRef<any>,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
@@ -147,6 +150,18 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._filterParams;
   }
 
+  public get items() {
+    return this._filterItems.items;
+  }
+
+  public get visibleItems() {
+    return this._filterItems.visibleItems;
+  }
+
+  public get hasKeyword() {
+    return this._filterItems.hasKeyword;
+  }
+
   public ngOnInit() {
 
     // Avoid ngChanges error
@@ -157,13 +172,13 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (this.sortUpdate) {
-      this.sortUpdate
-        .pipe(
-          takeUntil(this.config.destroy$),
-        )
-        .subscribe((data) => {
-          this.config.updateSort(data);
-        });
+      // this.sortUpdate
+      //   .pipe(
+      //     takeUntil(this.config.destroy$),
+      //   )
+      //   .subscribe((data) => {
+      //     this._filterItems.updateSort(data);
+      //   });
     }
 
     if (this.config.init) {
@@ -258,7 +273,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public updateValues(values, changeEvent = true) {
     Object.keys(values).forEach((key) => {
-      const filterItem = this.config.items.find((item) => item.name === key);
+      const filterItem = this.items.find((item) => item.name === key);
 
       if (!filterItem) {
         return;
@@ -307,7 +322,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getItemValue(name: string) {
-    const item = this.config.items.find((item) => item.name === name);
+    const item = this.items.find((item) => item.name === name);
 
     if (item) {
       return item.model;
@@ -317,7 +332,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getItemValueChange$(name: string): Observable<any> | null {
-    const item = this.config.items.find((i) => i.name === name);
+    const item = this.items.find((i) => i.name === name);
 
     if (item) {
       return item.valueChanged$
@@ -343,11 +358,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       return this._destroyFilterDrawer();
     }
 
-    const notTextItem = this.config.items.find((item) => {
-      return item.type !== ItemType.Keyword;
-    });
+    // const notTextItem = this.config.items.find((item) => {
+    //   return item.type !== ItemType.Keyword;
+    // });
 
-    if (!notTextItem) {
+    if (!this.visibleItems.length) {
       return;
     }
 
@@ -356,20 +371,20 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.opened.next();
 
     this._filterOverlay.open(this._injector,  {
-      items: this.config.visibleItems,
+      items: this.visibleItems,
       showSortBy: 'showSortBy',
-      sortItem: this.config.sortByItem,
-      sortDirectionItem: this.config.sortDirectionItem,
+      sortItem: this._filterItems.sortByItem,
+      sortDirectionItem: this._filterItems.sortDirectionItem,
       filterChanged: this._filterChanged$,
       search: this.search.bind(this),
       done: this.hide.bind(this),
       clear: this.clear.bind(this)
     });
 
-    if (this._firstOpen) {
-      this.config.loadValuesForPendingItems();
-      this._firstOpen = false;
-    }
+    // if (this._firstOpen) {
+    //   this.config.loadValuesForPendingItems();
+    //   this._firstOpen = false;
+    // }
   }
 
   public clearSearchText(event) {
@@ -381,9 +396,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   public init() {
 
     const data = this._filterParams.getFlattenedParams();
-    this._sort = this.config.getSort();
+    this._sort = this._filterItems.getSort();
 
-    this.config.init(data, this.config.getSort());
+    this.config.init(data, this._filterItems.getSort());
   }
 
   public clear(event = null) {
@@ -393,8 +408,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.searchText = '';
-    this.changedFilters = [];
-    this.config.filtersClear();
+    // this.changedFilters = [];
+    this._filterItems.filtersClear();
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
     this._filterChanged$.next();
@@ -425,7 +440,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     const data = this._filterParams.getFlattenedParams();
 
     if (this.config.reload) {
-      this.config.reload(data, this.config.getSort());
+      this.config.reload(data, this._filterItems.getSort());
     }
   }
 
@@ -434,19 +449,25 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param event
    */
   public resetFilter(event: { item: BaseItem<any>, type: string }) {
-    const item = event.item;
+    // debugger;
+    // const item = event.item;
+    //
+    // const index = this.changedFilters.indexOf(item);
+    //
+    // if (index > -1) {
+    //   this.changedFilters.splice(index, 1);
+    //   item.clear();
+    // }
+    //
+    // if (item.change) {
+    //   item.change(item);
+    // }
+    // this.change();
+  }
 
-    const index = this.changedFilters.indexOf(item);
-
-    if (index > -1) {
-      this.changedFilters.splice(index, 1);
-      item.clear();
-    }
-
-    if (item.change) {
-      item.change(item);
-    }
-    this.change();
+  public getItem(name): BaseItem<any> {
+    return this.items
+      .find((item) => item.name === name);
   }
 
   /**
@@ -456,7 +477,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.config.updateModelValues();
     const data = this._filterParams.getFlattenedParams();
-    const sort = this.config.getSort();
+    const sort = this._filterItems.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
       || (sort && this._sort && !objectsAreEquals(this._sort, sort));
@@ -491,17 +512,17 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Do update count of filled filters
    */
   private updateFilledCounter() {
-    this.changedFilters = this.config.getFilledItems();
-
-    this.changedFilters
-      .filter((item) => item.hasPendingValues)
-      .forEach((item) => item.loadValues(false));
-
-    this.activeFiltersWithInputCount =  this.changedFilters
-                                          .filter((item) => item.type !== ItemType.Keyword)
-                                          .length;
-
-    this._cdRef.markForCheck();
+    // this.changedFilters = this.config.getFilledItems();
+    //
+    // this.changedFilters
+    //   .filter((item) => item.hasPendingValues)
+    //   .forEach((item) => item.loadValues(false));
+    //
+    // this.activeFiltersWithInputCount =  this.changedFilters
+    //                                       .filter((item) => item.type !== ItemType.Keyword)
+    //                                       .length;
+    //
+    // this._cdRef.markForCheck();
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
@@ -516,6 +537,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this._config = new FsFilterConfig(config);
+    this._filterItems.setConfig(this._config);
 
     this._listenInternalItemsChange();
     if (this._config.persist) {
@@ -535,9 +557,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._persistanceStore.setConfig(this._config.persist, namespace, persistanceDisabled);
     this._persistanceStore.restore()
 
-    this.config.initItems(config.items, this._route, this._persistanceStore);
+    this._filterItems.initItems(config.items);
+    // this.config.initItems(config.items, this._route, this._persistanceStore);
 
-    this._filterParams = new FilterParams(this._router, this._route, this.config);
+    this._filterParams = new FilterParams(this._router, this._route, this._filterItems);
     if (this.config.queryParam) {
       // Read from query params
       this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
@@ -546,7 +569,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this._filterParams.updateQueryParams();
     }
 
-    this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
+    this._searchTextItem = this
+      .items
+      .find((item) => item.isTypeKeyword) as TextItem;
+
     if (this._searchTextItem) {
       this.searchText = this._searchTextItem.model;
       this.searchPlaceholder = this._searchTextItem.label as string || 'Search';
@@ -667,12 +693,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _listenInternalItemsChange() {
-    this.config.itemsChanged$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.change();
-      });
+    // this.config.itemsChanged$
+    //   .pipe(
+    //     takeUntil(this._destroy$),
+    //   )
+    //   .subscribe(() => {
+    //     this.change();
+    //   });
   }
 }

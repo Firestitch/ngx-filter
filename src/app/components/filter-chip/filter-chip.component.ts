@@ -7,13 +7,11 @@ import {
   Output
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { BaseItem } from '../../models/items/base-item';
-import { DateRangeItem } from '../../models/items/date-range-item';
-import { RangeItem } from '../../models/items/range-item';
-import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
-type Item = DateRangeItem | RangeItem | DateTimeRangeItem | BaseItem<any>;
+import { BaseItem } from '../../models/items/base-item';
+import { IFilterConfigItem } from '../../interfaces/config.interface';
+
 
 @Component({
   selector: 'fs-filter-chip',
@@ -22,9 +20,9 @@ type Item = DateRangeItem | RangeItem | DateTimeRangeItem | BaseItem<any>;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipComponent implements OnInit, OnDestroy {
-  @Input() public item: Item;
+  @Input() public item: BaseItem<IFilterConfigItem>;
 
-  @Output() public remove = new EventEmitter<{ item: Item, type: string }>();
+  @Output() public remove = new EventEmitter<{ item: BaseItem<IFilterConfigItem>, type: string }>();
 
   private _destroy$ = new Subject();
 
@@ -35,13 +33,16 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this.listenValueChangesForRanges();
 
     if (this.item.hasPendingValues) {
+      this.item.loadValues(false);
+
       this.item.values$
         .pipe(
+          take(1),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
-        this._cdRef.markForCheck();
-      })
+          this._cdRef.markForCheck();
+        });
     }
   }
 
@@ -51,12 +52,14 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   }
 
   public removeItem(item, type = null) {
-    this.remove.next({ item: item, type: type });
+    this.item.clear();
+    // this.remove.next({ item: item, type: type });
   }
 
   public listenValueChangesForRanges() {
-    this.item.valueChanged$
+    this.item.value$
       .pipe(
+        distinctUntilChanged(),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {

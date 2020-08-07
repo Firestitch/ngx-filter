@@ -1,7 +1,9 @@
 import { toString } from 'lodash-es';
-import { BaseItem } from './base-item';
+
 import { IFilterConfigCheckboxItem } from '../../interfaces/items/checkbox.interface';
-import { ItemType } from '@firestitch/filter';
+import { ItemType } from '../../enums/item-type.enum';
+
+import { BaseItem } from './base-item';
 
 
 export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
@@ -51,6 +53,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     } else {
       this.valueChanged = this.model && this.model !== false;
     }
+  }
+
+  public getChipsContent(type = null): string {
+    return this.label as string;
   }
 
   protected _validateModel() {

@@ -1,6 +1,7 @@
 import { IFilterConfigDateRangeItem } from '../../interfaces/item-config.interface';
+import { ItemType } from '../../enums/item-type.enum';
+
 import { BaseDateRangeItem } from './date-range/base-date-range-item';
-import { ItemType } from '@firestitch/filter';
 
 
 export class DateTimeRangeItem extends BaseDateRangeItem {

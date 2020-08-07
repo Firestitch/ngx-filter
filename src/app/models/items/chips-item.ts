@@ -1,7 +1,9 @@
 import { clone, isObject } from 'lodash-es';
-import { BaseItem } from './base-item';
+
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
-import { ItemType } from '@firestitch/filter';
+
+import { ItemType } from '../../enums/item-type.enum';
+import { BaseItem } from './base-item';
 
 
 export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
@@ -49,6 +51,16 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
   public checkIfValueChanged() {
     this.valueChanged = false;
+  }
+
+  public getChipsContent() {
+    return this.model
+      .reduce((acc, i) => {
+        acc.push(i.name);
+
+        return acc;
+      }, [])
+      .join(', ');
   }
 
   protected _validateModel() {

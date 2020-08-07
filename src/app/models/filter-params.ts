@@ -9,6 +9,11 @@ import { filterToQueryParam } from '../helpers/query-param-transformers';
 import { getRangeName } from '../helpers/get-range-name';
 import { BaseItem } from './items/base-item';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { RangeItem } from './items/range-item';
+import { DateRangeItem } from './items/date-range-item';
+import { DateTimeRangeItem } from './items/date-time-range-item';
+import { MultipleSelectItem } from './items/select/multiple-select-item';
+import { FsFilterItemsStore } from '../classes/items-store';
 
 
 export class FilterParams {
@@ -18,7 +23,7 @@ export class FilterParams {
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
-    private _config: FsFilterConfig
+    private _config: FsFilterItemsStore
   ) {}
 
   public get queryParams() {
@@ -77,12 +82,12 @@ export class FilterParams {
 
       const foundItem = this._config.items.find(filterItem => {
 
-        if (filterItem.isTypeRange) {
+        if (filterItem instanceof RangeItem) {
           return  name === getRangeName(filterItem.case, filterItem.name, 'min') ||
                   name === getRangeName(filterItem.case, filterItem.name, 'max') ||
                   name === filterItem.name;
 
-        } else if (filterItem.isTypeDateRange || filterItem.isTypeDateTimeRange) {
+        } else if (filterItem instanceof DateRangeItem || filterItem instanceof DateTimeRangeItem) {
           return name === getRangeName(filterItem.case, filterItem.name, 'from') ||
                  name ===  getRangeName(filterItem.case, filterItem.name, 'to');
         }
@@ -101,7 +106,7 @@ export class FilterParams {
 
     this._config.items.forEach(filterItem => {
 
-      if (filterItem.isTypeSelect && filterItem.isolate) {
+      if (filterItem instanceof MultipleSelectItem && filterItem.isolate) {
         if (filterItem.multiple && filterItem.value) {
           const isolated = arrayList(filterItem.values, 'value').sort();
           const value = filterItem.value.sort();

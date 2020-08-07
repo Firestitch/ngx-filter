@@ -1,5 +1,6 @@
 import { BaseSelectItem } from './base-select-item';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
+import { findValue } from '../../../helpers/find-value';
 
 export class SimpleSelectItem extends BaseSelectItem {
 
@@ -36,6 +37,22 @@ export class SimpleSelectItem extends BaseSelectItem {
     this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
       ? '__all'
       : null;
+  }
+
+  public getChipsContent(type = null): string {
+    if (this.children) {
+      const itemValue = findValue(this.values, this.model, this.children);
+
+      return itemValue && itemValue.name
+    } else {
+      const itemValue = this.values.find((val) => val.value === this.model);
+
+      if (itemValue) {
+        return itemValue.name
+      } else if (this.isolate) {
+        return this.isolate.label
+      }
+    }
   }
 
   protected _init() {

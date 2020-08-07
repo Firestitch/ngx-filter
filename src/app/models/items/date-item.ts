@@ -1,6 +1,10 @@
+import { format } from '@firestitch/date';
+
 import { IFilterConfigDateRangeItem } from '../../interfaces/item-config.interface';
+import { ItemType } from '../../enums/item-type.enum';
+import { ItemDateMode } from '../../enums/item-date-mode.enum';
+
 import { BaseDateItem } from './date/base-date-item';
-import { ItemType } from '@firestitch/filter';
 
 
 export class DateItem extends BaseDateItem {
@@ -11,8 +15,14 @@ export class DateItem extends BaseDateItem {
 
   public readonly type: ItemType.Date;
 
-  public isTypeDate() {
-    return true;
+  public getChipsContent(type = null): string {
+    let dateFormat = 'date';
+
+    if (this.mode == ItemDateMode.ScrollMonthYear) {
+      dateFormat = 'full-date-dayless';
+    }
+
+    return format(this.model, dateFormat);
   }
 
 }

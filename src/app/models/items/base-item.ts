@@ -1,7 +1,9 @@
-import { ItemType } from '../../enums/item-type.enum';
+import { isFunction } from 'lodash-es';
+
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { isFunction } from 'lodash-es';
+
+import { ItemType } from '../../enums/item-type.enum';
 
 import {
   IFilterConfigBaseItem,
@@ -28,6 +30,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected _initialLoading = false;
   protected _pendingValues = false;
   protected _observableValues: Observable<any>;
+  protected _value$ = new BehaviorSubject(null);
   protected _valueChanged$ = new BehaviorSubject(false);
   protected _values$ = new BehaviorSubject(null);
 
@@ -41,6 +44,51 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this._parseConfig(itemConfig);
   }
 
+  ///
+  public get isTypeAutocomplete() {
+    return this.type === ItemType.AutoComplete;
+  }
+
+  public get isTypeAutocompleteChips() {
+    return this.type === ItemType.AutoCompleteChips;
+  }
+
+  public get isTypeChips() {
+    return this.type === ItemType.Chips;
+  }
+
+  public get isTypeCheckbox() {
+    return this.type === ItemType.Checkbox;
+  }
+
+  public get isTypeSelect() {
+    return this.type === ItemType.Select;
+  }
+
+  public get isTypeDate() {
+    return this.type === ItemType.Date;
+  }
+
+  public get isTypeDateRange() {
+    return this.type === ItemType.DateRange;
+  }
+
+  public get isTypeRange() {
+    return this.type === ItemType.Range;
+  }
+
+  public get isTypeDateTimeRange() {
+    return this.type === ItemType.DateTimeRange;
+  }
+
+  public get isTypeDateTime() {
+    return this.type === ItemType.DateTime;
+  }
+
+  public get isTypeKeyword() {
+    return this.type === ItemType.Keyword;
+  }
+  ////
   public get type(): ItemType {
     return this._type;
   }
@@ -70,6 +118,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return  this._values$.asObservable();
   }
 
+  public get value$() {
+    return this._value$.asObservable();
+  }
+
   public get valueChanged$() {
     return this._valueChanged$;
   }
@@ -79,6 +131,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public set valueChanged(value: boolean) {
+    this._value$.next(this.value);
     this._valueChanged$.next(value);
   }
 
@@ -138,6 +191,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
       if (isObservable(valuesResult)) {
         this._pendingValues = true;
         this._observableValues = valuesResult;
+
+        this.loadValues(false);
       } else {
         this.values = valuesResult;
 
@@ -153,12 +208,23 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   public clear() {
     this.valueChanged = false;
+
+    const oldValue = this.value;
     this.model = undefined;
+    const newValue = this.value;
+
+    if (oldValue !== newValue && this.change) {
+      this.change(this);
+    }
   };
 
   // TODO
   public updateValue(value) {
 
+  }
+
+  public getChipsContent(type): string {
+    return '';
   }
 
 
@@ -189,7 +255,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   protected _initDefaultModel() {
     // TODO nullish change
-    if (this.model === undefined) {
+    if (this.model === undefined && this.defaultValue !== undefined) {
       this.model = this.defaultValue;
     }
   }

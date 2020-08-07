@@ -1,7 +1,9 @@
 import { clone, isObject } from 'lodash-es';
+
 import { IFilterConfigAutocompleteItem } from '../../interfaces/item-config.interface';
+import { ItemType } from '../../enums/item-type.enum';
+
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
-import { ItemType } from '@firestitch/filter';
 
 
 export class AutocompleteChipsItem extends BaseAutocompleteItem {
@@ -11,10 +13,6 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
   }
 
   public type: ItemType.AutoCompleteChips;
-
-  public get isTypeAutocompleteChips(): boolean {
-    return true;
-  }
 
   public get value() {
     if (Array.isArray(this.model) && this.model.length === 0) {
@@ -51,6 +49,16 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
 
   public checkIfValueChanged() {
     this.valueChanged = this.model && this.model.length;
+  }
+
+  public getChipsContent() {
+    return this.model
+      .reduce((acc, i) => {
+        acc.push(i.name);
+
+        return acc;
+      }, [])
+      .join(', ');
   }
 
   protected _init() {

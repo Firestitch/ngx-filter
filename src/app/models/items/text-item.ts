@@ -1,9 +1,9 @@
-import { ItemType } from '@firestitch/filter';
-
-import { BaseItem } from './base-item';
+import { ItemType } from '../../enums/item-type.enum';
 import {
   IFilterConfigTextItem
 } from '../../interfaces/item-config.interface';
+
+import { BaseItem } from './base-item';
 
 
 export class TextItem extends BaseItem<IFilterConfigTextItem> {
@@ -17,12 +17,8 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   public prefix: string;
   public suffix: string;
 
-  public get isTypeCheckbox(): boolean {
-    return true;
-  }
-
   public get value() {
-    return this.model;
+    return !!this.model ? this.model : null;
   }
 
   public get flattenedParams() {
@@ -43,6 +39,10 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
   public checkIfValueChanged() {
     this.valueChanged = this.model && this.model !== '';
+  }
+
+  public getChipsContent() {
+    return this.model;
   }
 
   protected _validateModel() {

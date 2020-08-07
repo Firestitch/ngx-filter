@@ -1,8 +1,9 @@
 import {
   IFilterConfigDateItem,
 } from '../../interfaces/item-config.interface';
+import { ItemType } from '../../enums/item-type.enum';
+
 import { BaseDateItem } from './date/base-date-item';
-import { ItemType } from '@firestitch/filter';
 
 
 export class DateTimeItem extends BaseDateItem {
@@ -12,9 +13,5 @@ export class DateTimeItem extends BaseDateItem {
   }
 
   public readonly type: ItemType.DateTime;
-
-  public isTypeDateTime() {
-    return true;
-  }
 
 }

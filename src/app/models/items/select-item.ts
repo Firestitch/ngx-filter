@@ -1,4 +1,4 @@
-import { ItemType } from '@firestitch/filter';
+import { ItemType } from '../../enums/item-type.enum';
 
 import { MultipleSelectItem } from './select/multiple-select-item';
 import { SimpleSelectItem } from './select/simple-select-item';

@@ -1,9 +1,11 @@
 import { clone, isObject } from 'lodash-es';
-import { BaseItem } from './base-item';
 import { isEmpty } from '@firestitch/common';
+
 import { getRangeName } from '../../helpers/get-range-name';
 import { IFilterConfigRangeItem } from '../../interfaces/item-config.interface';
-import { ItemType } from '@firestitch/filter';
+import { ItemType } from '../../enums/item-type.enum';
+
+import { BaseItem } from './base-item';
 
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
@@ -18,10 +20,6 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public options: { scale?: number }
   public prefix: string;
   public suffix: string;
-
-  public get isTypeRange(): boolean {
-    return true;
-  }
 
   public get value() {
     let value = clone(this.model);
@@ -81,6 +79,16 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public checkIfValueChanged() {
     if (this.model && Object.keys(this.model).length > 0) {
       this.valueChanged = true;
+    }
+  }
+
+  public getChipsContent(type): string {
+    if (type === 'from') {
+      const min = this.model.min;
+      return `${min}`;
+    } else if (type === 'to') {
+      const max = this.model.max;
+      return `${max}`;
     }
   }
 

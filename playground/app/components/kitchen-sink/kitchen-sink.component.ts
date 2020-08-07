@@ -162,7 +162,7 @@ export class KitchenSinkComponent {
           label: 'Observable Select',
           values: () => {
 
-            const filterItem: SimpleSelectItem = this.filterEl.config.getItem('simple_select');
+            const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
             console.log(filterItem);
             return new BehaviorSubject(this.users)
               .pipe(
@@ -247,6 +247,7 @@ export class KitchenSinkComponent {
           label: 'Multi Select Status',
           multiple: true,
           values: [
+            { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' }

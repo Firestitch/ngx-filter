@@ -1,5 +1,5 @@
 import { isEmpty } from '@firestitch/common';
-import { simpleFormat } from '@firestitch/date';
+import { format, simpleFormat } from '@firestitch/date';
 import { ItemType } from '../../../enums/item-type.enum';
 
 import { isDate, isValid, parse, parseISO } from 'date-fns';
@@ -99,6 +99,18 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
   public checkIfValueChanged() {
     this.valueChanged = false;
+  }
+
+  public getChipsContent(type = null): string {
+    const formatTo = this.type === ItemType.DateRange ? 'date' : 'date-time';
+
+    if (type === 'from') {
+      const from = this.model.from;
+      return `${format(from, formatTo)}`;
+    } else if (type === 'to') {
+      const to = this.model.to;
+      return `${format(to, formatTo)}`;
+    }
   }
 
   protected _validateModel() {

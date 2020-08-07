@@ -1,5 +1,5 @@
-<ng-container *ngIf="config?.items?.length">
-  <ng-container *ngIf="config.keywordFilter; else noKeywordFilter">
+<ng-container *ngIf="items?.length">
+  <ng-container *ngIf="hasKeyword; else noKeywordFilter">
     <div class="filter-search-container">
       <div class="filter-input-field">
         <form autocomplete="off" role="presentation">
@@ -55,7 +55,7 @@
 </ng-container>
 
 <ng-template #filterActions>
-  <div class="filter-actions" *ngIf="config.nonKeywordFilters">
+  <div class="filter-actions" *ngIf="visibleItems.length > 0">
     <button
       mat-button
       class="filters-button"
@@ -75,7 +75,7 @@
   <fs-filter-chips
     class="filter-chips"
     *ngIf="config.chips"
-    [filters]="changedFilters"
+    [filters]="items"
     (remove)="resetFilter($event)"
     [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
   </fs-filter-chips>
