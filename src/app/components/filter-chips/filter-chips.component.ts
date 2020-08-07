@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
@@ -9,8 +9,8 @@ import { FsFilterConfigItem } from '../../models/filter-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipsComponent {
-  @Input() public filters: FsFilterConfigItem[];
-  @Output() public remove = new EventEmitter<{ item: FsFilterConfigItem, type: string }>();
+  @Input() public filters: BaseItem<any>[];
+  @Output() public remove = new EventEmitter<{ item: BaseItem<any>, type: string }>();
 
   public chips = [];
 

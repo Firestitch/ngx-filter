@@ -6,10 +6,12 @@ import {
   Input, OnDestroy, OnInit,
   Output
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
-import { ItemType } from '../../enums/item-type.enum';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { ItemType } from '../../enums/item-type.enum';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
@@ -19,7 +21,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
 
-  @Input() public item: FsFilterConfigItem;
+  @Input() public item: BaseItem<any>;
   @Output() public itemChanged = new EventEmitter();
 
   private _destroy$ = new Subject<void>();

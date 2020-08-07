@@ -10,24 +10,11 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   type: T;
   label: string | string[];
   chipLabel?: string | string[];
-  // groups?: any;
   hide?: boolean;
-  wait?: boolean;
-  query?: string;
   values?: any;
-  values$?: any;
-  selectedValue?: any;
-  model?: any;
-  isolate?: any;
-  names?: any;
   primary?: boolean;
-  search?: any;
-  unchecked?: any;
-  checked?: any;
-  alias?: any;
-  placeholder?: any;
-  default?: any;
-  change?(item: IFilterConfigBaseItem): any
+  default?: unknown;
+  change?: (item: IFilterConfigBaseItem) => void
 }
 
 export interface IFilterConfigDateItem extends IFilterConfigBaseItem<FilterConfigDateType> {

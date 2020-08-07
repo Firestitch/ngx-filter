@@ -4,9 +4,11 @@ import {
   Component, ElementRef,
   KeyValueDiffers, OnInit, ViewChild
 } from '@angular/core';
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { fromEvent, merge } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+
+import { BaseItemComponent } from '../base-item/base-item.component';
+import { RangeItem } from '../../../models/items/range-item';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
   styleUrls: ['./range.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RangeComponent extends BaseItemComponent implements OnInit {
+export class RangeComponent extends BaseItemComponent<RangeItem> implements OnInit {
 
   @ViewChild('from', { static: true })
   public from: ElementRef;

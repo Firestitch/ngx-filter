@@ -1,16 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { format } from '@firestitch/date';
-import { FsFilterConfigItem } from '../models/filter-item';
+
 import { findValue } from '../helpers/find-value';
 import { ItemType } from '../enums/item-type.enum';
 import { ItemDateMode } from '../enums/item-date-mode.enum';
+import { BaseItem } from '../models/items/base-item';
+import { IFilterConfigItem } from '../interfaces/config.interface';
+import { DateItem } from '../models/items/date-item';
+import { BaseSelectItem } from '../models/items/select/base-select-item';
 
 
 @Pipe({
   name: 'fsItemToChip'
 })
 export class FsItemToChip implements PipeTransform {
-  transform(model: any, item: FsFilterConfigItem, type: string = null) {
+  transform(model: any, item: BaseItem<IFilterConfigItem>, type: string = null) {
     let result = '';
 
     switch (item.type) {
@@ -18,7 +22,7 @@ export class FsItemToChip implements PipeTransform {
 
         let dateFormat = 'date';
 
-        if (item.mode == ItemDateMode.ScrollMonthYear) {
+        if ((item as DateItem).mode == ItemDateMode.ScrollMonthYear) {
           dateFormat = 'full-date-dayless';
         }
 
@@ -45,8 +49,8 @@ export class FsItemToChip implements PipeTransform {
       } break;
       case ItemType.AutoCompleteChips:
       case ItemType.Chips: {
-        result = item.model.reduce((acc, item) => {
-          acc.push(item.name);
+        result = item.model.reduce((acc, i) => {
+          acc.push(i.name);
 
           return acc;
         }, []).join(', ');
@@ -65,7 +69,7 @@ export class FsItemToChip implements PipeTransform {
       } break;
 
       default: {
-        if (Array.isArray(model)) {
+        if (Array.isArray(model) && item instanceof BaseSelectItem) {
           const options = model.reduce((acc, key) => {
             const itemValue = item.values.find((val) => val.value === key);
 
@@ -80,18 +84,19 @@ export class FsItemToChip implements PipeTransform {
 
           result = options.join(', ');
         } else {
+          if (item instanceof BaseSelectItem) {
+            if (item.children) {
+              const itemValue = findValue(item.values, model, item.children);
 
-          if (item.children) {
-            const itemValue = findValue(item.values, model, item.children);
+              result = itemValue && itemValue.name
+            } else {
+              const itemValue = item.values.find((val) => val.value === model);
 
-            result = itemValue && itemValue.name
-          } else {
-            const itemValue = item.values.find((val) => val.value === model);
-
-            if (itemValue) {
-              result = itemValue.name
-            } else if (item.isolate) {
-              result = item.isolate.label
+              if (itemValue) {
+                result = itemValue.name
+              } else if (item.isolate) {
+                result = item.isolate.label
+              }
             }
           }
         }

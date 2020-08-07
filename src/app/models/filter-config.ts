@@ -10,7 +10,6 @@ import { Observable, Subject } from 'rxjs';
 
 import { clone } from 'lodash-es';
 
-import { FsFilterConfigItem } from './filter-item';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
 import { PersistanceStore } from '../classes/persistance-store';
@@ -18,6 +17,18 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { SelectItem } from './items/select-item';
 import { ChipsItem } from './items/chips-item';
+import { RangeItem } from './items/range-item';
+import { DateRangeItem } from './items/date-range-item';
+import { DateTimeRangeItem } from './items/date-time-range-item';
+import { DateItem } from './items/date-item';
+import { DateTimeItem } from './items/date-time-item';
+import { AutocompleteItem } from './items/autocomplete-item';
+import { AutocompleteChipsItem } from './items/autocomplete-chips-item';
+import { CheckboxItem } from './items/checkbox-item';
+import { TextItem } from './items/text-item';
+import { BaseItem } from './items/base-item';
+import { SimpleSelectItem } from './items/select/simple-select-item';
+import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -42,14 +53,14 @@ export class FsFilterConfig extends Model {
   @Alias() public reloadWhenConfigChanged: boolean;
   @Alias() public button: FilterButton;
 
-  public sortByItem: FsFilterConfigItem = null;
-  public sortDirectionItem: FsFilterConfigItem = null;
+  public sortByItem: BaseItem<IFilterConfigItem> = null;
+  public sortDirectionItem: BaseItem<IFilterConfigItem> = null;
   public keywordFilter = false;
   public nonKeywordFilters = false;
   public namespace: string; // for persistance
 
   private _items: any = [];
-  private _visibleItems: FsFilterConfigItem[] = [];
+  private _visibleItems: BaseItem<IFilterConfigItem>[] = [];
   private _filtersNames = [];
   private _itemsChanged$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
@@ -94,8 +105,27 @@ export class FsFilterConfig extends Model {
             return SelectItem.create(item);
           } else if (item.type === ItemType.Chips) {
             return ChipsItem.create(item as any);
+          } else if (item.type === ItemType.Range) {
+            return RangeItem.create(item as any);
+          } else if (item.type === ItemType.DateRange) {
+            return DateRangeItem.create(item as any);
+          } else if (item.type === ItemType.DateTimeRange) {
+            return DateTimeRangeItem.create(item as any);
+          } else if (item.type === ItemType.Date) {
+            return DateItem.create(item as any);
+          } else if (item.type === ItemType.DateTime) {
+            return DateTimeItem.create(item as any);
+          } else if (item.type === ItemType.AutoComplete) {
+            return AutocompleteItem.create(item as any);
+          } else if (item.type === ItemType.AutoCompleteChips) {
+            return AutocompleteChipsItem.create(item as any);
+          } else if (item.type === ItemType.Checkbox) {
+            return CheckboxItem.create(item as any);
+          } else if (item.type === ItemType.Keyword || item.type === ItemType.Text) {
+            return TextItem.create(item as any);
           } else {
-            return new FsFilterConfigItem(item, this, route, persistedValue)
+            throw new Error('ITEM');
+            // return new FsFilterConfigItem(item, this, route, persistedValue)
           }
         } else {
           throw Error('Filter init error. Items name must be unique.')
@@ -160,7 +190,10 @@ export class FsFilterConfig extends Model {
         sortByItem['default'] = this.sort.value;
       }
 
-      this.sortByItem = new FsFilterConfigItem(sortByItem, this, route, persists);
+      this.sortByItem = new SimpleSelectItem(
+        sortByItem as IFilterConfigSelectItem,
+        this
+      );
       this.sortByItem.initValues();
 
       const sortDirectionItem = {
@@ -177,7 +210,10 @@ export class FsFilterConfig extends Model {
         sortDirectionItem['default'] = this.sort.direction;
       }
 
-      this.sortDirectionItem = new FsFilterConfigItem(sortDirectionItem, this, route, persists);
+      this.sortDirectionItem = new SimpleSelectItem(
+        sortDirectionItem as IFilterConfigSelectItem,
+        this
+      );
       this.sortDirectionItem.initValues();
     }
   }

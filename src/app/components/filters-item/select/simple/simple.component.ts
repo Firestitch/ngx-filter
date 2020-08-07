@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
-import { FsFilterConfigItem } from '../../../../models/filter-item';
+import { SimpleSelectItem } from '../../../../models/items/select/simple-select-item';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { FsFilterConfigItem } from '../../../../models/filter-item';
 export class SelectSimpleComponent {
 
   @ViewChild('select', { static: true }) select: MatSelect;
-  @Input() public item: FsFilterConfigItem;
+  @Input() public item: SimpleSelectItem;
   @Output() public change = new EventEmitter();
 
   constructor(public cd: ChangeDetectorRef) {}

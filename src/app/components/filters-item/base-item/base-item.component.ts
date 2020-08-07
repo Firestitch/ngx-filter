@@ -10,9 +10,10 @@ import {
   Output
 } from '@angular/core';
 
-import { FsFilterConfigItem } from '../../../models/filter-item';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { BaseItem } from '../../../models/items/base-item';
+import { IFilterConfigItem } from '../../../interfaces/config.interface';
 
 
 @Component({
@@ -20,16 +21,20 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseItemComponent implements DoCheck, OnDestroy {
+export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements DoCheck, OnDestroy {
+
   @Input()
-  set item(value) {
+  set item(value: T) {
     this._item = value;
   };
 
-  @Input() public inline = false;
-  @Output() public itemChanged = new EventEmitter();
+  @Input()
+  public inline = false;
 
-  protected _item: FsFilterConfigItem;
+  @Output()
+  public itemChanged = new EventEmitter();
+
+  protected _item: T;
   protected _kvDiffer: KeyValueDiffer<string, any>;
   protected _destroy$ = new Subject();
 
@@ -43,7 +48,7 @@ export class BaseItemComponent implements DoCheck, OnDestroy {
     this.listenWithDebounce();
   }
 
-  get item() {
+  get item(): T {
     return this._item
   }
 

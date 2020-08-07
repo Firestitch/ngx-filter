@@ -1,21 +1,22 @@
 import { ItemType } from '../enums/item-type.enum';
 import { filterFromQueryParam } from './query-param-transformers';
 import { tryConvertToNumber } from './try-convert-to-number';
+import { getRangeName } from './get-range-name';
 
 export function parseItemValueFromStored(item, params) {
   const param = params[item.name];
 
   switch (item.type) {
     case ItemType.Range: {
-      const min = params[item.getRangeName('min')];
-      const max = params[item.getRangeName('max')];
+      const min = params[getRangeName(item.case, item.name, 'min')];
+      const max = params[getRangeName(item.case, item.name, 'max')];
 
       item.model = { min: min, max: max };
     } break;
 
     case ItemType.DateRange: case ItemType.DateTimeRange: {
-      const from = params[item.getRangeName('from')];
-      const to = params[item.getRangeName('to')];
+      const from = params[getRangeName(item.case, item.name, 'from')];
+      const to = params[getRangeName(item.case, item.name, 'to')];
 
       item.model = { from: from, to: to };
     } break;

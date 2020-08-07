@@ -38,6 +38,14 @@ export class SimpleSelectItem extends BaseSelectItem {
       : null;
   }
 
+  protected _init() {
+    super._init();
+
+    if (this.model === undefined && this.defaultValue === undefined) {
+      this.model = '__all';
+    }
+  }
+
   protected _setModel(value): void {
     if (value) {
       if (!isNaN(value)) {
@@ -45,7 +53,7 @@ export class SimpleSelectItem extends BaseSelectItem {
       }
     }
 
-    this._model = value;
+    super._setModel(value);
   }
 
   protected _validateModel() {

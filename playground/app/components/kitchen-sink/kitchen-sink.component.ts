@@ -6,9 +6,9 @@ import { nameValue, filter } from '@firestitch/common'
 
 import { BehaviorSubject, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
-import { FsFilterConfigItem } from 'src/app/models/filter-item';
 import { shuffle } from 'lodash-es';
 import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
+import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 
 
 @Component({
@@ -107,7 +107,6 @@ export class KitchenSinkComponent {
           name: 'keyword',
           type: ItemType.Keyword,
           label: 'Search',
-          query: 'keyword'
         },
         {
           name: 'payment_method_id',
@@ -163,7 +162,7 @@ export class KitchenSinkComponent {
           label: 'Observable Select',
           values: () => {
 
-            const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('simple_select');
+            const filterItem: SimpleSelectItem = this.filterEl.config.getItem('simple_select');
             console.log(filterItem);
             return new BehaviorSubject(this.users)
               .pipe(

@@ -1,6 +1,7 @@
 import { clone, isObject } from 'lodash-es';
 import { BaseItem } from './base-item';
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
+import { ItemType } from '@firestitch/filter';
 
 
 export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
@@ -9,6 +10,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return new ChipsItem(config, null);
   }
 
+  public readonly type: ItemType.Chips;
   public multiple: boolean;
 
   public get isTypeChips(): boolean {
@@ -16,10 +18,10 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
 
   public get value() {
-    let value = clone(this.model);
+    const value = clone(this.model);
 
-    if (Array.isArray(this.model) && this.model.length) {
-      value = this.model;
+    if (Array.isArray(value) && value.length === 0) {
+      return null;
     }
 
     return value;
@@ -77,8 +79,6 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       this.values = [];
     }
 
-    debugger;
-
     if (this.model && Array.isArray(this.model) && this.values.length) {
       if (Number.isInteger(this.model[0])) {
         this.model = this.model.map((id) => {
@@ -87,7 +87,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       }
     }
 
-    if (!this.model) {
+    if (this.model === undefined) {
       this.model = [];
     }
   }

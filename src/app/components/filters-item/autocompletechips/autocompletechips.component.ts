@@ -7,6 +7,7 @@ import {
 import { remove as arrayRemove } from '@firestitch/common';
 
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   templateUrl: './autocompletechips.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompletechipsComponent extends BaseItemComponent {
+export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -28,12 +29,6 @@ export class AutocompletechipsComponent extends BaseItemComponent {
       this.item.model.push(event.data);
       this.itemChange();
     }
-  }
-
-  public setSelectedValue(event) {
-    this.item.selectedValue = event
-      .filter((val) => !!val.data)
-      .map((val) => val.data);
   }
 
   public removeAutocompleteChipItem(event) {

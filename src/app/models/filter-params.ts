@@ -1,11 +1,14 @@
-import { FsFilterConfig } from './filter-config';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
-import { list as arrayList } from '@firestitch/common';
 
-import { FsFilterConfigItem } from '../models/filter-item';
+import { list as arrayList } from '@firestitch/common';
+import { isArray, isEqual, isObject, pickBy } from 'lodash-es';
+
+import { FsFilterConfig } from './filter-config';
 import { parseItemValueFromStored } from '../helpers/parse-item-value-from-stored';
 import { filterToQueryParam } from '../helpers/query-param-transformers';
+import { getRangeName } from '../helpers/get-range-name';
+import { BaseItem } from './items/base-item';
+import { IFilterConfigItem } from '../interfaces/config.interface';
 
 
 export class FilterParams {
@@ -45,7 +48,7 @@ export class FilterParams {
   public getRawFlattenedParams() {
     const params = {};
 
-    this._config.items.forEach((filterItem: FsFilterConfigItem) => {
+    this._config.items.forEach((filterItem: BaseItem<IFilterConfigItem>) => {
       Object.assign(params, filterItem.flattenedParams);
     });
 
@@ -75,13 +78,13 @@ export class FilterParams {
       const foundItem = this._config.items.find(filterItem => {
 
         if (filterItem.isTypeRange) {
-          return  name === filterItem.getRangeName('min') ||
-                  name === filterItem.getRangeName('max') ||
+          return  name === getRangeName(filterItem.case, filterItem.name, 'min') ||
+                  name === getRangeName(filterItem.case, filterItem.name, 'max') ||
                   name === filterItem.name;
 
         } else if (filterItem.isTypeDateRange || filterItem.isTypeDateTimeRange) {
-          return name === filterItem.getRangeName('from') ||
-                 name ===  filterItem.getRangeName('to');
+          return name === getRangeName(filterItem.case, filterItem.name, 'from') ||
+                 name ===  getRangeName(filterItem.case, filterItem.name, 'to');
         }
 
         return filterItem.name === name;

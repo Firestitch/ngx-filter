@@ -52,6 +52,10 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
         }
       }
     }
+
+    if (this.model === undefined) {
+      this.model = this.defaultValue;
+    }
   }
 
 }

@@ -5,9 +5,11 @@ import {
   KeyValueDiffers,
   OnDestroy
 } from '@angular/core';
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
+
+import { BaseItemComponent } from '../base-item/base-item.component';
+import { TextItem } from '../../../models/items/text-item';
 
 
 @Component({
@@ -16,7 +18,7 @@ import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
   styleUrls: ['./text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextComponent extends BaseItemComponent implements OnDestroy {
+export class TextComponent extends BaseItemComponent<TextItem> implements OnDestroy {
 
   public inputChange$ = new Subject();
   public destroy$ = new Subject();

@@ -33,7 +33,6 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
-import { FsFilterConfigItem } from '../../models/filter-item';
 import { objectsAreEquals } from '../../helpers/compare';
 import { FilterParams } from '../../models/filter-params';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
@@ -42,6 +41,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { PersistanceStore } from '../../classes/persistance-store';
 import { FilterConfig } from '../../interfaces/config.interface';
+import { TextItem } from '../../models/items/text-item';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
@@ -94,8 +95,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected _config: FsFilterConfig = null;
 
-  private _filterChanged$ = new Subject<FsFilterConfigItem>();
-  private _searchTextItem: FsFilterConfigItem;
+  private _filterChanged$ = new Subject<BaseItem<any>>();
+  private _searchTextItem: TextItem;
   private _searchTextNgModel: NgModel = null;
   private _firstOpen = true;
   private _filterParams: FilterParams;
@@ -432,23 +433,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Reset filter
    * @param event
    */
-  public resetFilter(event: { item: FsFilterConfigItem, type: string }) {
+  public resetFilter(event: { item: BaseItem<any>, type: string }) {
     const item = event.item;
-    const type = event.type;
 
     const index = this.changedFilters.indexOf(item);
 
     if (index > -1) {
-      if (type) {
-        item.partialClear(type);
-
-        if (!item.valueChanged) {
-          this.changedFilters.splice(index, 1);
-        }
-      } else {
-        this.changedFilters.splice(index, 1);
-        item.clear();
-      }
+      this.changedFilters.splice(index, 1);
+      item.clear();
     }
 
     if (item.change) {
@@ -557,7 +549,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._searchTextItem = this.config.items.find((item) => item.isTypeKeyword);
     if (this._searchTextItem) {
       this.searchText = this._searchTextItem.model;
-      this.searchPlaceholder = this._searchTextItem.label || 'Search';
+      this.searchPlaceholder = this._searchTextItem.label as string || 'Search';
     }
 
     // Count active filters after restore
@@ -579,7 +571,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       debounceTime(200),
       takeUntil(this._destroy$),
     )
-      .subscribe((changedItem: FsFilterConfigItem) => {
+      .subscribe((changedItem: BaseItem<any>) => {
         if (changedItem) {
           changedItem.checkIfValueChanged();
         }

@@ -8,6 +8,7 @@ import {
 } from './item-config.interface';
 import { IFilterConfigSelectItem } from './items/select.interface';
 import { IFilterConfigChipsItem } from './items/chips.interface';
+import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -33,6 +34,7 @@ export interface FilterConfig {
 export type IFilterConfigItem =
   (
     IFilterConfigBaseItem
+    | IFilterConfigCheckboxItem
     | IFilterConfigSelectItem
     | IFilterConfigChipsItem
     | IFilterConfigTextItem

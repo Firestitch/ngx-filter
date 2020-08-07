@@ -6,10 +6,14 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { BaseItem } from '../../models/items/base-item';
+import { DateRangeItem } from '../../models/items/date-range-item';
+import { RangeItem } from '../../models/items/range-item';
+import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 
+type Item = DateRangeItem | RangeItem | DateTimeRangeItem | BaseItem<any>;
 
 @Component({
   selector: 'fs-filter-chip',
@@ -18,9 +22,9 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipComponent implements OnInit, OnDestroy {
-  @Input() public item: FsFilterConfigItem;
+  @Input() public item: Item;
 
-  @Output() public remove = new EventEmitter<{ item: FsFilterConfigItem, type: string }>();
+  @Output() public remove = new EventEmitter<{ item: Item, type: string }>();
 
   private _destroy$ = new Subject();
 

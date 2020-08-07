@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FsFilterConfigItem } from '../models/filter-item';
+import { BaseItem } from '../models/items/base-item';
 
 
 @Pipe({
   name: 'fsFilterIsolateValues'
 })
 export class FsFilterIsolateValues implements PipeTransform {
-  transform(values: FsFilterConfigItem[], isolate) {
+  transform(values: BaseItem<any>[], isolate) {
     if (!isolate) {
       return values;
     } else {

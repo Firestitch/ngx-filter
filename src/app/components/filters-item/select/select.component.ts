@@ -9,6 +9,7 @@ import {
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { SelectSimpleComponent } from './simple/simple.component';
 import { SelectMultipleComponent } from './multiple/multiple.component';
+import { BaseSelectItem } from '../../../models/items/select/base-select-item';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { SelectMultipleComponent } from './multiple/multiple.component';
   templateUrl: './select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent extends BaseItemComponent implements DoCheck {
+export class SelectComponent extends BaseItemComponent<BaseSelectItem> implements DoCheck {
 
   @ViewChild('selectItem', { static: false })
   public selectedItem: SelectSimpleComponent | SelectMultipleComponent;

@@ -1,3 +1,5 @@
+import { ItemType } from '@firestitch/filter';
+
 import { MultipleSelectItem } from './select/multiple-select-item';
 import { SimpleSelectItem } from './select/simple-select-item';
 
@@ -11,4 +13,6 @@ export class SelectItem {
       return new SimpleSelectItem(config, null)
     }
   }
+
+  public readonly type: ItemType.Select;
 }

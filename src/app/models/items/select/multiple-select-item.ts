@@ -15,7 +15,7 @@ export class MultipleSelectItem extends BaseSelectItem {
   public get value() {
     let value = clone(this.model);
 
-    if (value && value.indexOf('__all') > -1) {
+    if (value.length === 0 || value.indexOf('__all') > -1) {
       value = null;
     }
 
@@ -30,6 +30,13 @@ export class MultipleSelectItem extends BaseSelectItem {
     this.model = [];
   }
 
+  protected _init() {
+    super._init();
+
+    if (this.model === undefined && !Array.isArray(this.defaultValue)) {
+      this.model = [];
+    }
+  }
   protected _setModel(value) {
     if (Array.isArray(value)) {
       value = value.map((val) => {
@@ -41,7 +48,7 @@ export class MultipleSelectItem extends BaseSelectItem {
       })
     }
 
-    this._model = value;
+    super._setModel(value);
   }
 
   protected _validateModel() {

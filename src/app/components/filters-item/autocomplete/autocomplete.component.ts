@@ -4,7 +4,9 @@ import {
   Component,
   KeyValueDiffers
 } from '@angular/core';
+
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { AutocompleteItem } from '../../../models/items/autocomplete-item';
 
 
 @Component({
@@ -12,7 +14,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   templateUrl: './autocomplete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutocompleteComponent extends BaseItemComponent {
+export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
