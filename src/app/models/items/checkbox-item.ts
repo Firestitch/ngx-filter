@@ -41,19 +41,13 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return params;
   }
 
-  public clear() {
-    super.clear();
-
-    this.model = false;
-  }
-
-  public checkIfValueChanged() {
-    if (this.unchecked) {
-      this.valueChanged = this.model !== this.unchecked;
-    } else {
-      this.valueChanged = this.model && this.model !== false;
-    }
-  }
+  // public checkIfValueChanged() {
+  //   if (this.unchecked) {
+  //     this.valueChanged = this.model !== this.unchecked;
+  //   } else {
+  //     this.valueChanged = this.model && this.model !== false;
+  //   }
+  // }
 
   public getChipsContent(type = null): string {
     return this.label as string;
@@ -77,6 +71,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     if (this.model === undefined) {
       this.model = this.checked == this.defaultValue;
     }
+  }
+
+  protected _clearValue() {
+    this.model = false;
   }
 
 }

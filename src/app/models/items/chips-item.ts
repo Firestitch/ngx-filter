@@ -45,13 +45,9 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return params;
   }
 
-  public clear() {
-    this.model = [];
-  }
-
-  public checkIfValueChanged() {
-    this.valueChanged = false;
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = false;
+  // }
 
   public getChipsContent() {
     return this.model
@@ -102,6 +98,10 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     if (this.model === undefined) {
       this.model = [];
     }
+  }
+
+  protected _clearValue() {
+    this.model = [];
   }
 
 }

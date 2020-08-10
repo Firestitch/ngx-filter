@@ -88,6 +88,12 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
+  public loadAsyncValues() {
+    this.items
+      .filter((item) => item.hasPendingValues)
+      .forEach((item) => item.loadAsyncValues());
+  }
+
   public getSort(): FilterSort | null {
     let sortBy = this.getSortByValue();
     sortBy = sortBy === '__all' ? null : sortBy;

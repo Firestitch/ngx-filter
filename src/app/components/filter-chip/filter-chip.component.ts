@@ -7,7 +7,7 @@ import {
   Output
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 
 import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
@@ -22,8 +22,6 @@ import { IFilterConfigItem } from '../../interfaces/config.interface';
 export class FsFilterChipComponent implements OnInit, OnDestroy {
   @Input() public item: BaseItem<IFilterConfigItem>;
 
-  @Output() public remove = new EventEmitter<{ item: BaseItem<IFilterConfigItem>, type: string }>();
-
   private _destroy$ = new Subject();
 
   constructor(private _cdRef: ChangeDetectorRef) {
@@ -33,7 +31,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this.listenValueChangesForRanges();
 
     if (this.item.hasPendingValues) {
-      this.item.loadValues(false);
+      this.item.loadAsyncValues(false);
 
       this.item.values$
         .pipe(
@@ -53,7 +51,6 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   public removeItem(item, type = null) {
     this.item.clear();
-    // this.remove.next({ item: item, type: type });
   }
 
   public listenValueChangesForRanges() {

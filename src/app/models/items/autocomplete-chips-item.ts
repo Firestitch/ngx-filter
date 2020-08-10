@@ -40,16 +40,9 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
     return params;
   }
 
-  public clear() {
-    super.clear();
-
-    this.model = [];
-    this.search = '';
-  }
-
-  public checkIfValueChanged() {
-    this.valueChanged = this.model && this.model.length;
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = this.model && this.model.length;
+  // }
 
   public getChipsContent() {
     return this.model
@@ -65,6 +58,11 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
     if (this.model === undefined) {
       this.model = [];
     }
+  }
+
+  protected _clearValue() {
+    this.model = [];
+    this.search = '';
   }
 
 }

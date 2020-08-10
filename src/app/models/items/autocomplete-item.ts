@@ -44,9 +44,9 @@ export class AutocompleteItem extends BaseAutocompleteItem {
     this.search = '';
   }
 
-  public checkIfValueChanged() {
-    this.valueChanged = !!this.model;
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = !!this.model;
+  // }
 
   public getChipsContent() {
     return this.model ? this.model.name : ''
@@ -55,4 +55,8 @@ export class AutocompleteItem extends BaseAutocompleteItem {
   protected _init() {
   }
 
+  protected _clearValue() {
+    this.model = null;
+    this.search = '';
+  }
 }

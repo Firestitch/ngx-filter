@@ -335,7 +335,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     const item = this.items.find((i) => i.name === name);
 
     if (item) {
-      return item.valueChanged$
+      return item.value$
         .pipe(
           filter((value) => !!value),
           map(() => {
@@ -381,10 +381,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       clear: this.clear.bind(this)
     });
 
-    // if (this._firstOpen) {
-    //   this.config.loadValuesForPendingItems();
-    //   this._firstOpen = false;
-    // }
+    if (this._firstOpen) {
+      this._filterItems.loadAsyncValues();
+      this._firstOpen = false;
+    }
   }
 
   public clearSearchText(event) {
@@ -442,27 +442,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.reload) {
       this.config.reload(data, this._filterItems.getSort());
     }
-  }
-
-  /**
-   * Reset filter
-   * @param event
-   */
-  public resetFilter(event: { item: BaseItem<any>, type: string }) {
-    // debugger;
-    // const item = event.item;
-    //
-    // const index = this.changedFilters.indexOf(item);
-    //
-    // if (index > -1) {
-    //   this.changedFilters.splice(index, 1);
-    //   item.clear();
-    // }
-    //
-    // if (item.change) {
-    //   item.change(item);
-    // }
-    // this.change();
   }
 
   public getItem(name): BaseItem<any> {
@@ -563,7 +542,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterParams = new FilterParams(this._router, this._route, this._filterItems);
     if (this.config.queryParam) {
       // Read from query params
-      this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
+      // this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
 
       // To fill query params with default values
       this._filterParams.updateQueryParams();
@@ -593,17 +572,17 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param changedItem
    */
   private _listenFilterChanges() {
-    this._filterChanged$.pipe(
-      debounceTime(200),
-      takeUntil(this._destroy$),
-    )
-      .subscribe((changedItem: BaseItem<any>) => {
-        if (changedItem) {
-          changedItem.checkIfValueChanged();
-        }
-
-        this.change();
-      })
+    // this._filterChanged$.pipe(
+    //   debounceTime(200),
+    //   takeUntil(this._destroy$),
+    // )
+    //   .subscribe((changedItem: BaseItem<any>) => {
+    //     // if (changedItem) {
+    //     //   changedItem.checkIfValueChanged();
+    //     // }
+    //
+    //     this.change();
+    //   })
   }
 
   private _destroyFilterDrawer() {
@@ -684,8 +663,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this._searchTextItem) {
               this._searchTextItem.model = value;
             }
-
-            this._filterChanged$.next();
+            // this._filterChanged$.next();
           });
         });
 
@@ -693,6 +671,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _listenInternalItemsChange() {
+    this._filterItems.itemsChange$
+      .subscribe(() => {
+        // console.log('hh');
+        this.change();
+      });
     // this.config.itemsChanged$
     //   .pipe(
     //     takeUntil(this._destroy$),

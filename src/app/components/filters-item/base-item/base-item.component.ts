@@ -31,9 +31,6 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
   @Input()
   public inline = false;
 
-  @Output()
-  public itemChanged = new EventEmitter();
-
   protected _item: T;
   protected _kvDiffer: KeyValueDiffer<string, any>;
   protected _destroy$ = new Subject();
@@ -71,14 +68,10 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
     this._debouncer$
       .pipe(
         takeUntil(this._destroy$),
-        debounceTime(300),
+        debounceTime(150),
       )
       .subscribe(() => {
-        if (this.item.change) {
-          this.item.change(this.item);
-        }
-
-        this.itemChanged.next(this.item);
+        this.item.valueChanged();
       })
   }
 

@@ -32,9 +32,9 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     return params;
   }
 
-  public checkIfValueChanged() {
-    this.valueChanged = !!this.model;
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = !!this.model;
+  // }
 
   protected _validateModel() {
   }

@@ -76,7 +76,6 @@
     class="filter-chips"
     *ngIf="config.chips"
     [filters]="items"
-    (remove)="resetFilter($event)"
     [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
   </fs-filter-chips>
 </ng-template>

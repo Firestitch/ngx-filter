@@ -70,17 +70,15 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return params;
   }
 
-  public clear() {
-    super.clear();
-
-    this.model = {};
+  public valueChanged() {
+    super.valueChanged();
   }
 
-  public checkIfValueChanged() {
-    if (this.model && Object.keys(this.model).length > 0) {
-      this.valueChanged = true;
-    }
-  }
+  // public checkIfValueChanged() {
+  //   if (this.model && Object.keys(this.model).length > 0) {
+  //     this.valueChanged = true;
+  //   }
+  // }
 
   public getChipsContent(type): string {
     if (type === 'from') {
@@ -111,6 +109,10 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     if (!this.model) {
       this.model = this.defaultValue || {};
     }
+  }
+
+  protected _clearValue() {
+    this.model = {};
   }
 
 }

@@ -40,7 +40,7 @@ export class FilterDrawerComponent implements DoCheck {
   protected _clear: Function;
   protected _done: Function;
   protected _search: Function;
-  protected _filterChanged$: Subject<Item>;
+  // protected _filterChanged$: Subject<Item>;
   protected _click: Function;
   public windowDesktop = false;
 
@@ -55,7 +55,7 @@ export class FilterDrawerComponent implements DoCheck {
     this._clear = data.clear;
     this._done = data.done;
     this._search = data.search;
-    this._filterChanged$ = data.filterChanged;
+    // this._filterChanged$ = data.filterChanged;
     this._click = data.click;
     this._differ = this._differs.find(this.items).create<Item>((index, item) => {
       return item.model;
@@ -84,9 +84,9 @@ export class FilterDrawerComponent implements DoCheck {
     this.overlayRef.detach();
   }
 
-  public filterChanged(event) {
-    this._filterChanged$.next(event);
-  }
+  // public filterChanged(event) {
+  //   this._filterChanged$.next(event);
+  // }
 
   public backdropClick() {
     this.done();

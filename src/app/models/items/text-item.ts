@@ -31,15 +31,9 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return params;
   }
 
-  public clear() {
-    super.clear();
-
-    this.model = '';
-  }
-
-  public checkIfValueChanged() {
-    this.valueChanged = this.model && this.model !== '';
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = this.model && this.model !== '';
+  // }
 
   public getChipsContent() {
     return this.model;
@@ -58,4 +52,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   protected _init() {
   }
 
+  protected _clearValue() {
+    this.model = '';
+  }
 }

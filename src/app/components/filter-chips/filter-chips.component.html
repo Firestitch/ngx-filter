@@ -1,7 +1,7 @@
 <fs-chips [(ngModel)]="chips">
   <ng-container *ngFor="let item of filters">
     <ng-container *ngIf="(item.value$ | async) !== null && item.type !== 'keyword'">
-      <fs-filter-chip [item]="item" (remove)="removeItem($event)"></fs-filter-chip>
+      <fs-filter-chip [item]="item"></fs-filter-chip>
     </ng-container>
   </ng-container>
 </fs-chips>

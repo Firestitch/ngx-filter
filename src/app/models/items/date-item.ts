@@ -27,4 +27,7 @@ export class DateItem extends BaseDateItem {
     return format(this.model, dateFormat);
   }
 
+  protected _clearValue() {
+    this.model = null;
+  }
 }

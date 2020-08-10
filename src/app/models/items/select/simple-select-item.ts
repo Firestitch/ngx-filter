@@ -14,30 +14,22 @@ export class SimpleSelectItem extends BaseSelectItem {
   public get value() {
     let value = this.model;
 
-    if (value == '__all') {
+    if (value == '__all' || value === undefined) {
       value = null;
     }
 
     return value;
   }
 
-  public checkIfValueChanged() {
-    const hasAllOption = Array.isArray(this.values) && this.values.some((val) => val.value === '__all');
-
-    if (hasAllOption && this.model && this.model !== '__all') {
-      this.valueChanged = true;
-    } else {
-      this.valueChanged = !!this.model;
-    }
-  }
-
-  public clear() {
-    super.clear();
-
-    this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
-      ? '__all'
-      : null;
-  }
+  // public checkIfValueChanged() {
+  //   const hasAllOption = Array.isArray(this.values) && this.values.some((val) => val.value === '__all');
+  //
+  //   if (hasAllOption && this.model && this.model !== '__all') {
+  //     this.valueChanged = true;
+  //   } else {
+  //     this.valueChanged = !!this.model;
+  //   }
+  // }
 
   public getChipsContent(type = null): string {
     if (this.children) {
@@ -79,5 +71,11 @@ export class SimpleSelectItem extends BaseSelectItem {
     });
 
     this.model = item ? item.value : '__all';
+  }
+
+  protected _clearValue() {
+    this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
+      ? '__all'
+      : null;
   }
 }

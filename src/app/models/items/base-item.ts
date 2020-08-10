@@ -1,7 +1,7 @@
 import { isFunction } from 'lodash-es';
 
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, skip, take, takeUntil, tap } from 'rxjs/operators';
 
 import { ItemType } from '../../enums/item-type.enum';
 
@@ -27,6 +27,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected readonly _type: ItemType;
 
   protected _model: any;
+  protected _initialized = false;
   protected _initialLoading = false;
   protected _pendingValues = false;
   protected _observableValues: Observable<any>;
@@ -108,7 +109,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   public set model(value) {
     this._setModel(value);
-    this.checkIfValueChanged();
+    this.valueChanged();
   }
 
   public set values(values) {
@@ -124,21 +125,25 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public get value$() {
-    return this._value$.asObservable();
+    return this._value$
+      .pipe(
+        skip(1),
+        // distinctUntilChanged(),
+      );
   }
 
-  public get valueChanged$() {
-    return this._valueChanged$;
-  }
-
-  public get valueChanged() {
-    return this._valueChanged$.getValue();
-  }
-
-  public set valueChanged(value: boolean) {
-    this._value$.next(this.value);
-    this._valueChanged$.next(value);
-  }
+  // public get valueChanged$() {
+  //   return this._valueChanged$;
+  // }
+  //
+  // public get valueChanged() {
+  //   return this._valueChanged$.getValue();
+  // }
+  //
+  // public set valueChanged(value: boolean) {
+  //   this._value$.next(this.value);
+  //   this._valueChanged$.next(value);
+  // }
 
   public get initialLoading(): boolean {
     return this._initialLoading;
@@ -149,7 +154,17 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public abstract get value();
-  public abstract checkIfValueChanged();
+  // public abstract checkIfValueChanged();
+
+  public valueChanged() {
+    if (!this._initialized) { return }
+
+    if (this.change) {
+      this.change(this);
+    }
+
+    this._value$.next(this.value);
+  }
 
   public get flattenedParams() {
     const value = this.value;
@@ -165,7 +180,30 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return params;
   }
 
-  public loadValues(reload = true) {
+  public initValues() {
+    const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
+
+    if (isFunction(this.values) && !isAutocomplete) {
+      const valuesResult = this.values();
+
+      if (isObservable(valuesResult)) {
+        this._pendingValues = true;
+        this._observableValues = valuesResult;
+      } else {
+        this.values = valuesResult;
+
+        // Move to some other place
+        this._init();
+        this._initialized = true;
+      }
+
+    } else {
+      this._init();
+      this._initialized = true;
+    }
+  }
+
+  public loadAsyncValues(reload = true) {
     if (reload || (!this.initialLoading && this.hasPendingValues)) {
       this.initialLoading = true;
 
@@ -180,45 +218,20 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
           this.initialLoading = false;
           this._init();
           this._validateModel();
+          this._initialized = true;
         });
 
     }
   }
 
 
-  // TODO strange intersection with loadValues
-  public initValues() {
-    const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
-
-    if (isFunction(this.values) && !isAutocomplete) {
-      const valuesResult = this.values();
-
-      if (isObservable(valuesResult)) {
-        this._pendingValues = true;
-        this._observableValues = valuesResult;
-
-        this.loadValues(false);
-      } else {
-        this.values = valuesResult;
-
-        // Move to some other place
-        this._init();
-      }
-
-    } else {
-      this._init();
-    }
-  }
-
-
   public clear() {
-    this.valueChanged = false;
-
     const oldValue = this.value;
     this.model = undefined;
     const newValue = this.value;
 
     if (oldValue !== newValue && this.change) {
+      this._value$.next(this.value);
       this.change(this);
     }
   };
@@ -259,9 +272,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   };
 
   protected _initDefaultModel() {
-    // TODO nullish change
     if (this.model === undefined && this.defaultValue !== undefined) {
       this.model = this.defaultValue;
     }
   }
+
+  protected abstract _clearValue();
 }

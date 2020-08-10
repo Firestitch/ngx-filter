@@ -22,13 +22,13 @@ export class MultipleSelectItem extends BaseSelectItem {
     return value;
   }
 
-  public checkIfValueChanged() {
-    this.valueChanged = this.model && this.model.length;
-  }
-
-  public clear() {
-    this.model = [];
-  }
+  // public checkIfValueChanged() {
+  //   const valueChanged = this.model && this.model.length;
+  //
+  //   if (valueChanged) {
+  //
+  //   }
+  // }
 
   public getChipsContent(type = null): string {
     const options = this.model.reduce((acc, key) => {
@@ -73,5 +73,9 @@ export class MultipleSelectItem extends BaseSelectItem {
         return value.value == item;
       });
     });
+  }
+
+  protected _clearValue() {
+    this.model = [];
   }
 }

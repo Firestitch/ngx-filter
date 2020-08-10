@@ -14,4 +14,7 @@ export class DateTimeItem extends BaseDateItem {
 
   public readonly type: ItemType.DateTime;
 
+  protected _clearValue() {
+    this.model = null;
+  }
 }

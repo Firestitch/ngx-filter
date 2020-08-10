@@ -10,11 +10,6 @@ import { BaseItem } from '../../models/items/base-item';
 })
 export class FsFilterChipsComponent {
   @Input() public filters: BaseItem<any>[];
-  @Output() public remove = new EventEmitter<{ item: BaseItem<any>, type: string }>();
 
   public chips = [];
-
-  public removeItem(event) {
-    this.remove.next(event);
-  }
 }

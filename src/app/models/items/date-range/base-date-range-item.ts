@@ -97,9 +97,9 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     this.model = {};
   }
 
-  public checkIfValueChanged() {
-    this.valueChanged = false;
-  }
+  // public checkIfValueChanged() {
+  //   this.valueChanged = false;
+  // }
 
   public getChipsContent(type = null): string {
     const formatTo = this.type === ItemType.DateRange ? 'date' : 'date-time';
