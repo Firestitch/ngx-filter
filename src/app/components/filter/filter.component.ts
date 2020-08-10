@@ -78,13 +78,13 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public closed = new EventEmitter<any>();
   @Output() public opened = new EventEmitter<any>();
 
-  @ContentChild(FilterStatusBarDirective, { static: false, read: TemplateRef })
+  @ContentChild(FilterStatusBarDirective, { read: TemplateRef })
   public statusBar;
 
-  @ViewChild('searchTextInput', { static: false }) public searchTextInput: ElementRef;
-  @ViewChild('searchTextInput', { static: false, read: MatInput }) public searchTextMatInput: MatInput;
+  @ViewChild('searchTextInput') public searchTextInput: ElementRef;
+  @ViewChild('searchTextInput', { read: MatInput }) public searchTextMatInput: MatInput;
 
-  @ViewChild('searchTextInput', { read: NgModel, static: false })
+  @ViewChild('searchTextInput', { read: NgModel })
   set searchTextNgModel(value) {
     this._searchTextNgModel = value;
   }
