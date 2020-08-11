@@ -100,7 +100,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected _config: FsFilterConfig = null;
 
-  private _filterChanged$ = new Subject<BaseItem<any>>();
   private _searchTextItem: TextItem;
   private _searchTextNgModel: NgModel = null;
   private _firstOpen = true;
@@ -138,7 +137,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this._destroy$)
     )
     .subscribe(() => {
-      this.updateFilledCounter();
       this.showFilterMenu = false;
     });
 
@@ -197,7 +195,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this._listenInputChanges();
     });
-    this._listenFilterChanges();
   }
 
   public focus() {
@@ -283,10 +280,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       filterItem.updateValue(values[key]);
     });
 
-    this.updateFilledCounter();
-
     if (changeEvent) {
-      this._filterChanged$.next();
+      // this._filterChanged$.next();
       // this._filterChange();
     }
   }
@@ -308,7 +303,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.changeVisibility(value);
   }
 
-  public filterInputEvent(event: KeyboardEvent) {
+  public filterInputEvent(event) {
 
     if (!this.windowDesktop) {
       return;
@@ -376,7 +371,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       showSortBy: 'showSortBy',
       sortItem: this._filterItems.sortByItem,
       sortDirectionItem: this._filterItems.sortDirectionItem,
-      filterChanged: this._filterChanged$,
       search: this.search.bind(this),
       done: this.hide.bind(this),
       clear: this.clear.bind(this)
@@ -409,12 +403,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.searchText = '';
-    // this.changedFilters = [];
     this._filterItems.filtersClear();
+
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
-    this._filterChanged$.next();
-    // this._filterChange();
     this.changeVisibility(false);
 
     if (this.config.clear) {
@@ -427,8 +419,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public search(event) {
     this.changeVisibilityClick(false, event);
-    this._filterChanged$.next();
-    // this._filterChange();
   }
 
   public reload(event = null) {
@@ -454,11 +444,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
-
-    // this.config.updateModelValues();
-    // const data = this._filterParams.getFlattenedParams();
-    // const sort = this._filterItems.getSort();
-
     const data = this._filterItems.itemsValuesAsQuery(true);
     const sort = this._filterItems.getSort();
 
@@ -473,39 +458,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    // This should be an option or a done with an wrapping helper function
-    // because it restricts functionality ie. reload
-    // const queryChanged = !objectsAreEquals(this._query, query);
-    // if (queryChanged) {
-
-    // this.updateFilledCounter();
-
     if (this.config.change) {
       this.config.change(data, sort);
     }
-
-    // if (this.config.queryParam) {
-    //   this._filterParams.updateQueryParams();
-    // }
-
-    // this._persistanceStore.save(this._filterParams.queryParams);
-  }
-
-  /**
-   * Do update count of filled filters
-   */
-  private updateFilledCounter() {
-    // this.changedFilters = this.config.getFilledItems();
-    //
-    // this.changedFilters
-    //   .filter((item) => item.hasPendingValues)
-    //   .forEach((item) => item.loadValues(false));
-    //
-    // this.activeFiltersWithInputCount =  this.changedFilters
-    //                                       .filter((item) => item.type !== ItemType.Keyword)
-    //                                       .length;
-    //
-    // this._cdRef.markForCheck();
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
@@ -522,22 +477,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterItems.setConfig(this._config);
     this._externalParams.setConfig(this._config);
 
-
-    // const namespace = this.config.namespace || getNormalizedPath(this._location);
-    // const persistanceDisabled = !!this._dialogRef || !!this._drawerRef;
-    // this._persistanceStore.setConfig(this._config.persist, namespace, persistanceDisabled);
-    // this._persistanceStore.restore()
-    // this.config.initItems(config.items, this._route, this._persistanceStore);
-
-    // this._filterParams = new FilterParams(this._router, this._route, this._filterItems);
-    // if (this.config.queryParam) {
-    //   // Read from query params
-    //   // this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
-    //
-    //   // To fill query params with default values
-    //   this._filterParams.updateQueryParams();
-    // }
-
     this._searchTextItem = this
       .items
       .find((item) => item.isTypeKeyword) as TextItem;
@@ -547,32 +486,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searchPlaceholder = this._searchTextItem.label as string || 'Search';
     }
 
-    // Count active filters after restore
-    this.updateFilledCounter();
-
-    // this._persistanceStore.save(this._filterParams.queryParams);
-
     if (!!this.config.reloadWhenConfigChanged) {
       this.change();
     }
-  }
-
-  /**
-   * Store updated filter data into localstorage
-   * @param changedItem
-   */
-  private _listenFilterChanges() {
-    // this._filterChanged$.pipe(
-    //   debounceTime(200),
-    //   takeUntil(this._destroy$),
-    // )
-    //   .subscribe((changedItem: BaseItem<any>) => {
-    //     // if (changedItem) {
-    //     //   changedItem.checkIfValueChanged();
-    //     // }
-    //
-    //     this.change();
-    //   })
   }
 
   private _destroyFilterDrawer() {
@@ -653,7 +569,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this._searchTextItem) {
               this._searchTextItem.model = value;
             }
-            // this._filterChanged$.next();
           });
         });
 
@@ -662,16 +577,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _listenInternalItemsChange() {
     this._filterItems.itemsChange$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
       .subscribe(() => {
-        // console.log('hh');
         this.change();
       });
-    // this.config.itemsChanged$
-    //   .pipe(
-    //     takeUntil(this._destroy$),
-    //   )
-    //   .subscribe(() => {
-    //     this.change();
-    //   });
   }
 }
