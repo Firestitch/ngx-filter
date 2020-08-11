@@ -40,7 +40,7 @@ export class ExternalParamsController {
     }
 
     if (this._queryParams.enabled) {
-      Object.assign(result, this._queryParams.queryParams);
+      Object.assign(result, this._queryParams.fetchedParams);
     }
 
     return result;
@@ -61,9 +61,6 @@ export class ExternalParamsController {
 
   private _sync() {
 
-    if (this._queryParams.enabled) {
-      // this._queryParams.fetchFromQueryParams(this._route.snapshot.queryParams, this._config.case);
-    }
   }
 
   private _initPersistance() {
@@ -93,19 +90,8 @@ export class ExternalParamsController {
       });
   }
 
-  // private _getRawFlattenedParams() {
-  //   const params = {};
-  //
-  //   this._itemsStore.items
-  //     .forEach((filterItem: BaseItem<IFilterConfigItem>) => {
-  //       Object.assign(params, filterItem.flattenedParams);
-  //     });
-  //
-  //   return params;
-  // }
-
   public buildQueryParams() {
-    const flattenedParams = this._itemsStore.getRawFlatt();
+    const flattenedParams = this._itemsStore.itemsValuesAsQuery();
 
     this._itemsStore.items.forEach(filterItem => {
 

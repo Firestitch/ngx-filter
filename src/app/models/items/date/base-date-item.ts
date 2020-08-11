@@ -24,7 +24,7 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     return value;
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -33,10 +33,6 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
     return params;
   }
-
-  // public checkIfValueChanged() {
-  //   this.valueChanged = !!this.model;
-  // }
 
   protected _validateModel() {
   }

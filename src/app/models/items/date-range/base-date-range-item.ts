@@ -62,7 +62,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     return value;
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -83,7 +83,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       const paramFromName = getRangeName(this.case, name, 'from');
       const paramToName = getRangeName(this.case, name, 'to');
 
-      params[name] = null;
       params[paramFromName] = null;
       params[paramToName] = null;
     }
@@ -96,10 +95,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
     this.model = {};
   }
-
-  // public checkIfValueChanged() {
-  //   this.valueChanged = false;
-  // }
 
   public getChipsContent(type = null): string {
     const formatTo = this.type === ItemType.DateRange ? 'date' : 'date-time';

@@ -1,7 +1,7 @@
 import { BaseSelectItem } from './base-select-item';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { findValue } from '../../../helpers/find-value';
-import { filterToQueryParam } from '../../../helpers/query-param-transformers';
+
 
 export class SimpleSelectItem extends BaseSelectItem {
 
@@ -21,28 +21,6 @@ export class SimpleSelectItem extends BaseSelectItem {
 
     return value;
   }
-
-  get valueAsQueryParam(): any {
-    const value = this.value;
-
-    // if (value !== null) {
-    //   const v = this.values.find((valueItem) => { return valueItem.value === value });
-    //
-    //   return filterToQueryParam(v.value, v.name);
-    // }
-
-    return value;
-  }
-
-  // public checkIfValueChanged() {
-  //   const hasAllOption = Array.isArray(this.values) && this.values.some((val) => val.value === '__all');
-  //
-  //   if (hasAllOption && this.model && this.model !== '__all') {
-  //     this.valueChanged = true;
-  //   } else {
-  //     this.valueChanged = !!this.model;
-  //   }
-  // }
 
   public getChipsContent(type = null): string {
     if (this.children) {

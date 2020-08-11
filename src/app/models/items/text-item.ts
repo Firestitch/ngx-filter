@@ -21,7 +21,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return !!this.model ? this.model : null;
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -31,16 +31,11 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return params;
   }
 
-  // public checkIfValueChanged() {
-  //   this.valueChanged = this.model && this.model !== '';
-  // }
-
   public getChipsContent() {
     return this.model;
   }
 
-  protected _validateModel() {
-  }
+  protected _validateModel() {}
 
   protected _parseConfig(item: IFilterConfigTextItem) {
     this.prefix = item.prefix;
@@ -49,8 +44,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     super._parseConfig(item);
   }
 
-  protected _init() {
-  }
+  protected _init() {}
 
   protected _clearValue() {
     this.model = '';

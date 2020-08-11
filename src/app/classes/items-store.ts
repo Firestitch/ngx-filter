@@ -1,7 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, skip, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+
+import { pickBy } from 'lodash-es';
 
 import { FilterSort, IFilterConfigItem } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
@@ -10,7 +12,6 @@ import { SimpleSelectItem } from '../models/items/select/simple-select-item';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/filter-config';
 import { createFilterItem } from '../helpers/create-filter-item';
-import { pickBy } from 'lodash-es';
 
 
 @Injectable()
@@ -54,20 +55,16 @@ export class FsFilterItemsStore implements OnDestroy {
     this.sortDirectionItem?.destroy();
   }
 
+  public setConfig(config) {
+    this._config = config;
+    this.initItems(config.items);
+  }
+
   public initItems(items: IFilterConfigItem[]) {
     if (Array.isArray(items)) {
       this._createItems(items);
       this._updateVisibleItems();
-
-      // After all the items have been created and added to this.items initalize the values
-      // This is important if some item default values are dependent on others
-      // this._initItemValues();
     }
-  }
-
-  public setConfig(config) {
-    this._config = config;
-    this.initItems(config.items);
   }
 
   public filtersClear() {
@@ -129,21 +126,19 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
-  public getRawFlatt() {
-    const flattenedParams = {};
+  public itemsValuesAsQuery(onlyPresented = false) {
+    const params = {};
     this.items.forEach((filterItem: BaseItem<any>) => {
-      Object.assign(flattenedParams, filterItem.flattenedParams);
+      Object.assign(params, filterItem.valueAsQuery);
     });
 
-    return flattenedParams;
-  }
+    if (onlyPresented) {
+      return pickBy(params, (val) => {
+        return val !== null && val !== void 0;
+      });
+    }
 
-  public getFlatt() {
-    const params = this.getRawFlatt();
-
-    return pickBy(params, (val) => {
-      return val !== null && val !== void 0;
-    });
+    return params;
   }
 
 

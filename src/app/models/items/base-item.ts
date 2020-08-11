@@ -49,6 +49,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this._parseConfig(itemConfig);
   }
 
+  public abstract get value();
+
   ///
   public get isTypeAutocomplete() {
     return this.type === ItemType.AutoComplete;
@@ -152,8 +154,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this._initialLoading = value;
   }
 
-  public abstract get value();
-
   public valueChanged() {
     this._value$.next(this.value);
 
@@ -166,7 +166,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -178,10 +178,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
 
     return params;
-  }
-
-  public get valueAsQueryParam() {
-    return this.flattenedParams[this.name];
   }
 
   public initValues(persistedValue: unknown) {
@@ -233,14 +229,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
 
   public clear() {
-    const oldValue = this.value;
     this._clearValue();
-    const newValue = this.value;
-
-    // if (oldValue !== newValue && this.change) {
-    //   // this._value$.next(this.value);
-    //   // this.change(this);
-    // }
   };
 
   // TODO

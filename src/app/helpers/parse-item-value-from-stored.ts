@@ -36,7 +36,6 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
     }
 
     case ItemType.Checkbox: {
-      debugger;
       if (param === 'true') {
         return true === item.checked;
       } else {

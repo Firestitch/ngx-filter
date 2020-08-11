@@ -14,10 +14,6 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
   public multiple: boolean;
   public isolate: IFilterIsolate;
 
-  public get isTypeSelect(): boolean {
-    return true;
-  }
-
   protected _parseConfig(item: IFilterConfigSelectItem) {
     this.multiple = item.multiple;
     this.children = item.children;

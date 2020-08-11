@@ -32,7 +32,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return value;
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -52,13 +52,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
         params[paramName] = value.max;
         values.push(value.max);
       }
-
-      // Legacy support
-      if (values.length) {
-        params[name] = values.join(',');
-      }
     } else {
-      params[name] = null;
       const paramMinName = getRangeName(this.case, name, 'min');
       const paramMaxName = getRangeName(this.case, name, 'max');
 

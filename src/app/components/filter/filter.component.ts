@@ -459,7 +459,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // const data = this._filterParams.getFlattenedParams();
     // const sort = this._filterItems.getSort();
 
-    const data = this._filterItems.getFlatt();
+    const data = this._filterItems.itemsValuesAsQuery(true);
     const sort = this._filterItems.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)

@@ -4,7 +4,6 @@ import { IFilterConfigAutocompleteItem } from '../../interfaces/item-config.inte
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
-import { filterToQueryParam } from '../../helpers/query-param-transformers';
 
 
 export class AutocompleteChipsItem extends BaseAutocompleteItem {
@@ -23,7 +22,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
     return clone(this.model);
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -40,20 +39,6 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem {
 
     return params;
   }
-
-  public get valueAsQueryParam(): any {
-    if (Array.isArray(this.model) && this.model.length) {
-      return this.model.map((item) => {
-        return filterToQueryParam(item.value, item.name);
-      }).join(',');
-    }
-
-    return null;
-  }
-
-  // public checkIfValueChanged() {
-  //   this.valueChanged = this.model && this.model.length;
-  // }
 
   public getChipsContent() {
     return this.model

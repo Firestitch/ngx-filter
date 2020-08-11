@@ -31,7 +31,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return value;
   }
 
-  public get flattenedParams() {
+  public get valueAsQuery() {
     const value = this.value;
     const name = this.name;
     const params = [];
@@ -41,20 +41,11 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return params;
   }
 
-  // public checkIfValueChanged() {
-  //   if (this.unchecked) {
-  //     this.valueChanged = this.model !== this.unchecked;
-  //   } else {
-  //     this.valueChanged = this.model && this.model !== false;
-  //   }
-  // }
-
   public getChipsContent(type = null): string {
     return this.label as string;
   }
 
-  protected _validateModel() {
-  }
+  protected _validateModel() {}
 
   protected _parseConfig(item: IFilterConfigCheckboxItem) {
     this.checked = item.checked;

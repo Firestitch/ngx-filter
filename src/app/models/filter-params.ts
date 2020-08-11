@@ -54,7 +54,7 @@ export class FilterParams {
     const params = {};
 
     this._config.items.forEach((filterItem: BaseItem<IFilterConfigItem>) => {
-      Object.assign(params, filterItem.flattenedParams);
+      Object.assign(params, filterItem.valueAsQuery);
     });
 
     return params;
