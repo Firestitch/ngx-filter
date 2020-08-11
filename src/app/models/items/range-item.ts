@@ -36,26 +36,13 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     const value = this.value;
     const name = this.name;
     const params = [];
+    const paramMinName = getRangeName(this.case, name, 'min');
+    const paramMaxName = getRangeName(this.case, name, 'max');
 
     if (isObject(value)) {
-      const values = [];
-      if (!isEmpty(value.min, { zero: true })) {
-        const paramName = getRangeName(this.case, name, 'min');
-
-        params[paramName] = value.min;
-        values.push(value.min);
-      }
-
-      if (!isEmpty(value.max, { zero: true })) {
-        const paramName = getRangeName(this.case, name, 'max');
-
-        params[paramName] = value.max;
-        values.push(value.max);
-      }
+      params[paramMinName] = value.min ?? null;
+      params[paramMaxName] = value.max ?? null;
     } else {
-      const paramMinName = getRangeName(this.case, name, 'min');
-      const paramMaxName = getRangeName(this.case, name, 'max');
-
       params[paramMinName] = null;
       params[paramMaxName] = null;
     }
@@ -72,6 +59,16 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
       const max = this.model.max;
       return `${max}`;
     }
+  }
+
+  public clearRange(type: 'from' | 'to') {
+    if (type === 'from') {
+      delete this.model.min;
+    } else if (type === 'to') {
+      delete this.model.max;
+    }
+
+    this.model = { ...this.model };
   }
 
   protected _validateModel() {

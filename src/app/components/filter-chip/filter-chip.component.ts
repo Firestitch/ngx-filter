@@ -4,11 +4,15 @@ import {
   Input, OnDestroy,
   OnInit,
 } from '@angular/core';
+
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
 import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
+import { RangeItem } from '../../models/items/range-item';
+import { DateRangeItem } from '../../models/items/date-range-item';
+import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 
 
 @Component({
@@ -47,8 +51,14 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public removeItem(item, type = null) {
-    this.item.clear();
+  public removeItem(type = null) {
+    if (this.item instanceof RangeItem) {
+      this.item.clearRange(type);
+    } else if (this.item instanceof DateRangeItem || this.item instanceof DateTimeRangeItem) {
+      this.item.clearDateRange(type);
+    } else {
+      this.item.clear();
+    }
   }
 
   public listenValueChangesForRanges() {

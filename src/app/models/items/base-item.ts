@@ -229,6 +229,12 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
 
   public clear() {
+    if (this.isTypeRange || this.isTypeDateRange || this.isTypeDateTimeRange) {
+      console.warn(`
+        Filter ${this.name} can not be cleared with .clear() method!
+        Use special .clearRange() or clearDateRange() instead.
+      `)
+    }
     this._clearValue();
   };
 

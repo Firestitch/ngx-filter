@@ -66,34 +66,18 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     const value = this.value;
     const name = this.name;
     const params = [];
+    const paramFromName = getRangeName(this.case, name, 'from');
+    const paramToName = getRangeName(this.case, name, 'to');
 
     if (isObject(value)) {
-      if (value.from) {
-        const paramName = getRangeName(this.case, name, 'from');
-
-        params[paramName] = value.from;
-      }
-
-      if (value.to) {
-        const paramName = getRangeName(this.case, name, 'to');
-
-        params[paramName] = value.to;
-      }
+      params[paramFromName] = value.from ?? null;
+      params[paramToName] = value.to ?? null;
     } else {
-      const paramFromName = getRangeName(this.case, name, 'from');
-      const paramToName = getRangeName(this.case, name, 'to');
-
       params[paramFromName] = null;
       params[paramToName] = null;
     }
 
     return params;
-  }
-
-  public clear() {
-    super.clear();
-
-    this.model = {};
   }
 
   public getChipsContent(type = null): string {
@@ -106,6 +90,16 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       const to = this.model.to;
       return `${format(to, formatTo)}`;
     }
+  }
+
+  public clearDateRange(type: 'from' | 'to') {
+    if (type === 'from') {
+      delete this.model.from;
+    } else if (type === 'to') {
+      delete this.model.to;
+    }
+
+    this.model = { ...this.model };
   }
 
   protected _validateModel() {
@@ -138,6 +132,10 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     if (!this.model) {
       this.model = this.defaultValue || {};
     }
+  }
+
+  protected _clearValue() {
+    this.model = {};
   }
 
 }
