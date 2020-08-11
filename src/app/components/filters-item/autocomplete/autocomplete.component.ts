@@ -27,10 +27,6 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
     return data ? data.name : data;
   };
 
-  public ngModelChange() {
-    this.itemChange();
-  }
-
   public fetch = (keyword) => {
     return this.item.values(keyword);
   }

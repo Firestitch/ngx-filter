@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, skip, takeUntil } from 'rxjs/operators';
 
 import { FilterSort, IFilterConfigItem } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
@@ -10,6 +10,7 @@ import { SimpleSelectItem } from '../models/items/select/simple-select-item';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/filter-config';
 import { createFilterItem } from '../helpers/create-filter-item';
+import { pickBy } from 'lodash-es';
 
 
 @Injectable()
@@ -26,6 +27,9 @@ export class FsFilterItemsStore implements OnDestroy {
   private _config: FsFilterConfig;
 
   private _itemsChange$ = new Subject();
+
+  constructor() {
+  }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
     return this._items;
@@ -44,7 +48,10 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.items.forEach((item) => item.destroy());
+    this.items
+      .forEach((item) => item.destroy());
+    this.sortByItem?.destroy();
+    this.sortDirectionItem?.destroy();
   }
 
   public initItems(items: IFilterConfigItem[]) {
@@ -54,16 +61,13 @@ export class FsFilterItemsStore implements OnDestroy {
 
       // After all the items have been created and added to this.items initalize the values
       // This is important if some item default values are dependent on others
-      this._initItemValues();
+      // this._initItemValues();
     }
-
-    this._createSortingItems();
-
-    this._subscribeToItemsChanges();
   }
 
   public setConfig(config) {
     this._config = config;
+    this.initItems(config.items);
   }
 
   public filtersClear() {
@@ -125,6 +129,24 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
+  public getRawFlatt() {
+    const flattenedParams = {};
+    this.items.forEach((filterItem: BaseItem<any>) => {
+      Object.assign(flattenedParams, filterItem.flattenedParams);
+    });
+
+    return flattenedParams;
+  }
+
+  public getFlatt() {
+    const params = this.getRawFlatt();
+
+    return pickBy(params, (val) => {
+      return val !== null && val !== void 0;
+    });
+  }
+
+
   private _createItems(items: IFilterConfigItem[]) {
     this._items = items
       .filter((item) => {
@@ -137,7 +159,7 @@ export class FsFilterItemsStore implements OnDestroy {
         }
       })
       .map((item) => {
-        const filterItem = createFilterItem(item);
+        const filterItem = createFilterItem(item, { case: this._config.case });
 
         if (filterItem.type === ItemType.Keyword) {
           this._hasKeyword = true;
@@ -151,15 +173,30 @@ export class FsFilterItemsStore implements OnDestroy {
   private _subscribeToItemsChanges() {
     this.items
       .forEach((item) => {
-        item.value$
+        item.valueChange$
           .pipe(
-            distinctUntilChanged(),
+            // filter(() => item.initialized),
+            // distinctUntilChanged(),
             takeUntil(item.destroy$)
           )
           .subscribe(() => {
             this._itemsChange$.next(item);
           })
       });
+
+    if (this._config.sortValues) {
+      this.sortByItem.valueChange$
+        .pipe()
+        .subscribe(() => {
+          this._itemsChange$.next(this.sortByItem);
+        });
+
+      this.sortDirectionItem.valueChange$
+        .pipe()
+        .subscribe(() => {
+          this._itemsChange$.next(this.sortDirectionItem);
+        });
+    }
   }
 
   private _updateVisibleItems() {
@@ -167,14 +204,18 @@ export class FsFilterItemsStore implements OnDestroy {
       .filter((item) => !item.isTypeKeyword && !item.hide);
   }
 
-  private _initItemValues() {
+  public _initItemValues(p) {
     this.items
       .forEach((item) => {
-        item.initValues();
+        item.initValues(p[item.name]);
       });
+
+    this._createSortingItems(p);
+
+    this._subscribeToItemsChanges();
   }
 
-  private _createSortingItems() {
+  private _createSortingItems(p) {
     if (this._config.sortValues) {
       const sortByItem = {
         name: SORT_BY_FIELD,
@@ -192,7 +233,7 @@ export class FsFilterItemsStore implements OnDestroy {
         sortByItem,
         null,
       );
-      this.sortByItem.initValues();
+      this.sortByItem.initValues(p[this.sortByItem.name]);
 
       const sortDirectionItem = {
         name: SORT_DIRECTION_FIELD,
@@ -212,7 +253,7 @@ export class FsFilterItemsStore implements OnDestroy {
         sortDirectionItem,
         null
       );
-      this.sortDirectionItem.initValues();
+      this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
     }
   }
 }

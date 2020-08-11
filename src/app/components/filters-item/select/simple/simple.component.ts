@@ -2,9 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
@@ -19,18 +17,16 @@ import { SimpleSelectItem } from '../../../../models/items/select/simple-select-
 })
 export class SelectSimpleComponent {
 
-  @ViewChild('select', { static: true }) select: MatSelect;
   @Input() public item: SimpleSelectItem;
-  @Output() public change = new EventEmitter();
+
+  @ViewChild('select', { static: true }) select: MatSelect;
 
   constructor(public cd: ChangeDetectorRef) {}
 
-  public changed($event) {
+  public changed() {
     if (this.item.isolate) {
       this.item.isolate.enabled = false;
     }
-
-    this.change.emit($event);
   }
 
   public isolateChange(filter) {
@@ -40,7 +36,5 @@ export class SelectSimpleComponent {
     } else {
       filter.model = null;
     }
-
-    this.change.next(filter);
   }
 }

@@ -1,6 +1,7 @@
 import { BaseSelectItem } from './base-select-item';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { findValue } from '../../../helpers/find-value';
+import { filterToQueryParam } from '../../../helpers/query-param-transformers';
 
 export class SimpleSelectItem extends BaseSelectItem {
 
@@ -17,6 +18,18 @@ export class SimpleSelectItem extends BaseSelectItem {
     if (value == '__all' || value === undefined) {
       value = null;
     }
+
+    return value;
+  }
+
+  get valueAsQueryParam(): any {
+    const value = this.value;
+
+    // if (value !== null) {
+    //   const v = this.values.find((valueItem) => { return valueItem.value === value });
+    //
+    //   return filterToQueryParam(v.value, v.name);
+    // }
 
     return value;
   }

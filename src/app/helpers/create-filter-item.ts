@@ -21,7 +21,7 @@ import { IFilterConfigItem } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
 
 
-export function createFilterItem(item: IFilterConfigItem) {
+export function createFilterItem(item: IFilterConfigItem, config: any) {
   switch (item.type) {
     case ItemType.Select: {
       return SelectItem.create(item);
@@ -32,7 +32,7 @@ export function createFilterItem(item: IFilterConfigItem) {
     }
 
     case ItemType.Range: {
-      return RangeItem.create(item as IFilterConfigRangeItem);
+      return RangeItem.create(item as IFilterConfigRangeItem, config);
     }
 
     case ItemType.DateRange: {

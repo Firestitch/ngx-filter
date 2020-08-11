@@ -5,7 +5,7 @@ import { FilterComponent } from '@firestitch/filter';
 import { nameValue, filter } from '@firestitch/common'
 
 import { BehaviorSubject, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, tap } from 'rxjs/operators';
 import { shuffle } from 'lodash-es';
 import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
@@ -69,7 +69,7 @@ export class KitchenSinkComponent {
 
   constructor() {
     this.conf = {
-      //persist: 'filter',
+      persist: false,
       inline: false,
       chips: true,
       autofocus: true,
@@ -178,6 +178,7 @@ export class KitchenSinkComponent {
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword)),
                 map((users) => nameValue(users, 'name', 'id')),
               )
@@ -190,6 +191,7 @@ export class KitchenSinkComponent {
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
                 map((users) => nameValue(users, 'name', 'id')),
               )

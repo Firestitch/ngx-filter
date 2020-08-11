@@ -17,9 +17,10 @@ import { MatSelect } from '@angular/material/select';
 })
 export class SelectMultipleComponent {
 
-  @ViewChild('select', { static: true }) select: MatSelect;
   @Input() public item;
-  @Output() public change = new EventEmitter();
+
+  @ViewChild('select', { static: true })
+  public select: MatSelect;
 
   constructor(public cd: ChangeDetectorRef) {}
 
@@ -37,8 +38,6 @@ export class SelectMultipleComponent {
         }
       }
     }
-
-    this.change.emit(this.item.model);
   }
 
   public close() {
@@ -51,7 +50,5 @@ export class SelectMultipleComponent {
     } else {
       filter.model = filter.multiple ? [] : null;
     }
-
-    this.change.next(filter);
   }
 }

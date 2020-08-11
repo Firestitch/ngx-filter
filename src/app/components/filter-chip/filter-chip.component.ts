@@ -1,13 +1,11 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input, OnDestroy,
   OnInit,
-  Output
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
 import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
@@ -35,7 +33,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
       this.item.values$
         .pipe(
-          take(1),
+          take(2),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {

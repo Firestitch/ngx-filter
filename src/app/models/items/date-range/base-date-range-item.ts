@@ -130,6 +130,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   }
 
   protected _parseConfig(item: IFilterConfigDateRangeItem) {
+    this.case = this._additionalConfig?.case ?? 'camel';
 
     super._parseConfig(item);
   }

@@ -3,7 +3,7 @@
   <mat-select
     #select
     [(ngModel)]="item.model"
-    (ngModelChange)="changed($event)">
+    (ngModelChange)="changed()">
     <mat-option *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"
                 [value]="item.value"
     >

@@ -5,6 +5,8 @@ import { IFilterConfigAutocompleteItem } from '../../interfaces/item-config.inte
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
+import { filterToQueryParam } from '../../helpers/query-param-transformers';
+import { isObject } from 'rxjs/internal-compatibility';
 
 
 export class AutocompleteItem extends BaseAutocompleteItem {
@@ -35,6 +37,14 @@ export class AutocompleteItem extends BaseAutocompleteItem {
     params[name] = value;
 
     return params;
+  }
+
+  public get valueAsQueryParam(): any {
+    if (isObject(this.model)) {
+      return filterToQueryParam(this.model.value, this.model.name);
+    }
+
+    return null;
   }
 
   public clear() {

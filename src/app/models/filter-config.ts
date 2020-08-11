@@ -5,10 +5,9 @@ import {
 } from './../interfaces/config.interface';
 import { Alias, Model } from 'tsmodels';
 
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
-import { BaseItem } from './items/base-item';
+import { ChangeFn, Sort } from '../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -33,11 +32,9 @@ export class FsFilterConfig extends Model {
   @Alias() public case: 'snake' | 'camel' = 'snake';
   @Alias() public reloadWhenConfigChanged: boolean;
   @Alias() public button: FilterButton;
+  @Alias() public items: IFilterConfigItem[];
 
   public namespace: string; // for persistance
-
-  // private _itemsChanged$ = new Subject<void>();
-  private _destroy$ = new Subject<void>();
 
   constructor(data: any = {}) {
     super();
@@ -71,6 +68,22 @@ export class FsFilterConfig extends Model {
     }
   }
 
+  public _fromJSON(value: any) {
+    super._fromJSON(value);
+
+    console.log(value.case);
+
+    this.case = value.case ?? 'snake';
+
+    if (this.persist) {
+      if (typeof this.persist === 'object') {
+        if (this.persist.name) {
+          this.namespace = this.persist.name;
+        }
+      }
+    }
+  }
+
   public updateModelValues() {
     // this.items.forEach((filter) => {
     //   filter.model = clone(filter.model);
@@ -83,21 +96,5 @@ export class FsFilterConfig extends Model {
     // if (this.sortDirectionItem) {
     //   this.sortDirectionItem.model = clone(this.sortDirectionItem.model);
     // }
-  }
-
-  // public loadValuesForPendingItems() {
-  //   debugger;
-  //   this.items
-  //     .filter((item) => item.hasPendingValues)
-  //     .forEach((item) => item.loadValues(false));
-  // }
-
-  // public itemsChanged() {
-  //   this._itemsChanged$.next();
-  // }
-
-  public destroy() {
-    this._destroy$.next();
-    this._destroy$.complete();
   }
 }

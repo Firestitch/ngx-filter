@@ -96,7 +96,7 @@ export class FilterParams {
       });
 
       if (foundItem) {
-        parseItemValueFromStored(foundItem, params);
+        // parseItemValueFromStored(foundItem, params);
       }
     });
   }

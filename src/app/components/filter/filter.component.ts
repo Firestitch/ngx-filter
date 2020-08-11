@@ -25,7 +25,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
-import { getNormalizedPath } from '@firestitch/common';
 import { DrawerRef } from '@firestitch/drawer';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
@@ -39,11 +38,13 @@ import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { ItemType } from '../../enums/item-type.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
-import { PersistanceStore } from '../../classes/persistance-store';
 import { FilterConfig } from '../../interfaces/config.interface';
 import { TextItem } from '../../models/items/text-item';
 import { BaseItem } from '../../models/items/base-item';
 import { FsFilterItemsStore } from '../../classes/items-store';
+import { ExternalParamsController } from '../../services/external-params-controller.service';
+import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
+import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
 
 
 @Component({
@@ -53,7 +54,9 @@ import { FsFilterItemsStore } from '../../classes/items-store';
   encapsulation: ViewEncapsulation.None,
   providers: [
     FsFilterOverlayService,
-    PersistanceStore,
+    ExternalParamsController,
+    PersistanceParamsController,
+    QueryParamsController,
     FsFilterItemsStore,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -114,7 +117,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _cdRef: ChangeDetectorRef,
-    private _persistanceStore: PersistanceStore,
+    private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
     @Optional() private _dialogRef: MatDialogRef<any>,
     @Optional() private _drawerRef: DrawerRef<any>,
@@ -184,6 +187,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.init) {
       this.init();
     }
+
+    this._listenInternalItemsChange();
   }
 
   public ngAfterViewInit(): void {
@@ -207,10 +212,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._destroy$.next();
     this._destroy$.complete();
-
-    if (this.config) {
-      this.config.destroy();
-    }
   }
 
   /**
@@ -395,7 +396,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public init() {
 
-    const data = this._filterParams.getFlattenedParams();
+    const data = this._externalParams.params;
     this._sort = this._filterItems.getSort();
 
     this.config.init(data, this._filterItems.getSort());
@@ -454,8 +455,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   public change() {
 
-    this.config.updateModelValues();
-    const data = this._filterParams.getFlattenedParams();
+    // this.config.updateModelValues();
+    // const data = this._filterParams.getFlattenedParams();
+    // const sort = this._filterItems.getSort();
+
+    const data = this._filterItems.getFlatt();
     const sort = this._filterItems.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
@@ -474,17 +478,17 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // const queryChanged = !objectsAreEquals(this._query, query);
     // if (queryChanged) {
 
-    this.updateFilledCounter();
+    // this.updateFilledCounter();
 
     if (this.config.change) {
       this.config.change(data, sort);
     }
 
-    if (this.config.queryParam) {
-      this._filterParams.updateQueryParams();
-    }
+    // if (this.config.queryParam) {
+    //   this._filterParams.updateQueryParams();
+    // }
 
-    this._persistanceStore.save(this._filterParams.queryParams);
+    // this._persistanceStore.save(this._filterParams.queryParams);
   }
 
   /**
@@ -506,7 +510,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
-      this.config.destroy();
       this._firstOpen = true;
     }
 
@@ -517,36 +520,23 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._config = new FsFilterConfig(config);
     this._filterItems.setConfig(this._config);
+    this._externalParams.setConfig(this._config);
 
-    this._listenInternalItemsChange();
-    if (this._config.persist) {
-      if (typeof this._config.persist === 'object') {
-        if (this._config.persist.name) {
-          this._config.namespace = this._config.persist.name;
-        }
-      }
-    }
 
-    if (!this._config.case) {
-      this._config.case = 'snake';
-    }
-
-    const namespace = this.config.namespace || getNormalizedPath(this._location);
-    const persistanceDisabled = !!this._dialogRef || !!this._drawerRef;
-    this._persistanceStore.setConfig(this._config.persist, namespace, persistanceDisabled);
-    this._persistanceStore.restore()
-
-    this._filterItems.initItems(config.items);
+    // const namespace = this.config.namespace || getNormalizedPath(this._location);
+    // const persistanceDisabled = !!this._dialogRef || !!this._drawerRef;
+    // this._persistanceStore.setConfig(this._config.persist, namespace, persistanceDisabled);
+    // this._persistanceStore.restore()
     // this.config.initItems(config.items, this._route, this._persistanceStore);
 
-    this._filterParams = new FilterParams(this._router, this._route, this._filterItems);
-    if (this.config.queryParam) {
-      // Read from query params
-      // this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
-
-      // To fill query params with default values
-      this._filterParams.updateQueryParams();
-    }
+    // this._filterParams = new FilterParams(this._router, this._route, this._filterItems);
+    // if (this.config.queryParam) {
+    //   // Read from query params
+    //   // this._filterParams.updateFromQueryParams(this._route.snapshot.queryParams);
+    //
+    //   // To fill query params with default values
+    //   this._filterParams.updateQueryParams();
+    // }
 
     this._searchTextItem = this
       .items
@@ -560,7 +550,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     // Count active filters after restore
     this.updateFilledCounter();
 
-    this._persistanceStore.save(this._filterParams.queryParams);
+    // this._persistanceStore.save(this._filterParams.queryParams);
 
     if (!!this.config.reloadWhenConfigChanged) {
       this.change();

@@ -4,7 +4,6 @@
   [(ngModel)]="item.model"
   [placeholder]="item.label"
   [fetchOnFocus]="item.fetchOnFocus"
-  (ngModelChange)="ngModelChange()"
   name="item.name">
   <ng-template fsAutocompleteTemplate let-data="data">
     {{data.name}}

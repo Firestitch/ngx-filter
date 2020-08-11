@@ -4,6 +4,7 @@ import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
 
 import { ItemType } from '../../enums/item-type.enum';
 import { BaseItem } from './base-item';
+import { filterToQueryParam } from '../../helpers/query-param-transformers';
 
 
 export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
@@ -43,6 +44,16 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     }
 
     return params;
+  }
+
+  public get valueAsQueryParam(): any {
+    if (Array.isArray(this.model) && this.model.length) {
+      return this.model.map((item) => {
+        return filterToQueryParam(item.value, item.name);
+      }).join(',');
+    }
+
+    return null;
   }
 
   // public checkIfValueChanged() {

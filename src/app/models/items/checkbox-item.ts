@@ -60,14 +60,14 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     this.checked = item.checked;
     this.unchecked = item.unchecked;
 
+    this.checked = item.checked ? toString(item.checked) : true;
+    this.unchecked = item.unchecked ? toString(item.unchecked) : false;
+    this.defaultValue = item.default === undefined ? this.unchecked : toString(this.defaultValue);
+
     super._parseConfig(item);
   }
 
   protected _init() {
-    this.checked = this.checked ? toString(this.checked) : true;
-    this.unchecked = this.unchecked ? toString(this.unchecked) : false;
-    this.defaultValue = this.defaultValue === undefined ? this.unchecked : toString(this.defaultValue);
-
     if (this.model === undefined) {
       this.model = this.checked == this.defaultValue;
     }

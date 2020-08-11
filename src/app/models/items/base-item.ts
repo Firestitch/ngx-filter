@@ -1,7 +1,10 @@
 import { isFunction } from 'lodash-es';
 
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, skip, take, takeUntil, tap } from 'rxjs/operators';
+import {
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 
 import { ItemType } from '../../enums/item-type.enum';
 
@@ -19,6 +22,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public chipLabel: string | string[];
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
+  public persistedValue: unknown;
 
   // Internal properties
 
@@ -27,19 +31,19 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected readonly _type: ItemType;
 
   protected _model: any;
-  protected _initialized = false;
+  protected _ready = new BehaviorSubject<boolean>(false);
   protected _initialLoading = false;
   protected _pendingValues = false;
   protected _observableValues: Observable<any>;
   protected _value$ = new BehaviorSubject(null);
-  protected _valueChanged$ = new BehaviorSubject(false);
+  protected _valueChange$ = new Subject<void>();
   protected _values$ = new BehaviorSubject(null);
 
   protected _destroy$ = new Subject<void>();
 
   constructor(
     itemConfig: T,
-    private _persistedValues: any
+    protected _additionalConfig: any
   ) {
     this._type = itemConfig.type;
     this._parseConfig(itemConfig);
@@ -124,26 +128,21 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return  this._values$.asObservable();
   }
 
-  public get value$() {
-    return this._value$
-      .pipe(
-        skip(1),
-        // distinctUntilChanged(),
-      );
+  public get valueChange$() {
+    return this._valueChange$.asObservable();
   }
 
-  // public get valueChanged$() {
-  //   return this._valueChanged$;
-  // }
-  //
-  // public get valueChanged() {
-  //   return this._valueChanged$.getValue();
-  // }
-  //
-  // public set valueChanged(value: boolean) {
-  //   this._value$.next(this.value);
-  //   this._valueChanged$.next(value);
-  // }
+  public get value$() {
+    return this._value$.asObservable();
+  }
+
+  public get initialized() {
+    return this._ready.getValue();
+  }
+
+  public get ready$() {
+    return this._ready.asObservable();
+  }
 
   public get initialLoading(): boolean {
     return this._initialLoading;
@@ -154,16 +153,17 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public abstract get value();
-  // public abstract checkIfValueChanged();
 
   public valueChanged() {
-    if (!this._initialized) { return }
-
-    if (this.change) {
-      this.change(this);
-    }
-
     this._value$.next(this.value);
+
+    if (this.initialized) {
+      if (this.change) {
+        this.change(this);
+      }
+
+      this._valueChange$.next();
+    }
   }
 
   public get flattenedParams() {
@@ -180,7 +180,14 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return params;
   }
 
-  public initValues() {
+  public get valueAsQueryParam() {
+    return this.flattenedParams[this.name];
+  }
+
+  public initValues(persistedValue: unknown) {
+    this.persistedValue = persistedValue;
+    this._initDefaultModel();
+
     const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
 
     if (isFunction(this.values) && !isAutocomplete) {
@@ -194,12 +201,12 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
         // Move to some other place
         this._init();
-        this._initialized = true;
+        this._ready.next(true);
       }
 
     } else {
       this._init();
-      this._initialized = true;
+      this._ready.next(true);
     }
   }
 
@@ -218,7 +225,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
           this.initialLoading = false;
           this._init();
           this._validateModel();
-          this._initialized = true;
+          this._ready.next(true);
         });
 
     }
@@ -227,13 +234,13 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   public clear() {
     const oldValue = this.value;
-    this.model = undefined;
+    this._clearValue();
     const newValue = this.value;
 
-    if (oldValue !== newValue && this.change) {
-      this._value$.next(this.value);
-      this.change(this);
-    }
+    // if (oldValue !== newValue && this.change) {
+    //   // this._value$.next(this.value);
+    //   // this.change(this);
+    // }
   };
 
   // TODO
@@ -267,15 +274,17 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.hide = item.hide;
 
     this.values = item.values;
-
-    this._initDefaultModel();
   };
 
   protected _initDefaultModel() {
-    if (this.model === undefined && this.defaultValue !== undefined) {
-      this.model = this.defaultValue;
+    const model = this.persistedValue ?? this.defaultValue;
+
+    if (model !== undefined) {
+      this.model = model;
     }
   }
 
-  protected abstract _clearValue();
+  protected _clearValue() {
+    this.model = null;
+  }
 }

@@ -32,11 +32,11 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnDest
     this.inputChange$
       .pipe(
         distinctUntilChanged(),
-        debounceTime(500),
+        debounceTime(200),
         takeUntil(this.destroy$)
       )
       .subscribe((value) => {
-        this.itemChange();
+        this.item.valueChanged();
       })
   }
 

@@ -67,8 +67,8 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
   public listenWithDebounce() {
     this._debouncer$
       .pipe(
-        takeUntil(this._destroy$),
         debounceTime(150),
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this.item.valueChanged();

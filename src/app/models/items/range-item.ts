@@ -10,8 +10,8 @@ import { BaseItem } from './base-item';
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
-  public static create(config: IFilterConfigRangeItem) {
-    return new RangeItem(config, null);
+  public static create(config: IFilterConfigRangeItem, c) {
+    return new RangeItem(config, c);
   }
 
   public readonly type: ItemType.Range;
@@ -70,16 +70,6 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return params;
   }
 
-  public valueChanged() {
-    super.valueChanged();
-  }
-
-  // public checkIfValueChanged() {
-  //   if (this.model && Object.keys(this.model).length > 0) {
-  //     this.valueChanged = true;
-  //   }
-  // }
-
   public getChipsContent(type): string {
     if (type === 'from') {
       const min = this.model.min;
@@ -97,6 +87,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     this.options = item.options;
     this.prefix = item.prefix;
     this.suffix = item.suffix;
+    this.case = this._additionalConfig?.case ?? 'camel';
 
     super._parseConfig(item);
   }

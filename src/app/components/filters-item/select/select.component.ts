@@ -32,10 +32,6 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
     super(_kvDiffers, _cd);
   }
 
-  public selectChange() {
-    this.itemChange();
-  }
-
   public ngDoCheck() {
     if (this._kvDiffer) {
       const changes = this._kvDiffer.diff(this.item);

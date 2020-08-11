@@ -17,6 +17,8 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
     if (value && isValid(value) && isDate(value)) {
       value = simpleFormat(value);
+    } else {
+      value = null;
     }
 
     return value;
