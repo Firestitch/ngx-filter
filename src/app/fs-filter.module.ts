@@ -43,11 +43,12 @@ import { CheckboxComponent } from './components/filters-item/checkbox/checkbox.c
 import { BaseItemComponent } from './components/filters-item/base-item/base-item.component';
 import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
-import { FsItemToChip } from './pipes/item-to-chip.pipe';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
 import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
+import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
+import { FsFilterChipContentComponent } from './components/filter-chip-content/filter-chip-content.component';
 
 @NgModule({
   imports: [
@@ -93,11 +94,11 @@ import { FilterStatusBarDirective } from './directives/status-bar/status-bar.dir
     FilterDrawerComponent,
     SelectBackdropComponent,
     FsFilterChipComponent,
+    FsFilterChipContentComponent,
 
     FilterStatusBarDirective,
 
     // Pipes
-    FsItemToChip,
     FsFilterIsolateValues,
   ],
   providers: [
