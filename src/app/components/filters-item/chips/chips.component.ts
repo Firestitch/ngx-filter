@@ -4,7 +4,9 @@ import {
   Component,
   KeyValueDiffers
 } from '@angular/core';
+
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { ChipsItem } from '../../../models/items/chips-item';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   styleUrls: [ './chips.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChipsComponent extends BaseItemComponent {
+export class ChipsComponent extends BaseItemComponent<ChipsItem> {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,

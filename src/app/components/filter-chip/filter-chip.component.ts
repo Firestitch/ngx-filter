@@ -1,14 +1,18 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input, OnDestroy,
   OnInit,
-  Output
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
+
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { BaseItem } from '../../models/items/base-item';
+import { IFilterConfigItem } from '../../interfaces/config.interface';
+import { RangeItem } from '../../models/items/range-item';
+import { DateRangeItem } from '../../models/items/date-range-item';
+import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 
 
 @Component({
@@ -18,9 +22,7 @@ import { takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipComponent implements OnInit, OnDestroy {
-  @Input() public item: FsFilterConfigItem;
-
-  @Output() public remove = new EventEmitter<{ item: FsFilterConfigItem, type: string }>();
+  @Input() public item: BaseItem<IFilterConfigItem>;
 
   private _destroy$ = new Subject();
 
@@ -31,13 +33,16 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this.listenValueChangesForRanges();
 
     if (this.item.hasPendingValues) {
+      this.item.loadAsyncValues(false);
+
       this.item.values$
         .pipe(
+          take(2),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
-        this._cdRef.markForCheck();
-      })
+          this._cdRef.markForCheck();
+        });
     }
   }
 
@@ -46,13 +51,20 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public removeItem(item, type = null) {
-    this.remove.next({ item: item, type: type });
+  public removeItem(type = null) {
+    if (this.item instanceof RangeItem) {
+      this.item.clearRange(type);
+    } else if (this.item instanceof DateRangeItem || this.item instanceof DateTimeRangeItem) {
+      this.item.clearDateRange(type);
+    } else {
+      this.item.clear();
+    }
   }
 
   public listenValueChangesForRanges() {
-    this.item.valueChanged$
+    this.item.value$
       .pipe(
+        distinctUntilChanged(),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {

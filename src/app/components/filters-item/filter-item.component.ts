@@ -2,14 +2,16 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
-  Input, OnDestroy, OnInit,
-  Output
+  Input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
-import { ItemType } from '../../enums/item-type.enum';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { ItemType } from '../../enums/item-type.enum';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
@@ -19,15 +21,14 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
 
-  @Input() public item: FsFilterConfigItem;
-  @Output() public itemChanged = new EventEmitter();
+  @Input() public item: BaseItem<any>;
 
   private _destroy$ = new Subject<void>();
 
   constructor(private _cdRef: ChangeDetectorRef) {}
 
   public ngOnInit(): void {
-    this.item.valueChanged$
+    this.item.value$
       .pipe(
         takeUntil(this._destroy$),
       )
@@ -42,8 +43,4 @@ export class FilterItemComponent implements OnInit, OnDestroy {
   }
 
   public itemType = ItemType;
-
-  public itemChange(event) {
-    this.itemChanged.next(event);
-  }
 }

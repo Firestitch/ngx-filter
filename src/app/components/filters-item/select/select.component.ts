@@ -9,6 +9,7 @@ import {
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { SelectSimpleComponent } from './simple/simple.component';
 import { SelectMultipleComponent } from './multiple/multiple.component';
+import { BaseSelectItem } from '../../../models/items/select/base-select-item';
 
 
 @Component({
@@ -16,10 +17,10 @@ import { SelectMultipleComponent } from './multiple/multiple.component';
   templateUrl: './select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent extends BaseItemComponent implements DoCheck {
+export class SelectComponent extends BaseItemComponent<BaseSelectItem> implements DoCheck {
 
-  @ViewChild('selectItem', { static: false }) public selectedItem:
-    SelectSimpleComponent | SelectMultipleComponent | SelectMultipleComponent;
+  @ViewChild('selectItem')
+  public selectedItem: SelectSimpleComponent | SelectMultipleComponent;
   // For case when we have multiple selection with __all option
   // If _all has been selected than we must disable all other items
   public allItemsOptionSelected = false;
@@ -29,10 +30,6 @@ export class SelectComponent extends BaseItemComponent implements DoCheck {
     protected _cd: ChangeDetectorRef
   ) {
     super(_kvDiffers, _cd);
-  }
-
-  public selectChange() {
-    this.itemChange();
   }
 
   public ngDoCheck() {

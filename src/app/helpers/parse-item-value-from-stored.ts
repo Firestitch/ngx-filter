@@ -1,59 +1,61 @@
 import { ItemType } from '../enums/item-type.enum';
 import { filterFromQueryParam } from './query-param-transformers';
 import { tryConvertToNumber } from './try-convert-to-number';
+import { getRangeName } from './get-range-name';
 
-export function parseItemValueFromStored(item, params) {
+export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'camel') {
   const param = params[item.name];
 
   switch (item.type) {
     case ItemType.Range: {
-      const min = params[item.getRangeName('min')];
-      const max = params[item.getRangeName('max')];
+      const min = params[getRangeName(paramCase, item.name, 'min')];
+      const max = params[getRangeName(paramCase, item.name, 'max')];
 
-      item.model = { min: min, max: max };
-    } break;
+      return { min: min, max: max };
+    }
 
     case ItemType.DateRange: case ItemType.DateTimeRange: {
-      const from = params[item.getRangeName('from')];
-      const to = params[item.getRangeName('to')];
+      const from = params[getRangeName(item.case, item.name, 'from')];
+      const to = params[getRangeName(item.case, item.name, 'to')];
 
-      item.model = { from: from, to: to };
-    } break;
+      return { from: from, to: to };
+    }
 
     case ItemType.Select: {
       if (item.multiple) {
         if (item.isolate && param === item.isolate.value) {
-          item.model = [param];
           item.isolate.enabled = true;
+
+          return [param];
         } else {
-          item.model = param.split(',');
+          return param.split(',');
         }
       } else {
-        item.model = param;
+        return param;
       }
-    } break;
+    }
 
     case ItemType.Checkbox: {
       if (param === 'true') {
-        item.model = true === item.checked;
+        return true === item.checked;
       } else {
-        item.model = param === item.checked;
+        return param === item.checked;
       }
-    } break;
+    }
 
     case ItemType.AutoComplete: {
       const filterParts = filterFromQueryParam(param);
 
-      item.model = {
+      return {
         name: filterParts[1],
         value: tryConvertToNumber(filterParts[0])
       }
-    } break;
+    }
 
     case ItemType.AutoCompleteChips: case ItemType.Chips: {
       const filterParts = param.split(',');
 
-      item.model = filterParts.reduce((arry, value) => {
+      return filterParts.reduce((arry, value) => {
 
         const chipParts = filterFromQueryParam(value);
 
@@ -64,10 +66,10 @@ export function parseItemValueFromStored(item, params) {
 
         return arry;
       }, [])
-    } break;
+    }
 
     default: {
-      item.model = param;
+      return param;
     }
   }
 }

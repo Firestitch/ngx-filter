@@ -3,8 +3,7 @@
   <mat-select
     #select
     [(ngModel)]="item.model"
-    [compareWith]="compare"
-    (ngModelChange)="changed($event)">
+    [compareWith]="compare">
     <ng-container *ngFor="let selectItem of item.values">
       <ng-container *ngIf="selectItem[item.children]; else simpleOption">
         <mat-optgroup [label]="selectItem.name">

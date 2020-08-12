@@ -4,8 +4,11 @@ import {
   Component,
   KeyValueDiffers, OnInit
 } from '@angular/core';
+
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { ItemType } from '../../../enums/item-type.enum';
+import { DateRangeItem } from '../../../models/items/date-range-item';
+import { DateTimeRangeItem } from '../../../models/items/date-time-range-item';
 
 
 @Component({
@@ -13,7 +16,7 @@ import { ItemType } from '../../../enums/item-type.enum';
   templateUrl: './date-range.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DateRangeComponent extends BaseItemComponent implements OnInit {
+export class DateRangeComponent extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit {
 
   public viewType = 'date';
 

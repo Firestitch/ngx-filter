@@ -5,7 +5,7 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem(item, 'from')">
+    (removed)="removeItem('from')">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item, type: 'from' }"
@@ -18,7 +18,7 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem(item, 'to')">
+    (removed)="removeItem('to')">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item, type: 'to' }"
@@ -33,7 +33,7 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem(item)">
+    (removed)="removeItem()">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item }"

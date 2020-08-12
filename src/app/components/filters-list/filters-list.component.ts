@@ -1,13 +1,14 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectorRef,
   Component,
   DoCheck,
   EventEmitter,
   Input, IterableDiffer, IterableDiffers,
   Output
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
+import { BaseItem } from '../../models/items/base-item';
 
+type Item = BaseItem<any>;
 
 @Component({
   selector: 'filters-list',
@@ -16,7 +17,7 @@ import { FsFilterConfigItem } from '../../models/filter-item';
   //changeDetection: ChangeDetectionStrategy.OnPush,  Commented out because filter items are not updating when delayed observable. Need to figure this out.
 })
 export class FiltersListComponent implements DoCheck {
-  @Input() public items: FsFilterConfigItem[] = [];
+  @Input() public items: Item[] = [];
   @Input() public showSortBy;
   @Input() public sortBy = null;
   @Input() public sortDirection = null;
@@ -27,10 +28,10 @@ export class FiltersListComponent implements DoCheck {
   @Output() public clear = new EventEmitter();
   @Output() public done = new EventEmitter();
 
-  protected _differ: IterableDiffer<FsFilterConfigItem>;
+  protected _differ: IterableDiffer<Item>;
 
   constructor(protected _differs: IterableDiffers, protected _cd: ChangeDetectorRef) {
-    this._differ = this._differs.find(this.items).create<FsFilterConfigItem>((index, item) => {
+    this._differ = this._differs.find(this.items).create<Item>((index, item) => {
       return item.model;
     });
   }

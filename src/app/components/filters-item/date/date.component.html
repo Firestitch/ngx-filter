@@ -3,7 +3,6 @@
   <input matInput
         fsDatePicker
          [(ngModel)]="item.model"
-         (change)="itemChange()"
          [maxYear]="item.maxYear"
          [view]="viewType"
          [name]="item.name">
@@ -16,7 +15,6 @@
     <input matInput
           fsDateScrollPicker
           [(ngModel)]="item.model"
-          (change)="itemChange()"
           [maxYear]="item.maxYear"
           [showMonth]="showMonth"
           [showDay]="showDay"

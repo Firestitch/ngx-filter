@@ -5,10 +5,10 @@ import { FilterComponent } from '@firestitch/filter';
 import { nameValue, filter } from '@firestitch/common'
 
 import { BehaviorSubject, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
-import { FsFilterConfigItem } from 'src/app/models/filter-item';
+import { map, delay, tap } from 'rxjs/operators';
 import { shuffle } from 'lodash-es';
 import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
+import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 
 
 @Component({
@@ -69,7 +69,7 @@ export class KitchenSinkComponent {
 
   constructor() {
     this.conf = {
-      //persist: 'filter',
+      persist: true,
       inline: false,
       chips: true,
       autofocus: true,
@@ -107,7 +107,6 @@ export class KitchenSinkComponent {
           name: 'keyword',
           type: ItemType.Keyword,
           label: 'Search',
-          query: 'keyword'
         },
         {
           name: 'payment_method_id',
@@ -163,7 +162,7 @@ export class KitchenSinkComponent {
           label: 'Observable Select',
           values: () => {
 
-            const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('simple_select');
+            const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
             console.log(filterItem);
             return new BehaviorSubject(this.users)
               .pipe(
@@ -179,6 +178,7 @@ export class KitchenSinkComponent {
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword)),
                 map((users) => nameValue(users, 'name', 'id')),
               )
@@ -191,6 +191,7 @@ export class KitchenSinkComponent {
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
                 map((users) => nameValue(users, 'name', 'id')),
               )
@@ -248,6 +249,7 @@ export class KitchenSinkComponent {
           label: 'Multi Select Status',
           multiple: true,
           values: [
+            { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' }

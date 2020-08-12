@@ -4,7 +4,9 @@ import {
   Component,
   KeyValueDiffers
 } from '@angular/core';
+
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { CheckboxItem } from '../../../models/items/checkbox-item';
 
 
 @Component({
@@ -13,16 +15,12 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   styleUrls: ['checkbox.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckboxComponent extends BaseItemComponent {
+export class CheckboxComponent extends BaseItemComponent<CheckboxItem> {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
     protected _cd: ChangeDetectorRef
   ) {
     super(_kvDiffers, _cd);
-  }
-
-  public onFilterChange() {
-
   }
 }

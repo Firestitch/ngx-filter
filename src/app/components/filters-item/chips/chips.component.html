@@ -3,8 +3,7 @@
     <fs-label>{{item.label}}</fs-label>
     <fs-chips [(ngModel)]="item.model"
               [compare]="compareFn"
-              [multiple]="item.multiple"
-              (ngModelChange)="modelChange()">
+              [multiple]="item.multiple">
       <fs-chip *ngFor="let value of item.values"
                [value]="value"
                [selectable]="true">

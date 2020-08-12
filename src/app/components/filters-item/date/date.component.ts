@@ -8,6 +8,9 @@ import {
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { ItemType } from '../../../enums/item-type.enum';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
+import { BaseDateItem } from '../../../models/items/date/base-date-item';
+import { DateItem } from '../../../models/items/date-item';
+import { DateTimeItem } from '../../../models/items/date-time-item';
 
 
 @Component({
@@ -15,7 +18,7 @@ import { ItemDateMode } from '../../../enums/item-date-mode.enum';
   templateUrl: './date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DateComponent extends BaseItemComponent implements OnInit {
+export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> implements OnInit {
 
   public viewType = 'date';
   public itemDateMode = ItemDateMode;
@@ -37,7 +40,7 @@ export class DateComponent extends BaseItemComponent implements OnInit {
       this.viewType = 'date'
     }
 
-    if (this.item.mode === ItemDateMode.ScrollMonthYear) {
+    if ((this.item as BaseDateItem).mode === ItemDateMode.ScrollMonthYear) {
       this.showDay = false;
     }
   }

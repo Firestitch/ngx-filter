@@ -112,7 +112,7 @@ import { FilterStatusBarDirective } from './directives/status-bar/status-bar.dir
   ]
 })
 export class FsFilterModule {
-  static forRoot(config: FilterConfig = {}): ModuleWithProviders {
+  static forRoot(config: FilterConfig = {}): ModuleWithProviders<FsFilterModule> {
     return {
       ngModule: FsFilterModule,
       providers: [

@@ -9,13 +9,13 @@ import {
   Inject,
   HostListener
 } from '@angular/core';
-import { FsFilterConfigItem } from '../../models/filter-item';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
-import { ItemType } from 'src/app/enums/item-type.enum';
 import { Subject } from 'rxjs';
+import { BaseItem } from '../../models/items/base-item';
 
+type Item = BaseItem<any>;
 
 @Component({
   templateUrl: './filter-drawer.component.html',
@@ -30,17 +30,17 @@ export class FilterDrawerComponent implements DoCheck {
     this.windowDesktop = window.innerWidth > 1200;
   }
 
-  @Input() public items: FsFilterConfigItem[] = [];
+  @Input() public items: Item[] = [];
   @Input() public showSortBy;
-  @Input() public sortItem: FsFilterConfigItem;
-  @Input() public sortDirectionItem: FsFilterConfigItem;
+  @Input() public sortItem: Item;
+  @Input() public sortDirectionItem: Item;
   @Input() public inline = false;
 
-  protected _differ: IterableDiffer<FsFilterConfigItem>;
+  protected _differ: IterableDiffer<Item>;
   protected _clear: Function;
   protected _done: Function;
   protected _search: Function;
-  protected _filterChanged$: Subject<FsFilterConfigItem>;
+  // protected _filterChanged$: Subject<Item>;
   protected _click: Function;
   public windowDesktop = false;
 
@@ -55,9 +55,9 @@ export class FilterDrawerComponent implements DoCheck {
     this._clear = data.clear;
     this._done = data.done;
     this._search = data.search;
-    this._filterChanged$ = data.filterChanged;
+    // this._filterChanged$ = data.filterChanged;
     this._click = data.click;
-    this._differ = this._differs.find(this.items).create<FsFilterConfigItem>((index, item) => {
+    this._differ = this._differs.find(this.items).create<Item>((index, item) => {
       return item.model;
     });
 
@@ -84,9 +84,9 @@ export class FilterDrawerComponent implements DoCheck {
     this.overlayRef.detach();
   }
 
-  public filterChanged(event) {
-    this._filterChanged$.next(event);
-  }
+  // public filterChanged(event) {
+  //   this._filterChanged$.next(event);
+  // }
 
   public backdropClick() {
     this.done();

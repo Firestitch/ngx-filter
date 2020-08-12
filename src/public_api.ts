@@ -9,16 +9,15 @@ export { FilterItemComponent } from './app/components/filters-item/filter-item.c
 export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
 
 // Interfaces
-export {
-  IFilterConfigBaseItem,
-  IFilterConfigDateItem,
-  IFilterConfigAutocompleteItem,
-  IFilterItemDefaultRange,
-  IFilterConfigDateRangeItem,
-  IFilterConfigRangeItem,
-  IFilterItemDefaultDateRange,
-  IFilterConfigTextItem,
-} from './app/interfaces/item-config.interface';
+export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
+export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';
+export { IFilterConfigDateItem } from './app/interfaces/items/date.interface';
+export { IFilterItemDefaultDateRange, IFilterConfigDateRangeItem } from './app/interfaces/items/date-range.interface';
+export { IFilterItemDefaultRange, IFilterConfigRangeItem } from './app/interfaces/items/range.interface';
+export { IFilterConfigTextItem } from './app/interfaces/items/text.interface';
+export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
+export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
+export { IFilterConfigSelectItem, IFilterConfigSelectIsolate } from './app/interfaces/items/select.interface';
 
 export {
   FilterConfig,
