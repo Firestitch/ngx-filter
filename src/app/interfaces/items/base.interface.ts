@@ -1,4 +1,4 @@
-import { ItemType } from '@firestitch/filter';
+import { ItemType } from '../../enums/item-type.enum';
 
 export type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange;
 export type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange;
