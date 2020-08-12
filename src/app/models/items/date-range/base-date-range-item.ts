@@ -94,14 +94,16 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     }
   }
 
-  public clearDateRange(type: 'from' | 'to') {
+  public clearDateRange(type: 'from' | 'to' = null) {
     if (type === 'from') {
       delete this.model.from;
+      this.model = { ...this.model };
     } else if (type === 'to') {
       delete this.model.to;
+      this.model = { ...this.model };
+    } else {
+      this.model = {};
     }
-
-    this.model = { ...this.model };
   }
 
   protected _validateModel() {

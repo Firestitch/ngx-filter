@@ -12,6 +12,8 @@ import { SimpleSelectItem } from '../models/items/select/simple-select-item';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/filter-config';
 import { createFilterItem } from '../helpers/create-filter-item';
+import { RangeItem } from '../models/items/range-item';
+import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
 
 
 @Injectable()
@@ -69,7 +71,13 @@ export class FsFilterItemsStore implements OnDestroy {
 
   public filtersClear() {
     this.items.forEach((item) => {
-      item.clear();
+      if (item instanceof RangeItem) {
+        item.clearRange();
+      } else if (item instanceof BaseDateRangeItem) {
+        item.clearDateRange();
+      } else {
+        item.clear();
+      }
     });
 
     if (this.sortByItem) {

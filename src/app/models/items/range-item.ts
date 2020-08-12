@@ -63,14 +63,16 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     }
   }
 
-  public clearRange(type: 'from' | 'to') {
+  public clearRange(type: 'from' | 'to' = null) {
     if (type === 'from') {
       delete this.model.min;
+      this.model = { ...this.model };
     } else if (type === 'to') {
       delete this.model.max;
+      this.model = { ...this.model };
+    } else {
+      this.model = {};
     }
-
-    this.model = { ...this.model };
   }
 
   protected _validateModel() {
