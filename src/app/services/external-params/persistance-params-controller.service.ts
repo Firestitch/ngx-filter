@@ -1,14 +1,14 @@
 import { Injectable, Optional } from '@angular/core';
 import { Location } from '@angular/common';
-
-import { FsPersistanceStore } from '@firestitch/store';
-
-import { FsFilterPersistance } from '../../interfaces/config.interface';
-import { getNormalizedPath } from '@firestitch/common';
-import { FsStore } from '@firestitch/store';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
+
 import { DrawerRef } from '@firestitch/drawer';
+import { FsPersistanceStore } from '@firestitch/store';
+import { getNormalizedPath } from '@firestitch/common';
+import { FsStore } from '@firestitch/store';
+
+import { FsFilterPersistance } from '../../interfaces/config.interface';
 import { restoreItems } from '../../helpers/restore-items';
 import { FsFilterItemsStore } from '../items-store.service';
 

@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-
-import { RangeItem } from '../../models/items/range-item';
-import { getRangeName } from '../../helpers/get-range-name';
-import { DateRangeItem } from '../../models/items/date-range-item';
-import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
-import { parseItemValueFromStored } from '../../helpers/parse-item-value-from-stored';
 import { FsFilterItemsStore } from '../items-store.service';
 import { restoreItems } from '../../helpers/restore-items';
 
