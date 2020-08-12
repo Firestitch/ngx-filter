@@ -42,7 +42,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   constructor(
     itemConfig: T,
-    protected _additionalConfig: any
+    protected _additionalConfig: unknown
   ) {
     this._type = itemConfig.type;
     this._parseConfig(itemConfig);

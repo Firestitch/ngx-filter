@@ -10,8 +10,8 @@ import { BaseItem } from './base-item';
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
-  public static create(config: IFilterConfigRangeItem, c) {
-    return new RangeItem(config, c);
+  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown) {
+    return new RangeItem(config, additionalConfig);
   }
 
   public readonly type: ItemType.Range;
@@ -20,6 +20,8 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public options: { scale?: number }
   public prefix: string;
   public suffix: string;
+
+  protected readonly _additionalConfig: { case: 'camel' | 'snake' }
 
   public get value() {
     let value = clone(this.model);
