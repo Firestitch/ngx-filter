@@ -14,6 +14,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
   public case: 'snake' | 'camel';
 
+  protected readonly _additionalConfig: { case: 'camel' | 'snake' }
+
   public get isTypeDateRange(): boolean {
     return this.type === ItemType.DateRange;
   }
