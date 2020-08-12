@@ -1,7 +1,8 @@
 <mat-form-field *ngIf="item.mode===itemDateMode.Calendar; else elseMode">
   <mat-label>{{item.label}}</mat-label>
   <input matInput
-        fsDatePicker
+         fsDatePicker
+         [fsFilterFocusTrigger]="item"
          [(ngModel)]="item.model"
          [maxYear]="item.maxYear"
          [view]="viewType"
@@ -14,6 +15,7 @@
     <mat-label>{{item.label}}</mat-label>
     <input matInput
           fsDateScrollPicker
+           [fsFilterFocusTrigger]="item"
           [(ngModel)]="item.model"
           [maxYear]="item.maxYear"
           [showMonth]="showMonth"

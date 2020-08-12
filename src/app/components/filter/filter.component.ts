@@ -38,6 +38,7 @@ import { FsFilterItemsStore } from '../../services/items-store.service';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
+import { FocusControllerService } from '../../services/focus-controller.service';
 
 
 @Component({
@@ -50,6 +51,7 @@ import { QueryParamsController } from '../../services/external-params/query-para
     ExternalParamsController,
     PersistanceParamsController,
     QueryParamsController,
+    FocusControllerService,
     FsFilterItemsStore,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -109,7 +111,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private _store: FsStore,
-    private _injector: Injector,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _externalParams: ExternalParamsController,
@@ -171,6 +172,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this._listenInternalItemsChange();
+    this._initOverlay();
   }
 
   public ngAfterViewInit(): void {
@@ -341,15 +343,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.opened.next();
 
-    this._filterOverlay.open(this._injector,  {
-      items: this.visibleItems,
-      showSortBy: 'showSortBy',
-      sortItem: this._filterItems.sortByItem,
-      sortDirectionItem: this._filterItems.sortDirectionItem,
-      search: this.search.bind(this),
-      done: this.hide.bind(this),
-      clear: this.clear.bind(this)
-    });
+    this._filterOverlay.open();
 
     if (this._firstOpen) {
       this._filterItems.loadAsyncValues();
@@ -558,5 +552,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.change();
       });
+  }
+
+  private _initOverlay() {
+    this._filterOverlay.setClearFn(this.clear.bind(this));
+    this._filterOverlay.setDoneFn(this.hide.bind(this));
   }
 }

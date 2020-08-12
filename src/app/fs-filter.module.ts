@@ -97,6 +97,7 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
     FsFilterChipContentComponent,
 
     FilterStatusBarDirective,
+    FocusToItemDirective,
 
     // Pipes
     FsFilterIsolateValues,

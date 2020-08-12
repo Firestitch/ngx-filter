@@ -17,45 +17,28 @@ export class FsFilterOverlayService implements OnDestroy {
   public detach$ = new Subject();
   public attach$ = new Subject();
 
+  private _clearFn: Function;
+  private _doneFn: Function;
+
   private _destroy$ = new Subject();
   private _overlayRef: OverlayRef;
 
   constructor(
+    private _injector: Injector,
     @Inject(FS_FILTER_META) private _filterMeta: FsFilterMeta,
     private _overlay: Overlay
-  ) {
+  ) {}
 
-    // this.detach$
-    // .pipe(
-    //   takeUntil(this._destroy$)
-    // )
-    // .subscribe(() => {
-    //   this.detach();
-    // });
-    //
-    // this.attach$
-    // .pipe(
-    //   takeUntil(this._destroy$)
-    // )
-    // .subscribe(() => {
-    //   this.attach();
-    // });
+  public get isOpened() {
+    return !!this._overlayRef;
   }
 
-  private removeFilterClass() {
-    this._filterMeta.openedFilters--;
-
-    if (this._filterMeta.openedFilters === 0) {
-      window.document.body.classList.remove('fs-filter-open');
-    }
+  public setClearFn(fn: Function) {
+    this._clearFn = fn
   }
 
-  private addFilterClass() {
-    this._filterMeta.openedFilters++;
-
-    if (this._filterMeta.openedFilters === 1) {
-      window.document.body.classList.add('fs-filter-open');
-    }
+  public setDoneFn(fn: Function) {
+    this._doneFn = fn
   }
 
   public close() {
@@ -67,8 +50,7 @@ export class FsFilterOverlayService implements OnDestroy {
     }
   }
 
-  public open(injector: Injector, data: any) {
-
+  public open() {
     this._overlayRef = this._createOverlay();
 
     this._overlayRef.backdropClick()
@@ -97,7 +79,7 @@ export class FsFilterOverlayService implements OnDestroy {
 
     this.addFilterClass();
 
-    return this.openPortalPreview(injector, this._overlayRef, data);
+    return this.openPortalPreview();
   }
 
   ngOnDestroy() {
@@ -114,14 +96,11 @@ export class FsFilterOverlayService implements OnDestroy {
     return this._overlay.create(overlayConfig);
   }
 
-  private openPortalPreview(
-    parentInjector: Injector,
-    overlayRef: OverlayRef,
-    data: any,
-  ) {
-    const injector = this._createInjector(parentInjector, data, overlayRef);
+  private openPortalPreview() {
+    const data = { done: this._doneFn, clear: this._clearFn };
+    const injector = this._createInjector(this._injector, data, this._overlayRef);
     const containerPortal = new ComponentPortal(FilterDrawerComponent, undefined, injector);
-    const containerRef = overlayRef.attach<FilterDrawerComponent>(containerPortal);
+    const containerRef = this._overlayRef.attach<FilterDrawerComponent>(containerPortal);
 
     return containerRef.instance;
   }
@@ -133,5 +112,21 @@ export class FsFilterOverlayService implements OnDestroy {
     ]);
 
     return new PortalInjector(parentInjector, injectionTokens);
+  }
+
+  private removeFilterClass() {
+    this._filterMeta.openedFilters--;
+
+    if (this._filterMeta.openedFilters === 0) {
+      window.document.body.classList.remove('fs-filter-open');
+    }
+  }
+
+  private addFilterClass() {
+    this._filterMeta.openedFilters++;
+
+    if (this._filterMeta.openedFilters === 1) {
+      window.document.body.classList.add('fs-filter-open');
+    }
   }
 }

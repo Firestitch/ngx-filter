@@ -1,4 +1,5 @@
 <fs-autocomplete-chips
+  [fsFilterFocusTrigger]="item"
   [fetch]="item.values"
   [ngModel]="item.model"
   (selected)="addAutocompleteChipItem($event)"

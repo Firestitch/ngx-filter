@@ -2,6 +2,7 @@
   <mat-label>{{item.label}}</mat-label>
   <mat-select
     #select
+    [fsFilterFocusTrigger]="item"
     [(ngModel)]="item.model"
     (ngModelChange)="changed()">
     <mat-option *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"

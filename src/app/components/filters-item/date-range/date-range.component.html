@@ -2,6 +2,8 @@
   <mat-label>{{item.label[0]}}</mat-label>
   <input
     matInput
+    [fsFilterFocusTrigger]="item"
+    [focusTargetType]="'from'"
     [fsDateRangeFrom]="item.name"
     [(ngModel)]="item.model.from"
     (ngModelChange)="itemChange()"
@@ -13,6 +15,8 @@
   <mat-label>{{item.label[1]}}</mat-label>
   <input
     matInput
+    [fsFilterFocusTrigger]="item"
+    [focusTargetType]="'to'"
     [fsDateRangeTo]="item.name"
     [(ngModel)]="item.model.to"
     (ngModelChange)="itemChange()"

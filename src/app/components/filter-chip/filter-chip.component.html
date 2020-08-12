@@ -5,7 +5,8 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem('from')">
+    (click)="focusOnItem('from')"
+    (removed)="removeItem($event, 'from')">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item, type: 'from' }"
@@ -18,7 +19,8 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem('to')">
+    (click)="focusOnItem('to')"
+    (removed)="removeItem($event, 'to')">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item, type: 'to' }"
@@ -33,7 +35,8 @@
     [selectable]="false"
     [removable]="true"
     size="small"
-    (removed)="removeItem()">
+    (click)="focusOnItem()"
+    (removed)="removeItem($event)">
     <ng-template
       [ngTemplateOutlet]="chipContent"
       [ngTemplateOutletContext]="{ item: item }"

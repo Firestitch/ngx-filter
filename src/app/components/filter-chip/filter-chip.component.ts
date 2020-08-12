@@ -13,6 +13,7 @@ import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { RangeItem } from '../../models/items/range-item';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
+import { FocusControllerService } from '../../services/focus-controller.service';
 
 
 @Component({
@@ -26,7 +27,10 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
 
-  constructor(private _cdRef: ChangeDetectorRef) {
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+    private _focusController: FocusControllerService,
+  ) {
   }
 
   public ngOnInit() {
@@ -51,7 +55,11 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public removeItem(type = null) {
+  public focusOnItem(type = null) {
+    this._focusController.click(this.item, type);
+  }
+
+  public removeItem(event: MouseEvent, type = null) {
     if (this.item instanceof RangeItem) {
       this.item.clearRange(type);
     } else if (this.item instanceof DateRangeItem || this.item instanceof DateTimeRangeItem) {

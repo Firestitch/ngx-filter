@@ -12,8 +12,8 @@ import {
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
-import { Subject } from 'rxjs';
 import { BaseItem } from '../../models/items/base-item';
+import { FsFilterItemsStore } from '../../services/items-store.service';
 
 type Item = BaseItem<any>;
 
@@ -30,38 +30,39 @@ export class FilterDrawerComponent implements DoCheck {
     this.windowDesktop = window.innerWidth > 1200;
   }
 
-  @Input() public items: Item[] = [];
-  @Input() public showSortBy;
-  @Input() public sortItem: Item;
-  @Input() public sortDirectionItem: Item;
   @Input() public inline = false;
 
   protected _differ: IterableDiffer<Item>;
   protected _clear: Function;
   protected _done: Function;
-  protected _search: Function;
-  // protected _filterChanged$: Subject<Item>;
-  protected _click: Function;
+
   public windowDesktop = false;
 
   constructor(protected _differs: IterableDiffers,
               protected _cd: ChangeDetectorRef,
+              protected _itemsStore: FsFilterItemsStore,
               @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
               @Inject(FILTER_DRAWER_DATA) private data) {
-    this.items = data.items;
-    this.showSortBy = data.showSortBy;
-    this.sortItem = data.sortItem;
-    this.sortDirectionItem = data.sortDirectionItem;
     this._clear = data.clear;
     this._done = data.done;
-    this._search = data.search;
-    // this._filterChanged$ = data.filterChanged;
-    this._click = data.click;
+
     this._differ = this._differs.find(this.items).create<Item>((index, item) => {
       return item.model;
     });
 
     this.updateWindowWidth();
+  }
+
+  public get items(): Item[] {
+    return this._itemsStore.visibleItems;
+  }
+
+  public get sortItem(): Item {
+    return this._itemsStore.sortByItem;
+  }
+
+  public get sortDirectionItem(): Item {
+    return this._itemsStore.sortDirectionItem;
   }
 
   public ngDoCheck() {
@@ -83,10 +84,6 @@ export class FilterDrawerComponent implements DoCheck {
     this._done();
     this.overlayRef.detach();
   }
-
-  // public filterChanged(event) {
-  //   this._filterChanged$.next(event);
-  // }
 
   public backdropClick() {
     this.done();

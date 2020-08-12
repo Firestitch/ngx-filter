@@ -3,6 +3,8 @@
     <mat-label>{{item.label[0]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
+           [fsFilterFocusTrigger]="item"
+           [focusTargetType]="'from'"
            type="text"
            inputmode="decimal"
            [(ngModel)]="item.model.min"
@@ -17,6 +19,8 @@
     <mat-label>{{item.label[1]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
     <input matInput
+           [fsFilterFocusTrigger]="item"
+           [focusTargetType]="'to'"
            type="text"
            inputmode="decimal"
            [(ngModel)]="item.model.max"

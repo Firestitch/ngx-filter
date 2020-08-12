@@ -1,6 +1,6 @@
 <mat-form-field>
   <mat-label>{{item.label}}</mat-label>
   <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
-  <input matInput [(ngModel)]="item.model">
+  <input matInput [(ngModel)]="item.model" [fsFilterFocusTrigger]="item">
   <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
 </mat-form-field>

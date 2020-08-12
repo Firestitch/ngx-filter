@@ -48,7 +48,7 @@
     "@firestitch/clear": "^8.1.0",
     "@firestitch/common": "^8.0.5",
     "@firestitch/date": "^8.0.1",
-    "@firestitch/datepicker": "^8.0.7",
+    "@firestitch/datepicker": "^8.2.6",
     "@firestitch/drawer": "^8.3.7",
     "@firestitch/example": "^9.1.0",
     "@firestitch/iframe": "^8.0.0",
