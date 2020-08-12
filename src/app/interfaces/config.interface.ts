@@ -1,11 +1,9 @@
-import {
-  IFilterConfigBaseItem,
-  IFilterConfigDateItem,
-  IFilterConfigAutocompleteItem,
-  IFilterConfigRangeItem,
-  IFilterConfigDateRangeItem,
-  IFilterConfigTextItem,
-} from './item-config.interface';
+import { IFilterConfigBaseItem } from './items/base.interface';
+import { IFilterConfigAutocompleteItem } from './items/autocomplete.interface';
+import { IFilterConfigDateItem } from './items/date.interface';
+import { IFilterConfigDateRangeItem } from './items/date-range.interface';
+import { IFilterConfigRangeItem } from './items/range.interface';
+import { IFilterConfigTextItem } from './items/text.interface';
 import { IFilterConfigSelectItem } from './items/select.interface';
 import { IFilterConfigChipsItem } from './items/chips.interface';
 import { IFilterConfigCheckboxItem } from './items/checkbox.interface';

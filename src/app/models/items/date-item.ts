@@ -1,8 +1,6 @@
 import { format } from '@firestitch/date';
 
-import {
-  IFilterConfigDateItem,
-} from '../../interfaces/item-config.interface';
+import { IFilterConfigDateItem } from '../../interfaces/items/date.interface';
 import { ItemType } from '../../enums/item-type.enum';
 import { ItemDateMode } from '../../enums/item-date-mode.enum';
 

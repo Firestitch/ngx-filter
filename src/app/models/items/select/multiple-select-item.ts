@@ -1,7 +1,9 @@
-import { clone } from 'lodash-es';
-import { BaseSelectItem } from './base-select-item';
-import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { filter } from '@firestitch/common';
+
+import { clone } from 'lodash-es';
+
+import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
+import { BaseSelectItem } from './base-select-item';
 
 
 export class MultipleSelectItem extends BaseSelectItem {

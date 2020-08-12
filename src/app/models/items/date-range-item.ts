@@ -1,4 +1,4 @@
-import { IFilterConfigDateRangeItem } from '../../interfaces/item-config.interface';
+import { IFilterConfigDateRangeItem } from '../../interfaces/items/date-range.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseDateRangeItem } from './date-range/base-date-range-item';

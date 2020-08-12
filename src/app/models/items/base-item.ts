@@ -8,10 +8,8 @@ import {
 
 import { ItemType } from '../../enums/item-type.enum';
 
-import {
-  IFilterConfigBaseItem,
-  IFilterItemDefaultRange
-} from '../../interfaces/item-config.interface';
+import { IFilterConfigBaseItem } from '../../interfaces/items/base.interface';
+import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
 
 
 export abstract class BaseItem<T extends IFilterConfigBaseItem> {

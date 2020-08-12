@@ -1,9 +1,10 @@
-import {
-  IFilterConfigAutocompleteItem,
-  IFilterConfigDateItem,
-  IFilterConfigDateRangeItem,
-  IFilterConfigRangeItem, IFilterConfigTextItem,
-} from '../interfaces/item-config.interface';
+import { IFilterConfigAutocompleteItem } from '../interfaces/items/autocomplete.interface';
+import { IFilterConfigDateRangeItem } from '../interfaces/items/date-range.interface';
+import { IFilterConfigDateItem } from '../interfaces/items/date.interface';
+import { IFilterConfigRangeItem } from '../interfaces/items/range.interface';
+import { IFilterConfigTextItem } from '../interfaces/items/text.interface';
+import { IFilterConfigCheckboxItem } from '../interfaces/items/checkbox.interface';
+import { IFilterConfigItem } from '../interfaces/config.interface';
 import { SelectItem } from '../models/items/select-item';
 import { ChipsItem } from '../models/items/chips-item';
 import { IFilterConfigChipsItem } from '../interfaces/items/chips.interface';
@@ -15,9 +16,7 @@ import { DateTimeItem } from '../models/items/date-time-item';
 import { AutocompleteItem } from '../models/items/autocomplete-item';
 import { AutocompleteChipsItem } from '../models/items/autocomplete-chips-item';
 import { CheckboxItem } from '../models/items/checkbox-item';
-import { IFilterConfigCheckboxItem } from '../interfaces/items/checkbox.interface';
 import { TextItem } from '../models/items/text-item';
-import { IFilterConfigItem } from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
 
 

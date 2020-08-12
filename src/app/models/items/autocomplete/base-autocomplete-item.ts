@@ -1,5 +1,5 @@
 import { BaseItem } from '../base-item';
-import { IFilterConfigAutocompleteItem } from '../../../interfaces/item-config.interface';
+import { IFilterConfigAutocompleteItem } from '../../../interfaces/items/autocomplete.interface';
 
 
 export abstract class BaseAutocompleteItem extends BaseItem<IFilterConfigAutocompleteItem> {

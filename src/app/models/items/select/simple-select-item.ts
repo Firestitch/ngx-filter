@@ -1,6 +1,6 @@
-import { BaseSelectItem } from './base-select-item';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { findValue } from '../../../helpers/find-value';
+import { BaseSelectItem } from './base-select-item';
 
 
 export class SimpleSelectItem extends BaseSelectItem {

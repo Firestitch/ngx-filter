@@ -7,7 +7,7 @@ import { isDate, isValid, parse, parseISO } from 'date-fns';
 import { clone, isObject, isString } from 'lodash-es';
 import { BaseItem } from '../base-item';
 import { getRangeName } from '../../../helpers/get-range-name';
-import { IFilterConfigDateRangeItem } from '../../../interfaces/item-config.interface';
+import { IFilterConfigDateRangeItem } from '../../../interfaces/items/date-range.interface';
 
 
 export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeItem> {

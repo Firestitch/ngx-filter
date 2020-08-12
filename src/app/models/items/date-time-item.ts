@@ -1,6 +1,6 @@
 import {
   IFilterConfigDateItem,
-} from '../../interfaces/item-config.interface';
+} from '../../interfaces/items/date.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseDateItem } from './date/base-date-item';

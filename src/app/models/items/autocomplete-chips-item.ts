@@ -1,6 +1,6 @@
 import { clone, isObject } from 'lodash-es';
 
-import { IFilterConfigAutocompleteItem } from '../../interfaces/item-config.interface';
+import { IFilterConfigAutocompleteItem } from '../../interfaces/items/autocomplete.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';

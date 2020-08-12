@@ -1,7 +1,7 @@
 import { ItemType } from '../../enums/item-type.enum';
 import {
   IFilterConfigTextItem
-} from '../../interfaces/item-config.interface';
+} from '../../interfaces/items/text.interface';
 
 import { BaseItem } from './base-item';
 

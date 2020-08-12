@@ -3,7 +3,7 @@ import { isDate, isValid, parse } from 'date-fns';
 import { clone } from 'lodash-es';
 
 import { BaseItem } from '../base-item';
-import { IFilterConfigDateItem } from '../../../interfaces/item-config.interface';
+import { IFilterConfigDateItem } from '../../../interfaces/items/date.interface';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
 
 

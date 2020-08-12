@@ -2,7 +2,7 @@ import { clone, isObject } from 'lodash-es';
 import { isEmpty } from '@firestitch/common';
 
 import { getRangeName } from '../../helpers/get-range-name';
-import { IFilterConfigRangeItem } from '../../interfaces/item-config.interface';
+import { IFilterConfigRangeItem } from '../../interfaces/items/range.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseItem } from './base-item';

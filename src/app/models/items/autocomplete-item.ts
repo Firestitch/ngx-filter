@@ -1,7 +1,7 @@
 import { clone } from 'lodash-es';
 import { isEmpty } from '@firestitch/common';
 
-import { IFilterConfigAutocompleteItem } from '../../interfaces/item-config.interface';
+import { IFilterConfigAutocompleteItem } from '../../interfaces/items/autocomplete.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
