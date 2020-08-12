@@ -5,8 +5,6 @@ import {
 } from './../interfaces/config.interface';
 import { Alias, Model } from 'tsmodels';
 
-import { Subject } from 'rxjs';
-
 import { ChangeFn, Sort } from '../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
@@ -71,8 +69,6 @@ export class FsFilterConfig extends Model {
   public _fromJSON(value: any) {
     super._fromJSON(value);
 
-    console.log(value.case);
-
     this.case = value.case ?? 'snake';
 
     if (this.persist) {
@@ -82,19 +78,5 @@ export class FsFilterConfig extends Model {
         }
       }
     }
-  }
-
-  public updateModelValues() {
-    // this.items.forEach((filter) => {
-    //   filter.model = clone(filter.model);
-    // });
-    //
-    // if (this.sortByItem) {
-    //   this.sortByItem.model = clone(this.sortByItem.model);
-    // }
-    //
-    // if (this.sortDirectionItem) {
-    //   this.sortDirectionItem.model = clone(this.sortDirectionItem.model);
-    // }
   }
 }
