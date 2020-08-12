@@ -8,6 +8,7 @@ import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 import { parseItemValueFromStored } from '../../helpers/parse-item-value-from-stored';
 import { FsFilterItemsStore } from '../items-store.service';
+import { restoreItems } from '../../helpers/restore-items';
 
 
 @Injectable()
@@ -56,30 +57,10 @@ export class QueryParamsController {
    * Parse query and update filter values
    */
   public fetchFromQueryParams() {
-    const params = this._route.snapshot.queryParams;
-    const result = {};
-
-    Object.keys(params)
-      .forEach((name) => {
-        const foundItem = this._itemsStore.items
-          .find((filterItem) => {
-            if (filterItem instanceof RangeItem) {
-              return  name === getRangeName(filterItem.case, filterItem.name, 'min') ||
-                name === getRangeName(filterItem.case, filterItem.name, 'max') ||
-                name === filterItem.name;
-            } else if (filterItem instanceof DateRangeItem || filterItem instanceof DateTimeRangeItem) {
-              return name === getRangeName(filterItem.case, filterItem.name, 'from') ||
-                name ===  getRangeName(filterItem.case, filterItem.name, 'to');
-            }
-
-            return filterItem.name === name;
-          });
-
-        if (foundItem) {
-          result[foundItem.name] = parseItemValueFromStored(foundItem, params, this._paramsCase);
-        }
-    });
-
-    this._fetchedParams = result;
+    this._fetchedParams = restoreItems(
+      this._route.snapshot.queryParams,
+      this._itemsStore.items,
+      this._paramsCase
+    );
   }
 }

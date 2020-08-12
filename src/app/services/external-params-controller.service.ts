@@ -58,7 +58,11 @@ export class ExternalParamsController {
   }
 
   private _initPersistance() {
-    this._persistanceStore.init(this._config.persist, this._config.namespace);
+    this._persistanceStore.init(
+      this._config.persist,
+      this._config.namespace,
+      this._config.case
+    );
   }
 
   private _initQueryParams() {
