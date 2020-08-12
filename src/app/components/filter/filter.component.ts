@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -20,12 +19,9 @@ import {
   HostBinding,
 } from '@angular/core';
 import { NgModel } from '@angular/forms';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
-import { DrawerRef } from '@firestitch/drawer';
 
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
@@ -33,15 +29,12 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 import { FsFilterConfig } from '../../models/filter-config';
 import { objectsAreEquals } from '../../helpers/compare';
-import { FilterParams } from '../../models/filter-params';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
-import { ItemType } from '../../enums/item-type.enum';
-import { MatDialogRef } from '@angular/material/dialog';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
-import { FilterConfig } from '../../interfaces/config.interface';
+import { FilterConfig, FilterSort } from '../../interfaces/config.interface';
 import { TextItem } from '../../models/items/text-item';
 import { BaseItem } from '../../models/items/base-item';
-import { FsFilterItemsStore } from '../../classes/items-store';
+import { FsFilterItemsStore } from '../../services/items-store.service';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
@@ -63,19 +56,16 @@ import { QueryParamsController } from '../../services/external-params/query-para
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @HostBinding('class.filters-open') showFilterMenu = false;
-  @HostBinding('class.window-desktop') windowDesktop = false;
-  @HostBinding('class.fs-filter') fsFilterClass = true;
-
-  @Input('config') set setConfig(config) {
+  @Input('config')
+  set setConfig(config) {
     this._initFilterWithConfig(config);
   }
 
-  @Input('filter') set setFilter(config) {
+  @Input('filter')
+  set setFilter(config) {
     this._initFilterWithConfig(config);
   }
 
-  @Input() public sortUpdate: EventEmitter<any> = null;
   @Input() public showSortBy: any = true;
   @Input() public showFilterInput = true;
   @Output() public closed = new EventEmitter<any>();
@@ -84,15 +74,26 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ContentChild(FilterStatusBarDirective, { read: TemplateRef })
   public statusBar;
 
-  @ViewChild('searchTextInput') public searchTextInput: ElementRef;
-  @ViewChild('searchTextInput', { read: MatInput }) public searchTextMatInput: MatInput;
+  @ViewChild('searchTextInput')
+  public searchTextInput: ElementRef;
+
+  @ViewChild('searchTextInput', { read: MatInput })
+  public searchTextMatInput: MatInput;
 
   @ViewChild('searchTextInput', { read: NgModel })
   set searchTextNgModel(value) {
     this._searchTextNgModel = value;
   }
 
-  // public changedFilters = [];
+  @HostBinding('class.filters-open')
+  public showFilterMenu = false;
+
+  @HostBinding('class.window-desktop')
+  public windowDesktop = false;
+
+  @HostBinding('class.fs-filter')
+  public fsFilterClass = true;
+
   public searchText = '';
   public searchPlaceholder = 'Search';
   public activeFiltersCount = 0;
@@ -103,23 +104,16 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _searchTextItem: TextItem;
   private _searchTextNgModel: NgModel = null;
   private _firstOpen = true;
-  private _filterParams: FilterParams;
-  private _sort = {};
+  private _sort: FilterSort;
   private _destroy$ = new Subject();
 
   constructor(
     private _store: FsStore,
-    private _location: Location,
-    private _route: ActivatedRoute,
-    private _router: Router,
     private _injector: Injector,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
-    private _cdRef: ChangeDetectorRef,
     private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
-    @Optional() private _dialogRef: MatDialogRef<any>,
-    @Optional() private _drawerRef: DrawerRef<any>,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._updateWindowWidth();
@@ -147,8 +141,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._config;
   }
 
-  public get filterParams(): FilterParams {
-    return this._filterParams;
+  public get filterParams() {
+    return this._filterItems.values();
   }
 
   public get items() {
@@ -172,16 +166,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    if (this.sortUpdate) {
-      // this.sortUpdate
-      //   .pipe(
-      //     takeUntil(this.config.destroy$),
-      //   )
-      //   .subscribe((data) => {
-      //     this._filterItems.updateSort(data);
-      //   });
-    }
-
     if (this.config.init) {
       this.init();
     }
@@ -197,12 +181,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  public focus() {
-    if (this.searchTextMatInput) {
-      this.searchTextMatInput.focus();
-    }
-  }
-
   public ngOnDestroy() {
 
     this._destroyFilterDrawer();
@@ -211,12 +189,17 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._destroy$.complete();
   }
 
+  public focus() {
+    if (this.searchTextMatInput) {
+      this.searchTextMatInput.focus();
+    }
+  }
+
   /**
    *
    * Do update value of some field
    *
    * @param values - values for update
-   * @param changeEvent - should change event to be fired
    *
    * To update text value just pass new text value
    *
@@ -269,21 +252,17 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * }
    *
    */
-  public updateValues(values, changeEvent = true) {
+  public updateValues(values) {
     Object.keys(values).forEach((key) => {
-      const filterItem = this.items.find((item) => item.name === key);
+      const filterItem = this.items
+        .find((item) => item.name === key);
 
       if (!filterItem) {
         return;
       }
 
-      filterItem.updateValue(values[key]);
+      filterItem.model = values[key];
     });
-
-    if (changeEvent) {
-      // this._filterChanged$.next();
-      // this._filterChange();
-    }
   }
 
   public hide() {
@@ -354,10 +333,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       return this._destroyFilterDrawer();
     }
 
-    // const notTextItem = this.config.items.find((item) => {
-    //   return item.type !== ItemType.Keyword;
-    // });
-
     if (!this.visibleItems.length) {
       return;
     }
@@ -390,10 +365,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public init() {
 
-    const data = this._externalParams.params;
+    const data = this._filterItems.valuesAsQuery(true);
     this._sort = this._filterItems.getSort();
 
-    this.config.init(data, this._filterItems.getSort());
+    this.config.init(data, this._sort);
   }
 
   public clear(event = null) {
@@ -428,7 +403,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       event.stopPropagation();
     }
 
-    const data = this._filterParams.getFlattenedParams();
+    const data = this._filterItems.valuesAsQuery(true);
 
     if (this.config.reload) {
       this.config.reload(data, this._filterItems.getSort());
@@ -444,7 +419,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
-    const data = this._filterItems.itemsValuesAsQuery(true);
+    const data = this._filterItems.valuesAsQuery(true);
     const sort = this._filterItems.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)

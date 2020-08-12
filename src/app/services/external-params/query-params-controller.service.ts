@@ -7,7 +7,7 @@ import { getRangeName } from '../../helpers/get-range-name';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 import { parseItemValueFromStored } from '../../helpers/parse-item-value-from-stored';
-import { FsFilterItemsStore } from '../../classes/items-store';
+import { FsFilterItemsStore } from '../items-store.service';
 
 
 @Injectable()

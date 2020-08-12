@@ -95,7 +95,7 @@ export class FsFilterItemsStore implements OnDestroy {
       .forEach((item) => item.loadAsyncValues());
   }
 
-  public getSort(): FilterSort | null {
+  public getSort(): FilterSort {
     let sortBy = this.getSortByValue();
     sortBy = sortBy === '__all' ? null : sortBy;
 
@@ -126,8 +126,21 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
-  public itemsValuesAsQuery(onlyPresented = false) {
+  public values(onlyPresented = false): Record<string, unknown> {
+    return this.items.reduce((acc, item) => {
+      const value = item.value;
+
+      if (!onlyPresented || value !== null) {
+        acc[item.name] = value;
+      }
+
+      return acc;
+    }, {});
+  }
+
+  public valuesAsQuery(onlyPresented = false): Record<string, unknown> {
     const params = {};
+
     this.items.forEach((filterItem: BaseItem<any>) => {
       Object.assign(params, filterItem.valueAsQuery);
     });

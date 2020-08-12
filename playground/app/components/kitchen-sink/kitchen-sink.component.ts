@@ -69,7 +69,7 @@ export class KitchenSinkComponent {
 
   constructor() {
     this.conf = {
-      persist: false,
+      persist: true,
       inline: false,
       chips: true,
       autofocus: true,

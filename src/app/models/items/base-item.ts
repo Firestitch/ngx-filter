@@ -13,6 +13,7 @@ import {
   IFilterItemDefaultRange
 } from '../../interfaces/item-config.interface';
 
+
 export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   // Configurable properties
@@ -31,7 +32,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected readonly _type: ItemType;
 
   protected _model: any;
-  protected _ready = new BehaviorSubject<boolean>(false);
+  protected _initialized = false;
   protected _initialLoading = false;
   protected _pendingValues = false;
   protected _observableValues: Observable<any>;
@@ -139,11 +140,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public get initialized() {
-    return this._ready.getValue();
-  }
-
-  public get ready$() {
-    return this._ready.asObservable();
+    return this._initialized;
   }
 
   public get initialLoading(): boolean {
@@ -197,12 +194,12 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
         // Move to some other place
         this._init();
-        this._ready.next(true);
+        this._initialized = true;
       }
 
     } else {
       this._init();
-      this._ready.next(true);
+      this._initialized = true;
     }
   }
 
@@ -221,7 +218,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
           this.initialLoading = false;
           this._init();
           this._validateModel();
-          this._ready.next(true);
+          this._initialized = true;
         });
 
     }
@@ -237,11 +234,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
     this._clearValue();
   };
-
-  // TODO
-  public updateValue(value) {
-
-  }
 
   public getChipsContent(type): string {
     return '';

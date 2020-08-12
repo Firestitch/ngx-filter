@@ -1,24 +1,22 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { FsFilterItemsStore } from '../classes/items-store';
+import { list as arrayList } from '@firestitch/common';
+
+import { isEqual, isObject } from 'lodash-es';
+
 import { FsFilterConfig } from '../models/filter-config';
+import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
+import { filterToQueryParam } from '../helpers/query-param-transformers';
+
+import { FsFilterItemsStore } from './items-store.service';
 import { PersistanceParamsController } from './external-params/persistance-params-controller.service';
 import { QueryParamsController } from './external-params/query-params-controller.service';
-import { BaseItem } from '../models/items/base-item';
-// import { IFilterConfigItem } from '@firestitch/filter';
-import { pickBy, isEqual, isObject } from 'lodash-es';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
-import { list as arrayList } from '@firestitch/common';
-import { filterToQueryParam } from '../helpers/query-param-transformers';
 
 
 @Injectable()
 export class ExternalParamsController {
 
-  private _ready$ = new BehaviorSubject<boolean>(false);
   private _config: FsFilterConfig
 
   constructor(
@@ -27,10 +25,6 @@ export class ExternalParamsController {
     private _queryParams: QueryParamsController,
     private _route: ActivatedRoute,
   ) {}
-
-  public get ready$() {
-    return this._ready$;
-  }
 
   public get params() {
     const result = {};
@@ -91,7 +85,7 @@ export class ExternalParamsController {
   }
 
   public buildQueryParams() {
-    const flattenedParams = this._itemsStore.itemsValuesAsQuery();
+    const flattenedParams = this._itemsStore.valuesAsQuery();
 
     this._itemsStore.items.forEach(filterItem => {
 
