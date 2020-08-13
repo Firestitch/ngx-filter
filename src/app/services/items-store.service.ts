@@ -59,6 +59,7 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public setConfig(config) {
+    this._filtersNames.clear();
     this._config = config;
     this.initItems(config.items);
   }
