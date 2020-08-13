@@ -14,6 +14,7 @@ import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/f
 import { createFilterItem } from '../helpers/create-filter-item';
 import { RangeItem } from '../models/items/range-item';
 import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
+import { ISortingChangeEvent } from '../interfaces/filter.interface';
 
 
 @Injectable()
@@ -124,7 +125,7 @@ export class FsFilterItemsStore implements OnDestroy {
     return this.sortDirectionItem ? this.sortDirectionItem.model : null;
   }
 
-  public updateSort(sort) {
+  public updateSort(sort: ISortingChangeEvent) {
     if (sort.sortBy) {
       this.sortByItem.model = sort.sortBy;
     }
