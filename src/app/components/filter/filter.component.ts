@@ -39,6 +39,7 @@ import { ExternalParamsController } from '../../services/external-params-control
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
+import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 
 
 @Component({
@@ -195,6 +196,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.searchTextMatInput) {
       this.searchTextMatInput.focus();
     }
+  }
+
+  public updateSort(sort: ISortingChangeEvent) {
+    this._filterItems.updateSort(sort)
   }
 
   /**
