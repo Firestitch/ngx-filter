@@ -52,7 +52,9 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
   public restore(): void {
     super.restore();
 
-    this._value.data = restoreItems(this._value.data, this._itemsStore.items, this._paramsCase);
+    if (this._value) {
+      this._value.data = restoreItems(this._value.data, this._itemsStore.items, this._paramsCase);
+    }
   }
 
 }
