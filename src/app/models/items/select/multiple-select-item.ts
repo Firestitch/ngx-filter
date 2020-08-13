@@ -18,7 +18,7 @@ export class MultipleSelectItem extends BaseSelectItem {
   public get value() {
     let value = clone(this.model);
 
-    if (value.length === 0 || value.indexOf('__all') > -1) {
+    if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
       value = null;
     }
 
