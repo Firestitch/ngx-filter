@@ -31,7 +31,7 @@
 
 <ng-template #defaultChip>
   <fs-chip
-    *ngIf="!item.isTypeCheckbox || item.value === item.checked"
+    *ngIf="itemVisible"
     [value]="item"
     [selectable]="false"
     [removable]="true"

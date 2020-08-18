@@ -14,6 +14,7 @@ import { RangeItem } from '../../models/items/range-item';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 import { FocusControllerService } from '../../services/focus-controller.service';
+import { CheckboxItem } from '../../models/items/checkbox-item';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<IFilterConfigItem>;
 
+  public itemVisible: boolean;
   public rangeItem: boolean;
 
   private _destroy$ = new Subject();
@@ -42,6 +44,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
       || this.item.isTypeDateTimeRange;
 
     this.listenValueChangesForRanges();
+    this._updateVisibility();
 
     if (this.item.hasPendingValues) {
       this.item.loadAsyncValues(false);
@@ -52,6 +55,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
+          this._updateVisibility();
           this._cdRef.markForCheck();
         });
     }
@@ -83,7 +87,13 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        this._updateVisibility();
         this._cdRef.markForCheck();
       });
+  }
+
+  private _updateVisibility() {
+    this.itemVisible = !this.item.isTypeCheckbox
+      || this.item.value === (this.item as CheckboxItem).checked;
   }
 }
