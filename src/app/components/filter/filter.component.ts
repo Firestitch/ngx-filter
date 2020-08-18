@@ -381,7 +381,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.activeFiltersCount = 0;
     this.activeFiltersWithInputCount = 0;
-    this.changeVisibility(false);
+    // this.changeVisibility(false);
 
     if (this.config.clear) {
       this.config.clear();

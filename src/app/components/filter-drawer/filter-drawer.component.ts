@@ -77,7 +77,7 @@ export class FilterDrawerComponent implements DoCheck {
 
   public clear() {
     this._clear();
-    this.overlayRef.detach();
+    // this.overlayRef.detach();
   }
 
   public done() {
