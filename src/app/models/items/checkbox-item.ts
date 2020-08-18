@@ -36,7 +36,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     const name = this.name;
     const params = [];
 
-    params[name] = value;
+    params[name] = this.model ? value : null;
 
     return params;
   }

@@ -1,4 +1,4 @@
-<ng-container *ngIf="item.isTypeDateRange || item.isTypeRange || item.isTypeDateTimeRange; else defaultChip">
+<ng-container *ngIf="rangeItem; else defaultChip">
   <fs-chip
     *ngIf="item.model?.min || item.model?.from"
     [value]="item"
@@ -31,6 +31,7 @@
 
 <ng-template #defaultChip>
   <fs-chip
+    *ngIf="!item.isTypeCheckbox || item.value === item.checked"
     [value]="item"
     [selectable]="false"
     [removable]="true"

@@ -23,7 +23,10 @@ import { FocusControllerService } from '../../services/focus-controller.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipComponent implements OnInit, OnDestroy {
+
   @Input() public item: BaseItem<IFilterConfigItem>;
+
+  public rangeItem: boolean;
 
   private _destroy$ = new Subject();
 
@@ -34,6 +37,10 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.rangeItem = this.item.isTypeDateRange
+      || this.item.isTypeRange
+      || this.item.isTypeDateTimeRange;
+
     this.listenValueChangesForRanges();
 
     if (this.item.hasPendingValues) {
