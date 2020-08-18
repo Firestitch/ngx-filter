@@ -5,6 +5,7 @@ import { IFilterConfigRangeItem } from '../interfaces/items/range.interface';
 import { IFilterConfigTextItem } from '../interfaces/items/text.interface';
 import { IFilterConfigCheckboxItem } from '../interfaces/items/checkbox.interface';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { IFilterConfigAutocompleteChipsItem } from '../interfaces/items/autocomplete-chips.interface';
 import { SelectItem } from '../models/items/select-item';
 import { ChipsItem } from '../models/items/chips-item';
 import { IFilterConfigChipsItem } from '../interfaces/items/chips.interface';
@@ -55,7 +56,7 @@ export function createFilterItem(item: IFilterConfigItem, config: any) {
     }
 
     case ItemType.AutoCompleteChips: {
-      return AutocompleteChipsItem.create(item as IFilterConfigAutocompleteItem);
+      return AutocompleteChipsItem.create(item as IFilterConfigAutocompleteChipsItem);
     }
 
     case ItemType.Checkbox: {

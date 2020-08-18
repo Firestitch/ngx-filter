@@ -188,12 +188,21 @@ export class KitchenSinkComponent {
           name: 'autocompletechips_user_id',
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
+          image: 'data.image',
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
                 map((users) => nameValue(users, 'name', 'id')),
+                map((users) => users.map((user, index) => {
+                  user.data = {
+                    image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
+                  };
+
+                  return user;
+                })),
+                tap(console.log),
               )
           }
         },

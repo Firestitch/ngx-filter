@@ -7,7 +7,7 @@ import { ItemType } from '../../enums/item-type.enum';
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
 
 
-export class AutocompleteItem extends BaseAutocompleteItem {
+export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocompleteItem> {
 
   public static create(config: IFilterConfigAutocompleteItem) {
     return new AutocompleteItem(config, null);

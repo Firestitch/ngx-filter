@@ -1,8 +1,10 @@
 import { BaseItem } from '../base-item';
 import { IFilterConfigAutocompleteItem } from '../../../interfaces/items/autocomplete.interface';
+import { IFilterConfigAutocompleteChipsItem } from '../../../interfaces/items/autocomplete-chips.interface';
 
+type AutoCompleteItem = IFilterConfigAutocompleteItem | IFilterConfigAutocompleteChipsItem;
 
-export abstract class BaseAutocompleteItem extends BaseItem<IFilterConfigAutocompleteItem> {
+export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends BaseItem<T> {
 
   public search: string;
 
@@ -11,7 +13,7 @@ export abstract class BaseAutocompleteItem extends BaseItem<IFilterConfigAutocom
   protected _validateModel() {
   }
 
-  protected _parseConfig(item: IFilterConfigAutocompleteItem) {
+  protected _parseConfig(item: T) {
     this.fetchOnFocus = item.fetchOnFocus;
 
     super._parseConfig(item);

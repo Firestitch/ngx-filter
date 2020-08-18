@@ -7,6 +7,7 @@ import { IFilterConfigTextItem } from './items/text.interface';
 import { IFilterConfigSelectItem } from './items/select.interface';
 import { IFilterConfigChipsItem } from './items/chips.interface';
 import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
+import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -38,6 +39,7 @@ export type IFilterConfigItem =
     | IFilterConfigTextItem
     | IFilterConfigDateItem
     | IFilterConfigAutocompleteItem
+    | IFilterConfigAutocompleteChipsItem
     | IFilterConfigRangeItem
     | IFilterConfigDateRangeItem
   );
