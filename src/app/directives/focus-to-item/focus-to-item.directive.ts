@@ -12,6 +12,8 @@ import {
   FsDatePickerComponent,
   FsDateScrollPickerComponent
 } from '@firestitch/datepicker';
+import { FsAutocompleteComponent } from '@firestitch/autocomplete';
+import { FsAutocompleteChipsComponent } from '@firestitch/autocomplete-chips';
 
 import { Subject } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
@@ -42,6 +44,8 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
     @Optional() @Self() private _targetDateScroll: FsDateScrollPickerComponent,
     @Optional() @Self() private _targetDateRangeFrom: DateRangePickerFromComponent,
     @Optional() @Self() private _targetDateRangeTo: DateRangePickerToComponent,
+    @Optional() @Self() private _targetAutocomplete: FsAutocompleteComponent,
+    @Optional() @Self() private _targetAutocompleteChips: FsAutocompleteChipsComponent,
   ) {}
 
   public ngOnInit(): void {
@@ -84,6 +88,14 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
         } else {
           this._targetDateRangeTo.open();
         }
+      } break;
+
+      case ItemType.AutoComplete: {
+        this._targetAutocomplete.focus();
+      } break;
+
+      case ItemType.AutoCompleteChips: {
+        this._targetAutocompleteChips.focus();
       } break;
     }
   }
