@@ -555,6 +555,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        if (this._searchTextItem) {
+          this.searchText = this._searchTextItem.value;
+        }
+
         this.change();
       });
   }
