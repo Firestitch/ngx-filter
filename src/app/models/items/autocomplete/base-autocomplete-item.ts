@@ -14,7 +14,7 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
   }
 
   protected _parseConfig(item: T) {
-    this.fetchOnFocus = item.fetchOnFocus;
+    this.fetchOnFocus = item.fetchOnFocus ?? true;
 
     super._parseConfig(item);
   }
