@@ -42,7 +42,7 @@ export class SimpleSelectItem extends BaseSelectItem {
     super._init();
 
     if (this.model === undefined && this.defaultValue === undefined) {
-      this.model = '__all';
+      this._model = '__all';
     }
   }
 
@@ -61,7 +61,11 @@ export class SimpleSelectItem extends BaseSelectItem {
       return value.value == this.model;
     });
 
-    this.model = item ? item.value : '__all';
+    const value = item ? item.value : '__all';
+
+    if (this._model !== value) {
+      this.model = value
+    }
   }
 
   protected _clearValue() {

@@ -84,14 +84,14 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
     if (this.model && Array.isArray(this.model) && this.values.length) {
       if (Number.isInteger(this.model[0])) {
-        this.model = this.model.map((id) => {
+        this._model = this.model.map((id) => {
           return this.values.find((value) => value.value === id);
         })
       }
     }
 
     if (this.model === undefined) {
-      this.model = [];
+      this._model = [];
     }
   }
 

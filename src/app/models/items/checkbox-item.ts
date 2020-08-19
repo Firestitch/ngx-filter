@@ -60,7 +60,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
   protected _init() {
     if (this.model === undefined) {
-      this.model = this.checked == this.defaultValue;
+      this._model = this.checked == this.defaultValue;
     }
   }
 

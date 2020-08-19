@@ -53,7 +53,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
 
   protected _init() {
     if (this.model === undefined) {
-      this.model = [];
+      this._model = [];
     }
   }
 

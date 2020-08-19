@@ -152,11 +152,11 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public valueChanged() {
     this._value$.next(this.value);
 
-    if (this.initialized) {
-      if (this.change) {
-        this.change(this);
-      }
+    if (this.change) {
+      this.change(this);
+    }
 
+    if (this.initialized) {
       this._valueChange$.next();
     }
   }
