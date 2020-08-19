@@ -535,12 +535,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this._searchTextNgModel.valueChanges
         .pipe(
           debounceTime(200),
-          filter((value) => value !== void 0),
+          filter((value) => !!value),
           takeUntil(this._destroy$),
         )
         .subscribe((value) => {
           this._zone.run(() => {
-            if (this._searchTextItem) {
+            if (this._searchTextItem && this._searchTextItem.value !== value) {
               this._searchTextItem.model = value;
             }
           });
@@ -555,7 +555,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        if (this._searchTextItem) {
+        if (this._searchTextItem && this.searchText !== this._searchTextItem.value) {
           this.searchText = this._searchTextItem.value;
         }
 
