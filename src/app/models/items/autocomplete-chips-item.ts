@@ -13,7 +13,11 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   }
 
   public type: ItemType.AutoCompleteChips;
-  public image: string;
+  public chipImage: string;
+  public chipIcon: string;
+  public chipColor: string;
+  public chipBackground: string;
+  public chipClass: string;
 
   public get value() {
     if (Array.isArray(this.model) && this.model.length === 0) {
@@ -58,7 +62,11 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   }
 
   protected _parseConfig(item: IFilterConfigAutocompleteChipsItem) {
-    this.image = item.image ?? 'image';
+    this.chipImage = item.chipImage ?? 'image';
+    this.chipIcon = item.chipIcon;
+    this.chipColor = item.chipColor;
+    this.chipBackground = item.chipBackground;
+    this.chipClass = item.chipClass;
 
     super._parseConfig(item);
   }

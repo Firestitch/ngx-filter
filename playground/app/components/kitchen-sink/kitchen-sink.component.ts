@@ -188,7 +188,7 @@ export class KitchenSinkComponent {
           name: 'autocompletechips_user_id',
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
-          image: 'data.image',
+          chipImage: 'data.image',
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
