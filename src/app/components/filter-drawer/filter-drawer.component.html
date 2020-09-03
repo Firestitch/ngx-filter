@@ -6,20 +6,22 @@
       <span class="text">Filters</span>
     </div>
 
-    <div class="filter-items">
-      <filter-item *ngFor="let filterItem of items"
-                   class="filter-group"
-                   [item]="filterItem">
-      </filter-item>
+    <div class="overflow-shadow filter-items">
+      <div class="overflow-shadow-content">
+        <filter-item *ngFor="let filterItem of items"
+                    class="filter-group"
+                    [item]="filterItem">
+        </filter-item>
 
-      <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0">
-        <filter-item class="filter-group sort"
-                     [item]="sortItem">
-        </filter-item>
-        <filter-item class="filter-group sort"
-                     [item]="sortDirectionItem">
-        </filter-item>
-      </ng-container>
+        <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0">
+          <filter-item class="filter-group sort"
+                      [item]="sortItem">
+          </filter-item>
+          <filter-item class="filter-group sort"
+                      [item]="sortDirectionItem">
+          </filter-item>
+        </ng-container>
+      </div>
     </div>
 
     <div class="filter-actions">
