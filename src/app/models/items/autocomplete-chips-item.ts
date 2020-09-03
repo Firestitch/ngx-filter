@@ -16,6 +16,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   public chipImage: string;
   public chipIcon: string;
   public chipColor: string;
+  public chipIconColor: string;
   public chipBackground: string;
   public chipClass: string;
 
@@ -64,6 +65,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   protected _parseConfig(item: IFilterConfigAutocompleteChipsItem) {
     this.chipImage = item.chipImage ?? 'image';
     this.chipIcon = item.chipIcon;
+    this.chipIconColor = item.chipIconColor;
     this.chipColor = item.chipColor;
     this.chipBackground = item.chipBackground;
     this.chipClass = item.chipClass;

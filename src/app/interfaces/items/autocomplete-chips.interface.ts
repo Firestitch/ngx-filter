@@ -6,6 +6,7 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   fetchOnFocus?: boolean;
   chipImage?: string;
   chipColor?: string;
+  chipIconColor?: string;
   chipBackground?: string;
   chipIcon?: string;
   chipClass?: string;
