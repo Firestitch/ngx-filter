@@ -535,7 +535,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       this._searchTextNgModel.valueChanges
         .pipe(
           debounceTime(200),
-          filter((value) => !!value),
           takeUntil(this._destroy$),
         )
         .subscribe((value) => {
