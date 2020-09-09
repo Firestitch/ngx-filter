@@ -35,4 +35,9 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
     arrayRemove(this.item.model, {value: event.data.value});
     this.itemChange();
   }
+
+  public clearAutocompleteChipItem() {
+    this.item.clear();
+    this.itemChange()
+  }
 }

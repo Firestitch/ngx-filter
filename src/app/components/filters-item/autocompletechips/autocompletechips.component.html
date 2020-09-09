@@ -4,6 +4,7 @@
   [ngModel]="item.model"
   (selected)="addAutocompleteChipItem($event)"
   (removed)="removeAutocompleteChipItem($event)"
+  (clear)="clearAutocompleteChipItem()"
   [allowText]="false"
   [fetchOnFocus]="item.fetchOnFocus"
   [placeholder]="item.label"

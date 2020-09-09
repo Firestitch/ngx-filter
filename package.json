@@ -43,7 +43,7 @@
     "@angular/router": "^9.1.12",
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/autocomplete": "^8.8.3",
-    "@firestitch/autocomplete-chips": "^8.4.15",
+    "@firestitch/autocomplete-chips": "^8.4.17",
     "@firestitch/chip": "^8.1.1",
     "@firestitch/clear": "^8.1.0",
     "@firestitch/common": "^8.0.5",
