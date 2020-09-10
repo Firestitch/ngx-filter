@@ -40,6 +40,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   protected _destroy$ = new Subject<void>();
 
+  private _clear$ = new Subject<void>();
+
   constructor(
     itemConfig: T,
     protected _additionalConfig: unknown
@@ -137,6 +139,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this._value$.asObservable();
   }
 
+  public get clear$() {
+    return this._clear$.asObservable();
+  }
+
   public get initialized() {
     return this._initialized;
   }
@@ -230,6 +236,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
         Use special .clearRange() or clearDateRange() instead.
       `)
     }
+
+    this._clear$.next();
     this._clearValue();
   };
 

@@ -10,16 +10,15 @@
             </span>
 
             <input
-              #searchTextInput
               matInput
-              [(ngModel)]="searchText"
+              [formControl]="searchText"
               [placeholder]="searchPlaceholder"
               name="filter-input"
               (click)="filterInputEvent($event)"
               class="filter-input">
 
             <a matSuffix
-              *ngIf="searchText && showFilterInput && config.clear"
+              *ngIf="searchText.value && showFilterInput && config.clear"
               (click)="clearSearchText($event)"
               href="javascript:void(0)"
               class="clear">

@@ -1,7 +1,7 @@
 import { FilterConfig } from './interfaces/config.interface';
 import { FS_FILTER_CONFIG } from './injectors/filter-config';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
@@ -55,6 +55,7 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
     CommonModule,
     RouterModule,
     FormsModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,

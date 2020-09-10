@@ -15,6 +15,7 @@ import { createFilterItem } from '../helpers/create-filter-item';
 import { RangeItem } from '../models/items/range-item';
 import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
+import { TextItem } from '../models/items/text-item';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
   public sortByItem: BaseItem<IFilterConfigItem> = null;
   public sortDirectionItem: BaseItem<IFilterConfigItem> = null;
+  public keywordItem: TextItem = null;
 
   private _items: BaseItem<IFilterConfigItem>[] = [];
   private _visibleItems: BaseItem<IFilterConfigItem>[] = [];
@@ -52,10 +54,7 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.items
-      .forEach((item) => item.destroy());
-    this.sortByItem?.destroy();
-    this.sortDirectionItem?.destroy();
+    this.destroyItems();
   }
 
   public setConfig(config) {
@@ -68,6 +67,7 @@ export class FsFilterItemsStore implements OnDestroy {
     if (Array.isArray(items)) {
       this._createItems(items);
       this._updateVisibleItems();
+      this._setKeywordItem();
     }
   }
 
@@ -97,6 +97,8 @@ export class FsFilterItemsStore implements OnDestroy {
         this.sortDirectionItem.clear();
       }
     }
+
+    this.keywordItem?.clear();
   }
 
   public loadAsyncValues() {
@@ -165,6 +167,27 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
 
+  public _initItemValues(p) {
+    this.items
+      .forEach((item) => {
+        item.initValues(p[item.name]);
+      });
+
+    this._createSortingItems(p);
+    this._subscribeToItemsChanges();
+  }
+
+  public destroyItems() {
+    this.items
+      .forEach((item) => item.destroy());
+    this.sortByItem?.destroy();
+    this.sortDirectionItem?.destroy();
+
+    this._items = [];
+    this.sortByItem = null;
+    this.sortDirectionItem = null;
+  }
+
   private _createItems(items: IFilterConfigItem[]) {
     this._items = items
       .filter((item) => {
@@ -195,7 +218,7 @@ export class FsFilterItemsStore implements OnDestroy {
           .pipe(
             // filter(() => item.initialized),
             // distinctUntilChanged(),
-            takeUntil(item.destroy$)
+            takeUntil(item.destroy$),
           )
           .subscribe(() => {
             this._itemsChange$.next(item);
@@ -204,13 +227,17 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (this._config.sortValues) {
       this.sortByItem.valueChange$
-        .pipe()
+        .pipe(
+          takeUntil(this.sortByItem.destroy$),
+        )
         .subscribe(() => {
           this._itemsChange$.next(this.sortByItem);
         });
 
       this.sortDirectionItem.valueChange$
-        .pipe()
+        .pipe(
+          takeUntil(this.sortDirectionItem.destroy$),
+        )
         .subscribe(() => {
           this._itemsChange$.next(this.sortDirectionItem);
         });
@@ -220,17 +247,6 @@ export class FsFilterItemsStore implements OnDestroy {
   private _updateVisibleItems() {
     this._visibleItems = this.items
       .filter((item) => !item.isTypeKeyword && !item.hide);
-  }
-
-  public _initItemValues(p) {
-    this.items
-      .forEach((item) => {
-        item.initValues(p[item.name]);
-      });
-
-    this._createSortingItems(p);
-
-    this._subscribeToItemsChanges();
   }
 
   private _createSortingItems(p) {
@@ -273,5 +289,11 @@ export class FsFilterItemsStore implements OnDestroy {
       );
       this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
     }
+  }
+
+  private _setKeywordItem() {
+    this.keywordItem = this
+      .items
+      .find((item) => item.isTypeKeyword) as TextItem;
   }
 }

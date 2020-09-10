@@ -5,6 +5,8 @@ import {
   KeyValueDiffers,
   OnDestroy
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
 
@@ -20,6 +22,7 @@ import { TextItem } from '../../../models/items/text-item';
 })
 export class TextComponent extends BaseItemComponent<TextItem> implements OnDestroy {
 
+  public textControl = new FormControl();
   public inputChange$ = new Subject();
   public destroy$ = new Subject();
 
@@ -29,14 +32,14 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnDest
   ) {
     super(_kvDiffers, _cd);
 
-    this.inputChange$
+    this.textControl.valueChanges
       .pipe(
         distinctUntilChanged(),
         debounceTime(200),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((value) => {
-        this.item.valueChanged();
+        this.item.model = value;
       })
   }
 
