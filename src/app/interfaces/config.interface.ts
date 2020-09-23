@@ -8,6 +8,7 @@ import { IFilterConfigSelectItem } from './items/select.interface';
 import { IFilterConfigChipsItem } from './items/chips.interface';
 import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
 import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
+import { IFilterSavedFiltersConfig } from './saved-filters.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -27,7 +28,8 @@ export interface FilterConfig {
   sortChange?: ChangeFn;
   reloadWhenConfigChanged?: boolean;
   case?: 'snake' | 'camel';
-  button?: FilterButton
+  button?: FilterButton;
+  savedFilters?: IFilterSavedFiltersConfig;
 }
 
 export type IFilterConfigItem =

@@ -19,6 +19,7 @@ import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './c
 import { DialogExampleComponent } from './components/dialog-example';
 import { DialogComponent } from './components/dialog';
 import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { FsFormModule } from '@firestitch/form';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
     AppMaterialModule,
     FsScrollbarModule,
     FormsModule,
+    FsFormModule.forRoot(),
     FsExampleModule.forRoot({ iframeObserveBody: true }),
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
@@ -49,7 +51,7 @@ import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
     NofiltersComponent,
     ExamplesComponent,
     DialogExampleComponent,
-    DialogComponent
+    DialogComponent,
   ],
   providers: [
     { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' } }

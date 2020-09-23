@@ -5,7 +5,10 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
 
-import { FilterSort, IFilterConfigItem } from '../interfaces/config.interface';
+import {
+  FilterSort,
+  IFilterConfigItem,
+} from '../interfaces/config.interface';
 import { ItemType } from '../enums/item-type.enum';
 import { BaseItem } from '../models/items/base-item';
 import { SimpleSelectItem } from '../models/items/select/simple-select-item';
@@ -16,6 +19,7 @@ import { RangeItem } from '../models/items/range-item';
 import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { TextItem } from '../models/items/text-item';
+import { IFilterExternalParams } from '../interfaces/external-params.interface';
 
 
 @Injectable()
@@ -167,7 +171,7 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
 
-  public _initItemValues(p) {
+  public initItemValues(p: IFilterExternalParams) {
     this.items
       .forEach((item) => {
         item.initValues(p[item.name]);
@@ -175,6 +179,20 @@ export class FsFilterItemsStore implements OnDestroy {
 
     this._createSortingItems(p);
     this._subscribeToItemsChanges();
+  }
+
+  public updateItemsWithValues(values: IFilterExternalParams) {
+    this.items
+      .forEach((item) => {
+        if (values[item.name]) {
+          item.model = values[item.name];
+        } else {
+          item.clear();
+        }
+      });
+
+    if (this.sortByItem) { this.sortByItem.clear(); }
+    if (this.sortDirectionItem) { this.sortDirectionItem.clear(); }
   }
 
   public destroyItems() {
@@ -216,8 +234,6 @@ export class FsFilterItemsStore implements OnDestroy {
       .forEach((item) => {
         item.valueChange$
           .pipe(
-            // filter(() => item.initialized),
-            // distinctUntilChanged(),
             takeUntil(item.destroy$),
           )
           .subscribe(() => {

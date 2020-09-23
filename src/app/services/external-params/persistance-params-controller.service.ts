@@ -19,7 +19,7 @@ const FILTER_STORE_KEY = 'fs-filter-persist';
 export class PersistanceParamsController extends FsPersistanceStore<FsFilterPersistance> {
 
   protected STORE_KEY = FILTER_STORE_KEY;
-  protected _paramsCase;
+  protected _paramsCase: 'snake' | 'camel';
 
   constructor(
     _store: FsStore,

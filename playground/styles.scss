@@ -3,6 +3,8 @@
 @import "~@firestitch/scrollbar/styles.scss";
 @import '~@firestitch/chip/styles';
 @import '~@firestitch/style/styles';
+@import '~@firestitch/skeleton/styles';
+@import '~@firestitch/form/styles';
 @import '../src/app/styles';
 
 @include mat-core();

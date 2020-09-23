@@ -14,6 +14,7 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
 import { FsFilterItemsStore } from '../../services/items-store.service';
+import { ExternalParamsController } from '../../services/external-params-controller.service';
 
 type Item = BaseItem<any>;
 
@@ -38,11 +39,14 @@ export class FilterDrawerComponent implements DoCheck {
 
   public windowDesktop = false;
 
-  constructor(protected _differs: IterableDiffers,
-              protected _cd: ChangeDetectorRef,
-              protected _itemsStore: FsFilterItemsStore,
-              @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
-              @Inject(FILTER_DRAWER_DATA) private data) {
+  constructor(
+    public externalParams: ExternalParamsController,
+    protected _differs: IterableDiffers,
+    protected _cd: ChangeDetectorRef,
+    protected _itemsStore: FsFilterItemsStore,
+    @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
+    @Inject(FILTER_DRAWER_DATA) private data,
+  ) {
     this._clear = data.clear;
     this._done = data.done;
 

@@ -49,16 +49,20 @@
     "@firestitch/common": "^8.0.5",
     "@firestitch/date": "^8.0.1",
     "@firestitch/datepicker": "^8.2.6",
+    "@firestitch/dialog": "^8.2.6",
     "@firestitch/drawer": "^8.3.7",
     "@firestitch/example": "^9.1.0",
+    "@firestitch/form": "^9.3.4",
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/label": "^8.2.5",
     "@firestitch/mask": "^8.3.0",
     "@firestitch/menu": "^9.1.3",
     "@firestitch/message": "^8.0.1",
+    "@firestitch/prompt": "^8.4.3",
     "@firestitch/scroll": "^8.0.0",
     "@firestitch/scroll-picker": "^8.0.0",
     "@firestitch/scrollbar": "^7.0.4",
+    "@firestitch/skeleton": "^8.1.4",
     "@firestitch/store": "^8.1.0",
     "@firestitch/style": "^8.0.8",
     "codelyzer": "^5.1.2",
@@ -91,7 +95,10 @@
     "@firestitch/chip": ">=8.1.1",
     "@firestitch/mask": ">=8.3.0",
     "@firestitch/store": ">=8.1.0",
-    "@firestitch/common": ">=8.0.5"
+    "@firestitch/common": ">=8.0.5",
+    "@firestitch/menu": ">=9.1.3",
+    "@firestitch/skeleton": ">=8.1.4",
+    "@firestitch/form": ">=9.3.0"
   },
   "dependencies": {
     "tslib": "^1.10.0"

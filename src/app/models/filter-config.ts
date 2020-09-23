@@ -6,6 +6,7 @@ import {
 import { Alias, Model } from 'tsmodels';
 
 import { ChangeFn, Sort } from '../interfaces/config.interface';
+import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -15,6 +16,7 @@ export class FsFilterConfig extends Model {
 
   @Alias() public load = true;
   @Alias() public persist: FsFilterPersistance = false;
+  @Alias() public savedFilters: IFilterSavedFiltersConfig;
   @Alias() public inline = false;
   @Alias() public autofocus = false;
   @Alias() public chips = false;

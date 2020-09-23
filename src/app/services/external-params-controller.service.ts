@@ -1,36 +1,48 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { list as arrayList } from '@firestitch/common';
-
-import { isEqual, isObject } from 'lodash-es';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { FsFilterConfig } from '../models/filter-config';
-import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
-import { filterToQueryParam } from '../helpers/query-param-transformers';
 
 import { FsFilterItemsStore } from './items-store.service';
 import { PersistanceParamsController } from './external-params/persistance-params-controller.service';
 import { QueryParamsController } from './external-params/query-params-controller.service';
+import { SavedFiltersController } from './external-params/saved-filters-controller.service';
+import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { buildQueryParams } from '../helpers/build-query-params';
+import { IFilterSavedFilter } from '../interfaces/saved-filters.interface';
 
 
 @Injectable()
-export class ExternalParamsController {
+export class ExternalParamsController implements OnDestroy {
 
-  private _config: FsFilterConfig
+  protected _init;
+  protected _pending$ = new BehaviorSubject(false);
+
+  private _shouldResetSavedFilters = true;
+
+  private _config: FsFilterConfig;
+  private _destroy$ = new Subject<void>();
 
   constructor(
     private _itemsStore: FsFilterItemsStore,
     private _persistanceStore: PersistanceParamsController,
     private _queryParams: QueryParamsController,
+    private _savedFilters: SavedFiltersController,
     private _route: ActivatedRoute,
   ) {}
 
-  public get params() {
-    const result = {};
+  public get params(): IFilterExternalParams {
+    const result: IFilterExternalParams = {};
 
     if (this._persistanceStore.enalbed) {
       Object.assign(result, this._persistanceStore.value?.data);
+    }
+
+    if (this._savedFilters.enabled && this._savedFilters.activeFilter) {
+      Object.assign(result, this._savedFilters.activeFilterData);
     }
 
     if (this._queryParams.enabled) {
@@ -40,21 +52,77 @@ export class ExternalParamsController {
     return result;
   }
 
+  public get pending(): boolean {
+    return this._pending$.getValue();
+  }
+
+  public get pending$(): Observable<boolean> {
+    return this._pending$.asObservable();
+  }
+
+  public get savedFiltersController(): SavedFiltersController {
+    return this._savedFilters;
+  }
+
+  public get savedFiltersEnabled(): boolean {
+    return this._savedFilters.enabled;
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
   public setConfig(config) {
     this._config = config;
 
     this._initPersistance();
     this._initQueryParams();
+    this._initSavedFilters();
 
-    this._sync();
-
-    this._initItemsValues();
+    this._pending$.next(true);
+    if (this._savedFilters.enabled) {
+      this._savedFilters
+        .load()
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this._savedFilters.updateActiveFilter();
+          this._initItemsValues();
+          this._listenAndResetSavedFilters();
+          this._pending$.next(false)
+        })
+    } else {
+      this._initItemsValues();
+      this._pending$.next(false)
+    }
 
     this._listenItemsChange();
   }
 
-  private _sync() {
+  public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
+    this.savedFiltersController.setActiveFilter(savedFilter);
+    this.reloadFiltersWithValues(savedFilter.filters, false);
+  }
 
+  public reloadFiltersWithValues(params: IFilterExternalParams, shouldResetSavedFilters = true) {
+    this._shouldResetSavedFilters = shouldResetSavedFilters;
+    this._itemsStore.updateItemsWithValues(params);
+
+    this._queryParams.writeStateToQueryParams(params);
+    this._persistanceStore.save(params);
+  }
+
+  public _initItemsValues() {
+    this._itemsStore.initItemValues(this.params);
+
+    const params = buildQueryParams(
+      this._itemsStore.valuesAsQuery(),
+      this._itemsStore.items,
+    );
+    this._queryParams.writeStateToQueryParams(params);
+    this._persistanceStore.save(params);
   }
 
   private _initPersistance() {
@@ -69,54 +137,44 @@ export class ExternalParamsController {
     this._queryParams.init(this._config.queryParam, this._config.case);
   }
 
-  private _initItemsValues() {
-    this._itemsStore._initItemValues(this.params);
-
-    const params = this.buildQueryParams();
-    this._queryParams.writeStateToQueryParams(params);
-    this._persistanceStore.save(params);
+  private _initSavedFilters() {
+    this._savedFilters.init(this._config.savedFilters, this._config.case);
   }
 
   private _listenItemsChange() {
     this._itemsStore
       .itemsChange$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
       .subscribe(() => {
-        const params = this.buildQueryParams();
+        const params = buildQueryParams(
+          this._itemsStore.valuesAsQuery(),
+          this._itemsStore.items,
+        );
 
         this._queryParams.writeStateToQueryParams(params);
         this._persistanceStore.save(params);
       });
   }
 
-  public buildQueryParams() {
-    const flattenedParams = this._itemsStore.valuesAsQuery();
+  private _listenAndResetSavedFilters(): void {
+    this._itemsStore
+      .itemsChange$
+      .pipe(
+        filter(() => !!this.savedFiltersController.activeFilter),
+        switchMap(() => {
+          const shouldReset = this._shouldResetSavedFilters;
 
-    this._itemsStore.items.forEach(filterItem => {
+          this._shouldResetSavedFilters = true;
 
-      if (filterItem instanceof MultipleSelectItem && filterItem.isolate) {
-        if (filterItem.multiple && filterItem.value) {
-          const isolated = arrayList(filterItem.values, 'value').sort();
-          const value = filterItem.value.sort();
-
-          if (isEqual(value, isolated)) {
-            flattenedParams[filterItem.name] = null;
-          }
-        }
-      }
-
-      if (filterItem.isTypeAutocomplete) {
-        if (isObject(filterItem.model)) {
-          flattenedParams[filterItem.name] = filterToQueryParam(filterItem.model.value, filterItem.model.name);
-        }
-      } else if (filterItem.isTypeAutocompleteChips || filterItem.isTypeChips) {
-        if (Array.isArray(filterItem.model) && filterItem.model.length) {
-          flattenedParams[filterItem.name] = filterItem.model.map((item) => {
-            return filterToQueryParam(item.value, item.name);
-          }).join(',');
-        }
-      }
-    });
-
-    return flattenedParams;
+          return of(shouldReset);
+        }),
+        filter((shouldReset) => shouldReset),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.savedFiltersController.resetActiveFilter();
+      });
   }
 }

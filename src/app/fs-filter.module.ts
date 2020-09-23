@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { PortalModule } from '@angular/cdk/portal';
-
+import { MatDialogModule } from '@angular/material/dialog';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FsDatePickerModule } from '@firestitch/datepicker';
@@ -25,6 +25,9 @@ import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsMaskModule } from '@firestitch/mask';
+import { FsMenuModule } from '@firestitch/menu';
+import { FsSkeletonModule } from '@firestitch/skeleton';
+import { FsFormModule } from '@firestitch/form';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -45,10 +48,14 @@ import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.c
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
 import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
 import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
+import { FsFilterDrawerActionsComponent } from './components/filter-drawer-actions/filter-drawer-actions.component';
 import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
 import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
 import { FsFilterChipContentComponent } from './components/filter-chip-content/filter-chip-content.component';
+import { FsFilterSavedFilterEditComponent } from './components/saved-filter-edit/saved-filter-edit.component';
+import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/saved-filters-menu.component';
+
 
 @NgModule({
   imports: [
@@ -63,6 +70,7 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
     MatCheckboxModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatDialogModule,
     FlexLayoutModule,
     FsChipModule,
     FsCommonModule,
@@ -74,6 +82,9 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
     FsScrollModule,
     PortalModule,
     FsMaskModule,
+    FsMenuModule,
+    FsSkeletonModule,
+    FsFormModule,
   ],
   declarations: [
     BaseItemComponent,
@@ -96,6 +107,9 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
     SelectBackdropComponent,
     FsFilterChipComponent,
     FsFilterChipContentComponent,
+    FsFilterDrawerActionsComponent,
+    FsFilterSavedFilterEditComponent,
+    FsSavedFiltersMenuComponent,
 
     FilterStatusBarDirective,
     FocusToItemDirective,
@@ -108,7 +122,8 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
   ],
   exports: [
     FilterComponent,
-    FilterStatusBarDirective
+    FilterStatusBarDirective,
+    FsSavedFiltersMenuComponent,
   ],
   entryComponents: [
     FilterDrawerComponent

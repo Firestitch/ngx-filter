@@ -9,6 +9,7 @@ import { map, delay, tap } from 'rxjs/operators';
 import { shuffle } from 'lodash-es';
 import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
+import { savedFilters } from './saved-filter';
 
 
 @Component({
@@ -272,6 +273,54 @@ export class KitchenSinkComponent {
           suffix: '%',
         }
       ],
+      savedFilters: {
+        load: () => {
+          console.log('<====== Load Saved Filters =====>');
+          return of(savedFilters)
+            .pipe(
+              delay(2000),
+            );
+        },
+        save: (filter) => {
+          console.log('<====== Save Filter =====>');
+          const filterIndex = savedFilters.findIndex((f) => {
+            return f.id === filter.id;
+          });
+
+          if (filterIndex > -1) {
+            // Here I'm emulating like backend returend filter which automatically activated
+            filter.active = true;
+            savedFilters[filterIndex] = filter;
+          } else {
+            // Here I'm emulating like backend returend new filter with ID to me
+            filter = {
+              ...filter,
+              id: 999,
+            }
+            savedFilters.push(filter);
+          }
+
+          console.log('Save Filter', filter);
+          console.log('Saved Filters: ', savedFilters);
+
+          return of(filter)
+            .pipe(
+              delay(2000),
+            );
+        },
+        order: (filters) => {
+          console.log('<====== Order Saved Filters =====>');
+          console.log('order filters', filters);
+
+          return of();
+        },
+        delete: (filter) => {
+          console.log('<====== Delete Saved Filter =====>');
+          console.log('order filters', filter);
+
+          return of();
+        },
+      }
       //clear: false,
       // button: {
       //   label: '',

@@ -37,6 +37,7 @@ import { ExternalParamsController } from '../../services/external-params-control
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
+import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 
 
@@ -52,6 +53,7 @@ import { ISortingChangeEvent } from '../../interfaces/filter.interface';
     QueryParamsController,
     FocusControllerService,
     FsFilterItemsStore,
+    SavedFiltersController,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -71,6 +73,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public showFilterInput = true;
   @Output() public closed = new EventEmitter<any>();
   @Output() public opened = new EventEmitter<any>();
+  @Output() public ready = new EventEmitter<void>();
 
   @ContentChild(FilterStatusBarDirective, { read: TemplateRef })
   public statusBar;
@@ -109,6 +112,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _filterItems: FsFilterItemsStore,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
+    this._listenWhenFilterReady();
     this._updateWindowWidth();
 
     this._filterOverlay.attach$
@@ -160,7 +164,21 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (this.config.init) {
-      this.init();
+      if (this._externalParams.pending) {
+        this._externalParams
+          .pending$
+          .pipe(
+            filter((pending) => {
+              return !pending;
+            }),
+            takeUntil(this._destroy$),
+          )
+          .subscribe(() => {
+            this.init();
+          })
+      } else {
+        this.init();
+      }
     }
 
     this._listenInternalItemsChange();
@@ -525,8 +543,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._zone.runOutsideAngular(() => {
       this.searchText.valueChanges
         .pipe(
-          distinctUntilChanged(),
           debounceTime(200),
+          distinctUntilChanged(),
+          filter((value) => {
+            return value !== this._filterItems.keywordItem?.model;
+          }),
           takeUntil(this._destroy$),
         )
         .subscribe((value) => {
@@ -568,5 +589,18 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _initOverlay() {
     this._filterOverlay.setClearFn(this.clear.bind(this));
     this._filterOverlay.setDoneFn(this.hide.bind(this));
+  }
+
+  // We may need some time to recieve external params and after that ready can be emitted
+  private _listenWhenFilterReady() {
+    this._externalParams
+      .pending$
+      .pipe(
+        filter((value) => !value),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.ready.emit();
+      });
   }
 }

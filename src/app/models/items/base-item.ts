@@ -182,6 +182,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public initValues(persistedValue: unknown) {
+    this._initialized = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
 

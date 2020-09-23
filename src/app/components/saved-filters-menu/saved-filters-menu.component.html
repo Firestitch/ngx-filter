@@ -1,0 +1,17 @@
+<a [fsMenuTriggerFor]="menu" class="selector">{{ (activeFilter$ | async)?.name || 'Not selected' }}</a>
+
+<fs-menu #menu>
+  <ng-container *ngIf="activeFilter$ | async">
+    <ng-template fs-menu-item (click)="removeActiveFilter()">
+      None
+    </ng-template>
+  </ng-container>
+  <ng-container *ngFor="let filter of filters$ | async">
+    <ng-template fs-menu-item (click)="selectFilter(filter)">
+      {{ filter.name }}
+    </ng-template>
+  </ng-container>
+  <ng-template fs-menu-item class="saved-filter-last-item" (click)="manageFilters()">
+    Manage
+  </ng-template>
+</fs-menu>

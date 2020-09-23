@@ -1,3 +1,7 @@
+// Controllers
+export { ExternalParamsController } from './app/services/external-params-controller.service';
+export { SavedFiltersController } from './app/services/external-params/saved-filters-controller.service';
+
 // Modules
 export { FsFilterModule } from './app/fs-filter.module';
 
@@ -29,9 +33,32 @@ export {
   FsFilterPersistance,
 } from './app/interfaces/config.interface';
 
-// Enums/Models
+export {
+  IFilterSavedFilter,
+  IFilterSavedFiltersConfig,
+  FilterRemoteDelete,
+  FilterRemoteOrder,
+  FilterRemoteLoad,
+  FilterRemoteSave
+} from './app/interfaces/saved-filters.interface';
+
+// Models
 export { ItemType } from './app/enums/item-type.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
+
+// Models
+export { DateItem } from './app/models/items/date-item';
+export { DateRangeItem } from './app/models/items/date-range-item';
+export { DateTimeItem } from './app/models/items/date-time-item';
+export { DateTimeRangeItem } from './app/models/items/date-time-range-item';
+export { AutocompleteItem } from './app/models/items/autocomplete-item';
+export { AutocompleteChipsItem } from './app/models/items/autocomplete-chips-item';
+export { RangeItem } from './app/models/items/range-item';
+export { SelectItem } from './app/models/items/select-item';
+export { BaseItem } from './app/models/items/base-item';
+export { TextItem } from './app/models/items/text-item';
+export { ChipsItem } from './app/models/items/chips-item';
+export { CheckboxItem } from './app/models/items/checkbox-item';
 
 // Injectors
 export { FS_FILTER_CONFIG } from './app/injectors/filter-config';

@@ -8,26 +8,29 @@
 
     <div class="overflow-shadow filter-items">
       <div class="overflow-shadow-content">
-        <filter-item *ngFor="let filterItem of items"
-                    class="filter-group"
-                    [item]="filterItem">
-        </filter-item>
+        <ng-container *fsSkeleton="(externalParams.pending$ | async) !== true">
+          <filter-item *ngFor="let filterItem of items"
+                       class="filter-group"
+                       [item]="filterItem">
+          </filter-item>
 
-        <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0">
-          <filter-item class="filter-group sort"
-                      [item]="sortItem">
-          </filter-item>
-          <filter-item class="filter-group sort"
-                      [item]="sortDirectionItem">
-          </filter-item>
+          <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0">
+            <filter-item class="filter-group sort"
+                         [item]="sortItem">
+            </filter-item>
+            <filter-item class="filter-group sort"
+                         [item]="sortDirectionItem">
+            </filter-item>
+          </ng-container>
         </ng-container>
       </div>
     </div>
 
-    <div class="filter-actions">
-      <button type="button" mat-button color="primary" (click)="done()">Done</button>
-      <button type="button" mat-button (click)="clear()">Clear</button>
-    </div>
+    <fs-filter-drawer-actions class="filter-actions"
+                              *ngIf="(externalParams.pending$ | async) !== true"
+                              (clear)="clear()"
+                              (done)="done()">
+    </fs-filter-drawer-actions>
   </div>
 </div>
 <div class="backdrop" *ngIf="!windowDesktop" (click)="backdropClick()"></div>
