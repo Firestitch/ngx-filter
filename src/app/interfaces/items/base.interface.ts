@@ -11,6 +11,7 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   label: string | string[];
   chipLabel?: string | string[];
   hide?: boolean;
+  clear?: boolean;
   values?: any;
   primary?: boolean;
   default?: unknown;

@@ -5,6 +5,7 @@
   [(ngModel)]="item.model"
   [placeholder]="item.label"
   [fetchOnFocus]="item.fetchOnFocus"
+  [showClear]="item.clearAllowed"
   name="item.name">
   <ng-template fsAutocompleteTemplate let-data="data">
     {{data.name}}
