@@ -103,6 +103,7 @@ export class ExternalParamsController implements OnDestroy {
 
   public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
     this.savedFiltersController.setActiveFilter(savedFilter);
+
     if (savedFilter) {
       this.reloadFiltersWithValues(savedFilter.filters, false);
     }
