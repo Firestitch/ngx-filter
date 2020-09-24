@@ -9,12 +9,14 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
   public search: string;
 
   public fetchOnFocus: boolean;
+  public clearAllowed: boolean;
 
   protected _validateModel() {
   }
 
   protected _parseConfig(item: T) {
     this.fetchOnFocus = item.fetchOnFocus ?? true;
+    this.clearAllowed = item.clear ?? true;
 
     super._parseConfig(item);
   }

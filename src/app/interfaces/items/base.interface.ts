@@ -3,7 +3,6 @@ import { BaseItem } from '../../models/items/base-item';
 
 export type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange;
 export type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange;
-export type FilterAutoCompleteType = ItemType.AutoComplete | ItemType.AutoCompleteChips;
 
 export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   name: string;
@@ -11,7 +10,6 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   label: string | string[];
   chipLabel?: string | string[];
   hide?: boolean;
-  clear?: boolean;
   values?: any;
   primary?: boolean;
   default?: unknown;

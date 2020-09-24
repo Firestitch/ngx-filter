@@ -10,4 +10,5 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   chipBackground?: string;
   chipIcon?: string;
   chipClass?: string;
+  clear?: boolean;
 }

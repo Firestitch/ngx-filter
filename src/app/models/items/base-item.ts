@@ -20,7 +20,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public label: string | string[];
   public chipLabel: string | string[];
   public hide: boolean;
-  public clearAllowed: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
   public persistedValue: unknown;
 
@@ -266,7 +265,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.chipLabel = item.chipLabel;
     this.defaultValue = item.default;
     this.change = item.change;
-    this.clearAllowed = item.clear ?? true;
     this.hide = item.hide;
 
     this.values = item.values;
