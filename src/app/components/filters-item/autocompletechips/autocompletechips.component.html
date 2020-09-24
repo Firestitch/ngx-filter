@@ -5,16 +5,18 @@
   (selected)="addAutocompleteChipItem($event)"
   (removed)="removeAutocompleteChipItem($event)"
   (clear)="clearAutocompleteChipItem()"
+  (click)="clicked()"
   [allowText]="false"
   [fetchOnFocus]="item.fetchOnFocus"
   [placeholder]="item.label"
   [chipImage]="item.chipImage"
-  [chipColor]="item.chipColor"
-  [chipIconColor]="item.chipIconColor"
-  [chipBackground]="item.chipBackground"
+  [chipColor]="chipColor"
+  [chipIconColor]="chipIcon"
+  [chipBackground]="chipBackground"
   [chipIcon]="item.chipIcon"
   [chipClass]="item.chipClass"
   [allowClear]="item.clearAllowed"
+  [removable]="item.clearAllowed"
   name="model">
   <ng-template fsAutocompleteObject let-object="object">
     {{ object.name }}

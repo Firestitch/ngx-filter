@@ -27,7 +27,7 @@ export class KitchenSinkComponent {
   public sort = null;
 
   public users = [
-    { id: 1, name: 'John Doe' },
+    { id: 1, name: 'John Doe', color: 'red' },
     { id: 2, name: 'Jane Doe' },
     { id: 3, name: 'Bob Tom' }
   ];
@@ -192,7 +192,8 @@ export class KitchenSinkComponent {
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
-          clear: false,
+          chipColor: '#fff',
+          chipBackground: 'color',
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
