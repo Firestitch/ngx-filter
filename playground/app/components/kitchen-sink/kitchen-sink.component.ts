@@ -161,6 +161,7 @@ export class KitchenSinkComponent {
           name: 'observable_select',
           type: ItemType.Select,
           label: 'Observable Select',
+          clear: false,
           values: () => {
 
             const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
@@ -175,6 +176,7 @@ export class KitchenSinkComponent {
           name: 'autocomplete_user_id',
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
+          clear: false,
           change: (item) => {},
           values: (keyword) => {
             return new BehaviorSubject(this.users)
@@ -190,6 +192,7 @@ export class KitchenSinkComponent {
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
+          clear: false,
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -222,19 +225,22 @@ export class KitchenSinkComponent {
         {
           name: 'date',
           type: ItemType.Date,
-          label: 'Date'
+          label: 'Date',
+          clear: false,
         },
         {
           name: 'scroll-date',
           type: ItemType.Date,
           label: 'Scroll Date',
           maxYear: (new Date()).getFullYear(),
-          mode: ItemDateMode.ScrollMonthYear
+          mode: ItemDateMode.ScrollMonthYear,
+          clear: false,
         },
         {
           name: 'date_range',
           type: ItemType.DateRange,
           label: [ 'From Date', 'To Date'],
+          clear: false,
         },
         {
           name: 'checkbox',

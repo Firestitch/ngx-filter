@@ -69,7 +69,6 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     this.chipColor = item.chipColor;
     this.chipBackground = item.chipBackground;
     this.chipClass = item.chipClass;
-    this.clearAllowed = item.clear ?? true;
 
     super._parseConfig(item);
   }

@@ -13,7 +13,6 @@ import { IFilterConfigDateRangeItem } from '../../../interfaces/items/date-range
 export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeItem> {
 
   public case: 'snake' | 'camel';
-  public clearAllowed: boolean;
 
   protected readonly _additionalConfig: { case: 'camel' | 'snake' }
 
@@ -125,7 +124,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
   protected _parseConfig(item: IFilterConfigDateRangeItem) {
     this.case = this._additionalConfig?.case ?? 'camel';
-    this.clearAllowed = item.clear ?? true;
 
     super._parseConfig(item);
   }

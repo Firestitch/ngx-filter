@@ -11,7 +11,6 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
   public maxYear: number;
   public mode: ItemDateMode
-  public clearAllowed: boolean;
 
   public get value() {
     let value = clone(this.model);
@@ -51,7 +50,6 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
   protected _parseConfig(item: IFilterConfigDateItem) {
     this.maxYear = item.maxYear;
     this.mode = item.mode || ItemDateMode.Calendar;
-    this.clearAllowed = item.clear ?? true;
 
     super._parseConfig(item);
   }

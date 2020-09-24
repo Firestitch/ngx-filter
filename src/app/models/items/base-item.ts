@@ -22,6 +22,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
   public persistedValue: unknown;
+  public clearAllowed: boolean;
 
   // Internal properties
 
@@ -266,6 +267,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.defaultValue = item.default;
     this.change = item.change;
     this.hide = item.hide;
+    this.clearAllowed = item.clear ?? true;
 
     this.values = item.values;
   };

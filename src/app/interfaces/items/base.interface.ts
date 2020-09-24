@@ -13,5 +13,6 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   values?: any;
   primary?: boolean;
   default?: unknown;
-  change?: (item: BaseItem<any>) => void
+  change?: (item: BaseItem<any>) => void;
+  clear?: boolean;
 }
