@@ -8,8 +8,7 @@
     [multiple]="item.multiple">
       <mat-option
         *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"
-        [value]="item.value"
-        [ngStyle]="item.style">
+        [value]="item.value">
           {{ item.name }}
     </mat-option>
   </mat-select>

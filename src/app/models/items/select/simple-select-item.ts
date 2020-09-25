@@ -69,6 +69,8 @@ export class SimpleSelectItem extends BaseSelectItem {
   }
 
   protected _clearValue() {
+    super._clearValue();
+
     this.model = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
       ? '__all'
       : null;

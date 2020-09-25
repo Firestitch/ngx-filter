@@ -50,4 +50,10 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
     }
   }
 
+  protected _clearValue() {
+    if (this.isolate) {
+      this.isolate.enabled = false;
+    }
+  }
+
 }

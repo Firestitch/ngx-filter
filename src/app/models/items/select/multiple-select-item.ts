@@ -71,6 +71,8 @@ export class MultipleSelectItem extends BaseSelectItem {
   }
 
   protected _clearValue() {
+    super._clearValue();
+
     this.model = [];
   }
 }
