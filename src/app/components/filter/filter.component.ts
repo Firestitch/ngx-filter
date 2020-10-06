@@ -22,7 +22,7 @@ import { MatInput } from '@angular/material/input';
 
 import { FsStore } from '@firestitch/store';
 
-import { fromEvent, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
@@ -39,6 +39,7 @@ import { QueryParamsController } from '../../services/external-params/query-para
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
+import { IFsFilterAction } from '../../interfaces/action.interface';
 
 
 @Component({
@@ -102,6 +103,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _firstOpen = true;
   private _sort: FilterSort;
+  private _filtersBtnVisible$ = new BehaviorSubject(true);
+  private _keywordVisible$ = new BehaviorSubject(true);
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -152,6 +155,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get hasKeyword() {
     return this._filterItems.hasKeyword;
+  }
+
+  public get filtersBtnVisible$(): Observable<boolean> {
+    return this._filtersBtnVisible$.asObservable();
+  }
+
+  public get keywordVisible$(): Observable<boolean> {
+    return this._keywordVisible$.asObservable();
   }
 
   public ngOnInit() {
@@ -446,6 +457,56 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Update filter actions config
+   * @param actions
+   */
+  public updateActions(actions: IFsFilterAction[]): void {
+    this._config.actionsController.initActions(actions);
+  }
+
+  /**
+   * Show "Filters" button
+   */
+  public showFiltersBtn(): void {
+    this._filtersBtnVisible$.next(true);
+  }
+
+  /**
+   * Hide "Filters" button
+   */
+  public hideFiltersBtn(): void {
+    this._filtersBtnVisible$.next(false);
+  }
+
+  /**
+   * Show "Keyword" field if it present
+   */
+  public showKeywordField(): void {
+    this._keywordVisible$.next(true);
+  }
+
+  /**
+   * Hide "Keyword" field if it present
+   */
+  public hideKeywordField(): void {
+    this._keywordVisible$.next(false);
+  }
+
+  /**
+   * Go through actions and check show() callback and update visible actions
+   */
+  public updateActionsVisibility(): void {
+    this._config.actionsController.updateActionsVisibility();
+  }
+
+  /**
+   * Go through actions and check disabled() callback and update disabled state
+   */
+  public updateDisabledState(): void {
+    this._config.actionsController.updateDisabledState();
+  }
+
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
       this._filterItems.destroyItems();
@@ -564,8 +625,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _listenKeywordItemClear() {
-    this._filterItems.keywordItem
-      .clear$
+    this._filterItems
+      .keywordItem
+      ?.clear$
       .pipe(
         takeUntil(this._filterItems.keywordItem.destroy$),
         takeUntil(this._destroy$),

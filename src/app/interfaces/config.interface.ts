@@ -9,6 +9,7 @@ import { IFilterConfigChipsItem } from './items/chips.interface';
 import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
 import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
 import { IFilterSavedFiltersConfig } from './saved-filters.interface';
+import { IFsFilterAction } from './action.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -30,6 +31,7 @@ export interface FilterConfig {
   case?: 'snake' | 'camel';
   button?: FilterButton;
   savedFilters?: IFilterSavedFiltersConfig;
+  actions?: IFsFilterAction[];
 }
 
 export type IFilterConfigItem =

@@ -1,0 +1,13 @@
+:host {
+  display: inline-flex;
+}
+
+.action-button + .action-button {
+  margin-left: 5px;
+}
+
+.menu-button {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+}

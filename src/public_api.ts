@@ -22,6 +22,7 @@ export { IFilterConfigTextItem } from './app/interfaces/items/text.interface';
 export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
 export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
 export { IFilterConfigSelectItem, IFilterConfigSelectIsolate } from './app/interfaces/items/select.interface';
+export { IFsFilterAction } from './app/interfaces/action.interface';
 
 export {
   FilterConfig,

@@ -55,6 +55,7 @@ import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.d
 import { FsFilterChipContentComponent } from './components/filter-chip-content/filter-chip-content.component';
 import { FsFilterSavedFilterEditComponent } from './components/saved-filter-edit/saved-filter-edit.component';
 import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/saved-filters-menu.component';
+import { FsFilterActionsComponent } from './components/actions/actions.component';
 
 
 @NgModule({
@@ -110,6 +111,7 @@ import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/sav
     FsFilterDrawerActionsComponent,
     FsFilterSavedFilterEditComponent,
     FsSavedFiltersMenuComponent,
+    FsFilterActionsComponent,
 
     FilterStatusBarDirective,
     FocusToItemDirective,

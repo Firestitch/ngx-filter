@@ -1,0 +1,112 @@
+<!-- Buttons -->
+<ng-container *ngFor="let action of actions">
+  <div class="action-button">
+    <ng-container [ngSwitch]="action.type">
+      <!-- Basic button -->
+      <button type="button"
+              *ngSwitchCase="'basic'"
+              mat-button
+              (click)="action.click($event)"
+              [ngClass]="action.classArray"
+              [disabled]="action.disabled$ | async"
+              [tabIndex]="action.tabIndex"
+      >
+        <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+      </button>
+
+      <!-- Raised button -->
+      <button type="button"
+              *ngSwitchDefault
+              mat-raised-button
+              (click)="action.click($event)"
+              [ngClass]="action.classArray"
+              [disabled]="action.disabled$ | async"
+              [tabIndex]="action.tabIndex"
+      >
+        <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+      </button>
+
+      <!-- Icon button -->
+      <button type="button"
+              *ngSwitchCase="'icon'"
+              mat-icon-button
+              (click)="action.click($event)"
+              [ngClass]="action.classArray"
+              [disabled]="action.disabled$ | async"
+              [tabIndex]="action.tabIndex"
+      >
+        <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+      </button>
+
+      <!-- Fab button -->
+      <button type="button"
+              *ngSwitchCase="'fab'"
+              mat-fab
+              (click)="action.click($event)"
+              [ngClass]="action.classArray"
+              [disabled]="action.disabled$ | async"
+              [tabIndex]="action.tabIndex"
+      >
+        <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+      </button>
+
+      <!-- Mini Fab button -->
+      <button type="button"
+              *ngSwitchCase="'mini-fab'"
+              mat-mini-fab
+              (click)="action.click($event)"
+              [ngClass]="action.classArray"
+              [disabled]="action.disabled$ | async"
+              [tabIndex]="action.tabIndex"
+      >
+        <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+      </button>
+
+      <ng-template #buttonContent let-value="value">
+        <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+      </ng-template>
+    </ng-container>
+  </div>
+</ng-container>
+<!-- /Buttons -->
+
+<!-- menu -->
+<ng-container *ngIf="kebabActions">
+  <button type="button"
+          mat-icon-button
+          class="menu-button"
+          [fsMenuTriggerFor]="rowActionsRef"
+          [ngClass]="{
+                    'hidden': !kebabActions.length,
+                    'show-mobile': !kebabActions.length && actions.length
+                  }">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <fs-menu #rowActionsRef>
+    <ng-template ngFor
+                 let-action
+                 [ngForOf]="actions"
+    >
+      <ng-template fs-menu-item
+                   class="hidden-mobile-menu-action"
+                   (click)="action.click($event)"
+                   [fsClass]="action.classArray"
+      >
+        <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+      </ng-template>
+    </ng-template>
+    <ng-template ngFor
+                 let-action
+                 [ngForOf]="kebabActions"
+    >
+      <ng-template fs-menu-item
+                   (click)="action.click($event)"
+                   [fsClass]="action.classArray"
+      >
+        <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+      </ng-template>
+    </ng-template>
+  </fs-menu>
+
+  <!-- /menu -->
+</ng-container>

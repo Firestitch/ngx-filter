@@ -10,6 +10,7 @@ import { shuffle } from 'lodash-es';
 import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 import { savedFilters } from './saved-filter';
+import { IFsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 
 @Component({
@@ -79,6 +80,7 @@ export class KitchenSinkComponent {
         { name: 'Name', value: 'name'},
         { name: 'Date', value: 'date'}
       ],
+      actions: this._filterActions(),
       sort: {
         direction: 'desc',
         value: 'name',
@@ -349,6 +351,60 @@ export class KitchenSinkComponent {
 
     //   this.conf.items.pop();
     // },3000)
+  }
+
+  private _filterActions() {
+    return [
+      {
+        label: 'Columns',
+        customize: true,
+        primary: false,
+      },
+      {
+        click: (event) => {
+          console.log(event);
+        },
+        icon: 'delete',
+        primary: false,
+        label: 'Secondary Button'
+      },
+      {
+        click: (event) => {
+          // this.list.enableOrder();
+        },
+        label: 'Kebab only button',
+        menu: true
+      },
+      {
+        label: 'Reorder',
+        menu: true,
+        click: (event) => {
+          this.filterEl.updateActions(this._doneAction());
+          this.filterEl.hideKeywordField();
+          this.filterEl.hideFiltersBtn();
+        }
+      },
+      {
+        click: (event) => {
+          console.log(event);
+        },
+        label: 'Primary Button'
+      }
+    ];
+  }
+
+  private _doneAction(): IFsFilterAction[] {
+    return [
+      {
+        label: 'Done',
+        primary: false,
+        click: () => {
+          this.filterEl.updateActions(this._filterActions());
+          this.filterEl.showKeywordField();
+          this.filterEl.showFiltersBtn();
+        },
+      },
+    ];
   }
 
   private _filterUsersByKeyword(users, keyword) {
