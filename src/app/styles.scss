@@ -1,9 +1,13 @@
 .filters-button {
   margin-left: 10px !important;
+}
 
-  &+ fs-filter-actions:not(:empty) {
-    margin-left: 5px;
-  }
+.filters-button + fs-filter-actions:not(:empty) {
+  margin-left: 5px;
+}
+
+fs-filter-actions:not(:empty) {
+  margin-left: 10px;
 }
 
 .saved-filter-last-item {
