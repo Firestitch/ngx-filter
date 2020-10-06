@@ -340,9 +340,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (item) {
       return item.value$
         .pipe(
-          filter((value) => !!value),
           map(() => {
-            return this.getItemValue(name);
+            return item.model;
           }),
         );
     } else {
