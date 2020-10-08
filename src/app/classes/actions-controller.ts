@@ -56,6 +56,10 @@ export class ActionsController implements OnDestroy {
   }
 
   public initActions(rawActions: IFsFilterAction[]) {
+    if (!rawActions || !Array.isArray(rawActions)) {
+      return;
+    }
+
     this.show();
 
     this._allActions = rawActions
