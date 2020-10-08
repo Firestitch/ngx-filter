@@ -1,4 +1,3 @@
-import { IFsFilterAction } from '@firestitch/filter';
 import { Alias, Model } from 'tsmodels';
 
 import {
@@ -9,6 +8,7 @@ import {
 } from './../interfaces/config.interface';
 import { ChangeFn, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
+import { IFsFilterAction } from '../interfaces/action.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
