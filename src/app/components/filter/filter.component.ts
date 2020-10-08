@@ -20,6 +20,8 @@ import {
 import { FormControl } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 
+import { BreakpointObserver } from '@angular/cdk/layout';
+
 import { FsStore } from '@firestitch/store';
 
 import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
@@ -40,6 +42,7 @@ import { FocusControllerService } from '../../services/focus-controller.service'
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 import { IFsFilterAction } from '../../interfaces/action.interface';
+import { ActionsController } from '../../classes/actions-controller';
 
 
 @Component({
@@ -55,6 +58,7 @@ import { IFsFilterAction } from '../../interfaces/action.interface';
     FocusControllerService,
     FsFilterItemsStore,
     SavedFiltersController,
+    ActionsController,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -113,6 +117,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     private _zone: NgZone,
     private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
+    private _actions: ActionsController,
+    private _breakpointObserver: BreakpointObserver,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._listenWhenFilterReady();
@@ -163,6 +169,18 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get keywordVisible$(): Observable<boolean> {
     return this._keywordVisible$.asObservable();
+  }
+
+  public get actionsVisible$() {
+    return this._actions.visible$;
+  }
+
+  public get actions$() {
+    return this._actions.actions$;
+  }
+
+  public get menuActions$() {
+    return this._actions.menuActions$;
   }
 
   public ngOnInit() {
@@ -461,7 +479,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param actions
    */
   public updateActions(actions: IFsFilterAction[]): void {
-    this._config.actionsController.initActions(actions);
+    this._actions.initActions(actions);
   }
 
   /**
@@ -496,14 +514,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Go through actions and check show() callback and update visible actions
    */
   public updateActionsVisibility(): void {
-    this._config.actionsController.updateActionsVisibility();
+    this._actions.updateActionsVisibility();
   }
 
   /**
    * Go through actions and check disabled() callback and update disabled state
    */
   public updateDisabledState(): void {
-    this._config.actionsController.updateDisabledState();
+    this._actions.updateDisabledState();
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
@@ -518,6 +536,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this._config = new FsFilterConfig(config);
+    this._actions.initActions(this._config.actions);
     this._filterItems.setConfig(this._config);
     this._externalParams.setConfig(this._config);
 

@@ -1,14 +1,14 @@
+import { IFsFilterAction } from '@firestitch/filter';
 import { Alias, Model } from 'tsmodels';
+
 import {
   FilterButton,
   FilterConfig,
   FsFilterPersistance,
   IFilterConfigItem
 } from './../interfaces/config.interface';
-
 import { ChangeFn, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
-import { ActionsController } from '../classes/actions-controller';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -35,23 +35,14 @@ export class FsFilterConfig extends Model {
   @Alias() public reloadWhenConfigChanged: boolean;
   @Alias() public button: FilterButton;
   @Alias() public items: IFilterConfigItem[];
+  @Alias() public actions: IFsFilterAction[];
 
   public namespace: string; // for persistance
-
-  private _actionsController = new ActionsController();
 
   constructor(data: FilterConfig = {}) {
     super();
     this._fromJSON(data);
     this._init();
-
-    if (Array.isArray(data.actions)) {
-      this._actionsController.initActions(data.actions);
-    }
-  }
-
-  public get actionsController(): ActionsController {
-    return this._actionsController;
   }
 
   private _init() {

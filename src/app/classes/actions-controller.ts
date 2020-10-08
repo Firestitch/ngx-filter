@@ -1,19 +1,30 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { skip, takeUntil } from 'rxjs/operators';
 
 import { Action } from '../models/action.model';
 import { IFsFilterAction } from '../interfaces/action.interface';
 
 
-export class ActionsController {
+@Injectable()
+export class ActionsController implements OnDestroy {
 
   private _visible$ = new BehaviorSubject(false);
   private _actions$ = new BehaviorSubject<Action[]>([]);
   private _menuActions$ = new BehaviorSubject<Action[]>([]);
+  private _destroy$ = new Subject<void>();
 
+  private readonly _mobileMedia = '(max-width: 799px)';
   private _allActions: Action[] = [];
   private _reorderAction: Action;
 
-  constructor() {}
+  constructor(
+    private _breakpointObserver: BreakpointObserver,
+  ) {
+    this._listenMobileMedia();
+  }
 
   public get menuActions(): Action[] {
     return this._menuActions$.value;
@@ -33,6 +44,15 @@ export class ActionsController {
 
   public get visible$(): Observable<boolean> {
     return this._visible$.asObservable();
+  }
+
+  public get mobileMode(): boolean {
+    return this._breakpointObserver.isMatched(this._mobileMedia);
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public initActions(rawActions: IFsFilterAction[]) {
@@ -91,13 +111,14 @@ export class ActionsController {
   private _classifyActions() {
     const kebabActions = [];
     const actions = [];
+    const mobileMode = this.mobileMode;
 
     this._allActions
       .filter((action) => {
         return action.visible;
       })
       .forEach((action) => {
-        if (action.menu) {
+        if (action.menu || mobileMode) {
           kebabActions.push(action);
         } else {
           actions.push(action);
@@ -114,5 +135,16 @@ export class ActionsController {
     } else {
       this._setActions( [...this.actions, action ]);
     }
+  }
+
+  private _listenMobileMedia() {
+    this._breakpointObserver.observe(this._mobileMedia)
+      .pipe(
+        skip(1),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._classifyActions();
+      })
   }
 }

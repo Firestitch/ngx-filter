@@ -85,18 +85,6 @@
   <fs-menu #rowActionsRef>
     <ng-template ngFor
                  let-action
-                 [ngForOf]="actions"
-    >
-      <ng-template fs-menu-item
-                   class="hidden-mobile-menu-action"
-                   (click)="action.click($event)"
-                   [fsClass]="action.classArray"
-      >
-        <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
-      </ng-template>
-    </ng-template>
-    <ng-template ngFor
-                 let-action
                  [ngForOf]="kebabActions"
     >
       <ng-template fs-menu-item

@@ -71,9 +71,9 @@
     </ng-container>
 
     <fs-filter-actions
-      *ngIf="config.actionsController.visible$ | async"
-      [actions]="config.actionsController.actions$ | async"
-      [kebabActions]="config.actionsController.menuActions$ | async">
+      *ngIf="actionsVisible$ | async"
+      [actions]="actions$ | async"
+      [kebabActions]="menuActions$ | async">
     </fs-filter-actions>
   </div>
 </ng-template>
