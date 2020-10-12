@@ -1,0 +1,70 @@
+<ng-container [ngSwitch]="action.type">
+  <!-- Basic button -->
+  <button type="button"
+          *ngSwitchCase="'basic'"
+          mat-button
+          (click)="action.click && action.click($event)"
+          [color]="action.color"
+          [ngClass]="action.classArray"
+          [disabled]="action.disabled$ | async"
+          [tabIndex]="action.tabIndex"
+  >
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <!-- Raised button -->
+  <button type="button"
+          *ngSwitchDefault
+          mat-raised-button
+          (click)="action.click && action.click($event)"
+          [color]="action.color"
+          [ngClass]="action.classArray"
+          [disabled]="action.disabled$ | async"
+          [tabIndex]="action.tabIndex"
+  >
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <!-- Icon button -->
+  <button type="button"
+          *ngSwitchCase="'icon'"
+          mat-icon-button
+          (click)="action.click && action.click($event)"
+          [color]="action.color"
+          [ngClass]="action.classArray"
+          [disabled]="action.disabled$ | async"
+          [tabIndex]="action.tabIndex"
+  >
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <!-- Fab button -->
+  <button type="button"
+          *ngSwitchCase="'fab'"
+          mat-fab
+          (click)="action.click && action.click($event)"
+          [color]="action.color"
+          [ngClass]="action.classArray"
+          [disabled]="action.disabled$ | async"
+          [tabIndex]="action.tabIndex"
+  >
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <!-- Mini Fab button -->
+  <button type="button"
+          *ngSwitchCase="'mini-fab'"
+          mat-mini-fab
+          (click)="action.click && action.click($event)"
+          [color]="action.color"
+          [ngClass]="action.classArray"
+          [disabled]="action.disabled$ | async"
+          [tabIndex]="action.tabIndex"
+  >
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <ng-template #buttonContent>
+    <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+  </ng-template>
+</ng-container>

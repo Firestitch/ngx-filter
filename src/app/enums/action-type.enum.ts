@@ -3,5 +3,5 @@ export enum ActionType {
   Raised = 'raised',
   Icon = 'icon',
   Fab = 'fab',
-  MiniFab = 'mini-fab'
+  MiniFab = 'mini-fab',
 }

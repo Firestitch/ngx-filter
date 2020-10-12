@@ -56,6 +56,8 @@ import { FsFilterChipContentComponent } from './components/filter-chip-content/f
 import { FsFilterSavedFilterEditComponent } from './components/saved-filter-edit/saved-filter-edit.component';
 import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/saved-filters-menu.component';
 import { FsFilterActionsComponent } from './components/actions/actions.component';
+import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
+import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
 
 
 @NgModule({
@@ -112,6 +114,8 @@ import { FsFilterActionsComponent } from './components/actions/actions.component
     FsFilterSavedFilterEditComponent,
     FsSavedFiltersMenuComponent,
     FsFilterActionsComponent,
+    FsFilterActionButtonComponent,
+    FsFilterActionKebabActionsComponent,
 
     FilterStatusBarDirective,
     FocusToItemDirective,

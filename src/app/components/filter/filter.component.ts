@@ -41,7 +41,7 @@ import { QueryParamsController } from '../../services/external-params/query-para
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
-import { IFsFilterAction } from '../../interfaces/action.interface';
+import { FsFilterAction } from '../../interfaces/action.interface';
 import { ActionsController } from '../../classes/actions-controller';
 
 
@@ -478,7 +478,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Update filter actions config
    * @param actions
    */
-  public updateActions(actions: IFsFilterAction[]): void {
+  public updateActions(actions: FsFilterAction[]): void {
     this._actions.initActions(actions);
   }
 

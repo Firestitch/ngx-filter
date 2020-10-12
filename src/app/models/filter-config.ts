@@ -8,7 +8,7 @@ import {
 } from './../interfaces/config.interface';
 import { ChangeFn, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
-import { IFsFilterAction } from '../interfaces/action.interface';
+import { FsFilterAction } from '../interfaces/action.interface';
 
 export const SORT_BY_FIELD = 'system_sort_by';
 export const SORT_DIRECTION_FIELD = 'system_sort_direction';
@@ -35,7 +35,7 @@ export class FsFilterConfig extends Model {
   @Alias() public reloadWhenConfigChanged: boolean;
   @Alias() public button: FilterButton;
   @Alias() public items: IFilterConfigItem[];
-  @Alias() public actions: IFsFilterAction[];
+  @Alias() public actions: FsFilterAction[];
 
   public namespace: string; // for persistance
 

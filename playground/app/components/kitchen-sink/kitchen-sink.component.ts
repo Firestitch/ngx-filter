@@ -1,16 +1,12 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 
-import { FilterConfig, ItemType } from '@firestitch/filter';
-import { FilterComponent } from '@firestitch/filter';
-import { nameValue, filter } from '@firestitch/common'
+import { ActionMode, FilterComponent, FilterConfig, ItemType } from '@firestitch/filter';
+import { filter, nameValue } from '@firestitch/common'
 
-import { BehaviorSubject, of } from 'rxjs';
-import { map, delay, tap } from 'rxjs/operators';
-import { shuffle } from 'lodash-es';
-import { ItemDateMode } from 'src/app/enums/item-date-mode.enum';
-import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
+import { of } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
 import { savedFilters } from './saved-filter';
-import { IFsFilterAction } from '../../../../src/app/interfaces/action.interface';
+import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 
 @Component({
@@ -112,175 +108,18 @@ export class KitchenSinkComponent {
           label: 'Search',
         },
         {
-          name: 'payment_method_id',
-          label: 'Payment Method',
-          type: ItemType.AutoComplete,
-          hide: true,
-          values: (keyword) => {
-            return of([]);
-          }
-        },
-        {
-          name: 'simple_select',
-          type: ItemType.Select,
-          label: 'Simple Select',
-          chipLabel: 'Special Label',
-          change: (item) => {
-
-            // const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
-            // filterItem.values.pop();
-            // //filterItem.clear();
-          },
-          values: () => {
-
-            return of([
-              { name: 'All', value: '__all' },
-              { name: 'Option 1', value: 1 },
-              { name: 'Option 2', value: 2 },
-              { name: 'Option 3', value: 3 }
-          ]).pipe(
-            delay(3000)
-          )
-          }
-        },
-        {
-          name: 'group_select',
-          type: ItemType.Select,
-          label: 'Group Select',
-          children: 'types',
-          values: () => {
-            return this.subject;
-          }
-        },
-        {
-          name: 'range',
-          type: ItemType.Range,
-          prefix: '$&nbsp;',
-          label: ['Min Price', 'Max Price'],
-          chipLabel: ['Custom Min Price', 'Custom Max Price'],
-        },
-        {
-          name: 'observable_select',
-          type: ItemType.Select,
-          label: 'Observable Select',
-          clear: false,
-          values: () => {
-
-            const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
-            console.log(filterItem);
-            return new BehaviorSubject(this.users)
-              .pipe(
-                map((users) => shuffle(nameValue(users, 'name', 'id'))),
-              )
-          }
-        },
-        {
-          name: 'autocomplete_user_id',
-          label: 'Autocomplete User',
-          type: ItemType.AutoComplete,
-          clear: false,
-          change: (item) => {},
-          values: (keyword) => {
-            return new BehaviorSubject(this.users)
-              .pipe(
-                tap(() => console.log('load autocomplete_user_id')),
-                map((users) => this._filterUsersByKeyword(users, keyword)),
-                map((users) => nameValue(users, 'name', 'id')),
-              )
-          }
-        },
-        {
-          name: 'autocompletechips_user_id',
-          label: 'Autocomplete Chips User',
-          type: ItemType.AutoCompleteChips,
-          chipImage: 'data.image',
-          chipColor: '#fff',
-          chipBackground: 'color',
-          values: (keyword) => {
-            return new BehaviorSubject(this.users)
-              .pipe(
-                tap(() => console.log('load autocomplete_user_id')),
-                map((users) => this._filterUsersByKeyword(users, keyword || '')),
-                map((users) => nameValue(users, 'name', 'id')),
-                map((users) => users.map((user, index) => {
-                  user.data = {
-                    image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
-                  };
-
-                  return user;
-                })),
-                tap(console.log),
-              )
-          }
-        },
-        {
           name: 'days_chips',
           label: 'Weekdays',
           type: ItemType.Chips,
           multiple: true,
           values: (keyword) => {
-            return new BehaviorSubject(this.weekdays)
+            return of(this.weekdays)
               .pipe(
                 map((weekdays) => nameValue(weekdays, 'name', 'id')),
               )
           }
         },
-        {
-          name: 'date',
-          type: ItemType.Date,
-          label: 'Date',
-          clear: false,
-        },
-        {
-          name: 'scroll-date',
-          type: ItemType.Date,
-          label: 'Scroll Date',
-          maxYear: (new Date()).getFullYear(),
-          mode: ItemDateMode.ScrollMonthYear,
-          clear: false,
-        },
-        {
-          name: 'date_range',
-          type: ItemType.DateRange,
-          label: [ 'From Date', 'To Date'],
-          clear: false,
-        },
-        {
-          name: 'checkbox',
-          type: ItemType.Checkbox,
-          label: 'Checkbox'
-        },
-        {
-          name: 'state',
-          type: ItemType.Select,
-          label: 'Status',
-          multiple: true,
-          values: [
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' }
-          ],
-          isolate: { label: 'Show Deleted', value: 'deleted' }
-        },
-        {
-          name: 'multiselect',
-          type: ItemType.Select,
-          label: 'Multi Select Status',
-          multiple: true,
-          values: [
-            { name: 'All', value: '__all' },
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' }
-          ]
-        },
-        {
-          name: 'max_price',
-          type: ItemType.Text,
-          label: 'Max Price',
-          prefix: '$&nbsp;',
-          suffix: '%',
-        }
+
       ],
       savedFilters: {
         load: () => {
@@ -353,12 +192,60 @@ export class KitchenSinkComponent {
     // },3000)
   }
 
-  private _filterActions() {
+  private _filterActions(): FsFilterAction[] {
     return [
+      {
+        mode: ActionMode.Menu,
+        label: 'Menu',
+        items: [
+          {
+            label: 'Test',
+            click: () => {
+              console.log('Test clicked');
+            },
+          },
+          {
+            label: 'Test 2',
+            click: () => {
+              console.log('Test 2 clicked');
+            },
+          },
+          {
+            label: 'Group 1',
+            items: [
+              {
+                label: 'Sub Item',
+                click: () => {
+                  console.log('Group 1 Sub Item clicked');
+                },
+              },
+            ]
+          },
+        ],
+      },
+      {
+        mode: ActionMode.Menu,
+        label: 'Another Menu',
+        items: [
+          {
+            label: 'Heh',
+            click: () => {
+              console.log('Heh clicked');
+            },
+          },
+          {
+            label: 'Feh',
+            click: () => {
+              console.log('Feh clicked');
+            },
+          }
+        ],
+      },
       {
         label: 'Columns',
         customize: true,
         primary: false,
+        color: 'warn',
       },
       {
         click: (event) => {
@@ -393,7 +280,7 @@ export class KitchenSinkComponent {
     ];
   }
 
-  private _doneAction(): IFsFilterAction[] {
+  private _doneAction(): FsFilterAction[] {
     return [
       {
         label: 'Done',

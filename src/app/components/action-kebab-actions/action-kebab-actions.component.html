@@ -1,21 +1,17 @@
-<!-- Buttons -->
-<ng-container *ngFor="let action of actions">
-
-  <ng-container [ngSwitch]="action.mode">
-    <ng-container *ngSwitchCase="'button'">
-      <fs-filter-action-button [action]="action"></fs-filter-action-button>
-    </ng-container>
-
-    <ng-container *ngSwitchCase="'menu'">
-      <fs-filter-action-button
-        [action]="action"
-        [fsMenuTriggerFor]="someRef">
-      </fs-filter-action-button>
-
-      <fs-menu #someRef>
+<button type="button"
+        mat-icon-button
+        class="menu-button"
+        [fsMenuTriggerFor]="kebabActionsMenu">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<fs-menu #kebabActionsMenu>
+  <ng-container *ngFor="let action of kebabActions">
+    <ng-container [ngSwitch]="action.mode">
+      <!-- Case when actions was collapsed from action with mode = 'menu'-->
+      <ng-container *ngSwitchCase="'menu'">
         <ng-container *ngFor="let childAction of action.items">
           <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
-            <fs-menu-group [label]="childAction.label">
+            <fs-menu-group [label]="'[' + action.label + '] ' + childAction.label">
               <ng-container *ngFor="let subAction of childAction.items">
                 <ng-template fs-menu-item
                              [link]="subAction.routerLink?.link"
@@ -23,7 +19,7 @@
                              [hidden]="!(subAction.visible$ | async)"
                              (click)="subAction.click($event)">
                   <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
-                  {{subAction.label}}
+                  [{{ action.label }}] {{subAction.label}}
                 </ng-template>
               </ng-container>
             </fs-menu-group>
@@ -35,17 +31,21 @@
                          [hidden]="!(childAction.visible$ | async)"
                          (click)="childAction.click($event);">
               <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
-              {{childAction.label}}
+              [{{ action.label }}] {{childAction.label}}
             </ng-template>
           </ng-template>
         </ng-container>
-      </fs-menu>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <ng-template fs-menu-item
+                     (click)="action.click($event)"
+                     [fsClass]="action.classArray"
+        >
+          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+        </ng-template>
+      </ng-container>
+
     </ng-container>
   </ng-container>
-</ng-container>
-<!-- /Buttons -->
-
-<!-- menu -->
-<ng-container *ngIf="kebabActions?.length">
-  <fs-filter-action-kebab-actions [kebabActions]="kebabActions"></fs-filter-action-kebab-actions>
-</ng-container>
+</fs-menu>

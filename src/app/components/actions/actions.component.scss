@@ -2,7 +2,12 @@
   display: inline-flex;
 }
 
-.action-button + .action-button {
+.action-button {
+  display: block;
+}
+
+.action-button + .action-button,
+fs-menu + .action-button{
   margin-left: 5px;
 }
 

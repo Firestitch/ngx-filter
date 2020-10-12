@@ -22,7 +22,16 @@ export { IFilterConfigTextItem } from './app/interfaces/items/text.interface';
 export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
 export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
 export { IFilterConfigSelectItem, IFilterConfigSelectIsolate } from './app/interfaces/items/select.interface';
-export { IFsFilterAction } from './app/interfaces/action.interface';
+export {
+  FsFilterAction,
+  FsFilterActionClickFn,
+  FsFilterActionShowFn,
+  IFsFilterMenuActionLink,
+  IFsFilterMenuActionGroupItem,
+  IFsFilterMenuActionItem,
+  IFsFilterMenuAction,
+  IFsFilterBasicAction
+} from './app/interfaces/action.interface';
 
 export {
   FilterConfig,
@@ -43,9 +52,10 @@ export {
   FilterRemoteSave
 } from './app/interfaces/saved-filters.interface';
 
-// Models
+// Enums
 export { ItemType } from './app/enums/item-type.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
+export { ActionMode } from './app/enums/action-mode.enum';
 
 // Models
 export { DateItem } from './app/models/items/date-item';

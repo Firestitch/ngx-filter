@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 
 import { Action } from '../models/action.model';
-import { IFsFilterAction } from '../interfaces/action.interface';
+import { FsFilterAction } from '../interfaces/action.interface';
 
 
 @Injectable()
@@ -55,7 +55,7 @@ export class ActionsController implements OnDestroy {
     this._destroy$.complete();
   }
 
-  public initActions(rawActions: IFsFilterAction[]) {
+  public initActions(rawActions: FsFilterAction[]) {
     if (!rawActions || !Array.isArray(rawActions)) {
       return;
     }
