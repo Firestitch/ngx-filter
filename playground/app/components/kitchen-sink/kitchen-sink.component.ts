@@ -3,10 +3,13 @@ import { Component, EventEmitter, ViewChild } from '@angular/core';
 import { ActionMode, FilterComponent, FilterConfig, ItemType } from '@firestitch/filter';
 import { filter, nameValue } from '@firestitch/common'
 
-import { of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { BehaviorSubject, of } from 'rxjs';
+import { delay, map, tap } from 'rxjs/operators';
+import { shuffle } from 'lodash-es';
+
 import { savedFilters } from './saved-filter';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
+import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 
 
 @Component({
@@ -106,6 +109,107 @@ export class KitchenSinkComponent {
           name: 'keyword',
           type: ItemType.Keyword,
           label: 'Search',
+        },
+        {
+          name: 'payment_method_id',
+          label: 'Payment Method',
+          type: ItemType.AutoComplete,
+          hide: true,
+          values: (keyword) => {
+            return of([]);
+          }
+        },
+        {
+          name: 'simple_select',
+          type: ItemType.Select,
+          label: 'Simple Select',
+          chipLabel: 'Special Label',
+          change: (item) => {
+
+            // const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
+            // filterItem.values.pop();
+            // //filterItem.clear();
+          },
+          values: () => {
+
+            return of([
+              { name: 'All', value: '__all' },
+              { name: 'Option 1', value: 1 },
+              { name: 'Option 2', value: 2 },
+              { name: 'Option 3', value: 3 }
+          ]).pipe(
+            delay(3000)
+          )
+          }
+        },
+        {
+          name: 'group_select',
+          type: ItemType.Select,
+          label: 'Group Select',
+          children: 'types',
+          values: () => {
+            return this.subject;
+          }
+        },
+        {
+          name: 'range',
+          type: ItemType.Range,
+          prefix: '$&nbsp;',
+          label: ['Min Price', 'Max Price'],
+          chipLabel: ['Custom Min Price', 'Custom Max Price'],
+        },
+        {
+          name: 'observable_select',
+          type: ItemType.Select,
+          label: 'Observable Select',
+          clear: false,
+          values: () => {
+
+            const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
+            return new BehaviorSubject(this.users)
+              .pipe(
+                map((users) => shuffle(nameValue(users, 'name', 'id'))),
+              )
+          }
+        },
+        {
+          name: 'autocomplete_user_id',
+          label: 'Autocomplete User',
+          type: ItemType.AutoComplete,
+          clear: false,
+          change: (item) => {},
+          values: (keyword) => {
+            return new BehaviorSubject(this.users)
+              .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
+                map((users) => this._filterUsersByKeyword(users, keyword)),
+                map((users) => nameValue(users, 'name', 'id')),
+              )
+          }
+        },
+        {
+          name: 'autocompletechips_user_id',
+          label: 'Autocomplete Chips User',
+          type: ItemType.AutoCompleteChips,
+          chipImage: 'data.image',
+          chipColor: '#fff',
+          chipBackground: 'color',
+          values: (keyword) => {
+            return new BehaviorSubject(this.users)
+              .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
+                map((users) => this._filterUsersByKeyword(users, keyword || '')),
+                map((users) => nameValue(users, 'name', 'id')),
+                map((users) => users.map((user, index) => {
+                  user.data = {
+                    image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
+                  };
+
+                  return user;
+                })),
+                tap(console.log),
+              )
+          }
         },
         {
           name: 'days_chips',
