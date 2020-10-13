@@ -352,6 +352,15 @@ export class KitchenSinkComponent {
         color: 'warn',
       },
       {
+        mode: ActionMode.File,
+        label: 'Upload',
+        icon: 'cloud_upload',
+        color: 'accent',
+        select: (file) => {
+          console.log('Selected File', file);
+        },
+      },
+      {
         click: (event) => {
           console.log(event);
         },

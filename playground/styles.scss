@@ -5,8 +5,10 @@
 @import '~@firestitch/style/styles';
 @import '~@firestitch/skeleton/styles';
 @import '~@firestitch/form/styles';
+@import '~@firestitch/file/styles';
 @import '../src/app/styles';
 
 @include mat-core();
 @include fs-date-picker($mat-blue);
 @include fs-style($mat-blue);
+@include fs-file($mat-blue);

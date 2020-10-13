@@ -58,6 +58,7 @@ import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/sav
 import { FsFilterActionsComponent } from './components/actions/actions.component';
 import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
 import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
+import { FsFileModule } from '@firestitch/file';
 
 
 @NgModule({
@@ -88,6 +89,7 @@ import { FsFilterActionKebabActionsComponent } from './components/action-kebab-a
     FsMenuModule,
     FsSkeletonModule,
     FsFormModule,
+    FsFileModule,
   ],
   declarations: [
     BaseItemComponent,

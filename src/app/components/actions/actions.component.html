@@ -41,6 +41,16 @@
         </ng-container>
       </fs-menu>
     </ng-container>
+
+    <ng-container *ngSwitchCase="'file'">
+      <fs-file
+        class="action-button"
+        (select)="action.fileSelected($event)"
+        (error)="action.fileError($event)"
+        (clicked)="action.click($event)">
+        <fs-filter-action-button [action]="action"></fs-filter-action-button>
+      </fs-file>
+    </ng-container>
   </ng-container>
 </ng-container>
 <!-- /Buttons -->

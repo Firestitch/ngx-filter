@@ -20,6 +20,7 @@ import { DialogExampleComponent } from './components/dialog-example';
 import { DialogComponent } from './components/dialog';
 import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
 import { FsFormModule } from '@firestitch/form';
+import { FsFileModule } from '@firestitch/file';
 
 
 @NgModule({
@@ -40,7 +41,12 @@ import { FsFormModule } from '@firestitch/form';
       { path: '', component: ExamplesComponent, pathMatch: 'full' },
       { path: 'nofilters', component: NofiltersComponent },
       { path: 'dialog', component: DialogExampleComponent }
-    ])
+    ]),
+    FsFileModule.forRoot({
+      allowDownload: true,
+      allowRemove: true,
+      dragoverMessage: true,
+    }),
   ],
   entryComponents: [
     DialogComponent

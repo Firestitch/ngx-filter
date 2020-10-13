@@ -3,7 +3,14 @@ import { ThemePalette } from '@angular/material/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ActionType } from '../enums/action-type.enum';
-import { FsFilterAction, FsFilterActionClickFn } from '../interfaces/action.interface';
+import {
+  FsFilterAction,
+  FsFilterActionClickFn,
+  FsFilterActionDisabledFn,
+  FsFilterActionShowFn,
+  FsFilterFileActionErrorFn,
+  FsFilterFileActionSelectFn,
+} from '../interfaces/action.interface';
 import { ActionMode } from '../enums/action-mode.enum';
 import { ActionMenuItem } from './action-menu-item.model';
 
@@ -21,6 +28,9 @@ export class Action {
   public type: ActionType;
   public tabIndex: number;
 
+  public fileSelected: FsFilterFileActionSelectFn;
+  public fileError: FsFilterFileActionErrorFn;
+
   public mode: ActionMode;
 
   public isReorderAction = false;
@@ -31,8 +41,8 @@ export class Action {
   private _visible$ = new BehaviorSubject<boolean>(true);
   private _disabled$ = new BehaviorSubject<boolean>(false);
 
-  private _showFn: () => boolean;
-  private _disabledFn: () => boolean;
+  private _showFn: FsFilterActionShowFn;
+  private _disabledFn: FsFilterActionDisabledFn;
 
   constructor(config: FsFilterAction = {}) {
     this._init(config);
@@ -72,7 +82,7 @@ export class Action {
   }
 
   public updateDisabledState(): void {
-    if (this._disabled$) {
+    if (this._disabledFn) {
       this.disabled = this._disabledFn();
     }
   }
@@ -85,7 +95,9 @@ export class Action {
     this.type = config.type ?? ActionType.Raised;
     this.label = config.label;
     this.mode = config.mode;
+    this.icon = config.icon;
     this._showFn = config.show;
+    this.tabIndex = config.tabIndex ?? 0;
 
     if (config.className) {
       this.className = config.className;
@@ -99,20 +111,27 @@ export class Action {
 
     switch (config.mode) {
       case ActionMode.Button: {
-        this.icon = config.icon;
         this.menu = config.menu;
         this.customize = config.customize;
-        this.tabIndex = config.tabIndex ?? 0;
-        this.primary = config.primary ?? true;
-        this._showFn = config.show;
-        this._disabledFn = config.disabled;
         this.click = config.click ?? (() => { });
+        this._disabledFn = config.disabled;
+
+        this.updateDisabledState();
       } break;
 
       case ActionMode.Menu: {
         if (config.items && Array.isArray(config.items)) {
           this.items = config.items.map((item) => new ActionMenuItem(item));
         }
+      } break;
+
+      case ActionMode.File: {
+        this.fileSelected = config.select;
+        this.fileError = config.error;
+        this.click = config.click ?? (() => { });
+        this._disabledFn = config.disabled;
+
+        this.updateDisabledState();
       } break;
     }
 

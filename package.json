@@ -52,6 +52,8 @@
     "@firestitch/dialog": "^8.2.6",
     "@firestitch/drawer": "^8.3.7",
     "@firestitch/example": "^9.1.0",
+    "@firestitch/exif-js": "^2.3.0",
+    "@firestitch/file": "^8.5.1",
     "@firestitch/form": "^9.3.4",
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/label": "^8.2.5",
@@ -69,6 +71,7 @@
     "cpx": "^1.5.0",
     "date-fns": "^2.15.0",
     "date-fns-tz": "^1.0.8",
+    "fileapi": "^2.2.0",
     "hammerjs": "^2.0.8",
     "highlight.js": "^9.15.10",
     "imask": "^6.0.3",
@@ -98,7 +101,8 @@
     "@firestitch/common": ">=8.0.5",
     "@firestitch/menu": ">=9.1.3",
     "@firestitch/skeleton": ">=8.1.4",
-    "@firestitch/form": ">=9.3.0"
+    "@firestitch/form": ">=9.3.0",
+    "@firestitch/file": ">=8.5.1"
   },
   "dependencies": {
     "tslib": "^1.10.0"

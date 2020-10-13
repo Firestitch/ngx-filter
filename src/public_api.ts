@@ -30,7 +30,11 @@ export {
   IFsFilterMenuActionGroupItem,
   IFsFilterMenuActionItem,
   IFsFilterMenuAction,
-  IFsFilterBasicAction
+  IFsFilterButtonAction,
+  IFsFilterFileAction,
+  FsFilterFileActionErrorFn,
+  FsFilterFileActionSelectFn,
+  FsFilterActionDisabledFn,
 } from './app/interfaces/action.interface';
 
 export {
