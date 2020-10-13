@@ -33,6 +33,7 @@ export class FsFilterItemsStore implements OnDestroy {
   private _visibleItems: BaseItem<IFilterConfigItem>[] = [];
   private _filtersNames = new Set<string>();
 
+  private _itemsValuesLoaded = false;
   private _hasKeyword = false;
   private _config: FsFilterConfig;
 
@@ -68,6 +69,7 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public initItems(items: IFilterConfigItem[]) {
+    this._itemsValuesLoaded = false;
     if (Array.isArray(items)) {
       this._createItems(items);
       this._updateVisibleItems();
@@ -204,6 +206,17 @@ export class FsFilterItemsStore implements OnDestroy {
     this._items = [];
     this.sortByItem = null;
     this.sortDirectionItem = null;
+  }
+
+  /**
+   * Some items might need to load async values before they will be shown
+   */
+  public prepareItems() {
+    if (!this._itemsValuesLoaded) {
+      this._itemsValuesLoaded = true;
+
+      this.loadAsyncValues();
+    }
   }
 
   private _createItems(items: IFilterConfigItem[]) {

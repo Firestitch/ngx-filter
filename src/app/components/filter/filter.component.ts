@@ -105,7 +105,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected _config: FsFilterConfig = null;
 
-  private _firstOpen = true;
   private _sort: FilterSort;
   private _filtersBtnVisible$ = new BehaviorSubject(true);
   private _keywordVisible$ = new BehaviorSubject(true);
@@ -384,14 +383,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._listenEscButton();
 
-    this.opened.next();
+    this.opened.emit();
 
     this._filterOverlay.open();
-
-    if (this._firstOpen) {
-      this._filterItems.loadAsyncValues();
-      this._firstOpen = false;
-    }
   }
 
   public clearSearchText(event) {
@@ -527,7 +521,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
       this._filterItems.destroyItems();
-      this._firstOpen = true;
     }
 
     config = {

@@ -47,6 +47,8 @@ export class FilterDrawerComponent implements DoCheck {
     @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
     @Inject(FILTER_DRAWER_DATA) private data,
   ) {
+    this._itemsStore.prepareItems();
+
     this._clear = data.clear;
     this._done = data.done;
 
