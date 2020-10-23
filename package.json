@@ -58,7 +58,7 @@
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/label": "^8.2.5",
     "@firestitch/mask": "^8.3.0",
-    "@firestitch/menu": "^9.1.3",
+    "@firestitch/menu": "^9.1.4",
     "@firestitch/message": "^8.0.1",
     "@firestitch/prompt": "^8.4.3",
     "@firestitch/scroll": "^8.0.0",
@@ -99,7 +99,7 @@
     "@firestitch/mask": ">=8.3.0",
     "@firestitch/store": ">=8.1.0",
     "@firestitch/common": ">=8.0.5",
-    "@firestitch/menu": ">=9.1.3",
+    "@firestitch/menu": ">=9.1.4",
     "@firestitch/skeleton": ">=8.1.4",
     "@firestitch/form": ">=9.3.0",
     "@firestitch/file": ">=8.5.1"
