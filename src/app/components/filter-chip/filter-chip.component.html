@@ -46,7 +46,7 @@
 </ng-template>
 
 <ng-template #chipContent let-item="item" let-type="type">
-  <ng-container *ngIf="!item.hasPendingValues && !item.initialLoading; else lodaingValues">
+  <ng-container *ngIf="!item.hasPendingValues && !item.loading; else lodaingValues">
     <fs-filter-chip-content [item]="item" [type]="type"></fs-filter-chip-content>
   </ng-container>
 

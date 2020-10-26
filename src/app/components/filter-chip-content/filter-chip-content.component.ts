@@ -8,10 +8,11 @@ import {
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
+
 
 @Component({
   selector: 'fs-filter-chip-content',
@@ -28,7 +29,7 @@ export class FsFilterChipContentComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
 
-  constructor(private _cdRef: ChangeDetectorRef,) {
+  constructor(private _cdRef: ChangeDetectorRef) {
   }
 
   public ngOnInit() {

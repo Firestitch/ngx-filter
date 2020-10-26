@@ -32,12 +32,12 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   protected _model: any;
   protected _initialized = false;
-  protected _initialLoading = false;
   protected _pendingValues = false;
-  protected _observableValues: Observable<any>;
+  protected _loading$ = new BehaviorSubject(false);
   protected _value$ = new BehaviorSubject(null);
   protected _valueChange$ = new Subject<void>();
   protected _values$ = new BehaviorSubject(null);
+  protected _valuesFn: () => Observable<unknown> | unknown;
 
   protected _destroy$ = new Subject<void>();
 
@@ -128,7 +128,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this._values$.getValue();
   }
 
-  public get values$() {
+  public get values$(): Observable<unknown> {
     return  this._values$.asObservable();
   }
 
@@ -148,12 +148,16 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this._initialized;
   }
 
-  public get initialLoading(): boolean {
-    return this._initialLoading;
+  public get loading$(): Observable<boolean> {
+    return this._loading$.asObservable();
   }
 
-  public set initialLoading(value: boolean) {
-    this._initialLoading = value;
+  public get loading(): boolean {
+    return this._loading$.getValue();
+  }
+
+  public set loading(value: boolean) {
+    this._loading$.next(value);
   }
 
   public valueChanged() {
@@ -189,12 +193,11 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
     const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
 
-    if (isFunction(this.values) && !isAutocomplete) {
-      const valuesResult = this.values();
+    if (this._valuesFn && !isAutocomplete) {
+      const valuesResult = this._valuesFn();
 
       if (isObservable(valuesResult)) {
         this._pendingValues = true;
-        this._observableValues = valuesResult;
       } else {
         this.values = valuesResult;
 
@@ -210,10 +213,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public loadAsyncValues(reload = true) {
-    if (reload || (!this.initialLoading && this.hasPendingValues)) {
-      this.initialLoading = true;
+    if (reload || (!this.loading && this.hasPendingValues)) {
+      this.loading = true;
 
-      this._observableValues
+      (this._valuesFn() as Observable<unknown>)
         .pipe(
           take(1),
           takeUntil(this._destroy$)
@@ -221,7 +224,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
         .subscribe((values) => {
           this.values = values;
           this._pendingValues = false;
-          this.initialLoading = false;
+          this.loading = false;
           this._init();
           this._validateModel();
           this._initialized = true;
@@ -229,7 +232,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
     }
   }
-
 
   public clear() {
     if (this.isTypeRange || this.isTypeDateRange || this.isTypeDateTimeRange) {
@@ -269,7 +271,11 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.hide = item.hide;
     this.clearAllowed = item.clear ?? true;
 
-    this.values = item.values;
+    if (isFunction(item.values)) {
+      this._valuesFn = item.values;
+    } else {
+      this.values = item.values;
+    }
   };
 
   protected _initDefaultModel() {
