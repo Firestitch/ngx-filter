@@ -40,3 +40,6 @@ dist/*
 /package
 /demo
 /docs
+
+# Specs
+coverage
