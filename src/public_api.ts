@@ -60,6 +60,7 @@ export {
 export { ItemType } from './app/enums/item-type.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
 export { ActionMode } from './app/enums/action-mode.enum';
+export { ActionType } from './app/enums/action-type.enum';
 
 // Models
 export { DateItem } from './app/models/items/date-item';
