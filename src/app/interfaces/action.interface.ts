@@ -53,12 +53,14 @@ export interface IFsFilterFileAction extends IFsFilterBaseAction {
 
 export interface IFsFilterMenuActionGroupItem {
   label?: string;
+  icon?: string;
   show?: FsFilterActionShowFn;
   items: IFsFilterMenuActionItem[];
 }
 
 export interface IFsFilterMenuActionItem {
   label?: string;
+  icon?: string;
   click?: FsFilterActionClickFn;
   link?: IFsFilterMenuActionLink;
   show?: FsFilterActionShowFn;

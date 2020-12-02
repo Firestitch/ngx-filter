@@ -75,6 +75,7 @@ export class ActionMenuItem {
 
   private _init(config: IFsFilterMenuActionGroupItem | IFsFilterMenuActionItem) {
     this.label = config.label;
+    this.icon = config.icon;
     this._showFn = config.show;
 
     if ('items' in config) {

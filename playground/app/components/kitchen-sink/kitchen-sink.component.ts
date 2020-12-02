@@ -333,6 +333,7 @@ export class KitchenSinkComponent {
         items: [
           {
             label: 'Heh',
+            icon: 'image',
             click: () => {
               console.log('Heh clicked');
             },
