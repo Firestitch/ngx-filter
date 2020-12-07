@@ -1,6 +1,12 @@
 import { Component, EventEmitter, ViewChild } from '@angular/core';
 
-import { ActionMode, FilterComponent, FilterConfig, ItemType } from '@firestitch/filter';
+import {
+  ActionMode,
+  FilterComponent,
+  FilterConfig,
+  ItemDateMode,
+  ItemType
+} from '@firestitch/filter';
 import { filter, nameValue } from '@firestitch/common'
 
 import { BehaviorSubject, of } from 'rxjs';
@@ -223,7 +229,62 @@ export class KitchenSinkComponent {
               )
           }
         },
-
+        {
+          name: 'date',
+          type: ItemType.Date,
+          label: 'Date',
+          clear: false,
+        },
+        {
+          name: 'scroll-date',
+          type: ItemType.Date,
+          label: 'Scroll Date',
+          maxYear: (new Date()).getFullYear(),
+          mode: ItemDateMode.ScrollMonthYear,
+          clear: false,
+        },
+        {
+          name: 'date_range',
+          type: ItemType.DateRange,
+          label: [ 'From Date', 'To Date'],
+          clear: false,
+        },
+        {
+          name: 'checkbox',
+          type: ItemType.Checkbox,
+          label: 'Checkbox'
+        },
+        {
+          name: 'state',
+          type: ItemType.Select,
+          label: 'Status',
+          multiple: true,
+          values: [
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' }
+          ],
+          isolate: { label: 'Show Deleted', value: 'deleted' }
+        },
+        {
+          name: 'multiselect',
+          type: ItemType.Select,
+          label: 'Multi Select Status',
+          multiple: true,
+          values: [
+            { name: 'All', value: '__all' },
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' }
+          ]
+        },
+        {
+          name: 'max_price',
+          type: ItemType.Text,
+          label: 'Max Price',
+          prefix: '$&nbsp;',
+          suffix: '%',
+        }
       ],
       savedFilters: {
         load: () => {
