@@ -48,7 +48,11 @@ export class SelectMultipleComponent {
     if (filter.isolate.enabled) {
       filter.model = filter.multiple ? [filter.isolate.value] : filter.isolate.value;
     } else {
-      filter.model = filter.multiple ? [] : null;
+      if (filter.multiple) {
+        filter.model = filter.defaultValue ? filter.defaultValue : [];
+      } else {
+        filter.model = filter.defaultValue ? filter.defaultValue : null;
+      }
     }
   }
 }
