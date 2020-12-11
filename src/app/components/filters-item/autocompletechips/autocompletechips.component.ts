@@ -52,4 +52,8 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
     this.item.clear();
     this.itemChange()
   }
+
+  public fetch = (keyword) => {
+    return this.item.valuesFn(keyword);
+  }
 }

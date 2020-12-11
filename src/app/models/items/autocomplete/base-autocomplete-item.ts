@@ -10,6 +10,10 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
 
   public fetchOnFocus: boolean;
 
+  public get valuesFn() {
+    return this._valuesFn;
+  }
+
   protected _validateModel() {
   }
 
