@@ -44,7 +44,7 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
   protected _init() {}
 
   protected _clearValue() {
-    this.model = null;
+    this.model = this.defaultValue ?? null;
     this.search = '';
   }
 }

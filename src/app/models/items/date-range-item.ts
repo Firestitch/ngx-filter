@@ -13,6 +13,6 @@ export class DateRangeItem extends BaseDateRangeItem {
   public readonly type: ItemType.DateRange;
 
   protected _clearValue() {
-    this.model = {};
+    this.model = this.defaultValue ?? {};
   }
 }

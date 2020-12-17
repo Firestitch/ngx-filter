@@ -26,6 +26,6 @@ export class DateItem extends BaseDateItem {
   }
 
   protected _clearValue() {
-    this.model = null;
+    this.model = this.defaultValue ?? null;
   }
 }

@@ -74,7 +74,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   }
 
   protected _clearValue() {
-    this.model = [];
+    this.model = this.defaultValue ?? [];
     this.search = '';
   }
 

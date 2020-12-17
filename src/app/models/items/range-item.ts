@@ -98,7 +98,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   }
 
   protected _clearValue() {
-    this.model = {};
+    this.model = this.defaultValue ?? {};
   }
 
 }

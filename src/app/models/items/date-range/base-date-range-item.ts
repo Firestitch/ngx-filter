@@ -139,7 +139,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   }
 
   protected _clearValue() {
-    this.model = {};
+    this.model = this.defaultValue ?? {};
   }
 
 }

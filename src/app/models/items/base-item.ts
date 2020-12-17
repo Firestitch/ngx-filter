@@ -287,6 +287,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   protected _clearValue() {
-    this.model = null;
+    this.model = this.defaultValue ?? null;
   }
 }
