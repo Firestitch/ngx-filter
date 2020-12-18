@@ -15,4 +15,6 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   default?: unknown;
   change?: (item: BaseItem<any>) => void;
   clear?: boolean;
+  disablePersist?: boolean;
+  disableQueryParams?: boolean;
 }

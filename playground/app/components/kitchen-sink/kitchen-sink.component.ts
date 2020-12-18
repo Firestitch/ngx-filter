@@ -129,6 +129,7 @@ export class KitchenSinkComponent {
           name: 'simple_select',
           type: ItemType.Select,
           label: 'Simple Select',
+          disableQueryParams: true,
           chipLabel: 'Special Label',
           change: (item) => {
 
@@ -152,6 +153,7 @@ export class KitchenSinkComponent {
           name: 'group_select',
           type: ItemType.Select,
           label: 'Group Select',
+          disablePersist: true,
           children: 'types',
           values: () => {
             return this.subject;

@@ -20,6 +20,7 @@ import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-it
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { TextItem } from '../models/items/text-item';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { IFilterConfigBaseItem } from '@firestitch/filter';
 
 
 @Injectable()
@@ -31,7 +32,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
   private _items: BaseItem<IFilterConfigItem>[] = [];
   private _visibleItems: BaseItem<IFilterConfigItem>[] = [];
-  private _filtersNames = new Set<string>();
+  private _itemsByName = new Map<string, BaseItem<IFilterConfigItem>>();
 
   private _itemsValuesLoaded = false;
   private _hasKeyword = false;
@@ -63,9 +64,13 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public setConfig(config) {
-    this._filtersNames.clear();
+    this._itemsByName.clear();
     this._config = config;
     this.initItems(config.items);
+  }
+
+  public getItemByName(name: string): BaseItem<IFilterConfigBaseItem> {
+    return this._itemsByName.get(name);
   }
 
   public initItems(items: IFilterConfigItem[]) {
@@ -156,10 +161,13 @@ export class FsFilterItemsStore implements OnDestroy {
     }, {});
   }
 
-  public valuesAsQuery(onlyPresented = false): Record<string, unknown> {
+  public valuesAsQuery(
+    onlyPresented = false,
+    items: BaseItem<IFilterConfigItem>[] = null
+  ): Record<string, unknown> {
     const params = {};
 
-    this.items.forEach((filterItem: BaseItem<any>) => {
+    (items || this.items).forEach((filterItem: BaseItem<any>) => {
       Object.assign(params, filterItem.valueAsQuery);
     });
 
@@ -222,10 +230,10 @@ export class FsFilterItemsStore implements OnDestroy {
   private _createItems(items: IFilterConfigItem[]) {
     this._items = items
       .filter((item) => {
-        if (this._filtersNames.has(item.name)) {
+        if (this._itemsByName.has(item.name)) {
           throw Error('Filter init error. Items name must be unique.');
         } else {
-          this._filtersNames.add(item.name);
+          this._itemsByName.set(item.name, null);
 
           return true;
         }
@@ -236,6 +244,8 @@ export class FsFilterItemsStore implements OnDestroy {
         if (filterItem.type === ItemType.Keyword) {
           this._hasKeyword = true;
         }
+
+        this._itemsByName.set(item.name, filterItem);
 
         return filterItem;
       });

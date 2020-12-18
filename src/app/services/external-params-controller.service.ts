@@ -151,13 +151,8 @@ export class ExternalParamsController implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        const params = buildQueryParams(
-          this._itemsStore.valuesAsQuery(),
-          this._itemsStore.items,
-        );
-
-        this._queryParams.writeStateToQueryParams(params);
-        this._persistanceStore.save(params);
+        this._saveQueryParams();
+        this._savePersistedParams();
       });
   }
 
@@ -179,5 +174,29 @@ export class ExternalParamsController implements OnDestroy {
       .subscribe(() => {
         this.savedFiltersController.resetActiveFilter();
       });
+  }
+
+  private _saveQueryParams() {
+    const targetItems = this._itemsStore.items
+      .filter((item) => !item.queryParamsDisabled);
+
+    const params = buildQueryParams(
+      this._itemsStore.valuesAsQuery(false, targetItems),
+      targetItems,
+    );
+
+    this._queryParams.writeStateToQueryParams(params);
+  }
+
+  private _savePersistedParams() {
+    const targetItems = this._itemsStore.items
+      .filter((item) => !item.persistanceDisabled);
+
+    const params = buildQueryParams(
+      this._itemsStore.valuesAsQuery(false, targetItems),
+      targetItems,
+    );
+
+    this._persistanceStore.save(params);
   }
 }

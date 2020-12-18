@@ -24,6 +24,9 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public persistedValue: unknown;
   public clearAllowed: boolean;
 
+  public persistanceDisabled: boolean;
+  public queryParamsDisabled: boolean;
+
   // Internal properties
 
   public change: (item: BaseItem<T>) => void;
@@ -270,6 +273,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.change = item.change;
     this.hide = item.hide;
     this.clearAllowed = item.clear ?? true;
+    this.persistanceDisabled = item.disablePersist ?? false;
+    this.queryParamsDisabled = item.disableQueryParams ?? false;
 
     if (isFunction(item.values)) {
       this._valuesFn = item.values;
