@@ -20,7 +20,7 @@ import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-it
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { TextItem } from '../models/items/text-item';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
-import { IFilterConfigBaseItem } from '@firestitch/filter';
+import { IFilterConfigBaseItem } from '../interfaces/items/base.interface';
 
 
 @Injectable()
