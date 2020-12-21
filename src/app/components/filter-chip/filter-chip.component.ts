@@ -5,16 +5,16 @@ import {
   OnInit,
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, Subject, timer } from 'rxjs';
+import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil } from 'rxjs/operators';
 
 import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { RangeItem } from '../../models/items/range-item';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
-import { FocusControllerService } from '../../services/focus-controller.service';
 import { CheckboxItem } from '../../models/items/checkbox-item';
+import { FocusControllerService } from '../../services/focus-controller.service';
 
 
 @Component({
@@ -29,6 +29,13 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   public itemVisible: boolean;
   public rangeItem: boolean;
+
+  public chipDelayedRender$: Observable<boolean>;
+
+  private _chipRenderTimer$ = timer(500)
+    .pipe(
+      mapTo(true),
+    );
 
   private _destroy$ = new Subject();
 
@@ -58,6 +65,8 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
           this._updateVisibility();
           this._cdRef.markForCheck();
         });
+
+      this._initDelayRender();
     }
   }
 
@@ -95,5 +104,17 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   private _updateVisibility() {
     this.itemVisible = !this.item.isTypeCheckbox
       || this.item.value === (this.item as CheckboxItem).checked;
+  }
+
+  private _initDelayRender() {
+    this.chipDelayedRender$ = combineLatest([
+      this.item.values$,
+      this._chipRenderTimer$.pipe(startWith(false))
+    ])
+      .pipe(
+        map(([values, timerValue]) => {
+          return !!values || timerValue;
+        }),
+      );
   }
 }
