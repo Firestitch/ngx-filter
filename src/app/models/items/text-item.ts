@@ -46,7 +46,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
   protected _init() {}
 
-  protected _clearValue() {
-    this.model = this.defaultValue ?? '';
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? '';
   }
 }

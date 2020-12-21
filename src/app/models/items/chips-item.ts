@@ -95,8 +95,8 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     }
   }
 
-  protected _clearValue() {
-    this.model = this.defaultValue ?? [];
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? [];
   }
 
 }

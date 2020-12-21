@@ -44,7 +44,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   protected _destroy$ = new Subject<void>();
 
-  private _clear$ = new Subject<void>();
+  private _clear$ = new Subject<unknown>();
 
   constructor(
     itemConfig: T,
@@ -236,7 +236,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
   }
 
-  public clear() {
+  public clear(defaultValue: unknown = undefined) {
     if (this.isTypeRange || this.isTypeDateRange || this.isTypeDateTimeRange) {
       console.warn(`
         Filter ${this.name} can not be cleared with .clear() method!
@@ -244,8 +244,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
       `)
     }
 
-    this._clear$.next();
-    this._clearValue();
+    this._clear$.next(defaultValue);
+    this._clearValue(defaultValue);
   };
 
   public getChipsContent(type): string {
@@ -291,7 +291,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
   }
 
-  protected _clearValue() {
-    this.model = this.defaultValue ?? null;
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? null;
   }
 }

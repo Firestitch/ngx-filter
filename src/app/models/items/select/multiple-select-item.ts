@@ -70,9 +70,9 @@ export class MultipleSelectItem extends BaseSelectItem {
     });
   }
 
-  protected _clearValue() {
-    super._clearValue();
+  protected _clearValue(defaultValue: unknown = undefined) {
+    super._clearValue(defaultValue);
 
-    this.model = this.defaultValue ?? [];
+    this.model = defaultValue ?? [];
   }
 }

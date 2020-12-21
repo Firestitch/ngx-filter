@@ -73,8 +73,8 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     super._parseConfig(item);
   }
 
-  protected _clearValue() {
-    this.model = this.defaultValue ?? [];
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? [];
     this.search = '';
   }
 

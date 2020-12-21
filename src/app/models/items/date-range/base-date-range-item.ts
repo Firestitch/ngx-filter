@@ -7,7 +7,10 @@ import { isDate, isValid, parse, parseISO } from 'date-fns';
 import { clone, isObject, isString } from 'lodash-es';
 import { BaseItem } from '../base-item';
 import { getRangeName } from '../../../helpers/get-range-name';
-import { IFilterConfigDateRangeItem } from '../../../interfaces/items/date-range.interface';
+import {
+  IFilterConfigDateRangeItem,
+  IFilterItemDefaultDateRange,
+} from '../../../interfaces/items/date-range.interface';
 
 
 export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeItem> {
@@ -94,15 +97,29 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     }
   }
 
-  public clearDateRange(type: 'from' | 'to' = null) {
+  public clearDateRange(type: 'from' | 'to' = null, defaultValue: IFilterItemDefaultDateRange = undefined) {
     if (type === 'from') {
       delete this.model.from;
+
+      if (defaultValue?.from) {
+        this.model.from = defaultValue.from;
+      }
+
       this.model = { ...this.model };
     } else if (type === 'to') {
       delete this.model.to;
+
+      if (defaultValue?.to) {
+        this.model.to = defaultValue.to;
+      }
+
       this.model = { ...this.model };
     } else {
-      this.model = {};
+      if (defaultValue) {
+        this.model = { ...defaultValue };
+      } else {
+        this.model = {};
+      }
     }
   }
 
@@ -138,7 +155,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     }
   }
 
-  protected _clearValue() {
+  protected _clearValue(defaultValue: unknown = undefined) {
     this.model = this.defaultValue ?? {};
   }
 

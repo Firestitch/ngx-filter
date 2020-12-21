@@ -68,13 +68,13 @@ export class SimpleSelectItem extends BaseSelectItem {
     }
   }
 
-  protected _clearValue() {
-    super._clearValue();
+  protected _clearValue(defaultValue: unknown = undefined) {
+    super._clearValue(defaultValue);
 
     const value = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
       ? '__all'
       : null;
 
-    this.model = this.defaultValue ?? value;
+    this.model = defaultValue ?? value;
   }
 }

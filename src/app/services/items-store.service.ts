@@ -85,11 +85,11 @@ export class FsFilterItemsStore implements OnDestroy {
   public filtersClear() {
     this.items.forEach((item) => {
       if (item instanceof RangeItem) {
-        item.clearRange();
+        item.clearRange(null, item.defaultValue);
       } else if (item instanceof BaseDateRangeItem) {
-        item.clearDateRange();
+        item.clearDateRange(null, item.defaultValue);
       } else {
-        item.clear();
+        item.clear(item.defaultValue);
       }
     });
 
@@ -97,7 +97,7 @@ export class FsFilterItemsStore implements OnDestroy {
       if (this._config.sort) {
         this.sortByItem.model = this._config.sort.value
       } else {
-        this.sortByItem.clear();
+        this.sortByItem.clear(this.sortByItem.defaultValue);
       }
     }
 
@@ -105,7 +105,7 @@ export class FsFilterItemsStore implements OnDestroy {
       if (this._config.sort) {
         this.sortDirectionItem.model = this._config.sort.direction
       } else {
-        this.sortDirectionItem.clear();
+        this.sortDirectionItem.clear(this.sortDirectionItem.defaultValue);
       }
     }
 

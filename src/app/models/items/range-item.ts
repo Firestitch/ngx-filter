@@ -2,7 +2,10 @@ import { clone, isObject } from 'lodash-es';
 import { isEmpty } from '@firestitch/common';
 
 import { getRangeName } from '../../helpers/get-range-name';
-import { IFilterConfigRangeItem } from '../../interfaces/items/range.interface';
+import {
+  IFilterConfigRangeItem,
+  IFilterItemDefaultRange,
+} from '../../interfaces/items/range.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseItem } from './base-item';
@@ -63,15 +66,29 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     }
   }
 
-  public clearRange(type: 'from' | 'to' = null) {
+  public clearRange(type: 'from' | 'to' = null, defaultValue: IFilterItemDefaultRange = undefined) {
     if (type === 'from') {
       delete this.model.min;
+
+      if (defaultValue?.min) {
+        this.model.min = defaultValue.min;
+      }
+
       this.model = { ...this.model };
     } else if (type === 'to') {
       delete this.model.max;
+
+      if (defaultValue?.max) {
+        this.model.max = defaultValue.max;
+      }
+
       this.model = { ...this.model };
     } else {
-      this.model = {};
+      if (defaultValue) {
+        this.model = { ...defaultValue };
+      } else {
+        this.model = {};
+      }
     }
   }
 
@@ -96,9 +113,4 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
       this.model = this.defaultValue || {};
     }
   }
-
-  protected _clearValue() {
-    this.model = this.defaultValue ?? {};
-  }
-
 }

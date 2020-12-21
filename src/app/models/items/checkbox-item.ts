@@ -64,8 +64,8 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     }
   }
 
-  protected _clearValue() {
-    this.model = this.defaultValue ?? false;
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? false;
   }
 
 }
