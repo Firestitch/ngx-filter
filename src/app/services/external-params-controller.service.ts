@@ -113,19 +113,15 @@ export class ExternalParamsController implements OnDestroy {
     this._shouldResetSavedFilters = shouldResetSavedFilters;
     this._itemsStore.updateItemsWithValues(params);
 
-    this._queryParams.writeStateToQueryParams(params);
-    this._persistanceStore.save(params);
+    this._saveQueryParams();
+    this._savePersistedParams();
   }
 
   public _initItemsValues() {
     this._itemsStore.initItemValues(this.params);
 
-    const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery(),
-      this._itemsStore.items,
-    );
-    this._queryParams.writeStateToQueryParams(params);
-    this._persistanceStore.save(params);
+    this._saveQueryParams();
+    this._savePersistedParams();
   }
 
   private _initPersistance() {
