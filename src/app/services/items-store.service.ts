@@ -229,6 +229,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
   private _createItems(items: IFilterConfigItem[]) {
     this._items = items
+      .filter((item) => !item.disable)
       .filter((item) => {
         if (this._itemsByName.has(item.name)) {
           throw Error('Filter init error. Items name must be unique.');

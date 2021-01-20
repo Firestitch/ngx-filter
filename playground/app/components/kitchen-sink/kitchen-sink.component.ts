@@ -117,6 +117,14 @@ export class KitchenSinkComponent {
           label: 'Search',
         },
         {
+          name: 'not_used',
+          type: ItemType.Select,
+          label: 'Not Used',
+          default: 1,
+          values: () => [],
+          disable: true,
+        },
+        {
           name: 'payment_method_id',
           label: 'Payment Method',
           type: ItemType.AutoComplete,
