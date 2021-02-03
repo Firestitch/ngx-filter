@@ -2,7 +2,7 @@ import { isEmpty } from '@firestitch/common';
 import { format, simpleFormat } from '@firestitch/date';
 import { ItemType } from '../../../enums/item-type.enum';
 
-import { isDate, isValid, parse, parseISO } from 'date-fns';
+import { isDate, isValid, parseISO } from 'date-fns';
 
 import { clone, isObject, isString } from 'lodash-es';
 import { BaseItem } from '../base-item';
@@ -129,10 +129,10 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   protected _setModel(value) {
     if (value) {
       if (value.from && (!isDate(value.from) || !isValid(value.from))) {
-        value.from = parse(value.from, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        value.from = parseISO(value.from);
       }
       if (value.to && (!isDate(value.to) || !isValid(value.to))) {
-        value.to = parse(value.to, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        value.to = parseISO(value.to);
       }
     }
 

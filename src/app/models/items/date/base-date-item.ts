@@ -1,5 +1,5 @@
 import { simpleFormat } from '@firestitch/date';
-import { isDate, isValid, parse } from 'date-fns';
+import { isDate, isValid, parseISO } from 'date-fns';
 import { clone } from 'lodash-es';
 
 import { BaseItem } from '../base-item';
@@ -40,7 +40,7 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
   protected _setModel(value) {
     if (value) {
       if (!isDate(value) || !isValid(value)) {
-        value = parse(value, 'yyyy-MM-dd\'T\'HH:mm:ssxxxxx', new Date());
+        value = parseISO(value);
       }
     }
 
