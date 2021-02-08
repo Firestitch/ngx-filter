@@ -71,7 +71,11 @@ export class FsFilterChipContentComponent implements OnInit, OnDestroy {
         const label = getLabelFromArray(this.item.label, this.type);
         return `${label}: ${result}`;
       } else {
-        return `${this.item.label}: ${result}`;
+        if (this.item.isTypeCheckbox) {
+          return result;
+        } else {
+          return `${this.item.label}: ${result}`;
+        }
       }
     }
   }
