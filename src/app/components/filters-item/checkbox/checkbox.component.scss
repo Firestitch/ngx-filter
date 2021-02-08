@@ -1,3 +1,7 @@
-fs-label-field {
-  margin: 0
+@import '~@angular/material/theming';
+
+
+.mat-checkbox {
+  display: block;
+  padding: 1.25em 0;
 }
