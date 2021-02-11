@@ -158,6 +158,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._filterItems.visibleItems;
   }
 
+  public get hasVisibleItemOrSorting(): boolean {
+    return this.visibleItems.length > 0 || !!this._filterItems.sortByItem
+  }
+
   public get hasKeyword() {
     return this._filterItems.hasKeyword;
   }
@@ -377,7 +381,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       return this._destroyFilterDrawer();
     }
 
-    if (!this.visibleItems.length) {
+    if (!this.hasVisibleItemOrSorting) {
       return;
     }
 
