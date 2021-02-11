@@ -4,10 +4,8 @@ import { Action } from '../../models/action.model';
 
 @Component({
   selector: 'fs-filter-action-kebab-actions',
+  styleUrls: ['./action-kebab-actions.component.scss'],
   templateUrl: './action-kebab-actions.component.html',
-  host: {
-    class: 'action-button',
-  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterActionKebabActionsComponent {

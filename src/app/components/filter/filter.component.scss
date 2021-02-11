@@ -121,27 +121,22 @@ fs-filter {
 
   .filter-actions {
     display: flex;
-    align-items: baseline;
-  }
-
-  .infinite-records {
-    color: #999;
-    font-size: 13px;
-    margin-left: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-
-    .order-toggle {
-      cursor: pointer;
-      padding-left: 4px;
-    }
+    align-items: center;
   }
 
   button.reload {
     margin-left: -40px;
     right: -9px;
+  }
+}
+
+.filters-button + fs-filter-actions:not(:empty) {
+  margin-left: 5px;
+}
+
+@media screen and (min-width: 599px) {
+  .filters-button {
+    margin-left: 10px;
   }
 }
 
@@ -154,6 +149,11 @@ fs-filter {
     height: 36px;
     border-radius: 50%;
     box-shadow: unset !important;
+    margin-left: 5px;
+
+    + fs-filter-actions {
+      margin-left: 0;
+    }
   }
 }
 
