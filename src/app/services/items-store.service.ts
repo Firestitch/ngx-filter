@@ -265,7 +265,7 @@ export class FsFilterItemsStore implements OnDestroy {
           })
       });
 
-    if (this._config.sortValues) {
+    if (this._config.sortValues?.length) {
       this.sortByItem.valueChange$
         .pipe(
           takeUntil(this.sortByItem.destroy$),
@@ -290,7 +290,7 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   private _createSortingItems(p) {
-    if (this._config.sortValues) {
+    if (this._config.sortValues?.length > 0) {
       const sortByItem = {
         name: SORT_BY_FIELD,
         type: ItemType.Select,
