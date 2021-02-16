@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
@@ -31,7 +31,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public keywordItem: TextItem = null;
 
   private _items: BaseItem<IFilterConfigItem>[] = [];
-  private _visibleItems: BaseItem<IFilterConfigItem>[] = [];
+  private _visibleItems$ = new BehaviorSubject<BaseItem<IFilterConfigItem>[]>([]);
   private _itemsByName = new Map<string, BaseItem<IFilterConfigItem>>();
 
   private _itemsValuesLoaded = false;
@@ -48,7 +48,15 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public get visibleItems(): BaseItem<IFilterConfigItem>[] {
-    return this._visibleItems;
+    return this._visibleItems$.getValue();
+  }
+
+  public get visibleItems$(): Observable<BaseItem<IFilterConfigItem>[]> {
+    return this._visibleItems$.asObservable();
+  }
+
+  public set visibleItems(items: BaseItem<IFilterConfigItem>[]) {
+    this._visibleItems$.next(items);
   }
 
   public get hasKeyword(): boolean {
@@ -77,7 +85,7 @@ export class FsFilterItemsStore implements OnDestroy {
     this._itemsValuesLoaded = false;
     if (Array.isArray(items)) {
       this._createItems(items);
-      this._updateVisibleItems();
+      this.updateVisibleItems();
       this._setKeywordItem();
     }
   }
@@ -227,6 +235,11 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
+  public updateVisibleItems(): void {
+    this.visibleItems = this.items
+      .filter((item) => !item.isTypeKeyword && !item.hide);
+  }
+
   private _createItems(items: IFilterConfigItem[]) {
     this._items = items
       .filter((item) => !item.disable)
@@ -282,11 +295,6 @@ export class FsFilterItemsStore implements OnDestroy {
           this._itemsChange$.next(this.sortDirectionItem);
         });
     }
-  }
-
-  private _updateVisibleItems() {
-    this._visibleItems = this.items
-      .filter((item) => !item.isTypeKeyword && !item.hide);
   }
 
   private _createSortingItems(p) {

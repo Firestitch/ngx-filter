@@ -43,6 +43,7 @@ import { SavedFiltersController } from '../../services/external-params/saved-fil
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import { ActionsController } from '../../classes/actions-controller';
+import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 
 
 @Component({
@@ -354,6 +355,49 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       return null;
     }
   }
+
+  public showItem(name: string) {
+    const item = this.getItem(name);
+
+    if (item) {
+      item.hide = false;
+
+      this._filterItems.updateVisibleItems();
+    }
+  }
+
+  public hideItem(name: string) {
+    const item = this.getItem(name);
+
+    if (!item) { return }
+
+    item.hide = true;
+
+    this._filterItems.updateVisibleItems();
+  }
+
+  public clearItem(name: string) {
+    const item = this.getItem(name);
+
+    if (!item) { return }
+
+    item.clear();
+  }
+
+  public updateItemConfig(
+    name: string,
+    params: IUpdateFilterItemConfig
+  ): void {
+    const item = this.getItem(name);
+
+    if (!item) { return }
+
+    item.label = params.label ?? item.label;
+    item.chipLabel = params.chipLabel ?? item.chipLabel;
+
+    this._filterItems.updateVisibleItems();
+  }
+
 
   public getItemValueChange$(name: string): Observable<any> | null {
     const item = this.items.find((i) => i.name === name);

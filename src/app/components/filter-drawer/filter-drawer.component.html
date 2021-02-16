@@ -9,7 +9,7 @@
     <div class="overflow-shadow filter-items">
       <div class="overflow-shadow-content">
         <ng-container *fsSkeleton="(externalParams.pending$ | async) !== true">
-          <filter-item *ngFor="let filterItem of items"
+          <filter-item *ngFor="let filterItem of items$ | async"
                        class="filter-group"
                        [item]="filterItem">
           </filter-item>

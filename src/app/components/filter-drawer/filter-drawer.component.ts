@@ -4,13 +4,14 @@ import {
   Component,
   DoCheck,
   Input,
-  IterableDiffer,
-  IterableDiffers,
   Inject,
   HostListener
 } from '@angular/core';
-import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { OverlayRef } from '@angular/cdk/overlay';
+
+import { Observable } from 'rxjs';
+
+import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
 import { FsFilterItemsStore } from '../../services/items-store.service';
@@ -24,7 +25,7 @@ type Item = BaseItem<any>;
   // Commented out because filter items are not updating with a delayed observable. Need to figure this out.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDrawerComponent implements DoCheck {
+export class FilterDrawerComponent {
 
   @HostListener('window:resize')
   updateWindowWidth() {
@@ -33,7 +34,6 @@ export class FilterDrawerComponent implements DoCheck {
 
   @Input() public inline = false;
 
-  protected _differ: IterableDiffer<Item>;
   protected _clear: Function;
   protected _done: Function;
 
@@ -41,7 +41,6 @@ export class FilterDrawerComponent implements DoCheck {
 
   constructor(
     public externalParams: ExternalParamsController,
-    protected _differs: IterableDiffers,
     protected _cd: ChangeDetectorRef,
     protected _itemsStore: FsFilterItemsStore,
     @Inject(FILTER_DRAWER_OVERLAY) private overlayRef: OverlayRef,
@@ -52,15 +51,11 @@ export class FilterDrawerComponent implements DoCheck {
     this._clear = data.clear;
     this._done = data.done;
 
-    this._differ = this._differs.find(this.items).create<Item>((index, item) => {
-      return item.model;
-    });
-
     this.updateWindowWidth();
   }
 
-  public get items(): Item[] {
-    return this._itemsStore.visibleItems;
+  public get items$(): Observable<Item[]> {
+    return this._itemsStore.visibleItems$;
   }
 
   public get sortItem(): Item {
@@ -69,16 +64,6 @@ export class FilterDrawerComponent implements DoCheck {
 
   public get sortDirectionItem(): Item {
     return this._itemsStore.sortDirectionItem;
-  }
-
-  public ngDoCheck() {
-    if (this._differ) {
-      const changes = this._differ.diff(this.items);
-
-      if (changes) {
-        this._cd.detectChanges();
-      }
-    }
   }
 
   public clear() {
