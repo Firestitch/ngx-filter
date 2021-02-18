@@ -262,7 +262,8 @@ export class KitchenSinkComponent {
         {
           name: 'checkbox',
           type: ItemType.Checkbox,
-          label: 'Checkbox'
+          label: 'Checkbox',
+          content: 'Some content here',
         },
         {
           name: 'state',
