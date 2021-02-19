@@ -18,7 +18,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
   public unchecked: unknown;
   public content: string;
 
-  private readonly _defaultContent = 'Enabled';
+  private static readonly _defaultContent = 'Enabled';
 
   public get isTypeCheckbox(): boolean {
     return true;
@@ -45,7 +45,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
   }
 
   public getChipsContent(type = null): string {
-    return this.content === this._defaultContent
+    return this.content === CheckboxItem._defaultContent
       ? this.label as string
       : this.content;
   }
@@ -59,7 +59,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     this.checked = item.checked ? toString(item.checked) : true;
     this.unchecked = item.unchecked ? toString(item.unchecked) : false;
     this.defaultValue = item.default === undefined ? this.unchecked : toString(this.defaultValue);
-    this.content = item.content ?? this._defaultContent;
+    this.content = item.content ?? CheckboxItem._defaultContent;
 
     super._parseConfig(item);
   }
