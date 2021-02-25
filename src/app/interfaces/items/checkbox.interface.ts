@@ -5,5 +5,4 @@ import { IFilterConfigBaseItem } from './base.interface';
 export interface IFilterConfigCheckboxItem extends IFilterConfigBaseItem<ItemType.Checkbox> {
   checked?: unknown;
   unchecked?: unknown;
-  content?: string;
 }
