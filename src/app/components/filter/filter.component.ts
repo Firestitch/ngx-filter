@@ -151,6 +151,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._filterItems.values();
   }
 
+  public get filterParamsQuery(): Record<string, unknown> {
+    return this._filterItems.valuesAsQuery(true);
+  }
+
   public get items() {
     return this._filterItems.items;
   }
