@@ -3,7 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   KeyValueDiffers,
-  OnDestroy
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -20,10 +21,9 @@ import { TextItem } from '../../../models/items/text-item';
   styleUrls: ['./text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextComponent extends BaseItemComponent<TextItem> implements OnDestroy {
+export class TextComponent extends BaseItemComponent<TextItem> implements OnInit, OnDestroy {
 
   public textControl = new FormControl();
-  public inputChange$ = new Subject();
   public destroy$ = new Subject();
 
   constructor(
@@ -31,6 +31,10 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnDest
     protected _cd: ChangeDetectorRef
   ) {
     super(_kvDiffers, _cd);
+  }
+
+  public ngOnInit(): void {
+    this.textControl.setValue(this.item.model);
 
     this.textControl.valueChanges
       .pipe(
@@ -40,10 +44,10 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnDest
       )
       .subscribe((value) => {
         this.item.model = value;
-      })
+      });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
