@@ -21,10 +21,10 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return !!this.model ? this.model : null;
   }
 
-  public get valueAsQuery() {
+  public get queryObject() {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     params[name] = value;
 

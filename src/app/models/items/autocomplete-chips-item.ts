@@ -1,4 +1,4 @@
-import { clone, isObject } from 'lodash-es';
+import { clone } from 'lodash-es';
 
 import { ItemType } from '../../enums/item-type.enum';
 import { IFilterConfigAutocompleteChipsItem } from '../../interfaces/items/autocomplete-chips.interface';
@@ -28,16 +28,27 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     return clone(this.model);
   }
 
-  public get valueAsQuery() {
+  public get queryObject() {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     if (Array.isArray(value)) {
-      params[name] = this.model
-        .map(item => {
-          return isObject(item) ? item.value : null;
-        })
+      params[name] = value;
+    } else {
+      params[name] = null;
+    }
+
+    return params;
+  }
+
+  public get persistanceObject(): Record<string, unknown> {
+    const value = this.value;
+    const name = this.name;
+    const params = {};
+
+    if (Array.isArray(value)) {
+      params[name] = value
         .join(',');
     } else {
       params[name] = null;

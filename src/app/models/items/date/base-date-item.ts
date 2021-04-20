@@ -1,10 +1,10 @@
-import { simpleFormat } from '@firestitch/date';
 import { isDate, isValid, parseISO } from 'date-fns';
 import { clone } from 'lodash-es';
 
 import { BaseItem } from '../base-item';
 import { IFilterConfigDateItem } from '../../../interfaces/items/date.interface';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
+import { simpleFormat } from '@firestitch/date';
 
 
 export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
@@ -13,25 +13,31 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
   public mode: ItemDateMode
 
   public get value() {
-    let value = clone(this.model);
+    const value = clone(this.model);
 
-    if (value && isValid(value) && isDate(value)) {
-      value = simpleFormat(value);
-    } else {
-      value = null;
+    if (!value || !isValid(value) || !isDate(value)) {
+      return null;
     }
 
     return value;
   }
 
-  public get valueAsQuery() {
+  public get queryObject(): Record<string, Date> {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     params[name] = value;
 
     return params;
+  }
+
+  public get persistanceObject(): Record<string, string> {
+    const value = this.queryObject[this.name];
+
+    return {
+      [this.name]: value ? simpleFormat(value) : null,
+    }
   }
 
   protected _validateModel() {

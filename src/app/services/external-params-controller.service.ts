@@ -177,7 +177,11 @@ export class ExternalParamsController implements OnDestroy {
       .filter((item) => !item.queryParamsDisabled);
 
     const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery(false, targetItems),
+      this._itemsStore.valuesAsQuery({
+        onlyPresented: false,
+        items: targetItems,
+        persisted: true
+      }),
       targetItems,
     );
 
@@ -189,7 +193,11 @@ export class ExternalParamsController implements OnDestroy {
       .filter((item) => !item.persistanceDisabled);
 
     const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery(false, targetItems),
+      this._itemsStore.valuesAsQuery({
+        onlyPresented: false,
+        items: targetItems,
+        persisted: true
+      }),
       targetItems,
     );
 

@@ -27,10 +27,10 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
     return value;
   }
 
-  public get valueAsQuery() {
+  public get queryObject() {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     params[name] = value;
 

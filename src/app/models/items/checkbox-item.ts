@@ -31,10 +31,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return value;
   }
 
-  public get valueAsQuery() {
+  public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     params[name] = this.model ? value : null;
 

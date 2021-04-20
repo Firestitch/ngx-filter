@@ -50,7 +50,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       }
 
       if (isValid(from) && isDate(from)) {
-        value.from = simpleFormat(from);
+        value.from = from;
       }
     }
 
@@ -60,29 +60,36 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       }
 
       if (isValid(to) && isDate(to)) {
-        value.to = simpleFormat(to);
+        value.to = to;
       }
     }
 
     return value;
   }
 
-  public get valueAsQuery() {
-    const value = this.value;
+  public get queryObject(): Record<string, Date> {
+    const value = this.value || {};
     const name = this.name;
-    const params = [];
     const paramFromName = getRangeName(this.case, name, 'from');
     const paramToName = getRangeName(this.case, name, 'to');
 
-    if (isObject(value)) {
-      params[paramFromName] = value.from ?? null;
-      params[paramToName] = value.to ?? null;
-    } else {
-      params[paramFromName] = null;
-      params[paramToName] = null;
-    }
+    return {
+      [paramFromName]: value.from ?? null,
+      [paramToName]: value.to ?? null,
+    };
+  }
 
-    return params;
+  public get persistanceObject(): Record<string, string> {
+    const query = this.queryObject;
+
+    return Object.keys(this.queryObject)
+      .reduce((acc, key) => {
+        if (!!query[key]) {
+          acc[key] = simpleFormat(query[key]);
+        }
+
+        return acc;
+      }, {});
   }
 
   public getChipsContent(type = null): string {

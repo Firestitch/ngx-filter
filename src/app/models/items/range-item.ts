@@ -37,10 +37,10 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return value;
   }
 
-  public get valueAsQuery() {
+  public get queryObject() {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
     const paramMinName = getRangeName(this.case, name, 'min');
     const paramMaxName = getRangeName(this.case, name, 'max');
 

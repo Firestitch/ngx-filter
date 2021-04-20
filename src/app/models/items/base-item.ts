@@ -175,18 +175,22 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     }
   }
 
-  public get valueAsQuery() {
+  public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
-    const params = [];
+    const params = {};
 
     if (Array.isArray(value)) {
-      params[name] = value.join(',');
+      params[name] = value;
     } else {
       params[name] = value;
     }
 
     return params;
+  }
+
+  public get persistanceObject(): Record<string, unknown> {
+    return this.queryObject;
   }
 
   public initValues(persistedValue: unknown) {

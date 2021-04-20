@@ -167,7 +167,7 @@ export class SavedFiltersController implements OnDestroy {
 
   public openSavedFilterEditDialog(): void {
     const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery(true),
+      this._itemsStore.valuesAsQuery(),
       this._itemsStore.items,
     );
     const values = this._itemsStore.values(true);

@@ -1,4 +1,4 @@
-import { clone, isObject } from 'lodash-es';
+import { clone } from 'lodash-es';
 
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
 
@@ -29,15 +29,22 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return value;
   }
 
-  public get valueAsQuery() {
+  public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
-    const params = [];
+
+    return {
+      [name]: value
+    };
+  }
+
+  public get persistanceObject(): Record<string, string> {
+    const value = this.value;
+    const name = this.name;
+    const params = {};
 
     if (Array.isArray(value)) {
-      params[name] = this.model.map(item => {
-        return isObject(item) ? item.value : null;
-      }).join(',');
+      params[name] = value.join(',');
     } else {
       params[name] = null;
     }

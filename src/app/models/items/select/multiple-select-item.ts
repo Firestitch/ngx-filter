@@ -25,6 +25,19 @@ export class MultipleSelectItem extends BaseSelectItem {
     return value;
   }
 
+  public get persistanceObject(): Record<string, unknown> {
+    const value = this.value;
+    const params = {};
+
+    if (Array.isArray(value)) {
+      params[this.name] = value.join(',');
+    } else {
+      params[this.name] = null;
+    }
+
+    return params;
+  }
+
   public getChipsContent(type = null): string {
     const options = this.model.reduce((acc, key) => {
       const itemValue = this.values.find((val) => val.value === key);

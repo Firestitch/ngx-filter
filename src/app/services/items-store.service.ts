@@ -22,6 +22,11 @@ import { TextItem } from '../models/items/text-item';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import { IFilterConfigBaseItem } from '../interfaces/items/base.interface';
 
+interface IValueAsQuery {
+  onlyPresented?: boolean;
+  items?: BaseItem<IFilterConfigItem>[];
+  persisted?: boolean;
+}
 
 @Injectable()
 export class FsFilterItemsStore implements OnDestroy {
@@ -169,14 +174,19 @@ export class FsFilterItemsStore implements OnDestroy {
     }, {});
   }
 
-  public valuesAsQuery(
-    onlyPresented = false,
-    items: BaseItem<IFilterConfigItem>[] = null
-  ): Record<string, unknown> {
+  public valuesAsQuery({
+    onlyPresented = true,
+    items = null,
+    persisted = false,
+  }: IValueAsQuery = {}): Record<string, unknown> {
     const params = {};
 
     (items || this.items).forEach((filterItem: BaseItem<any>) => {
-      Object.assign(params, filterItem.valueAsQuery);
+      const values = persisted
+        ? filterItem.persistanceObject
+        : filterItem.queryObject;
+
+      Object.assign(params, values);
     });
 
     if (onlyPresented) {
@@ -187,7 +197,6 @@ export class FsFilterItemsStore implements OnDestroy {
 
     return params;
   }
-
 
   public initItemValues(p: IFilterExternalParams) {
     this.items

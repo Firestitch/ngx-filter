@@ -152,7 +152,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get filterParamsQuery(): Record<string, unknown> {
-    return this._filterItems.valuesAsQuery(true);
+    return this._filterItems.valuesAsQuery();
   }
 
   public get items() {
@@ -448,7 +448,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public init() {
 
-    const data = this._filterItems.valuesAsQuery(true);
+    const data = this._filterItems.valuesAsQuery();
     this._sort = this._filterItems.getSort();
 
     this.config.init(data, this._sort);
@@ -485,7 +485,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       event.stopPropagation();
     }
 
-    const data = this._filterItems.valuesAsQuery(true);
+    const data = this._filterItems.valuesAsQuery();
 
     if (this.config.reload) {
       this.config.reload(data, this._filterItems.getSort());
@@ -501,7 +501,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
-    const data = this._filterItems.valuesAsQuery(true);
+    const data = this._filterItems.valuesAsQuery();
     const sort = this._filterItems.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
