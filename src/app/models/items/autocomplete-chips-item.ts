@@ -28,34 +28,23 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     return clone(this.model);
   }
 
-  public get queryObject() {
+  public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
     const params = {};
 
     if (Array.isArray(value)) {
-      params[name] = value;
-    } else {
-      params[name] = null;
-    }
-
-    return params;
-  }
-
-  public get persistanceObject(): Record<string, unknown> {
-    const value = this.value;
-    const name = this.name;
-    const params = {};
-
-    if (Array.isArray(value)) {
-      params[name] = value
+      params[this.name] = value
+        .filter((item) => !!item.value)
+        .map((item) => item.value)
         .join(',');
     } else {
-      params[name] = null;
+      params[name] = value;
     }
 
     return params;
   }
+
 
   public getChipsContent() {
     return this.model

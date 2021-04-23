@@ -181,7 +181,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     const params = {};
 
     if (Array.isArray(value)) {
-      params[name] = value;
+      params[this.name] = value.join(',');
     } else {
       params[name] = value;
     }
