@@ -10,6 +10,7 @@ import {
   FsFilterActionShowFn,
   FsFilterFileActionErrorFn,
   FsFilterFileActionSelectFn,
+  IFsFilterFileAction,
 } from '../interfaces/action.interface';
 import { ActionMode } from '../enums/action-mode.enum';
 import { ActionMenuItem } from './action-menu-item.model';
@@ -30,6 +31,7 @@ export class Action {
 
   public fileSelected: FsFilterFileActionSelectFn;
   public fileError: FsFilterFileActionErrorFn;
+  public multiple: boolean;
 
   public mode: ActionMode;
 
@@ -98,6 +100,10 @@ export class Action {
     this.icon = config.icon;
     this._showFn = config.show;
     this.tabIndex = config.tabIndex ?? 0;
+
+    if ((<IFsFilterFileAction>config).multiple !== undefined) {
+      this.multiple = (<IFsFilterFileAction>config).multiple;
+    }
 
     if (config.className) {
       this.className = config.className;

@@ -12,7 +12,7 @@ export type FsFilterAction = (IFsFilterButtonAction | IFsFilterMenuAction | IFsF
 export type FsFilterActionShowFn = () => boolean;
 export type FsFilterActionDisabledFn = () => boolean;
 export type FsFilterActionClickFn = (event?: MouseEvent) => void;
-export type FsFilterFileActionSelectFn = (file: FsFile) => void;
+export type FsFilterFileActionSelectFn = (file: FsFile | FsFile[]) => void;
 export type FsFilterFileActionErrorFn = (error: unknown) => void;
 
 

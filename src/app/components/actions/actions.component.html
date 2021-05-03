@@ -45,6 +45,7 @@
     <ng-container *ngSwitchCase="'file'">
       <fs-file
         class="action-button"
+        [multiple]="action.multiple"
         (select)="action.fileSelected($event)"
         (error)="action.fileError($event)"
         (clicked)="action.click($event)">

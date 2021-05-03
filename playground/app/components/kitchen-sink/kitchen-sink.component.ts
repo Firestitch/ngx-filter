@@ -428,6 +428,7 @@ export class KitchenSinkComponent {
         label: 'Upload',
         icon: 'cloud_upload',
         color: 'accent',
+        multiple: true,
         select: (file) => {
           console.log('Selected File', file);
         },
