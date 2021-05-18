@@ -12,8 +12,6 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return new CheckboxItem(config, null);
   }
 
-  public readonly type: ItemType.Checkbox;
-
   public checked: unknown;
   public unchecked: unknown;
 

@@ -17,8 +17,6 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return new RangeItem(config, additionalConfig);
   }
 
-  public readonly type: ItemType.Range;
-
   public case: 'snake' | 'camel';
   public options: { scale?: number }
   public prefix: string;

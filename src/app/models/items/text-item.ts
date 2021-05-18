@@ -12,8 +12,6 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return new TextItem(config, null);
   }
 
-  public readonly type: ItemType.Text | ItemType.Keyword;
-
   public prefix: string;
   public suffix: string;
 

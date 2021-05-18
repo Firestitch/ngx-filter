@@ -12,7 +12,6 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return new ChipsItem(config, null);
   }
 
-  public readonly type: ItemType.Chips;
   public multiple: boolean;
 
   public get isTypeChips(): boolean {

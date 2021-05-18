@@ -10,6 +10,4 @@ export class DateTimeRangeItem extends BaseDateRangeItem {
     return new DateTimeRangeItem(config, null);
   }
 
-  public readonly type: ItemType.DateTimeRange;
-
 }

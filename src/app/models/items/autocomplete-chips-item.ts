@@ -12,7 +12,6 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     return new AutocompleteChipsItem(config, null);
   }
 
-  public type: ItemType.AutoCompleteChips;
   public chipImage: string;
   public chipIcon: string;
   public chipColor: string;

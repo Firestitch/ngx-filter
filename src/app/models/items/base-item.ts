@@ -31,7 +31,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   public change: (item: BaseItem<T>) => void;
 
-  protected readonly _type: ItemType;
+  protected readonly _type: T['type'];
 
   protected _model: any;
   protected _initialized = false;
@@ -106,7 +106,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this._destroy$.asObservable();
   }
 
-  public get type(): ItemType {
+  public get type(): T['type'] {
     return this._type;
   }
 

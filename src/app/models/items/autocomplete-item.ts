@@ -13,8 +13,6 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
     return new AutocompleteItem(config, null);
   }
 
-  public type: ItemType.AutoComplete;
-
   public get value() {
     let value = clone(this.model);
 

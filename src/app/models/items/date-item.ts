@@ -13,8 +13,6 @@ export class DateItem extends BaseDateItem {
     return new DateItem(config, null);
   }
 
-  public readonly type: ItemType.Date;
-
   public getChipsContent(type = null): string {
     let dateFormat = 'date';
 
