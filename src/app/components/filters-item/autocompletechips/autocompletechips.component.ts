@@ -56,4 +56,8 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
   public fetch = (keyword) => {
     return this.item.valuesFn(keyword);
   }
+
+  public compareItems(item1, item2): boolean {
+    return item1?.value === item2?.value;
+  }
 }
