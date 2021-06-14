@@ -86,6 +86,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       .reduce((acc, key) => {
         if (!!query[key]) {
           acc[key] = simpleFormat(query[key]);
+        } else {
+          acc[key] = query[key];
         }
 
         return acc;
