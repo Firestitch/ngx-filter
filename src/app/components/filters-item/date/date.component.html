@@ -6,7 +6,7 @@
          [(ngModel)]="item.model"
          [maxYear]="item.maxYear"
          [view]="viewType"
-         [hideClearButton]="!item.clearAllowed"
+         [clear]="item.clearAllowed"
          [name]="item.name">
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
 </mat-form-field>
@@ -22,7 +22,7 @@
           [showMonth]="showMonth"
           [showDay]="showDay"
           [showYear]="showYear"
-          [hideClearButton]="!item.clearAllowed"
+          [clear]="item.clearAllowed"
           [name]="item.name">
     <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
   </mat-form-field>

@@ -1,4 +1,9 @@
-@import '../tools/assets/playground.scss';
+@use '../tools/assets/playground.scss';
+@use '~@firestitch/style/variables' with (
+  $palette: playground.$primary-palette
+);
+@use '~@firestitch/style/styles' as fs-style;
+
 @import '~@firestitch/datepicker/styles';
 @import "~@firestitch/scrollbar/styles.scss";
 @import '~@firestitch/chip/styles';
@@ -8,7 +13,6 @@
 @import '~@firestitch/file/styles';
 @import '../src/app/styles';
 
-@include mat-core();
-@include fs-date-picker($mat-blue);
-@include fs-style($mat-blue);
-@include fs-file($mat-blue);
+@include fs-date-picker();
+@include fs-style.core();
+@include fs-file(playground.$mat-blue);

@@ -77,7 +77,7 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
 
       case ItemType.Date: {
         if (this._item.mode === ItemDateMode.Calendar) {
-          this._targetDate.inputClick();
+          this._targetDate.open();
         } else {
           this._targetDateScroll.inputClick()
         }
