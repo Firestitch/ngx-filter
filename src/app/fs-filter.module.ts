@@ -22,6 +22,7 @@ import { FsLabelModule } from '@firestitch/label';
 import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FsMaskModule } from '@firestitch/mask';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -67,6 +68,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsAutocompleteModule,
     FsAutocompleteChipsModule,
     FsScrollModule,
+    FsMaskModule,
     PortalModule,
   ],
   declarations: [
