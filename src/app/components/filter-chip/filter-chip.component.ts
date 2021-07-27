@@ -13,7 +13,6 @@ import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { RangeItem } from '../../models/items/range-item';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
-import { CheckboxItem } from '../../models/items/checkbox-item';
 import { FocusControllerService } from '../../services/focus-controller.service';
 
 
@@ -102,8 +101,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   }
 
   private _updateVisibility() {
-    this.itemVisible = !this.item.isTypeCheckbox
-      || this.item.value === (this.item as CheckboxItem).checked;
+    this.itemVisible = this.item.isChipVisible;
   }
 
   private _initDelayRender() {

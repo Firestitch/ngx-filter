@@ -80,10 +80,9 @@
 
 <ng-template #filterChips>
   <fs-filter-chips
+    *ngIf="config.chips && hasFilterChips$ | async"
     class="filter-chips"
-    *ngIf="config.chips"
-    [filters]="items"
-    [ngClass]="{ 'has-filter-chips': activeFiltersWithInputCount }">
+    [filters]="items">
   </fs-filter-chips>
 </ng-template>
 

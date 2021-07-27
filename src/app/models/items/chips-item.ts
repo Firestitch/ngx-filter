@@ -28,6 +28,10 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return value;
   }
 
+  public get isChipVisible(): boolean {
+    return !!this.value;
+  }
+
   public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;

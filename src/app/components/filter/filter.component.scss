@@ -16,16 +16,12 @@ fs-filter {
   .status-bar {
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 17px;
+    margin: 4px 0;
   }
 
   .filter-chips {
     display: block;
-  }
-
-  .status-actions {
-    > * {
-      margin-top: 5px;
-    }
   }
 
   .filter-searchless-container {
@@ -38,7 +34,10 @@ fs-filter {
         margin-top: 0;
       }
     }
+  }
 
+  fs-filter-chips {
+    margin: 5px 0;
   }
 
   .filter-search-container {
@@ -70,7 +69,6 @@ fs-filter {
       display: flex;
       align-items: center;
       flex: 1;
-      height: 35px;
 
       .mat-form-field {
         width: 100%;

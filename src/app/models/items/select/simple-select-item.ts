@@ -38,6 +38,10 @@ export class SimpleSelectItem extends BaseSelectItem {
     }
   }
 
+  public get isChipVisible(): boolean {
+    return this.model !== '__all' && this.model !== undefined;
+  }
+
   protected _init() {
     super._init();
 

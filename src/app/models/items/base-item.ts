@@ -8,6 +8,7 @@ import {
 
 import { ItemType } from '../../enums/item-type.enum';
 
+import { IFilterConfigCheckboxItem } from '../../interfaces/items/checkbox.interface';
 import { IFilterConfigBaseItem } from '../../interfaces/items/base.interface';
 import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
 
@@ -101,6 +102,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this.type === ItemType.Keyword;
   }
   ////
+
+  public get isChipVisible(): boolean {
+    return !!this.model;
+  }
 
   public get destroy$() {
     return this._destroy$.asObservable();

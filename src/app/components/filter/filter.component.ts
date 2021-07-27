@@ -20,10 +20,6 @@ import {
 import { FormControl } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 
-import { BreakpointObserver } from '@angular/cdk/layout';
-
-import { FsStore } from '@firestitch/store';
-
 import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
@@ -61,7 +57,7 @@ import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.int
     SavedFiltersController,
     ActionsController,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -101,24 +97,21 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public searchText = new FormControl();
   public searchPlaceholder = 'Search';
-  public activeFiltersCount = 0;
-  public activeFiltersWithInputCount = 0;
 
   protected _config: FsFilterConfig = null;
 
   private _sort: FilterSort;
   private _filtersBtnVisible$ = new BehaviorSubject(true);
   private _keywordVisible$ = new BehaviorSubject(true);
+  private _hasFilterChips$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
 
   constructor(
-    private _store: FsStore,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
-    private _breakpointObserver: BreakpointObserver,
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._listenWhenFilterReady();
@@ -161,6 +154,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get visibleItems() {
     return this._filterItems.visibleItems;
+  }
+
+  public get hasFilterChips$(): Observable<boolean> {
+    return this._hasFilterChips$.asObservable();
   }
 
   public get hasVisibleItemOrSorting(): boolean {
@@ -402,7 +399,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterItems.updateVisibleItems();
   }
 
-
   public getItemValueChange$(name: string): Observable<any> | null {
     const item = this.items.find((i) => i.name === name);
 
@@ -447,11 +443,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public init() {
-
     const data = this._filterItems.valuesAsQuery();
     this._sort = this._filterItems.getSort();
 
     this.config.init(data, this._sort);
+    this._updateChipsVisibility();
   }
 
   public clear(event = null) {
@@ -461,10 +457,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this._filterItems.filtersClear();
-
-    this.activeFiltersCount = 0;
-    this.activeFiltersWithInputCount = 0;
-    // this.changeVisibility(false);
 
     if (this.config.clear) {
       this.config.clear();
@@ -479,7 +471,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public reload(event = null) {
-
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -518,6 +509,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.change) {
       this.config.change(data, sort);
     }
+
+    this._updateChipsVisibility();
   }
 
   /**
@@ -727,5 +720,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.ready.emit();
       });
+  }
+
+  private _updateChipsVisibility() {
+    const hasFilterChips = this._filterItems.items
+      .some((item: BaseItem<any>) => {
+        return item.isChipVisible;
+      });
+
+    this._hasFilterChips$.next(hasFilterChips);
   }
 }

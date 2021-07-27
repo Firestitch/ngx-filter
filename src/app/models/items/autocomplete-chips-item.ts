@@ -44,6 +44,9 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     return params;
   }
 
+  public get isChipVisible(): boolean {
+    return Array.isArray(this.model) && this.model.length > 0;
+  }
 
   public getChipsContent() {
     return this.model

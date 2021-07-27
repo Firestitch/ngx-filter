@@ -1,7 +1,6 @@
 import { toString } from 'lodash-es';
 
 import { IFilterConfigCheckboxItem } from '../../interfaces/items/checkbox.interface';
-import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseItem } from './base-item';
 
@@ -17,6 +16,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
   public get isTypeCheckbox(): boolean {
     return true;
+  }
+
+  public get isChipVisible() {
+    return this.value === (this as any).checked;
   }
 
   public get value() {

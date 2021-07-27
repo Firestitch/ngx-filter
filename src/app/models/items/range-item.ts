@@ -50,8 +50,11 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
       params[paramMaxName] = null;
     }
 
-
     return params;
+  }
+
+  public get isChipVisible(): boolean {
+    return this.model && (this.model.min !== undefined || this.model.max !== undefined);
   }
 
   public getChipsContent(type): string {

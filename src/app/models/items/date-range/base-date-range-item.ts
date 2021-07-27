@@ -27,6 +27,10 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     return this.type === ItemType.DateTimeRange;
   }
 
+  public get isChipVisible(): boolean {
+    return this.model && (this.model.from !== undefined || this.model.to !== undefined);
+  }
+
   public get value() {
     let value = clone(this.model);
 
