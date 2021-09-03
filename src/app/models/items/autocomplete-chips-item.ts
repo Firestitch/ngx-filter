@@ -80,4 +80,8 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
     this.search = '';
   }
 
+  protected _setModel(value) {
+    super._setModel(value || []);
+  }
+
 }
