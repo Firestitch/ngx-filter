@@ -32,11 +32,16 @@ export class MultipleSelectItem extends BaseSelectItem {
   public getChipsContent(type = null): string {
     const options = this.model.reduce((acc, key) => {
       const itemValue = this.values.find((val) => val.value === key);
+      let itemLabel: string;
 
       if (itemValue) {
-        acc.push(itemValue.name);
+        itemLabel = itemValue.name;
       } else if (this.isolate && this.isolate.enabled) {
-        acc.push(this.isolate.label);
+        itemLabel = this.isolate.label;
+      }
+
+      if (!acc.includes(itemLabel)) {
+        acc.push(itemLabel)
       }
 
       return acc;

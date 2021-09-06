@@ -36,8 +36,7 @@ export interface FilterConfig {
 
 export type IFilterConfigItem =
   (
-    IFilterConfigBaseItem
-    | IFilterConfigCheckboxItem
+    IFilterConfigCheckboxItem
     | IFilterConfigSelectItem
     | IFilterConfigChipsItem
     | IFilterConfigTextItem

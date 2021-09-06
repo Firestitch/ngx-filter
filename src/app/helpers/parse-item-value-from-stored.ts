@@ -22,14 +22,22 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
     }
 
     case ItemType.Select: {
-      if (item.multiple) {
-        if (item.isolate && param === item.isolate.value) {
-          item.isolate.enabled = true;
+      if (item.multiple && !!param) {
+        const values = param.split(',');
 
-          return [param];
-        } else {
-          return param.split(',');
+        if (item.isolate) {
+          const isolatedValue = Array.isArray(item.isolate.value)
+            ? item.isolate.value
+            : [ item.isolate.value ];
+
+          item.isolate.enabled = arraysHaveSameElements(isolatedValue, values);
+
+          return item.isolate.enabled
+            ? isolatedValue
+            : values;
         }
+
+        return values;
       } else {
         return param;
       }
@@ -72,4 +80,14 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
       return param;
     }
   }
+}
+
+function arraysHaveSameElements(arr1: unknown[], arr2: unknown[]): boolean {
+
+  arr1 = [ ...arr1 ].sort();
+  arr2 = [ ...arr2 ].sort();
+
+  return arr1.some((item) => {
+    return arr2.includes(item);
+  });
 }

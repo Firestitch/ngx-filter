@@ -35,18 +35,14 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
     }
 
     // TODO Refactor
-    if (this.isolate) {
-      for (const index in this.values) {
-        if (this.values.hasOwnProperty(index)) {
-          if (!this.values[index]) {
-            continue;
-          }
-
-          if (this.values[index].value == this.isolate.value) {
-            this.values.splice(index, 1);
-          }
+     if (this.isolate) {
+      this.values = this.values.filter((item) => {
+        if (Array.isArray(this.isolate.value)) {
+          return (this.isolate.value as unknown[]).indexOf(item.value) === -1;
+        } else {
+          return item.value !== this.isolate.value;
         }
-      }
+      });
     }
   }
 
