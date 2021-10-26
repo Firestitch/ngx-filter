@@ -78,8 +78,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     const paramToName = getRangeName(this.case, name, 'to');
 
     return {
-      [paramFromName]: value.from ?? null,
-      [paramToName]: value.to ?? null,
+      [paramFromName]: value.from || null,
+      [paramToName]: value.to || null,
     };
   }
 

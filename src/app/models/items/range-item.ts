@@ -6,7 +6,6 @@ import {
   IFilterConfigRangeItem,
   IFilterItemDefaultRange,
 } from '../../interfaces/items/range.interface';
-import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseItem } from './base-item';
 
@@ -43,8 +42,8 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     const paramMaxName = getRangeName(this.case, name, 'max');
 
     if (isObject(value)) {
-      params[paramMinName] = value.min ?? null;
-      params[paramMaxName] = value.max ?? null;
+      params[paramMinName] = value.min || null;
+      params[paramMaxName] = value.max || null;
     } else {
       params[paramMinName] = null;
       params[paramMaxName] = null;
