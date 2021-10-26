@@ -34,8 +34,16 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
   }
 
   public ngOnInit(): void {
-    this.textControl.setValue(this.item.model);
+    this._listenControlValueChanges();
+    this._listenModelChanges();
+  }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private _listenControlValueChanges(): void {
     this.textControl.valueChanges
       .pipe(
         distinctUntilChanged(),
@@ -47,9 +55,14 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
       });
   }
 
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private _listenModelChanges(): void {
+    this._item.value$
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.textControl.setValue(this.item.model, { emitEvent: false });
+      })
   }
 
 }
