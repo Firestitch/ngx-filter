@@ -13,15 +13,16 @@ export { FilterItemComponent } from './app/components/filters-item/filter-item.c
 export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
 
 // Interfaces
-export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
 export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';
+export { IFilterConfigAutocompleteChipsItem } from './app/interfaces/items/autocomplete-chips.interface';
+export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
+export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
+export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
 export { IFilterConfigDateItem } from './app/interfaces/items/date.interface';
 export { IFilterItemDefaultDateRange, IFilterConfigDateRangeItem } from './app/interfaces/items/date-range.interface';
 export { IFilterItemDefaultRange, IFilterConfigRangeItem } from './app/interfaces/items/range.interface';
+export { IFilterConfigSelectItem, IFilterConfigSelectIsolate, IFilterSelectValue, FilterValuesReturnFn } from './app/interfaces/items/select.interface';
 export { IFilterConfigTextItem } from './app/interfaces/items/text.interface';
-export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
-export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
-export { IFilterConfigSelectItem, IFilterConfigSelectIsolate } from './app/interfaces/items/select.interface';
 export {
   FsFilterAction,
   FsFilterActionClickFn,
