@@ -2,14 +2,15 @@ import { isFunction } from 'lodash-es';
 
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
 import {
+  finalize,
   take,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 
 import { ItemType } from '../../enums/item-type.enum';
 
-import { IFilterConfigCheckboxItem } from '../../interfaces/items/checkbox.interface';
-import { IFilterConfigBaseItem } from '../../interfaces/items/base.interface';
+import { IFilterConfigBaseItem, IFilterDefaultFn } from '../../interfaces/items/base.interface';
 import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
 
 
@@ -22,6 +23,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public chipLabel: string | string[];
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
+  public defaultValueFn: IFilterDefaultFn;
   public persistedValue: unknown;
   public clearAllowed: boolean;
 
@@ -37,6 +39,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected _model: any;
   protected _initialized = false;
   protected _pendingValues = false;
+  protected _pendingDefaultValue = false;
   protected _loading$ = new BehaviorSubject(false);
   protected _value$ = new BehaviorSubject(null);
   protected _valueChange$ = new Subject<void>();
@@ -119,6 +122,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     return this._pendingValues;
   }
 
+  public get hasPendingDefaultValue(): boolean {
+    return this._pendingDefaultValue;
+  }
+
   public get model() {
     return this._model;
   }
@@ -196,6 +203,18 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
   public get persistanceObject(): Record<string, unknown> {
     return this.queryObject;
+  }
+
+  public loadDefaultValue(): Observable<any> {
+    return this.defaultValueFn()
+      .pipe(
+        tap((value) => {
+          this.defaultValue = value;
+        }),
+        finalize(() => {
+          this._pendingDefaultValue = false;
+        })
+      )
   }
 
   public initValues(persistedValue: unknown) {
@@ -278,7 +297,14 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.name = item.name;
     this.label = item.label;
     this.chipLabel = item.chipLabel;
-    this.defaultValue = item.default;
+
+    if (typeof item.default === 'function') {
+      this._pendingDefaultValue = true;
+      this.defaultValueFn = item.default;
+    } else {
+      this.defaultValue = item.default;
+    }
+
     this.change = item.change;
     this.hide = item.hide;
     this.clearAllowed = item.clear ?? true;

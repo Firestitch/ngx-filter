@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, Subject } from 'rxjs';
+import { debounceTime, filter, finalize, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
 
@@ -35,6 +35,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public sortDirectionItem: BaseItem<IFilterConfigItem> = null;
   public keywordItem: TextItem = null;
 
+  private _ready$ = new BehaviorSubject(false);
   private _items: BaseItem<IFilterConfigItem>[] = [];
   private _visibleItems$ = new BehaviorSubject<BaseItem<IFilterConfigItem>[]>([]);
   private _itemsByName = new Map<string, BaseItem<IFilterConfigItem>>();
@@ -44,8 +45,10 @@ export class FsFilterItemsStore implements OnDestroy {
   private _config: FsFilterConfig;
 
   private _itemsChange$ = new Subject();
+  private _destroy$ = new Subject<void>();
 
   constructor() {
+    this._lazyInit();
   }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
@@ -72,8 +75,15 @@ export class FsFilterItemsStore implements OnDestroy {
     return this._itemsChange$.pipe(debounceTime(30));
   }
 
+  public get ready$() {
+    return this._ready$.asObservable();
+  }
+
   public ngOnDestroy() {
     this.destroyItems();
+
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public setConfig(config) {
@@ -90,8 +100,6 @@ export class FsFilterItemsStore implements OnDestroy {
     this._itemsValuesLoaded = false;
     if (Array.isArray(items)) {
       this._createItems(items);
-      this.updateVisibleItems();
-      this._setKeywordItem();
     }
   }
 
@@ -129,6 +137,30 @@ export class FsFilterItemsStore implements OnDestroy {
     this.items
       .filter((item) => item.hasPendingValues)
       .forEach((item) => item.loadAsyncValues());
+  }
+
+  public loadAsyncDefaults(): void {
+    const pendingItems = this.items
+      .filter((item) => {
+        return item.hasPendingDefaultValue
+          && (item.persistedValue === null || item.persistedValue === undefined);
+      });
+
+    if (pendingItems.length > 0) {
+      forkJoin(
+        pendingItems
+          .map((item) => item.loadDefaultValue())
+      )
+        .pipe(
+          finalize(() => {
+            this._ready$.next(true);
+          }),
+          takeUntil(this._destroy$),
+        )
+        .subscribe();
+    } else {
+      this._ready$.next(true);
+    }
   }
 
   public getSort(): FilterSort {
@@ -205,6 +237,7 @@ export class FsFilterItemsStore implements OnDestroy {
       });
 
     this._createSortingItems(p);
+    this.loadAsyncDefaults();
     this._subscribeToItemsChanges();
   }
 
@@ -304,6 +337,18 @@ export class FsFilterItemsStore implements OnDestroy {
           this._itemsChange$.next(this.sortDirectionItem);
         });
     }
+  }
+
+  private _lazyInit(): void {
+    this.ready$
+      .pipe(
+        filter((state) => state),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.updateVisibleItems();
+        this._setKeywordItem();
+      });
   }
 
   private _createSortingItems(p) {

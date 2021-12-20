@@ -20,7 +20,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 
-import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
@@ -156,6 +156,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._filterItems.visibleItems;
   }
 
+  public get itemsReady$(): Observable<boolean> {
+    return this._filterItems.ready$;
+  }
+
   public get hasFilterChips$(): Observable<boolean> {
     return this._hasFilterChips$.asObservable();
   }
@@ -196,24 +200,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.focus();
       }
     });
-
-    if (this.config.init) {
-      if (this._externalParams.pending) {
-        this._externalParams
-          .pending$
-          .pipe(
-            filter((pending) => {
-              return !pending;
-            }),
-            takeUntil(this._destroy$),
-          )
-          .subscribe(() => {
-            this.init();
-          })
-      } else {
-        this.init();
-      }
-    }
 
     this._listenInternalItemsChange();
     this._initOverlay();
@@ -711,13 +697,20 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // We may need some time to recieve external params and after that ready can be emitted
   private _listenWhenFilterReady() {
-    this._externalParams
-      .pending$
+    combineLatest(
+    [
+      this._externalParams.pending$,
+      this.itemsReady$,
+    ])
       .pipe(
-        filter((value) => !value),
+        filter(([pendingParams, itemsReady]) => !pendingParams && itemsReady),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        if (this.config.init) {
+          this.init();
+        }
+
         this.ready.emit();
       });
   }
