@@ -37,7 +37,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   protected readonly _type: T['type'];
 
   protected _model: any;
-  protected _initialized = false;
+  // protected _initialized = false;
   protected _pendingValues = false;
   protected _pendingDefaultValue = false;
   protected _loading$ = new BehaviorSubject(false);
@@ -175,6 +175,10 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this._loading$.next(value);
   }
 
+  protected get _initialized(): boolean {
+    return !this._pendingDefaultValue && !this._pendingValues;
+  }
+
   public valueChanged() {
     this._value$.next(this.value);
 
@@ -210,6 +214,8 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
       .pipe(
         tap((value) => {
           this.defaultValue = value;
+
+          this._initDefaultModel()
         }),
         finalize(() => {
           this._pendingDefaultValue = false;
@@ -218,7 +224,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public initValues(persistedValue: unknown) {
-    this._initialized = false;
+    // this._initialized = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
 
@@ -234,12 +240,12 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
 
         // Move to some other place
         this._init();
-        this._initialized = true;
+        // this._initialized = true;
       }
 
     } else {
       this._init();
-      this._initialized = true;
+      // this._initialized = true;
     }
   }
 
@@ -258,7 +264,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
           this.loading = false;
           this._init();
           this._validateModel();
-          this._initialized = true;
+          // this._initialized = true;
         });
 
     }
