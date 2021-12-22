@@ -210,12 +210,14 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   }
 
   public loadDefaultValue(): Observable<any> {
+    this._pendingDefaultValue = true;
+
     return this.defaultValueFn()
       .pipe(
         tap((value) => {
           this.defaultValue = value;
 
-          this._initDefaultModel()
+          this._initDefaultModel();
         }),
         finalize(() => {
           this._pendingDefaultValue = false;
@@ -305,7 +307,6 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.chipLabel = item.chipLabel;
 
     if (typeof item.default === 'function') {
-      this._pendingDefaultValue = true;
       this.defaultValueFn = item.default;
     } else {
       this.defaultValue = item.default;

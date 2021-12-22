@@ -142,7 +142,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public loadAsyncDefaults(): void {
     const pendingItems = this.items
       .filter((item) => {
-        return item.hasPendingDefaultValue
+        return item.defaultValueFn
           && (item.persistedValue === null || item.persistedValue === undefined);
       });
 
