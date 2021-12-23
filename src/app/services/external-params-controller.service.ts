@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
 
 import { FsFilterConfig } from '../models/filter-config';
 
@@ -141,6 +141,17 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _listenItemsChange() {
+    this._itemsStore.ready$
+      .pipe(
+        filter((v) => v),
+        take(1),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._saveQueryParams();
+        this._savePersistedParams();
+      })
+
     this._itemsStore
       .itemsChange$
       .pipe(
