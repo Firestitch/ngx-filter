@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { FsFilterConfig } from '../models/filter-config';
@@ -82,10 +82,8 @@ export class ExternalParamsController implements OnDestroy {
 
     this._pending$.next(true);
     if (this._savedFilters.enabled) {
-      combineLatest([
-        this._itemsStore.ready$,
-        this._savedFilters.load(),
-      ])
+      this._savedFilters
+        .load()
         .pipe(
           takeUntil(this._destroy$),
         )
@@ -96,14 +94,8 @@ export class ExternalParamsController implements OnDestroy {
           this._pending$.next(false)
         })
     } else {
-      this._itemsStore.ready$
-        .pipe(
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this._initItemsValues();
-          this._pending$.next(false);
-        });
+      this._initItemsValues();
+      this._pending$.next(false)
     }
 
     this._listenItemsChange();
