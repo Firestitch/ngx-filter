@@ -40,6 +40,21 @@
         </ng-container>
       </ng-container>
 
+      <ng-container *ngSwitchCase="'file'">
+        <ng-template fs-menu-item
+                     [fsClass]="action.classArray"
+        >
+          <fs-file
+            class="action-button"
+            [multiple]="action.multiple"
+            (select)="action.fileSelected($event)"
+            (error)="action.fileError($event)"
+            (clicked)="action.click($event)">
+            <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+          </fs-file>
+        </ng-template>
+      </ng-container>
+
       <ng-container *ngSwitchDefault>
         <ng-template fs-menu-item
                      (click)="action.click($event)"
