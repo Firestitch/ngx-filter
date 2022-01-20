@@ -21,6 +21,7 @@ interface IFsFilterBaseAction {
   className?: string;
   color?: ThemePalette;
   icon?: string;
+  iconPlacement?: 'left' | 'right';
   label?: string;
   primary?: boolean;
   show?: FsFilterActionShowFn;

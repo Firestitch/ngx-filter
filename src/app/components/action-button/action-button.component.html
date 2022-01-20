@@ -65,6 +65,14 @@
   </button>
 
   <ng-template #buttonContent>
-    <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
+    <ng-container *ngIf="!action.icon else withIcon">
+      {{action.label}}
+    </ng-container>
+
+    <ng-template #withIcon>
+      <mat-icon *ngIf="!action.iconPlacement || action.iconPlacement === 'left'">{{action.icon}}</mat-icon>
+      {{action.label}}
+      <mat-icon *ngIf="action.iconPlacement === 'right'">{{action.icon}}</mat-icon>
+    </ng-template>
   </ng-template>
 </ng-container>

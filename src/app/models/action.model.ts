@@ -20,6 +20,7 @@ export class Action {
 
   public primary = true;
   public icon: string;
+  public iconPlacement: 'left' | 'right';
   public label: string;
   public menu: boolean;
   public color: ThemePalette;
@@ -98,6 +99,7 @@ export class Action {
     this.label = config.label;
     this.mode = config.mode;
     this.icon = config.icon;
+    this.iconPlacement = config.iconPlacement;
     this._showFn = config.show;
     this.tabIndex = config.tabIndex ?? 0;
 
