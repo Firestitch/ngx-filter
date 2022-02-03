@@ -33,6 +33,12 @@ export class Action {
   public fileSelected: FsFilterFileActionSelectFn;
   public fileError: FsFilterFileActionErrorFn;
   public multiple: boolean;
+  public accept: string;
+  public minWidth: number;
+  public minHeight: number;
+  public maxWidth: number;
+  public maxHeight: number;
+  public imageQuality: number;
 
   public mode: ActionMode;
 
@@ -136,6 +142,13 @@ export class Action {
       case ActionMode.File: {
         this.fileSelected = config.select;
         this.fileError = config.error;
+        this.accept = config.accept;
+        this.imageQuality = config.imageQuality;
+        this.minWidth = config.minWidth;
+        this.minHeight = config.minHeight;
+        this.maxWidth = config.maxWidth;
+        this.maxHeight = config.maxHeight;
+
         this.click = config.click ?? (() => { });
         this._disabledFn = config.disabled;
 

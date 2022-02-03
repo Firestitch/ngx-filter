@@ -50,6 +50,11 @@ export interface IFsFilterFileAction extends IFsFilterBaseAction {
   multiple?: boolean;
   accept?: string;
   disabled?: FsFilterActionDisabledFn;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+  imageQuality?: number;
 }
 
 export interface IFsFilterMenuActionGroupItem {

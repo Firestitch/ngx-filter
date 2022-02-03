@@ -45,7 +45,12 @@
     <ng-container *ngSwitchCase="'file'">
       <fs-file
         class="action-button"
+        [accept]="action.accept || '*'"
         [multiple]="action.multiple"
+        [minWidth]="action.minWidth"
+        [minHeight]="action.minHeight"
+        [imageWidth]="action.maxWidth"
+        [imageHeight]="action.maxHeight"
         (select)="action.fileSelected($event)"
         (error)="action.fileError($event)"
         (clicked)="action.click($event)">
