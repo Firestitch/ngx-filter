@@ -79,7 +79,26 @@ export class ExternalParamsController implements OnDestroy {
     this._initPersistance();
     this._initQueryParams();
     this._initSavedFilters();
+    this.initItems();
+  }
 
+  public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
+    this.savedFiltersController.setActiveFilter(savedFilter);
+
+    if (savedFilter) {
+      this.reloadFiltersWithValues(savedFilter.filters, false);
+    }
+  }
+
+  public reloadFiltersWithValues(params: IFilterExternalParams, shouldResetSavedFilters = true) {
+    this._shouldResetSavedFilters = shouldResetSavedFilters;
+    this._itemsStore.updateItemsWithValues(params);
+
+    this._saveQueryParams();
+    this._savePersistedParams();
+  }
+
+  public initItems(): void {
     this._pending$.next(true);
     if (this._savedFilters.enabled) {
       this._savedFilters
@@ -99,22 +118,6 @@ export class ExternalParamsController implements OnDestroy {
     }
 
     this._listenItemsChange();
-  }
-
-  public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
-    this.savedFiltersController.setActiveFilter(savedFilter);
-
-    if (savedFilter) {
-      this.reloadFiltersWithValues(savedFilter.filters, false);
-    }
-  }
-
-  public reloadFiltersWithValues(params: IFilterExternalParams, shouldResetSavedFilters = true) {
-    this._shouldResetSavedFilters = shouldResetSavedFilters;
-    this._itemsStore.updateItemsWithValues(params);
-
-    this._saveQueryParams();
-    this._savePersistedParams();
   }
 
   public _initItemsValues() {

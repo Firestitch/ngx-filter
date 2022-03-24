@@ -28,7 +28,7 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { objectsAreEquals } from '../../helpers/compare';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
-import { FilterConfig, FilterSort } from '../../interfaces/config.interface';
+import { FilterConfig, FilterSort, IFilterConfigItem } from '../../interfaces/config.interface';
 import { BaseItem } from '../../models/items/base-item';
 import { FsFilterItemsStore } from '../../services/items-store.service';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
@@ -549,6 +549,16 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._actions.updateDisabledState();
   }
 
+  public setItems(items: IFilterConfigItem[]) {
+    this._filterItems.destroyItems();
+
+    this.config.items = items;
+    this._filterItems.setConfig(this._config);
+    this._externalParams.initItems();
+    this._syncSearchInputWithKeyword();
+    this._listenKeywordItemClear();
+  }
+
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
       this._filterItems.destroyItems();
@@ -564,11 +574,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterItems.setConfig(this._config);
     this._externalParams.setConfig(this._config);
 
-    const keywordItem = this._filterItems.keywordItem;
-    if (keywordItem) {
-      this.searchText.setValue(keywordItem.model);
-      this.searchPlaceholder = keywordItem.label as string || 'Search';
-    }
+    this._syncSearchInputWithKeyword();
 
     if (!!this.config.reloadWhenConfigChanged) {
       this.change();
@@ -664,6 +670,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
     });
+  }
+
+  private _syncSearchInputWithKeyword(): void {
+    const keywordItem = this._filterItems.keywordItem;
+    if (keywordItem) {
+      this.searchText.setValue(keywordItem.model);
+      this.searchPlaceholder = keywordItem.label as string || 'Search';
+    }
   }
 
   private _listenKeywordItemClear() {
