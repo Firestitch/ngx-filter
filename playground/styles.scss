@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @use '../tools/assets/playground.scss';
 @use '~@firestitch/style/variables' with (
   $palette: playground.$primary-palette
@@ -13,6 +14,5 @@
 @import '~@firestitch/file/styles';
 @import '../src/app/styles';
 
-@include fs-date-picker();
 @include fs-style.core();
-@include fs-file(playground.$mat-blue);
+@include fs-file(playground.$primary-palette);

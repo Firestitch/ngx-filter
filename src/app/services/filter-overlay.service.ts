@@ -3,12 +3,13 @@ import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
 import { FS_FILTER_META, FsFilterMeta } from '../providers/filter-meta';
+import { FocusControllerService } from './focus-controller.service';
 
 
 @Injectable()
@@ -26,8 +27,11 @@ export class FsFilterOverlayService implements OnDestroy {
   constructor(
     private _injector: Injector,
     @Inject(FS_FILTER_META) private _filterMeta: FsFilterMeta,
-    private _overlay: Overlay
-  ) {}
+    private _overlay: Overlay,
+    private _focusController: FocusControllerService,
+  ) {
+    this._openWhenChipClicked();
+  }
 
   public get isOpened() {
     return !!this._overlayRef;
@@ -128,5 +132,18 @@ export class FsFilterOverlayService implements OnDestroy {
     if (this._filterMeta.openedFilters === 1) {
       window.document.body.classList.add('fs-filter-open');
     }
+  }
+
+  private _openWhenChipClicked(): void {
+    this._focusController.focusOn$
+      .pipe(
+        filter((v) => !!v),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        if (!this.isOpened) {
+          this.open();
+        }
+      });
   }
 }

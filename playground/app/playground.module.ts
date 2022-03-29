@@ -18,7 +18,7 @@ import { AppMaterialModule } from './material.module';
 import { ExamplesComponent, NofiltersComponent, KitchenSinkComponent } from './components';
 import { DialogExampleComponent } from './components/dialog-example';
 import { DialogComponent } from './components/dialog';
-import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { FsFormModule } from '@firestitch/form';
 import { FsFileModule } from '@firestitch/file';
 
@@ -38,10 +38,10 @@ import { FsFileModule } from '@firestitch/file';
     FsMessageModule.forRoot(),
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot([
-      { path: '', component: ExamplesComponent, pathMatch: 'full' },
-      { path: 'nofilters', component: NofiltersComponent },
-      { path: 'dialog', component: DialogExampleComponent }
-    ]),
+    { path: '', component: ExamplesComponent, pathMatch: 'full' },
+    { path: 'nofilters', component: NofiltersComponent },
+    { path: 'dialog', component: DialogExampleComponent }
+], { relativeLinkResolution: 'legacy' }),
     FsFileModule.forRoot({
       allowDownload: true,
       allowRemove: true,
@@ -60,7 +60,7 @@ import { FsFileModule } from '@firestitch/file';
     DialogComponent,
   ],
   providers: [
-    { provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' } }
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'auto' } }
   ],
 })
 export class PlaygroundModule {

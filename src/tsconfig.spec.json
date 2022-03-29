@@ -2,8 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
-    "esModuleInterop": true,
-    "emitDecoratorMetadata": true
+    "esModuleInterop": true
   },
   "files": [
     "test.ts"

@@ -8,6 +8,7 @@ export { FsFilterModule } from './app/fs-filter.module';
 // Components
 export { FilterComponent } from './app/components/filter/filter.component';
 export { FilterItemComponent } from './app/components/filters-item/filter-item.component';
+export { FsSavedFiltersMenuComponent } from './app/components/saved-filters-menu/saved-filters-menu.component';
 
 // Directives
 export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
