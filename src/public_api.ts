@@ -84,6 +84,7 @@ export { FS_FILTER_CONFIG } from './app/injectors/filter-config';
 
 // Helpers
 export { filterToQueryParam, filterFromQueryParam } from './app/helpers/query-param-transformers';
+export { buildQueryParams } from './app/helpers/build-query-params';
 
 // Const
 export { QUERY_PARAM_DELIMITER } from './app/consts/query-param-delimiter';
