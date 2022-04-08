@@ -474,6 +474,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       .find((item) => item.name === name);
   }
 
+  public fetchQueryParams(): void {
+    this._externalParams.fetchQueryParams();
+  }
+
   /**
    * Call change callback and apply new filter values
    */

@@ -127,6 +127,11 @@ export class ExternalParamsController implements OnDestroy {
     this._savePersistedParams();
   }
 
+  public fetchQueryParams(): void {
+    this._initQueryParams();
+    this._itemsStore.updateItemsWithValues(this.params);
+  }
+
   private _initPersistance() {
     this._persistanceStore.init(
       this._config.persist,
