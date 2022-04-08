@@ -247,7 +247,13 @@ export class FsFilterItemsStore implements OnDestroy {
         if (values[item.name]) {
           item.model = values[item.name];
         } else {
-          item.clear();
+          if (item instanceof RangeItem) {
+            item.clearRange(null, item.defaultValue);
+          } else if (item instanceof BaseDateRangeItem) {
+            item.clearDateRange(null, item.defaultValue);
+          } else {
+            item.clear();
+          }
         }
       });
 
