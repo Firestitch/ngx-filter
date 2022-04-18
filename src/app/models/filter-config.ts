@@ -31,7 +31,7 @@ export class FsFilterConfig extends Model {
   @Alias() public reload: ChangeFn;
   @Alias() public clear: ChangeFn;
   @Alias() public sortChange: ChangeFn;
-  @Alias() public case: 'snake' | 'camel' = 'snake';
+  @Alias() public case: 'snake' | 'camel' = 'camel';
   @Alias() public reloadWhenConfigChanged: boolean;
   @Alias() public button: FilterButton;
   @Alias() public items: IFilterConfigItem[];
@@ -74,7 +74,7 @@ export class FsFilterConfig extends Model {
   public _fromJSON(value: any) {
     super._fromJSON(value);
 
-    this.case = value.case ?? 'snake';
+    this.case = value.case ?? 'camel';
 
     if (this.persist) {
       if (typeof this.persist === 'object') {

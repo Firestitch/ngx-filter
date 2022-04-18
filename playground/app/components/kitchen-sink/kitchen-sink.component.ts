@@ -117,7 +117,7 @@ export class KitchenSinkComponent {
           label: 'Search',
         },
         {
-          name: 'not_used',
+          name: 'notUsed',
           type: ItemType.Select,
           label: 'Not Used',
           default: 1,
@@ -125,7 +125,7 @@ export class KitchenSinkComponent {
           disable: true,
         },
         {
-          name: 'payment_method_id',
+          name: 'paymentMethodId',
           label: 'Payment Method',
           type: ItemType.AutoComplete,
           hide: true,
@@ -134,7 +134,7 @@ export class KitchenSinkComponent {
           }
         },
         {
-          name: 'simple_select',
+          name: 'simpleSelect',
           type: ItemType.Select,
           label: 'Simple Select',
           disableQueryParams: true,
@@ -158,7 +158,7 @@ export class KitchenSinkComponent {
           }
         },
         {
-          name: 'group_select',
+          name: 'groupSelect',
           type: ItemType.Select,
           label: 'Group Select',
           disablePersist: true,
@@ -175,7 +175,7 @@ export class KitchenSinkComponent {
           chipLabel: ['Custom Min Price', 'Custom Max Price'],
         },
         {
-          name: 'observable_select',
+          name: 'observableSelect',
           type: ItemType.Select,
           label: 'Observable Select',
           clear: false,
@@ -189,7 +189,7 @@ export class KitchenSinkComponent {
           }
         },
         {
-          name: 'autocomplete_user_id',
+          name: 'autocompleteUserId',
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
           clear: false,
@@ -204,7 +204,7 @@ export class KitchenSinkComponent {
           }
         },
         {
-          name: 'autocompletechips_user_id',
+          name: 'autocompletechipsUserId',
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
@@ -228,7 +228,7 @@ export class KitchenSinkComponent {
           }
         },
         {
-          name: 'days_chips',
+          name: 'daysChips',
           label: 'Weekdays',
           type: ItemType.Chips,
           multiple: true,
@@ -246,7 +246,7 @@ export class KitchenSinkComponent {
           clear: false,
         },
         {
-          name: 'scroll-date',
+          name: 'scrollDate',
           type: ItemType.Date,
           label: 'Scroll Date',
           maxYear: (new Date()).getFullYear(),
@@ -254,7 +254,7 @@ export class KitchenSinkComponent {
           clear: false,
         },
         {
-          name: 'date_range',
+          name: 'dateRange',
           type: ItemType.DateRange,
           label: [ 'From Date', 'To Date'],
           clear: false,
@@ -289,7 +289,7 @@ export class KitchenSinkComponent {
           ]
         },
         {
-          name: 'max_price',
+          name: 'maxPrice',
           type: ItemType.Text,
           label: 'Max Price',
           prefix: '$&nbsp;',
