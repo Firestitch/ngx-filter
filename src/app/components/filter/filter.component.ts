@@ -649,10 +649,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _listenInputChanges() {
-    if (!this._filterItems.keywordItem) {
-      return;
-    }
-
     this._zone.runOutsideAngular(() => {
       this.searchText.valueChanges
         .pipe(
@@ -728,6 +724,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.config.init) {
           this.init();
         }
+
+        this._syncSearchInputWithKeyword();
 
         this.ready.emit();
       });
