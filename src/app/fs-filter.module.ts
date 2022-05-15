@@ -28,6 +28,7 @@ import { FsMaskModule } from '@firestitch/mask';
 import { FsMenuModule } from '@firestitch/menu';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsFormModule } from '@firestitch/form';
+import { FsFileModule } from '@firestitch/file';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -58,7 +59,7 @@ import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/sav
 import { FsFilterActionsComponent } from './components/actions/actions.component';
 import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
 import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
-import { FsFileModule } from '@firestitch/file';
+import { WeekComponent } from './components/filters-item/week/week.component';
 
 
 @NgModule({
@@ -102,6 +103,7 @@ import { FsFileModule } from '@firestitch/file';
     SelectMultipleComponent,
     ChipsComponent,
     TextComponent,
+    WeekComponent,
     RangeComponent,
     AutocompleteComponent,
     AutocompletechipsComponent,

@@ -51,6 +51,11 @@
                             [item]="item">
     </filter-item-date-range>
 
+    <filter-item-week class="interface"
+                      *ngSwitchCase="itemType.Week"
+                      [item]="item">
+    </filter-item-week>
+
     <filter-item-checkbox class="interface interface-checkbox"
                           *ngSwitchCase="itemType.Checkbox"
                           [item]="item">

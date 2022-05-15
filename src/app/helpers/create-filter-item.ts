@@ -6,6 +6,7 @@ import { IFilterConfigTextItem } from '../interfaces/items/text.interface';
 import { IFilterConfigCheckboxItem } from '../interfaces/items/checkbox.interface';
 import { IFilterConfigItem } from '../interfaces/config.interface';
 import { IFilterConfigAutocompleteChipsItem } from '../interfaces/items/autocomplete-chips.interface';
+import { IFilterConfigWeekItem } from '../interfaces/items/week.interface';
 import { SelectItem } from '../models/items/select-item';
 import { ChipsItem } from '../models/items/chips-item';
 import { IFilterConfigChipsItem } from '../interfaces/items/chips.interface';
@@ -18,6 +19,7 @@ import { AutocompleteItem } from '../models/items/autocomplete-item';
 import { AutocompleteChipsItem } from '../models/items/autocomplete-chips-item';
 import { CheckboxItem } from '../models/items/checkbox-item';
 import { TextItem } from '../models/items/text-item';
+import { WeekItem } from '../models/items/week-item';
 import { ItemType } from '../enums/item-type.enum';
 
 
@@ -45,6 +47,10 @@ export function createFilterItem(item: IFilterConfigItem, config: any) {
 
     case ItemType.Date: {
       return DateItem.create(item as IFilterConfigDateItem);
+    }
+
+    case ItemType.Week: {
+      return WeekItem.create(item as IFilterConfigWeekItem);
     }
 
     case ItemType.DateTime: {

@@ -1,0 +1,11 @@
+<mat-form-field>
+  <mat-label>{{item.label}}</mat-label>
+  <input matInput
+         fsDateWeekPicker
+         [fsFilterFocusTrigger]="item"
+         [(ngModel)]="item.model"
+         [seedDate]="item.seedDate"
+         [clear]="item.clearAllowed"
+         [name]="item.name">
+  <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
+</mat-form-field>

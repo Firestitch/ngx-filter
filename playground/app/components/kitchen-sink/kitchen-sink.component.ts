@@ -260,6 +260,11 @@ export class KitchenSinkComponent {
           clear: false,
         },
         {
+          name: 'week',
+          type: ItemType.Week,
+          label: 'Week',
+        },
+        {
           name: 'checkbox',
           type: ItemType.Checkbox,
           label: 'Checkbox',

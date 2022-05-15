@@ -5,6 +5,7 @@ export enum ItemType {
   Date              = 'date',
   DateTime          = 'datetime',
   DateRange         = 'daterange',
+  Week              = 'week',
   DateTimeRange     = 'datetimerange',
   AutoComplete      = 'autocomplete',
   AutoCompleteChips = 'autocompletechips',

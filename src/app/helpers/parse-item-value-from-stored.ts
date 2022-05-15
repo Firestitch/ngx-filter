@@ -21,6 +21,14 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
       return { from: from, to: to };
     }
 
+    case ItemType.Week: {
+      const from = params[getRangeName('camel', item.name, 'from')];
+      const to = params[getRangeName('camel', item.name, 'to')];
+      const period = params[`${item.name}Period`]
+
+      return { from, to, period };
+    }
+
     case ItemType.Select: {
       if (item.multiple && !!param) {
         const values = param.split(',');

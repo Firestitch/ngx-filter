@@ -3,6 +3,7 @@ import { getRangeName } from './get-range-name';
 import { DateRangeItem } from '../models/items/date-range-item';
 import { DateTimeRangeItem } from '../models/items/date-time-range-item';
 import { parseItemValueFromStored } from './parse-item-value-from-stored';
+import { WeekItem } from '../models/items/week-item';
 
 
 /**
@@ -41,6 +42,10 @@ function findItemWidthName(items, name) {
       } else if (filterItem instanceof DateRangeItem || filterItem instanceof DateTimeRangeItem) {
         return name === getRangeName(filterItem.case, filterItem.name, 'from') ||
           name ===  getRangeName(filterItem.case, filterItem.name, 'to');
+      } else if (filterItem instanceof WeekItem) {
+        return name === getRangeName('camel', filterItem.name, 'from')
+          || name ===  getRangeName('camel', filterItem.name, 'to')
+          || name ===  `${filterItem.name}Period`;
       }
 
       return filterItem.name === name;
