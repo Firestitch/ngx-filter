@@ -8,6 +8,7 @@ import { clone, isObject, isString } from 'lodash-es';
 import { BaseItem } from './base-item';
 import { IFilterConfigWeekItem } from '../../interfaces/items/week.interface';
 import { getRangeName } from '../../helpers/get-range-name';
+import { parseDate } from '../../helpers/parse-date';
 
 
 export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
@@ -104,6 +105,14 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
 
   protected _validateModel() {}
 
+  protected _setModel(value) {
+    value.from = parseDate(value.from);
+    value.to = parseDate(value.to);
+    value.period = parseInt(value.period, 10) || null;
+
+    super._setModel(value);
+  }
+
   protected _parseConfig(item: IFilterConfigWeekItem) {
     super._parseConfig(item);
 
@@ -113,6 +122,6 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   protected _init() {}
 
   protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? '';
+    this.model = defaultValue ?? {};
   }
 }

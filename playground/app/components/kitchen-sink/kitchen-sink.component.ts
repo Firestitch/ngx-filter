@@ -8,6 +8,7 @@ import {
   ItemType
 } from '@firestitch/filter';
 import { filter, nameValue } from '@firestitch/common'
+import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 
 import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
@@ -263,6 +264,7 @@ export class KitchenSinkComponent {
           name: 'week',
           type: ItemType.Week,
           label: 'Week',
+          default: getPeriodForDate(new Date(), getFirstDayOfFirstYearWeek(new Date()), 1),
         },
         {
           name: 'checkbox',
