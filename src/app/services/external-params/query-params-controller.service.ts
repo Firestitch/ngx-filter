@@ -53,7 +53,7 @@ export class QueryParamsController {
   public fetchFromQueryParams() {
     this._fetchedParams = restoreItems(
       this._route.snapshot.queryParams,
-      this._itemsStore.items,
+      [this._itemsStore.items, this._itemsStore.sortByItem, this._itemsStore.sortDirectionItem ],
       this._paramsCase
     );
   }

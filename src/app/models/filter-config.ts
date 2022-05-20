@@ -10,8 +10,8 @@ import { ChangeFn, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
 import { FsFilterAction } from '../interfaces/action.interface';
 
-export const SORT_BY_FIELD = 'system_sort_by';
-export const SORT_DIRECTION_FIELD = 'system_sort_direction';
+export const SORT_BY_FIELD = 'sortName';
+export const SORT_DIRECTION_FIELD = 'sortDirection';
 
 
 export class FsFilterConfig extends Model {

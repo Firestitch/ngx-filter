@@ -236,7 +236,7 @@ export class FsFilterItemsStore implements OnDestroy {
         item.initValues(p[item.name]);
       });
 
-    this._createSortingItems(p);
+    this._initSortingItems(p);
     this.loadAsyncDefaults();
     this._subscribeToItemsChanges();
   }
@@ -312,6 +312,7 @@ export class FsFilterItemsStore implements OnDestroy {
         return filterItem;
       });
 
+    this._createSortingItems();
   }
 
   private _subscribeToItemsChanges() {
@@ -357,7 +358,14 @@ export class FsFilterItemsStore implements OnDestroy {
       });
   }
 
-  private _createSortingItems(p) {
+  private _initSortingItems(p: IFilterExternalParams): void {
+    if (this.sortByItem && this.sortDirectionItem) {
+      this.sortByItem.initValues(p[this.sortByItem.name]);
+      this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
+    }
+  }
+
+  private _createSortingItems(): void {
     if (this._config.sortValues?.length > 0) {
       const sortByItem = {
         name: SORT_BY_FIELD,
@@ -375,7 +383,6 @@ export class FsFilterItemsStore implements OnDestroy {
         sortByItem,
         null,
       );
-      this.sortByItem.initValues(p[this.sortByItem.name]);
 
       const sortDirectionItem = {
         name: SORT_DIRECTION_FIELD,
@@ -395,7 +402,6 @@ export class FsFilterItemsStore implements OnDestroy {
         sortDirectionItem,
         null
       );
-      this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
     }
   }
 
