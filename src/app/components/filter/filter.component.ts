@@ -432,7 +432,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     const data = this._filterItems.valuesAsQuery();
     this._sort = this._filterItems.getSort();
 
-    this.config.init(data, this._sort);
+    if (this.config.init) {
+      this.config.init(data, this._sort);
+    }
+
     this._updateChipsVisibility();
   }
 
@@ -721,10 +724,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        if (this.config.init) {
-          this.init();
-        }
-
+        this.init();
         this._syncSearchInputWithKeyword();
 
         this.ready.emit();
