@@ -1,5 +1,3 @@
-import { Alias, Model } from 'tsmodels';
-
 import {
   FilterButton,
   FilterConfig,
@@ -14,38 +12,65 @@ export const SORT_BY_FIELD = 'sortName';
 export const SORT_DIRECTION_FIELD = 'sortDirection';
 
 
-export class FsFilterConfig extends Model {
+export class FsFilterConfig {
 
-  @Alias() public load = true;
-  @Alias() public persist: FsFilterPersistance = false;
-  @Alias() public savedFilters: IFilterSavedFiltersConfig;
-  @Alias() public inline = false;
-  @Alias() public autofocus = false;
-  @Alias() public chips = false;
-  @Alias('sorts') public sortValues: any[] = null;
-  @Alias() public sort: Sort = null;
-  @Alias() public sortDirection = null;
-  @Alias() public queryParam = false;
-  @Alias() public init: ChangeFn;
-  @Alias() public change: ChangeFn;
-  @Alias() public reload: ChangeFn;
-  @Alias() public clear: ChangeFn;
-  @Alias() public sortChange: ChangeFn;
-  @Alias() public case: 'snake' | 'camel' = 'camel';
-  @Alias() public reloadWhenConfigChanged: boolean;
-  @Alias() public button: FilterButton;
-  @Alias() public items: IFilterConfigItem[];
-  @Alias() public actions: FsFilterAction[];
+  public load = true;
+  public persist: FsFilterPersistance = false;
+  public savedFilters: IFilterSavedFiltersConfig;
+  public inline = false;
+  public autofocus = false;
+  public chips = false;
+  public sortValues: any[] = null;
+  public sort: Sort = null;
+  // public sortDirection = null;
+  public queryParam = false;
+  public init: ChangeFn;
+  public change: ChangeFn;
+  public reload: ChangeFn;
+  public clear: ChangeFn;
+  public sortChange: ChangeFn;
+  public case: 'snake' | 'camel' = 'camel';
+  public reloadWhenConfigChanged: boolean;
+  public button: FilterButton;
+  public items: IFilterConfigItem[];
+  public actions: FsFilterAction[];
 
   public namespace: string; // for persistance
 
   constructor(data: FilterConfig = {}) {
-    super();
-    this._fromJSON(data);
-    this._init();
+    this._init(data);
   }
 
-  private _init() {
+  private _init(data: FilterConfig = {}) {
+    this.load       = data.load ?? true;
+    this.persist    = data.persist;
+    this.savedFilters = data.savedFilters;
+    this.inline     = data.inline ?? false;
+    this.autofocus  = data.autofocus ?? false;
+    this.chips      = data.chips ?? false;
+    this.sortValues = data.sorts;
+    this.sort       = data.sort;
+    this.queryParam = data.queryParam ?? false;
+    this.init       = data.init;
+    this.change     = data.change;
+    this.reload     = data.reload;
+    this.clear      = data.clear;
+    this.sortChange = data.sortChange;
+    this.case       = data.case ?? 'camel';
+    this.reloadWhenConfigChanged = data.reloadWhenConfigChanged;
+    this.button     = data.button;
+    this.items      = data.items;
+    this.actions    = data.actions;
+    this.case       = data.case ?? 'camel';
+
+    if (this.persist) {
+      if (typeof this.persist === 'object') {
+        if (this.persist.name) {
+          this.namespace = this.persist.name;
+        }
+      }
+    }
+
     if (!this.button) {
       this.button = {};
     }
@@ -68,20 +93,6 @@ export class FsFilterConfig extends Model {
 
     if (this.clear === undefined) {
       this.clear = () => {}
-    }
-  }
-
-  public _fromJSON(value: any) {
-    super._fromJSON(value);
-
-    this.case = value.case ?? 'camel';
-
-    if (this.persist) {
-      if (typeof this.persist === 'object') {
-        if (this.persist.name) {
-          this.namespace = this.persist.name;
-        }
-      }
     }
   }
 }
