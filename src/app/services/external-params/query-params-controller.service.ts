@@ -51,13 +51,15 @@ export class QueryParamsController {
    * Parse query and update filter values
    */
   public fetchFromQueryParams() {
+    const items = [
+      ...this._itemsStore.items,
+      this._itemsStore.sortByItem,
+      this._itemsStore.sortDirectionItem,
+    ].filter((item) => !!item);
+
     this._fetchedParams = restoreItems(
       this._route.snapshot.queryParams,
-      [
-        ...this._itemsStore.items,
-        this._itemsStore.sortByItem,
-        this._itemsStore.sortDirectionItem,
-      ],
+      items,
       this._paramsCase
     );
   }

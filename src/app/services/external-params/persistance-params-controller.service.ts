@@ -52,14 +52,16 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
   public restore(): void {
     super.restore();
 
+    const items = [
+      ...this._itemsStore.items,
+      this._itemsStore.sortByItem,
+      this._itemsStore.sortDirectionItem,
+    ].filter((item) => !!item);
+
     if (this._value) {
       this._value.data = restoreItems(
         this._value.data,
-        [
-          ...this._itemsStore.items,
-          this._itemsStore.sortByItem,
-          this._itemsStore.sortDirectionItem,
-        ],
+        items,
         this._paramsCase
       );
     }
