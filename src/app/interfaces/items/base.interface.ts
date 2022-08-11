@@ -5,10 +5,12 @@ import { BaseItem } from '../../models/items/base-item';
 
 export type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange;
 export type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange;
-export type IFilterDefaultFn = () => Observable<unknown>;
+export type IFilterDefaultFn<T extends unknown = unknown> = () => Observable<T>;
+export type FilterNameValue = { name: string, value: unknown };
 
+type DefaultItemType = ItemType.Date | ItemType.DateTime | ItemType.Week | ItemType.Keyword;
 
-export interface IFilterConfigBaseItem<T = ItemType, U = string> {
+export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   name: string;
   type: T;
   label: string | string[];
@@ -17,7 +19,7 @@ export interface IFilterConfigBaseItem<T = ItemType, U = string> {
   disable?: boolean;
   values?: any;
   primary?: boolean;
-  default?: IFilterDefaultFn | any;
+  default?: unknown;
   change?: (item: BaseItem<any>) => void;
   clear?: boolean;
   disablePersist?: boolean;

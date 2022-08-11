@@ -10,11 +10,12 @@ import {
 
 import { ItemType } from '../../enums/item-type.enum';
 
-import { IFilterConfigBaseItem, IFilterDefaultFn } from '../../interfaces/items/base.interface';
+import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
 import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
+import { IFilterConfigItem } from '../../interfaces/config.interface';
 
 
-export abstract class BaseItem<T extends IFilterConfigBaseItem> {
+export abstract class BaseItem<T extends IFilterConfigItem> {
 
   // Configurable properties
 
@@ -23,7 +24,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
   public chipLabel: string | string[];
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
-  public defaultValueFn: IFilterDefaultFn;
+  public defaultValueFn: IFilterDefaultFn<unknown>;
   public persistedValue: unknown;
   public clearAllowed: boolean;
 
@@ -307,7 +308,7 @@ export abstract class BaseItem<T extends IFilterConfigBaseItem> {
     this.chipLabel = item.chipLabel;
 
     if (typeof item.default === 'function') {
-      this.defaultValueFn = item.default;
+      this.defaultValueFn = item.default as IFilterDefaultFn;
     } else {
       this.defaultValue = item.default;
     }

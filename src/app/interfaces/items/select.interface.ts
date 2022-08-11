@@ -9,6 +9,7 @@ export interface IFilterConfigSelectItem extends IFilterConfigBaseItem<ItemType.
   multiple?: boolean;
   children?: string;
   values?: FilterValuesReturnFn;
+  default?: string[] | string;
 }
 
 export interface IFilterConfigSelectIsolate {

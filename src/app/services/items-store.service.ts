@@ -20,7 +20,7 @@ import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-it
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { TextItem } from '../models/items/text-item';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
-import { IFilterConfigBaseItem } from '../interfaces/items/base.interface';
+
 
 interface IValueAsQuery {
   onlyPresented?: boolean;
@@ -92,7 +92,7 @@ export class FsFilterItemsStore implements OnDestroy {
     this.initItems(config.items);
   }
 
-  public getItemByName(name: string): BaseItem<IFilterConfigBaseItem> {
+  public getItemByName(name: string): BaseItem<IFilterConfigItem> {
     return this._itemsByName.get(name);
   }
 

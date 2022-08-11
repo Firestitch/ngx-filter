@@ -1,4 +1,4 @@
-import { IFilterConfigBaseItem } from './base.interface';
+import { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './base.interface';
 import { ItemType } from '../../enums/item-type.enum';
 
 
@@ -10,4 +10,5 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   chipBackground?: string;
   chipIcon?: string;
   chipClass?: string;
+  default?: IFilterDefaultFn<FilterNameValue[]> | FilterNameValue[];
 }
