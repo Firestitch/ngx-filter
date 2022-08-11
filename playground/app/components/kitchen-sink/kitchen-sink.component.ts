@@ -121,7 +121,7 @@ export class KitchenSinkComponent {
           name: 'notUsed',
           type: ItemType.Select,
           label: 'Not Used',
-          default: 1,
+          default: '1',
           values: () => [],
           disable: true,
         },
