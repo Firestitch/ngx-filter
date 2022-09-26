@@ -37,7 +37,7 @@ export class ExternalParamsController implements OnDestroy {
   public get params(): IFilterExternalParams {
     const result: IFilterExternalParams = {};
 
-    if (this._persistanceStore.enalbed) {
+    if (this._persistanceStore.enabled) {
       Object.assign(result, this._persistanceStore.value?.data);
     }
 

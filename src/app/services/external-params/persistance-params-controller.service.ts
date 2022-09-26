@@ -32,10 +32,6 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
     super(_store, _route);
   }
 
-  public get enalbed(): boolean {
-    return this._enabled;
-  }
-
   public init(
     persistanceConfig: FsFilterPersistance,
     namespace: string,
@@ -50,6 +46,10 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
   }
 
   public restore(): void {
+    if (!this.enabled) {
+      return;
+    }
+
     super.restore();
 
     const items = [
