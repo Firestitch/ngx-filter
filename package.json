@@ -100,7 +100,7 @@
   "peerDependencies": {
     "@firestitch/autocomplete-chips": ">=12.0.0",
     "@firestitch/chip": ">=12.0.0",
-    "@firestitch/common": ">=12.0.0",
+    "@firestitch/common": ">=12.3.0",
     "@firestitch/date": ">=12.0.0",
     "@firestitch/datepicker": ">=12.0.1",
     "@firestitch/drawer": ">=12.0.0",
