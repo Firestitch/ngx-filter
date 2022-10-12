@@ -1,4 +1,4 @@
-import { filter } from '@firestitch/common';
+import { filter, isArrayEqual } from '@firestitch/common';
 
 import { clone } from 'lodash-es';
 
@@ -72,11 +72,15 @@ export class MultipleSelectItem extends BaseSelectItem {
   }
 
   protected _validateModel() {
-    this.model = filter(this.model || [], (item) => {
+    const possibleValues = filter(this.model || [], (item) => {
       return this.values.find(value => {
         return value.value == item;
       });
     });
+
+    if (!isArrayEqual(this.model, possibleValues)) {
+      this.model = possibleValues;
+    }
   }
 
   protected _clearValue(defaultValue: unknown = undefined) {
