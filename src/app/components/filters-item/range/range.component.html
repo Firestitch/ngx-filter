@@ -1,4 +1,4 @@
-<span fxLayout="row">
+<div class="fs-row form-field">
   <mat-form-field class="filter-range-min">
     <mat-label>{{item.label[0]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
@@ -14,7 +14,7 @@
     >
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
-  <div class="spacer"></div>
+
   <mat-form-field class="filter-range-max">
     <mat-label>{{item.label[1]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
@@ -30,4 +30,4 @@
     >
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
-</span>
+</div>

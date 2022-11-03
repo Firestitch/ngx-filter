@@ -14,7 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsCommonModule } from '@firestitch/common';
@@ -76,7 +75,6 @@ import { WeekComponent } from './components/filters-item/week/week.component';
     MatAutocompleteModule,
     MatButtonModule,
     MatDialogModule,
-    FlexLayoutModule,
     FsChipModule,
     FsCommonModule,
     FsStoreModule,
