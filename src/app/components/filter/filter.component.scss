@@ -6,6 +6,15 @@ fs-filter {
   margin-bottom: 20px;
   display: block;
 
+  &:not(.has-keyword) {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .filter-status-container {
+      margin-bottom: 4px;
+    }
+  }
+
   .results {
     min-height: 90px;
     position: relative;
@@ -13,38 +22,32 @@ fs-filter {
     overflow-y: hidden;
   }
 
-  .status-bar {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 17px;
-    margin: 4px 0;
-  }
-
-  .filter-chips {
-    display: block;
-  }
-
-  .filter-searchless-container {
+  .filter-status-container {
+    flex-grow: 1;
     display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 4px;
 
-    .status-actions {
-      flex-grow: 1;
+    .filter-status {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 17px;
+    }
 
-      > *:first-child {
-        margin-top: 0;
-      }
+    .filter-status + fs-filter-chips {
+      margin-top: 4px;
+    }
+
+    fs-filter-chips {
+      display: block;
     }
   }
 
-  fs-filter-chips {
-    margin: 5px 0;
-  }
-
-  .filter-search-container {
+  .filter-container {
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
-    flex: 1 1 0;
     position: relative;
 
     .search {
@@ -63,7 +66,7 @@ fs-filter {
       height: 100%;
     }
 
-    .filter-input-field {
+    .filter-keyword {
       flex-direction: row;
       box-sizing: border-box;
       display: flex;

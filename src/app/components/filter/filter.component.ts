@@ -95,6 +95,11 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class.fs-filter')
   public fsFilterClass = true;
 
+  @HostBinding('class.has-keyword')
+  public get hasKeyword() {
+    return this._filterItems.hasKeyword;
+  }
+
   public searchText = new FormControl();
   public searchPlaceholder = 'Search';
 
@@ -166,10 +171,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get hasVisibleItemOrSorting(): boolean {
     return this.visibleItems.length > 0 || !!this._filterItems.sortByItem
-  }
-
-  public get hasKeyword() {
-    return this._filterItems.hasKeyword;
   }
 
   public get filtersBtnVisible$(): Observable<boolean> {

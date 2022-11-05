@@ -1,94 +1,74 @@
-<ng-container *ngIf="hasKeyword; else noKeywordFilter">
-  <div class="filter-search-container">
-    <div class="filter-input-field">
-      <form autocomplete="off" role="presentation" *ngIf="keywordVisible$ | async">
-        <mat-form-field floatLabel="never">
-            <span matPrefix>
-              <mat-icon matPrefix>search</mat-icon>
-            </span>
+<ng-container>
+  <div class="filter-container">
+    <ng-container *ngIf="hasKeyword">
+      <div class="filter-keyword">
+        <form autocomplete="off" role="presentation" *ngIf="keywordVisible$ | async">
+          <mat-form-field floatLabel="never">
+              <span matPrefix>
+                <mat-icon matPrefix>search</mat-icon>
+              </span>
 
-          <input
-            #searchTextInput
-            matInput
-            [formControl]="searchText"
-            [placeholder]="searchPlaceholder"
-            name="filter-input"
-            (click)="filterInputEvent($event)"
-            class="filter-input">
+            <input
+              #searchTextInput
+              matInput
+              [formControl]="searchText"
+              [placeholder]="searchPlaceholder"
+              name="filter-input"
+              (click)="filterInputEvent($event)"
+              class="filter-input">
 
-          <a matSuffix
-             *ngIf="searchText.value && showFilterInput && config.clear"
-             (click)="clearSearchText($event)"
-             href="javascript:void(0)"
-             class="clear">
-            <mat-icon>clear</mat-icon>
-          </a>
+            <a matSuffix
+              *ngIf="searchText.value && showFilterInput && config.clear"
+              (click)="clearSearchText($event)"
+              href="javascript:void(0)"
+              class="clear">
+              <mat-icon>clear</mat-icon>
+            </a>
 
-          <a matSuffix
-             (click)="reload($event)"
-             class="reload"
-             *ngIf="config.reload">
-            <mat-icon>refresh</mat-icon>
-          </a>
-        </mat-form-field>
-      </form>
-    </div>
-    <ng-container *ngTemplateOutlet="filterActions"></ng-container>
-  </div>
-  <div class="status-actions" *ngIf="keywordVisible$ | async">
-    <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
-    <ng-container *ngTemplateOutlet="filterChips"></ng-container>
-  </div>
-</ng-container>
-
-<ng-template #noKeywordFilter>
-  <div class="filter-searchless-container">
-    <div class="status-actions">
-      <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
-      <ng-container *ngTemplateOutlet="filterChips"></ng-container>
-    </div>
-    <ng-container *ngTemplateOutlet="filterActions"></ng-container>
-  </div>
-</ng-template>
-
-
-<ng-template #filterActions>
-  <div class="filter-actions">
-    <ng-container *ngIf="hasVisibleItemOrSorting && filtersBtnVisible$ | async">
-      <button
-        mat-button
-        class="filters-button"
-        [ngClass]="{
-          'mat-raised-button': config.button.style == 'raised',
-          'mat-button': config.button.style == 'basic',
-          'mat-icon-button': config.button.style == 'icon'
-        }"
-        (click)="changeVisibilityClick(!showFilterMenu, $event)"
-        type="button"
-        [color]="config.button.color">
-        <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
-        {{ config.button.label }}
-      </button>
+            <a matSuffix
+              (click)="reload($event)"
+              class="reload"
+              *ngIf="config.reload">
+              <mat-icon>refresh</mat-icon>
+            </a>
+          </mat-form-field>
+        </form>
+      </div>
     </ng-container>
 
-    <fs-filter-actions
-      *ngIf="actionsVisible$ | async"
-      [actions]="actions$ | async"
-      [kebabActions]="menuActions$ | async">
-    </fs-filter-actions>
+    <div class="filter-actions">
+      <ng-container *ngIf="hasVisibleItemOrSorting && filtersBtnVisible$ | async">
+        <button
+          mat-button
+          class="filters-button"
+          [ngClass]="{
+            'mat-raised-button': config.button.style == 'raised',
+            'mat-button': config.button.style == 'basic',
+            'mat-icon-button': config.button.style == 'icon'
+          }"
+          (click)="changeVisibilityClick(!showFilterMenu, $event)"
+          type="button"
+          [color]="config.button.color">
+          <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
+          {{ config.button.label }}
+        </button>
+      </ng-container>
+  
+      <fs-filter-actions
+        *ngIf="actionsVisible$ | async"
+        [actions]="actions$ | async"
+        [kebabActions]="menuActions$ | async">
+      </fs-filter-actions>
+    </div>
   </div>
-</ng-template>
-
-<ng-template #filterChips>
-  <fs-filter-chips
-    *ngIf="config.chips && hasFilterChips$ | async"
-    class="filter-chips"
-    [filters]="items">
-  </fs-filter-chips>
-</ng-template>
-
-<ng-template #statusBarContainer>
-  <div class="status-bar" *ngIf="statusBar">
-    <small><ng-container *ngTemplateOutlet="statusBar"></ng-container></small>
+  <div class="filter-status-container">
+    <div class="filter-status" *ngIf="statusBar">
+      <small><ng-container *ngTemplateOutlet="statusBar"></ng-container></small>
+    </div>
+    <fs-filter-chips
+      *ngIf="config.chips && hasFilterChips$ | async"
+      class="filter-chips"
+      [filters]="items">
+    </fs-filter-chips>
   </div>
-</ng-template>
+</ng-container>
