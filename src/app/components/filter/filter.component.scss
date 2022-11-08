@@ -9,10 +9,6 @@ fs-filter {
   &:not(.has-keyword) {
     display: flex;
     flex-direction: row-reverse;
-
-    .filter-status-container {
-      margin-bottom: 4px;
-    }
   }
 
   .results {
@@ -27,7 +23,7 @@ fs-filter {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-top: 4px;
+    margin: 4px 0;
 
     .filter-status {
       overflow: hidden;
