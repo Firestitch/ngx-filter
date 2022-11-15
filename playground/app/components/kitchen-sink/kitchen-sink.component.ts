@@ -433,6 +433,7 @@ export class KitchenSinkComponent {
       {
         mode: ActionMode.File,
         label: 'Upload',
+        menu: false,
         icon: 'cloud_upload',
         color: 'accent',
         multiple: true,

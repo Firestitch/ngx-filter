@@ -1,7 +1,8 @@
-<button type="button"
-        mat-icon-button
-        class="menu-button"
-        [fsMenuTriggerFor]="kebabActionsMenu">
+<button 
+    type="button"
+    mat-icon-button
+    class="menu-button"
+    [fsMenuTriggerFor]="kebabActionsMenu">
   <mat-icon>more_vert</mat-icon>
 </button>
 <fs-menu #kebabActionsMenu>
@@ -16,11 +17,12 @@
                 {{ action.label }} <mat-icon style="margin: 0;">arrow_right</mat-icon> {{childAction.label}}
               </ng-template>
               <ng-container *ngFor="let subAction of childAction.items">
-                <ng-template fs-menu-item
-                             [link]="subAction.routerLink?.link"
-                             [queryParams]="subAction.routerLink?.queryParams"
-                             [hidden]="!(subAction.visible$ | async)"
-                             (click)="subAction.click($event)">
+                <ng-template 
+                    fs-menu-item
+                    [link]="subAction.routerLink?.link"
+                    [queryParams]="subAction.routerLink?.queryParams"
+                    [hidden]="!(subAction.visible$ | async)"
+                    (click)="subAction.click($event)">
                   <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
                   {{subAction.label}}
                 </ng-template>
@@ -28,11 +30,12 @@
             </fs-menu-group>
           </ng-container>
           <ng-template #simpleMenuItem>
-            <ng-template fs-menu-item
-                         [link]="childAction.routerLink?.link"
-                         [queryParams]="childAction.routerLink?.queryParams"
-                         [hidden]="!(childAction.visible$ | async)"
-                         (click)="childAction.click($event);">
+            <ng-template 
+                fs-menu-item
+                [link]="childAction.routerLink?.link"
+                [queryParams]="childAction.routerLink?.queryParams"
+                [hidden]="!(childAction.visible$ | async)"
+                (click)="childAction.click($event);">
               <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
              {{ action.label }} <mat-icon style="margin: 0;">arrow_right</mat-icon>{{ childAction.label }}
             </ng-template>
@@ -41,30 +44,27 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'file'">
-        <ng-template fs-menu-item
-                     [fsClass]="action.classArray"
-        >
-          <fs-file
-            class="action-button"
-            [accept]="action.accept || '*'"
+        <ng-template 
+            fs-menu-file-item
+            [fsClass]="action.classArray"
             [multiple]="action.multiple"
+            [accept]="action.accept || '*'"
             [minWidth]="action.minWidth"
             [minHeight]="action.minHeight"
             [imageWidth]="action.maxWidth"
             [imageHeight]="action.maxHeight"
-            (select)="action.fileSelected($event)"
             (error)="action.fileError($event)"
-            (clicked)="action.click($event)">
-            <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
-          </fs-file>
+            (select)="action.fileSelected($event)"
+            (click)="action.click($event)">
+          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
         </ng-template>
       </ng-container>
 
       <ng-container *ngSwitchDefault>
-        <ng-template fs-menu-item
-                     (click)="action.click($event)"
-                     [fsClass]="action.classArray"
-        >
+        <ng-template 
+            fs-menu-item
+            (click)="action.click($event)"
+            [fsClass]="action.classArray">
           <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
         </ng-template>
       </ng-container>

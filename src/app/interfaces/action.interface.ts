@@ -27,10 +27,10 @@ interface IFsFilterBaseAction {
   show?: FsFilterActionShowFn;
   click?: FsFilterActionClickFn;
   tabIndex?: number;
+  menu?: boolean;
 }
 
 export interface IFsFilterButtonAction extends IFsFilterBaseAction {
-  menu?: boolean;
   mode?: ActionMode.Button;
   customize?: boolean;
   disabled?: FsFilterActionDisabledFn;

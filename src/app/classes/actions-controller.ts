@@ -122,7 +122,7 @@ export class ActionsController implements OnDestroy {
         return action.visible;
       })
       .forEach((action) => {
-        if (action.menu || mobileMode) {
+        if (action.menu !== false && (action.menu || mobileMode)) {
           kebabActions.push(action);
         } else {
           actions.push(action);

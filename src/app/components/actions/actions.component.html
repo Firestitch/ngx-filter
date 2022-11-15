@@ -1,9 +1,10 @@
 <!-- Buttons -->
 <ng-container *ngFor="let action of actions">
-
   <ng-container [ngSwitch]="action.mode">
     <ng-container *ngSwitchCase="'button'">
-      <fs-filter-action-button [action]="action"></fs-filter-action-button>
+      <fs-filter-action-button
+        [action]="action">
+      </fs-filter-action-button>
     </ng-container>
 
     <ng-container *ngSwitchCase="'menu'">
@@ -17,11 +18,12 @@
           <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
             <fs-menu-group [label]="childAction.label">
               <ng-container *ngFor="let subAction of childAction.items">
-                <ng-template fs-menu-item
-                             [link]="subAction.routerLink?.link"
-                             [queryParams]="subAction.routerLink?.queryParams"
-                             [hidden]="!(subAction.visible$ | async)"
-                             (click)="subAction.click($event)">
+                <ng-template 
+                    fs-menu-item
+                    [link]="subAction.routerLink?.link"
+                    [queryParams]="subAction.routerLink?.queryParams"
+                    [hidden]="!(subAction.visible$ | async)"
+                    (click)="subAction.click($event)">
                   <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
                   {{subAction.label}}
                 </ng-template>
@@ -29,11 +31,12 @@
             </fs-menu-group>
           </ng-container>
           <ng-template #simpleMenuItem>
-            <ng-template fs-menu-item
-                         [link]="childAction.routerLink?.link"
-                         [queryParams]="childAction.routerLink?.queryParams"
-                         [hidden]="!(childAction.visible$ | async)"
-                         (click)="childAction.click($event);">
+            <ng-template 
+                fs-menu-item
+                [link]="childAction.routerLink?.link"
+                [queryParams]="childAction.routerLink?.queryParams"
+                [hidden]="!(childAction.visible$ | async)"
+                (click)="childAction.click($event);">
               <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
               {{childAction.label}}
             </ng-template>
@@ -44,16 +47,16 @@
 
     <ng-container *ngSwitchCase="'file'">
       <fs-file
-        class="action-button"
-        [accept]="action.accept || '*'"
-        [multiple]="action.multiple"
-        [minWidth]="action.minWidth"
-        [minHeight]="action.minHeight"
-        [imageWidth]="action.maxWidth"
-        [imageHeight]="action.maxHeight"
-        (select)="action.fileSelected($event)"
-        (error)="action.fileError($event)"
-        (clicked)="action.click($event)">
+          class="action-button"
+          [accept]="action.accept || '*'"
+          [multiple]="action.multiple"
+          [minWidth]="action.minWidth"
+          [minHeight]="action.minHeight"
+          [imageWidth]="action.maxWidth"
+          [imageHeight]="action.maxHeight"
+          (select)="action.fileSelected($event)"
+          (error)="action.fileError($event)"
+          (clicked)="action.click($event)">
         <fs-filter-action-button [action]="action"></fs-filter-action-button>
       </fs-file>
     </ng-container>
@@ -63,5 +66,7 @@
 
 <!-- menu -->
 <ng-container *ngIf="kebabActions?.length">
-  <fs-filter-action-kebab-actions [kebabActions]="kebabActions"></fs-filter-action-kebab-actions>
+  <fs-filter-action-kebab-actions 
+    [kebabActions]="kebabActions">
+  </fs-filter-action-kebab-actions>
 </ng-container>

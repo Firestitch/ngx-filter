@@ -108,6 +108,7 @@ export class Action {
     this.iconPlacement = config.iconPlacement;
     this._showFn = config.show;
     this.tabIndex = config.tabIndex ?? 0;
+    this.menu = config.menu;
 
     if ((<IFsFilterFileAction>config).multiple !== undefined) {
       this.multiple = (<IFsFilterFileAction>config).multiple;
@@ -125,7 +126,6 @@ export class Action {
 
     switch (config.mode) {
       case ActionMode.Button: {
-        this.menu = config.menu;
         this.customize = config.customize;
         this.click = config.click ?? (() => { });
         this._disabledFn = config.disabled;
