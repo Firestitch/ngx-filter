@@ -20,6 +20,7 @@ import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-it
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { TextItem } from '../models/items/text-item';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
 
 
 interface IValueAsQuery {
@@ -140,16 +141,33 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public loadAsyncDefaults(): void {
-    const pendingItems = this.items
+    // default values can be asynchronous, and we must load them if there is no persisted value instead
+    const defaultValuesToBeLoaded = this.items
       .filter((item) => {
         return item.defaultValueFn
           && (item.persistedValue === null || item.persistedValue === undefined);
       });
 
-    if (pendingItems.length > 0) {
+    // special hack for isolate multiple select
+    // values for this type of select must be preloaded
+    // Read more in class MultipleSelectItem._init()
+    const valuesToBeLoaded = this.items
+      .filter((item) => {
+        return (item instanceof MultipleSelectItem) && item.hasPendingValues && item.isolate;
+      });
+
+    if (defaultValuesToBeLoaded.length > 0 || valuesToBeLoaded.length > 0) {
       forkJoin(
-        pendingItems
-          .map((item) => item.loadDefaultValue())
+        defaultValuesToBeLoaded
+          .map((item) => item.loadDefaultValue()),
+
+        valuesToBeLoaded
+          .map((item) => {
+            item.loadAsyncValues();
+
+            return item.loading$
+              .pipe();
+          })
       )
         .pipe(
           finalize(() => {

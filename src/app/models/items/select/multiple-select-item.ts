@@ -4,6 +4,7 @@ import { clone } from 'lodash-es';
 
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { BaseSelectItem } from './base-select-item';
+import { arraysAreEquals } from '../../../helpers/compare';
 
 
 export class MultipleSelectItem extends BaseSelectItem {
@@ -18,7 +19,9 @@ export class MultipleSelectItem extends BaseSelectItem {
   public get value() {
     let value = clone(this.model);
 
-    if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
+    if (this.isolateOptionNotSelected) {
+      value = this.values.map((v) => v.value);
+    } else if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
       value = null;
     }
 
@@ -27,6 +30,13 @@ export class MultipleSelectItem extends BaseSelectItem {
 
   public get isChipVisible(): boolean {
     return Array.isArray(this.model) && this.model.length > 0;
+  }
+
+  protected get isolateOptionNotSelected() {
+    const modelValue = this.model;
+    const isolate = this.isolate;
+
+    return isolate && !isolate.enabled && modelValue?.length === 0;
   }
 
   public getChipsContent(type = null): string {
@@ -53,7 +63,21 @@ export class MultipleSelectItem extends BaseSelectItem {
   protected _init() {
     super._init();
 
-    if (this.model === undefined && !Array.isArray(this.defaultValue)) {
+    const values = this.values.map((itemv) => itemv.value);
+    const wrongDefaultValue = this.model === undefined && !Array.isArray(this.defaultValue);
+
+    /**
+     * When multiple select is in isolate mode and have no options selected
+     * it should send to the server all it's possible values,
+     * but should not show them as selected in interfaces as well as in query params & persistance
+     *
+     * Code below prevents filling model with values from query params if query params contain all possible values
+     */
+    const isolate = !wrongDefaultValue
+      && !this.isolateOptionNotSelected
+      && arraysAreEquals(this.model, values);
+
+    if (wrongDefaultValue || isolate) {
       this.model = [];
     }
   }

@@ -1,12 +1,12 @@
 import { list as arrayList } from '@firestitch/common';
 
-import { isEqual } from 'date-fns';
 import { isObject } from 'lodash-es';
 
 import { filterToQueryParam } from './query-param-transformers';
 import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
 import { BaseItem } from '../models/items/base-item';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { arraysAreEquals } from './compare';
 
 
 export function buildQueryParams(flattenedParams: Record<string, unknown>, items: BaseItem<IFilterConfigItem>[]) {
@@ -16,7 +16,7 @@ export function buildQueryParams(flattenedParams: Record<string, unknown>, items
         const isolated = arrayList(filterItem.values, 'value').sort();
         const value = filterItem.value.sort();
 
-        if (isEqual(value, isolated)) {
+        if (arraysAreEquals(value, isolated)) {
           flattenedParams[filterItem.name] = null;
         }
       }

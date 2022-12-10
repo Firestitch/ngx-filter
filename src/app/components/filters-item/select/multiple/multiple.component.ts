@@ -2,12 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
   ViewChild
 } from '@angular/core';
 import { MatSelect } from '@angular/material/select';
+
+import { MultipleSelectItem } from '../../../../models/items/select/multiple-select-item';
+
 
 @Component({
   selector: 'filter-item-select-multiple',
@@ -17,7 +18,8 @@ import { MatSelect } from '@angular/material/select';
 })
 export class SelectMultipleComponent {
 
-  @Input() public item;
+  @Input()
+  public item: MultipleSelectItem;
 
   @ViewChild('select', { static: true })
   public select: MatSelect;
