@@ -106,9 +106,11 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   protected _validateModel() {}
 
   protected _setModel(value) {
-    value.from = parseDate(value.from);
-    value.to = parseDate(value.to);
-    value.period = parseInt(value.period, 10) || null;
+    if (value) {
+      value.from = parseDate(value.from);
+      value.to = parseDate(value.to);
+      value.period = parseInt(value.period, 10) || null;
+    }
 
     super._setModel(value);
   }
@@ -122,6 +124,6 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   protected _init() {}
 
   protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? {};
+    this.model = defaultValue ?? undefined;
   }
 }
