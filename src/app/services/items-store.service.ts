@@ -158,16 +158,18 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (defaultValuesToBeLoaded.length > 0 || valuesToBeLoaded.length > 0) {
       forkJoin(
-        defaultValuesToBeLoaded
-          .map((item) => item.loadDefaultValue()),
+        [
+          ...defaultValuesToBeLoaded
+            .map((item) => item.loadDefaultValue()),
 
-        valuesToBeLoaded
-          .map((item) => {
-            item.loadAsyncValues();
+          ...valuesToBeLoaded
+            .map((item) => {
+              item.loadAsyncValues();
 
-            return item.loading$
-              .pipe();
-          })
+              return item.loading$
+                .pipe();
+            })
+        ],
       )
         .pipe(
           finalize(() => {
