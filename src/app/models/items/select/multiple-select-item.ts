@@ -20,7 +20,7 @@ export class MultipleSelectItem extends BaseSelectItem {
     let value = clone(this.model);
 
     if (this.isolateOptionNotSelected) {
-      value = this.values.map((v) => v.value);
+      value = this.values?.map((v) => v.value);
     } else if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
       value = null;
     }
@@ -64,7 +64,7 @@ export class MultipleSelectItem extends BaseSelectItem {
     super._init();
 
     const values = this.values.map((itemv) => itemv.value);
-    const wrongDefaultValue = this.model === undefined && !Array.isArray(this.defaultValue);
+    const wrongDefaultValue = !this.model && !Array.isArray(this.defaultValue);
 
     /**
      * When multiple select is in isolate mode and have no options selected
