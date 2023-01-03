@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
@@ -31,7 +30,6 @@ export class ExternalParamsController implements OnDestroy {
     private _persistanceStore: PersistanceParamsController,
     private _queryParams: QueryParamsController,
     private _savedFilters: SavedFiltersController,
-    private _route: ActivatedRoute,
   ) {}
 
   public get params(): IFilterExternalParams {

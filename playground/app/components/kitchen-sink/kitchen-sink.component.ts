@@ -1,4 +1,4 @@
-import { Component, EventEmitter, ViewChild } from '@angular/core';
+import { Component, EventEmitter, ViewChild, OnInit } from '@angular/core';
 
 import {
   ActionMode,
@@ -17,6 +17,7 @@ import { shuffle } from 'lodash-es';
 import { savedFilters } from './saved-filter';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple
   templateUrl: 'kitchen-sink.component.html',
   styleUrls: [ 'kitchen-sink.component.css' ]
 })
-export class KitchenSinkComponent {
+export class KitchenSinkComponent implements OnInit {
 
   @ViewChild('filter', { static: true }) public filterEl: FilterComponent;
 
@@ -75,7 +76,11 @@ export class KitchenSinkComponent {
     },
   ];
 
-  constructor() {
+  public constructor(
+    private _router: Router,
+  ) {}
+
+  public ngOnInit(): void {
     this.conf = {
       persist: true,
       inline: false,
@@ -373,6 +378,8 @@ export class KitchenSinkComponent {
     //   this.conf.items.pop();
     // },3000)
   }
+
+  
 
   private _filterActions(): FsFilterAction[] {
     return [

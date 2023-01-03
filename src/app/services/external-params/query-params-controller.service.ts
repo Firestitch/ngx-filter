@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { FsFilterItemsStore } from '../items-store.service';
 import { restoreItems } from '../../helpers/restore-items';
+import { Location } from '@angular/common';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class QueryParamsController {
   constructor(
     private _router: Router,
     private _route: ActivatedRoute,
+    private _location: Location,
     private _itemsStore: FsFilterItemsStore
   ) {}
 
@@ -38,13 +40,25 @@ export class QueryParamsController {
   public writeStateToQueryParams(params) {
     if (!this._enabled) { return }
 
-    // Update query
-    this._router.navigate([], {
-      replaceUrl: true,
-      relativeTo: this._route,
-      queryParams: params,
-      queryParamsHandling: 'merge',
-    }).then(() => {});
+    this._location.replaceState(
+      this._router.createUrlTree([],
+          {      
+            relativeTo: this._route,
+            queryParams: params,
+            queryParamsHandling: 'merge',
+            preserveFragment: true,
+          }
+      ).toString()
+    );
+    
+    // Trying replacing the URL without triggering an Angular navigation change
+    // // Update query
+    // this._router.navigate([], {
+    //   replaceUrl: true,
+    //   relativeTo: this._route,
+    //   queryParams: params,
+    //   queryParamsHandling: 'merge',
+    // }).then(() => {});
   }
 
   /**
