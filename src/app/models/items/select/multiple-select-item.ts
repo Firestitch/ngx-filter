@@ -22,7 +22,7 @@ export class MultipleSelectItem extends BaseSelectItem {
     if (this.isolateOptionNotSelected) {
       value = this.values?.map((v) => v.value);
     } else if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
-      value = null;
+      value = undefined;
     }
 
     return value;

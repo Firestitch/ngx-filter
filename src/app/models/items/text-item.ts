@@ -16,7 +16,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   public suffix: string;
 
   public get value() {
-    return !!this.model ? this.model : null;
+    return !!this.model ? this.model : undefined;
   }
 
   public get queryObject() {

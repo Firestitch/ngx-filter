@@ -22,7 +22,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     const value = clone(this.model);
 
     if (Array.isArray(value) && value.length === 0) {
-      return null;
+      return undefined;
     }
 
     return value;
@@ -49,7 +49,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     if (Array.isArray(value)) {
       params[name] = value.join(',');
     } else {
-      params[name] = null;
+      params[name] = undefined;
     }
 
     return params;

@@ -2,7 +2,6 @@ import { clone } from 'lodash-es';
 import { isEmpty } from '@firestitch/common';
 
 import { IFilterConfigAutocompleteItem } from '../../interfaces/items/autocomplete.interface';
-import { ItemType } from '../../enums/item-type.enum';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
 
@@ -16,8 +15,8 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
   public get value() {
     let value = clone(this.model);
 
-    if (!this.model || isEmpty(this.model.value, { zero: true })) {
-      return null;
+    if (!this.model || this.model.value === undefined) {
+      return undefined;
     }
 
     value = this.model.value;
@@ -42,7 +41,7 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
   protected _init() {}
 
   protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? null;
+    this.model = defaultValue ?? undefined;
     this.search = '';
   }
 }

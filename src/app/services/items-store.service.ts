@@ -243,7 +243,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (onlyPresented) {
       return pickBy(params, (val) => {
-        return val !== null && val !== void 0;
+        return val !== void 0;
       });
     }
 

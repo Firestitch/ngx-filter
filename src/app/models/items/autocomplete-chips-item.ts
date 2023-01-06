@@ -21,7 +21,7 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
 
   public get value() {
     if (Array.isArray(this.model) && this.model.length === 0) {
-      return null;
+      return undefined;
     }
 
     return clone(this.model);

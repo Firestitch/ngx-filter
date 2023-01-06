@@ -335,6 +335,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? null;
+    this.model = defaultValue ?? undefined;
   }
 }

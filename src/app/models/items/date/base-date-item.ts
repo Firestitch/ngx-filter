@@ -16,7 +16,7 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     const value = clone(this.model);
 
     if (!value || !isValid(value) || !isDate(value)) {
-      return null;
+      return undefined;
     }
 
     return value;
@@ -36,7 +36,7 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     const value = this.queryObject[this.name];
 
     return {
-      [this.name]: value ? simpleFormat(value) : null,
+      [this.name]: value ? simpleFormat(value) : undefined,
     }
   }
 

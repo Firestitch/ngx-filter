@@ -16,7 +16,7 @@ export class SimpleSelectItem extends BaseSelectItem {
     let value = this.model;
 
     if (value == '__all' || value === undefined) {
-      value = null;
+      value = undefined;
     }
 
     return value;
@@ -77,7 +77,7 @@ export class SimpleSelectItem extends BaseSelectItem {
 
     const value = Array.isArray(this.values) && this.values.some((val) => val.value === '__all')
       ? '__all'
-      : null;
+      : undefined;
 
     this.model = defaultValue ?? value;
   }

@@ -28,7 +28,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
     if (!isObject(this.model) ||
       (isEmpty(this.model.max, { zero: true }) && isEmpty(this.model.min, { zero: true }))) {
-      value = null;
+      value = undefined;
     }
 
     return value;
@@ -42,11 +42,11 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     const paramMaxName = getRangeName(this.case, name, 'max');
 
     if (isObject(value)) {
-      params[paramMinName] = value.min || null;
-      params[paramMaxName] = value.max || null;
+      params[paramMinName] = value.min || undefined;
+      params[paramMaxName] = value.max || undefined;
     } else {
-      params[paramMinName] = null;
-      params[paramMaxName] = null;
+      params[paramMinName] = undefined;
+      params[paramMaxName] = undefined;
     }
 
     return params;

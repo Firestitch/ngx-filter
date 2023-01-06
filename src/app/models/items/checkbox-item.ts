@@ -26,7 +26,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     const value = this.model ? this.checked : this.unchecked;
 
     if (!value) {
-      return null;
+      return undefined;
     }
 
     return value;
@@ -37,7 +37,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     const name = this.name;
     const params = {};
 
-    params[name] = this.model ? value : null;
+    params[name] = this.model ? value : undefined;
 
     return params;
   }

@@ -24,11 +24,11 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
 
     if (!isObject(this.model) ||
       (isEmpty(this.model.from, { zero: true }) && isEmpty(this.model.to, { zero: true }))) {
-      value = null;
+      value = undefined;
     }
 
     if (isEmpty(value, { zero: true })) {
-      return null;
+      return undefined;
     }
 
     let from = value.from;
@@ -77,9 +77,9 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     const paramPeriodName = `${name}Period`;
 
     return {
-      [paramFromName]: value?.from || null,
-      [paramToName]: value?.to || null,
-      [paramPeriodName]: value?.period || null,
+      [paramFromName]: value?.from || undefined,
+      [paramToName]: value?.to || undefined,
+      [paramPeriodName]: value?.period || undefined,
     };
   }
 
@@ -109,7 +109,7 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     if (value) {
       value.from = parseDate(value.from);
       value.to = parseDate(value.to);
-      value.period = parseInt(value.period, 10) || null;
+      value.period = parseInt(value.period, 10) || undefined;
     }
 
     super._setModel(value);

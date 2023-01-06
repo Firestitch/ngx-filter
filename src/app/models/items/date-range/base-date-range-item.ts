@@ -36,11 +36,11 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
     if (!isObject(this.model) ||
       (isEmpty(this.model.from, { zero: true }) && isEmpty(this.model.to, { zero: true }))) {
-      value = null;
+      value = undefined;
     }
 
     if (isEmpty(value, { zero: true })) {
-      return null;
+      return undefined;
     }
 
     let from = value.from;
@@ -78,8 +78,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     const paramToName = getRangeName(this.case, name, 'to');
 
     return {
-      [paramFromName]: value.from || null,
-      [paramToName]: value.to || null,
+      [paramFromName]: value.from || undefined,
+      [paramToName]: value.to || undefined,
     };
   }
 
