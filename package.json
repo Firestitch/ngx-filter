@@ -45,7 +45,7 @@
     "@babel/preset-typescript": "^7.12.1",
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/autocomplete": "^12.0.0",
-    "@firestitch/autocomplete-chips": "^12.0.0",
+    "@firestitch/autocomplete-chips": "^12.4.1",
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.0.0",
     "@firestitch/common": "^12.3.0",
