@@ -486,7 +486,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
    * Call change callback and apply new filter values
    */
   public change() {
-    debugger
     const data = this._filterItems.valuesAsQuery();
     const sort = this._filterItems.getSort();
 
