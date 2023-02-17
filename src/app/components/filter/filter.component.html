@@ -63,7 +63,7 @@
   </div>
   <div class="filter-status-container">
     <div class="filter-status" *ngIf="statusBar">
-      <small><ng-container *ngTemplateOutlet="statusBar"></ng-container></small>
+      <ng-container *ngTemplateOutlet="statusBar"></ng-container>
     </div>
     <fs-filter-chips
       *ngIf="config.chips && hasFilterChips$ | async"
