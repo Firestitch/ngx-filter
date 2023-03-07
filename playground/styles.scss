@@ -1,5 +1,5 @@
 @use '~@angular/material' as mat;
-@use '../tools/assets/playground.scss';
+@use '~@firestitch/component-tools/assets/playground.scss';
 @use '~@firestitch/style/variables' with (
   $palette: playground.$primary-palette
 );
