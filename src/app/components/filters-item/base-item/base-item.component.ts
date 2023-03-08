@@ -31,6 +31,14 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
   @Input()
   public inline = false;
 
+  public get label(): string {
+    if (Array.isArray(this.item.label)) {
+      return this.item.label[0];
+    }
+
+    return this.item.label;
+  }
+
   protected _item: T;
   protected _kvDiffer: KeyValueDiffer<string, any>;
   protected _destroy$ = new Subject();

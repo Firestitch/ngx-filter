@@ -9,6 +9,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 import { ItemType } from '../../../enums/item-type.enum';
 import { DateRangeItem } from '../../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../../models/items/date-time-range-item';
+import { PickerViewType } from '../../../enums/picker-view-type.enum';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { DateTimeRangeItem } from '../../../models/items/date-time-range-item';
 })
 export class DateRangeComponent extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit {
 
-  public viewType = 'date';
+  public viewType = PickerViewType.Date;
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -29,9 +30,9 @@ export class DateRangeComponent extends BaseItemComponent<DateRangeItem | DateTi
 
   public ngOnInit() {
     if (this.item.type === ItemType.DateTimeRange) {
-      this.viewType = 'datetime';
+      this.viewType = PickerViewType.DateTime;
     } else {
-      this.viewType = 'date'
+      this.viewType = PickerViewType.Date;
     }
   }
 }

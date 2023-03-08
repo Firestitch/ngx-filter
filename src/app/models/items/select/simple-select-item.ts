@@ -50,6 +50,13 @@ export class SimpleSelectItem extends BaseSelectItem {
     }
   }
 
+  protected get isolateOptionNotSelected() {
+    const modelValue = this.model;
+    const isolate = this.isolate;
+
+    return isolate && !isolate.enabled && modelValue?.length === 0;
+  }
+
   protected _setModel(value): void {
     if (value) {
       if (!isNaN(value)) {

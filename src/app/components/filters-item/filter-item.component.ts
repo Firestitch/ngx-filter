@@ -23,6 +23,10 @@ export class FilterItemComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<any>;
 
+  public get filterItem(): any {
+    return this.item;
+  }
+
   private _destroy$ = new Subject<void>();
 
   constructor(private _cdRef: ChangeDetectorRef) {}

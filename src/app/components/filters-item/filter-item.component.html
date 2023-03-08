@@ -3,62 +3,62 @@
   <ng-container [ngSwitch]="item.type">
     <filter-item-text class="interface"
                       *ngSwitchCase="itemType.Text"
-                      [item]="item">
+                      [item]="filterItem">
     </filter-item-text>
 
     <filter-item-select class="interface"
                         *ngSwitchCase="itemType.Select"
-                        [item]="item">
+                        [item]="filterItem">
     </filter-item-select>
 
     <filter-item-chips class="interface"
                        *ngSwitchCase="itemType.Chips"
-                       [item]="item">
+                       [item]="filterItem">
     </filter-item-chips>
 
     <filter-item-range class="interface interface-range"
                        *ngSwitchCase="itemType.Range"
-                       [item]="item">
+                       [item]="filterItem">
     </filter-item-range>
 
     <filter-item-autocomplete class="interface"
                               *ngSwitchCase="itemType.AutoComplete"
-                              [item]="item">
+                              [item]="filterItem">
     </filter-item-autocomplete>
 
     <filter-item-autocompletechips class="interface"
                                    *ngSwitchCase="itemType.AutoCompleteChips"
-                                   [item]="item">
+                                   [item]="filterItem">
     </filter-item-autocompletechips>
 
     <filter-item-date class="interface interface-date"
                       *ngSwitchCase="itemType.Date"
-                      [item]="item">
+                      [item]="filterItem">
     </filter-item-date>
 
     <filter-item-date class="interface interface-date"
                       *ngSwitchCase="itemType.DateTime"
-                      [item]="item">
+                      [item]="filterItem">
     </filter-item-date>
 
     <filter-item-date-range class="interface interface-date"
                             *ngSwitchCase="itemType.DateRange"
-                            [item]="item">
+                            [item]="filterItem">
     </filter-item-date-range>
 
     <filter-item-date-range class="interface interface-date"
                             *ngSwitchCase="itemType.DateTimeRange"
-                            [item]="item">
+                            [item]="filterItem">
     </filter-item-date-range>
 
     <filter-item-week class="interface"
                       *ngSwitchCase="itemType.Week"
-                      [item]="item">
+                      [item]="filterItem">
     </filter-item-week>
 
     <filter-item-checkbox class="interface interface-checkbox"
                           *ngSwitchCase="itemType.Checkbox"
-                          [item]="item">
+                          [item]="filterItem">
     </filter-item-checkbox>
   </ng-container>
 
