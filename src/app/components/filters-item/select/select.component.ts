@@ -44,7 +44,12 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
     protected _cd: ChangeDetectorRef
   ) {
     super(_kvDiffers, _cd);
-    this.values$ = this.item.values$ as Observable<unknown[]>;
+  }
+  
+  public ngOnChanges(changes: any): void {
+    if (changes.item) {
+      this.values$ = this.item.values$ as Observable<unknown[]>;
+    }
   }
 
   public ngDoCheck() {
