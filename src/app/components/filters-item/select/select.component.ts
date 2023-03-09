@@ -5,6 +5,7 @@ import {
   Component,
   ViewChild,
   DoCheck,
+  SimpleChanges,
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -12,9 +13,9 @@ import { Observable } from 'rxjs';
 import { BaseItemComponent } from '../base-item/base-item.component';
 import { SelectSimpleComponent } from './simple/simple.component';
 import { SelectMultipleComponent } from './multiple/multiple.component';
-import { BaseSelectItem } from 'src/app/models/items/select/base-select-item';
-import { MultipleSelectItem } from 'src/app/models/items/select/multiple-select-item';
-import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item';
+import { BaseSelectItem } from '../../../models/items/select/base-select-item';
+import { MultipleSelectItem } from '../../../models/items/select/multiple-select-item';
+import { SimpleSelectItem } from '../../../models/items/select/simple-select-item';
 
 @Component({
   selector: 'filter-item-select',
@@ -46,7 +47,7 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
     super(_kvDiffers, _cd);
   }
   
-  public ngOnChanges(changes: any): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (changes.item) {
       this.values$ = this.item.values$ as Observable<unknown[]>;
     }
