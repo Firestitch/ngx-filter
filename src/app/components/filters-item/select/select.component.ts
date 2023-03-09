@@ -46,7 +46,7 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
   ) {
     super(_kvDiffers, _cd);
   }
-  
+
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.item) {
       this.values$ = this.item.values$ as Observable<unknown[]>;
