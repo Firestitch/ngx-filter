@@ -11,6 +11,7 @@ import { ItemDateMode } from '../../../enums/item-date-mode.enum';
 import { BaseDateItem } from '../../../models/items/date/base-date-item';
 import { DateItem } from '../../../models/items/date-item';
 import { DateTimeItem } from '../../../models/items/date-time-item';
+import { PickerViewType } from '../../../enums/picker-view-type.enum';
 
 
 @Component({
@@ -20,7 +21,8 @@ import { DateTimeItem } from '../../../models/items/date-time-item';
 })
 export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> implements OnInit {
 
-  public viewType = 'date';
+  public viewType = PickerViewType.Date;
+
   public itemDateMode = ItemDateMode;
   public showYear = true;
   public showMonth = true;
@@ -35,9 +37,9 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
 
   public ngOnInit() {
     if (this.item.type === ItemType.DateTime) {
-      this.viewType = 'datetime';
+      this.viewType = PickerViewType.DateTime;
     } else {
-      this.viewType = 'date'
+      this.viewType = PickerViewType.Date;
     }
 
     if ((this.item as BaseDateItem).mode === ItemDateMode.ScrollMonthYear) {

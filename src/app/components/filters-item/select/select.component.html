@@ -6,17 +6,17 @@
 </ng-container>
 
 <ng-template #itemSelect>
-  <ng-container *ngIf="(item.values$ | async)?.length">
+  <ng-container *ngIf="(values$ | async)?.length">
     <ng-container *ngIf="item.multiple && !item.children">
       <filter-item-select-multiple
-        [item]="item"
+        [item]="multipleSelectItem"
         #selectItem>
       </filter-item-select-multiple>
     </ng-container>
 
     <ng-container *ngIf="!item.multiple && !item.children">
       <filter-item-select-simple
-        [item]="item"
+        [item]="simpleSelectItem"
         #selectItem>
       </filter-item-select-simple>
     </ng-container>

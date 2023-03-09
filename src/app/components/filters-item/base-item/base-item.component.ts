@@ -6,8 +6,9 @@ import {
   EventEmitter,
   Input,
   KeyValueDiffer,
-  KeyValueDiffers, OnDestroy,
-  Output
+  KeyValueDiffers, OnChanges, OnDestroy,
+  Output,
+  SimpleChanges
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -21,7 +22,7 @@ import { IFilterConfigItem } from '../../../interfaces/config.interface';
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements DoCheck, OnDestroy {
+export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements DoCheck, OnChanges, OnDestroy {
 
   @Input()
   set item(value: T) {
@@ -30,6 +31,8 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
 
   @Input()
   public inline = false;
+
+  public label!: string;
 
   protected _item: T;
   protected _kvDiffer: KeyValueDiffer<string, any>;
@@ -59,7 +62,17 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
     }
   }
 
-  public ngOnDestroy() {
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.item) {
+      if (Array.isArray(this.item.label)) {
+        this.label = this.item.label[0];
+      } else {
+        this.label = this.item.label;
+      }
+    }
+  }
+
+  public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
   }
