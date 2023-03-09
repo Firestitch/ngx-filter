@@ -27,6 +27,7 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
   public showYear = true;
   public showMonth = true;
   public showDay = true;
+  public maxDate = null;
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -44,6 +45,10 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
 
     if ((this.item as BaseDateItem).mode === ItemDateMode.ScrollMonthYear) {
       this.showDay = false;
+    }
+
+    if (this.item.maxYear) {
+      this.maxDate = new Date(`12-15-${this.item.maxYear}`);      
     }
   }
 }

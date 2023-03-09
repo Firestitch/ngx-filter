@@ -14,15 +14,16 @@
 <ng-template #elseMode>
   <mat-form-field>
     <mat-label>{{item.label}}</mat-label>
+
     <input matInput
           fsDateScrollPicker
-           [fsFilterFocusTrigger]="item"
+          [fsFilterFocusTrigger]="item"
           [(ngModel)]="item.model"
-          [maxYear]="item.maxYear"
           [showMonth]="showMonth"
           [showDay]="showDay"
           [showYear]="showYear"
           [clear]="item.clearAllowed"
+          [maxDate]="maxDate"
           [name]="item.name">
     <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
   </mat-form-field>
