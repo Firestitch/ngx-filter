@@ -3,11 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   DoCheck,
-  EventEmitter,
   Input,
   KeyValueDiffer,
   KeyValueDiffers, OnChanges, OnDestroy,
-  Output
+  SimpleChanges
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -61,7 +60,7 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
     }
   }
 
-  public ngOnChanges(changes: any): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (changes.item) {
       if (Array.isArray(this.item.label)) {
         this.label = this.item.label[0];
