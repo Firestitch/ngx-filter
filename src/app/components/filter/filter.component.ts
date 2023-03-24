@@ -335,29 +335,25 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public get itemValues(): any[] {
     return this.items
-      .map((item) => item.model);
+      .map((item) => item.value);
   }
-  
+
   public get nonEmptyItemValues(): any[] {
     return this.items
-      .filter((item) => item.model !== undefined)
-      .map((item) => item.model);
+      .filter((item) => item.value !== undefined)
+      .map((item) => item.value);
   }
 
   public get hasItemValues(): boolean {
     return this.itemValues
-      .some((item) => item.model !== undefined);
+      .some((item) => item.value !== undefined);
   }
 
   public getItemValue(name: string) {
     const item = this.items
       .find((item) => item.name === name);
 
-    if (item) {
-      return item.model;
-    } else {
-      return null;
-    }
+    return item?.value;
   }
 
   public showItem(name: string) {
