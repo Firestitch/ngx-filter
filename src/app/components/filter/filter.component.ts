@@ -345,7 +345,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public get hasItemValues(): boolean {
-    return this.itemValues
+    return this.items
       .some((item) => item.value !== undefined);
   }
 
