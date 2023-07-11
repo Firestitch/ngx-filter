@@ -17,10 +17,9 @@
               (click)="filterInputEvent($event)"
               class="filter-input">
 
-            <div matSuffix>
+            <div matSuffix *ngIf="searchText.value && showFilterInput && config.clear">
               <a
-                mat-icon-button
-                *ngIf="searchText.value && showFilterInput && config.clear"
+                mat-icon-button                
                 (click)="clearSearchText($event)"
                 class="clear">
                 <mat-icon>clear</mat-icon>
