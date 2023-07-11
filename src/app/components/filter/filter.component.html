@@ -17,20 +17,24 @@
               (click)="filterInputEvent($event)"
               class="filter-input">
 
-            <a matSuffix
-              *ngIf="searchText.value && showFilterInput && config.clear"
-              (click)="clearSearchText($event)"
-              href="javascript:void(0)"
-              class="clear">
-              <mat-icon>clear</mat-icon>
-            </a>
-
-            <a matSuffix
-              (click)="reload($event)"
-              class="reload"
-              *ngIf="config.reload">
-              <mat-icon>refresh</mat-icon>
-            </a>
+            <div matSuffix>
+              <a
+                mat-icon-button
+                *ngIf="searchText.value && showFilterInput && config.clear"
+                (click)="clearSearchText($event)"
+                class="clear">
+                <mat-icon>clear</mat-icon>
+              </a>
+            </div>
+            <div matSuffix>
+              <a 
+                  mat-icon-button
+                  (click)="reload($event)"
+                  class="reload"
+                  *ngIf="config.reload">
+                <mat-icon>refresh</mat-icon>
+              </a>
+            </div>
           </mat-form-field>
         </form>
       </div>

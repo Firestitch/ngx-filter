@@ -1,6 +1,6 @@
 <fs-chips [(ngModel)]="chips">
   <ng-container *ngFor="let item of filters">
-    <ng-container *ngIf="(item.value$ | async) !== undefined">
+    <ng-container *ngIf="(item.value$ | async) !== undefined && item.type !== ItemType.Keyword">
       <fs-filter-chip [item]="item"></fs-filter-chip>
     </ng-container>
   </ng-container>

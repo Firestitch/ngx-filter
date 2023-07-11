@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BaseItem } from '../../models/items/base-item';
+import { ItemType } from '../../enums';
 
 
 @Component({
@@ -9,7 +10,9 @@ import { BaseItem } from '../../models/items/base-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterChipsComponent {
+
   @Input() public filters: BaseItem<any>[];
 
+  public ItemType = ItemType;
   public chips = [];
 }

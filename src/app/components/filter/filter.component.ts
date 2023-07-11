@@ -437,6 +437,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public clearSearchText(event) {
     event.stopPropagation();
+    this.searchText.setValue('');
     this._filterItems.keywordItem.clear();
     this.searchTextInput.nativeElement.focus();
   }
