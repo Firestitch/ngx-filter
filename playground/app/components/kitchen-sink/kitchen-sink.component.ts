@@ -379,7 +379,7 @@ export class KitchenSinkComponent implements OnInit {
     // },3000)
   }
 
-  
+
 
   private _filterActions(): FsFilterAction[] {
     return [
@@ -436,6 +436,7 @@ export class KitchenSinkComponent implements OnInit {
         customize: true,
         primary: false,
         color: 'warn',
+        tooltip: 'Tooltip',
       },
       {
         mode: ActionMode.File,
