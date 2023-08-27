@@ -518,6 +518,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this._updateChipsVisibility();
+
+    // visibility for actions can depend on filters state
+    this._actions.updateActionsVisibility();
   }
 
   /**
