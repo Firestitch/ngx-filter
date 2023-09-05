@@ -34,6 +34,7 @@ export class Action {
   public fileError: FsFilterFileActionErrorFn;
   public multiple: boolean;
   public accept: string;
+  public tooltip: string;
   public minWidth: number;
   public minHeight: number;
   public maxWidth: number;
@@ -102,6 +103,7 @@ export class Action {
     this.primary = config.primary ?? true;
     this.color = config.color;
     this.type = config.type ?? ActionType.Raised;
+    this.tooltip = config.tooltip;
     this.label = config.label;
     this.mode = config.mode;
     this.icon = config.icon;

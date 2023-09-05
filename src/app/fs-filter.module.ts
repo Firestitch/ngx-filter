@@ -27,6 +27,7 @@ import { FsMenuModule } from '@firestitch/menu';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsFormModule } from '@firestitch/form';
 import { FsFileModule } from '@firestitch/file';
+import { FsPopoverModule } from '@firestitch/popover';
 
 import { FilterComponent } from './components/filter/filter.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
@@ -87,6 +88,7 @@ import { WeekComponent } from './components/filters-item/week/week.component';
     FsSkeletonModule,
     FsFormModule,
     FsFileModule,
+    FsPopoverModule,
   ],
   declarations: [
     BaseItemComponent,

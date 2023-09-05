@@ -20,6 +20,7 @@ interface IFsFilterBaseAction {
   type?: ActionType;
   className?: string;
   color?: ThemePalette;
+  tooltip?: string;
   icon?: string;
   iconPlacement?: 'left' | 'right';
   label?: string;
