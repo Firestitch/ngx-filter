@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "12.10.8",
+  "version": "12.10.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -35,7 +35,6 @@
     "@angular/compiler-cli": "^12.2.16",
     "@angular/core": "^12.2.16",
     "@angular/forms": "^12.2.16",
-    "@angular/http": "^7.2.15",
     "@angular/material": "^12.2.13",
     "@angular/platform-browser": "^12.2.16",
     "@angular/platform-browser-dynamic": "^12.2.16",

@@ -23,7 +23,6 @@ import { FsLabelModule } from '@firestitch/label';
 import { FsScrollModule } from '@firestitch/scroll';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
-import { FsMaskModule } from '@firestitch/mask';
 import { FsMenuModule } from '@firestitch/menu';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsFormModule } from '@firestitch/form';
@@ -84,7 +83,6 @@ import { WeekComponent } from './components/filters-item/week/week.component';
     FsAutocompleteChipsModule,
     FsScrollModule,
     PortalModule,
-    FsMaskModule,
     FsMenuModule,
     FsSkeletonModule,
     FsFormModule,

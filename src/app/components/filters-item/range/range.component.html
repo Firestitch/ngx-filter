@@ -8,10 +8,7 @@
            type="text"
            inputmode="decimal"
            [(ngModel)]="item.model.min"
-           fsMaskNumber
-           [scale]="item.options?.scale || 2"
-           #from
-    >
+           #from>
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
 
@@ -24,10 +21,7 @@
            type="text"
            inputmode="decimal"
            [(ngModel)]="item.model.max"
-           fsMaskNumber
-           [scale]="item.options?.scale || 2"
-           #to
-    >
+           #to>
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
 </div>
