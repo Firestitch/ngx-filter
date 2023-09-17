@@ -3,7 +3,7 @@
     <ng-container *ngIf="hasKeyword">
       <div class="filter-keyword">
         <form autocomplete="off" role="presentation" *ngIf="keywordVisible$ | async">
-          <mat-form-field [floatLabel]="'never'" appearance="outline" class="form-field-padless" ngClass="search">
+          <mat-form-field [floatLabel]="'never'" class="form-field-padless" ngClass="search">
             <span matPrefix>
               <mat-icon matPrefix>search</mat-icon>
             </span>
