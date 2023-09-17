@@ -1,15 +1,16 @@
-import { IFilterConfigBaseItem } from './items/base.interface';
-import { IFilterConfigAutocompleteItem } from './items/autocomplete.interface';
-import { IFilterConfigDateItem } from './items/date.interface';
-import { IFilterConfigDateRangeItem } from './items/date-range.interface';
-import { IFilterConfigRangeItem } from './items/range.interface';
-import { IFilterConfigTextItem } from './items/text.interface';
-import { IFilterConfigSelectItem } from './items/select.interface';
-import { IFilterConfigChipsItem } from './items/chips.interface';
-import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
-import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
-import { IFilterSavedFiltersConfig } from './saved-filters.interface';
+import { ButtonStyle } from '../enums';
 import { FsFilterAction } from './action.interface';
+import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
+import { IFilterConfigAutocompleteItem } from './items/autocomplete.interface';
+import { IFilterConfigBaseItem } from './items/base.interface';
+import { IFilterConfigCheckboxItem } from './items/checkbox.interface';
+import { IFilterConfigChipsItem } from './items/chips.interface';
+import { IFilterConfigDateRangeItem } from './items/date-range.interface';
+import { IFilterConfigDateItem } from './items/date.interface';
+import { IFilterConfigRangeItem } from './items/range.interface';
+import { IFilterConfigSelectItem } from './items/select.interface';
+import { IFilterConfigTextItem } from './items/text.interface';
+import { IFilterSavedFiltersConfig } from './saved-filters.interface';
 
 export interface FilterConfig {
   inline?: boolean;
@@ -59,7 +60,7 @@ export interface Sort {
 }
 
 export interface FilterButton {
-  style?: 'raised' | 'basic' | 'icon';
+  style?: ButtonStyle;
   color?: 'primary' | 'default',
   icon?: string,
   label?: string

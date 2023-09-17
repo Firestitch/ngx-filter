@@ -1,5 +1,7 @@
-import { Component, EventEmitter, ViewChild, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 
+import { filter, nameValue } from '@firestitch/common';
+import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 import {
   ActionMode,
   FilterComponent,
@@ -7,23 +9,21 @@ import {
   ItemDateMode,
   ItemType
 } from '@firestitch/filter';
-import { filter, nameValue } from '@firestitch/common'
-import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 
+import { shuffle } from 'lodash-es';
 import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
-import { shuffle } from 'lodash-es';
 
-import { savedFilters } from './saved-filter';
+import { Router } from '@angular/router';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
-import { Router } from '@angular/router';
+import { savedFilters } from './saved-filter';
 
 
 @Component({
   selector: 'kitchen-sink',
   templateUrl: 'kitchen-sink.component.html',
-  styleUrls: [ 'kitchen-sink.component.css' ]
+  styleUrls: ['kitchen-sink.component.css']
 })
 export class KitchenSinkComponent implements OnInit {
 
@@ -78,7 +78,7 @@ export class KitchenSinkComponent implements OnInit {
 
   public constructor(
     private _router: Router,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.conf = {
@@ -88,8 +88,8 @@ export class KitchenSinkComponent implements OnInit {
       autofocus: true,
       queryParam: true,
       sorts: [
-        { name: 'Name', value: 'name'},
-        { name: 'Date', value: 'date'}
+        { name: 'Name', value: 'name' },
+        { name: 'Date', value: 'date' }
       ],
       actions: this._filterActions(),
       sort: {
@@ -158,9 +158,9 @@ export class KitchenSinkComponent implements OnInit {
               { name: 'Option 1', value: 1 },
               { name: 'Option 2', value: 2 },
               { name: 'Option 3', value: 3 }
-          ]).pipe(
-            delay(3000)
-          )
+            ]).pipe(
+              delay(3000)
+            )
           }
         },
         {
@@ -199,7 +199,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
           clear: false,
-          change: (item) => {},
+          change: (item) => { },
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -262,7 +262,7 @@ export class KitchenSinkComponent implements OnInit {
         {
           name: 'dateRange',
           type: ItemType.DateRange,
-          label: [ 'From Date', 'To Date'],
+          label: ['From Date', 'To Date'],
           clear: false,
         },
         {
@@ -355,11 +355,10 @@ export class KitchenSinkComponent implements OnInit {
 
           return of();
         },
-      }
-      //clear: false,
+      },
       // button: {
       //   label: '',
-      //   style: 'icon',
+      //   style: ButtonStyle.Stroked,
       // }
     };
 
@@ -498,7 +497,7 @@ export class KitchenSinkComponent implements OnInit {
 
   private _filterUsersByKeyword(users, keyword) {
     return filter(users, (user) => {
-      return user.name.toLowerCase().match(new RegExp(`${ keyword }`));
+      return user.name.toLowerCase().match(new RegExp(`${keyword}`));
     })
   }
 }

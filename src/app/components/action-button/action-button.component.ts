@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ActionType } from '../../enums/action-type.enum';
 import { Action } from '../../models/action.model';
 
 
@@ -11,6 +12,8 @@ import { Action } from '../../models/action.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterActionButtonComponent {
+
+  public ActionType = ActionType;
 
   @Input()
   public action: Action;

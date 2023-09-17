@@ -66,13 +66,14 @@
           fsPopover
           [enabled]="!!action.tooltip"
           [text]="action.tooltip">
-        <fs-filter-action-button [action]="action"></fs-filter-action-button>
+        <fs-filter-action-button 
+          [action]="action">
+        </fs-filter-action-button>
       </fs-file>
     </ng-container>
   </ng-container>
 </ng-container>
 <!-- /Buttons -->
-
 <!-- menu -->
 <ng-container *ngIf="kebabActions?.length">
   <fs-filter-action-kebab-actions

@@ -2,6 +2,7 @@ import { ThemePalette } from '@angular/material/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { ActionMode } from '../enums/action-mode.enum';
 import { ActionType } from '../enums/action-type.enum';
 import {
   FsFilterAction,
@@ -12,8 +13,8 @@ import {
   FsFilterFileActionSelectFn,
   IFsFilterFileAction,
 } from '../interfaces/action.interface';
-import { ActionMode } from '../enums/action-mode.enum';
 import { ActionMenuItem } from './action-menu-item.model';
+import { FsFilterConfig } from './filter-config';
 
 
 export class Action {
@@ -29,7 +30,6 @@ export class Action {
   public click: FsFilterActionClickFn;
   public type: ActionType;
   public tabIndex: number;
-
   public fileSelected: FsFilterFileActionSelectFn;
   public fileError: FsFilterFileActionErrorFn;
   public multiple: boolean;
@@ -54,8 +54,8 @@ export class Action {
   private _showFn: FsFilterActionShowFn;
   private _disabledFn: FsFilterActionDisabledFn;
 
-  constructor(config: FsFilterAction = {}) {
-    this._init(config);
+  constructor(filterConfig: FsFilterConfig, actionConfig: FsFilterAction = {}) {
+    this._init(filterConfig, actionConfig);
   }
 
   public get visible(): boolean {
@@ -97,12 +97,10 @@ export class Action {
     }
   }
 
-  private _init(config: FsFilterAction): void {
+  private _init(filterConfig: FsFilterConfig, config: FsFilterAction = {}): void {
     config.mode = config.mode ?? ActionMode.Button;
-
     this.primary = config.primary ?? true;
     this.color = config.color;
-    this.type = config.type ?? ActionType.Raised;
     this.tooltip = config.tooltip;
     this.label = config.label;
     this.mode = config.mode;
@@ -111,6 +109,14 @@ export class Action {
     this._showFn = config.show;
     this.tabIndex = config.tabIndex ?? 0;
     this.menu = config.menu;
+
+    if (!this.type) {
+      this.type = (config.type || filterConfig.button?.style || ActionType.Raised) as any;
+
+      if (this.type === ActionType.Stroked && this.primary) {
+        this.type = ActionType.Flat
+      }
+    }
 
     if ((<IFsFilterFileAction>config).multiple !== undefined) {
       this.multiple = (<IFsFilterFileAction>config).multiple;

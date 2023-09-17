@@ -1,11 +1,12 @@
-import { Injectable, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
 
-import { Action } from '../models/action.model';
 import { FsFilterAction } from '../interfaces/action.interface';
+import { Action } from '../models/action.model';
+import { FsFilterConfig } from '../models/filter-config';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class ActionsController implements OnDestroy {
   private _actions$ = new BehaviorSubject<Action[]>([]);
   private _menuActions$ = new BehaviorSubject<Action[]>([]);
   private _destroy$ = new Subject<void>();
+  private _config: FsFilterConfig;
 
   private readonly _mobileMedia = '(max-width: 799px)';
   private _allActions: Action[] = [];
@@ -55,6 +57,11 @@ export class ActionsController implements OnDestroy {
     this._destroy$.complete();
   }
 
+  public setConfig(config: FsFilterConfig) {
+    this._config = config;
+    this.initActions(config.actions);
+  }
+
   public initActions(rawActions: FsFilterAction[]) {
     if (!rawActions || !Array.isArray(rawActions)) {
       return;
@@ -63,7 +70,7 @@ export class ActionsController implements OnDestroy {
     this.show();
 
     this._allActions = rawActions
-      .map((action) => new Action(action));
+      .map((action) => new Action(this._config, action));
 
     if (this._reorderAction) {
       this._allActions.unshift(this._reorderAction);
@@ -135,9 +142,9 @@ export class ActionsController implements OnDestroy {
 
   private _classifyAction(action: Action) {
     if (action.menu) {
-      this._setKebabActions([...this.menuActions, action ]);
+      this._setKebabActions([...this.menuActions, action]);
     } else {
-      this._setActions( [...this.actions, action ]);
+      this._setActions([...this.actions, action]);
     }
   }
 

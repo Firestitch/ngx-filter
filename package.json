@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "12.11.2",
+  "version": "12.11.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -69,7 +69,7 @@
     "@firestitch/scrollbar": "^12.0.1",
     "@firestitch/skeleton": "^12.0.0",
     "@firestitch/store": "^12.0.0",
-    "@firestitch/style": "^12.1.0",
+    "@firestitch/style": "^12.1.12",
     "@types/jest": "^26.0.15",
     "babel-jest": "^26.6.1",
     "codelyzer": "^6.0.0",

@@ -1,34 +1,7 @@
 <ng-container [ngSwitch]="action.type">
-  <!-- Basic button -->
-  <button 
-      type="button"
-      *ngSwitchCase="'basic'"
-      mat-button
-      (click)="action.click && action.click($event)"
-      [color]="action.color"
-      [ngClass]="action.classArray"
-      [disabled]="action.disabled$ | async"
-      [tabIndex]="action.tabIndex">
-    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
-  </button>
-
-  <!-- Raised button -->
-  <button 
-      type="button"
-      *ngSwitchDefault
-      mat-raised-button
-      (click)="action.click && action.click($event)"
-      [color]="action.color"
-      [ngClass]="action.classArray"
-      [disabled]="action.disabled$ | async"
-      [tabIndex]="action.tabIndex">
-    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
-  </button>
-
-  <!-- Icon button -->
   <button
       type="button"
-      *ngSwitchCase="'icon'"
+      *ngSwitchCase="ActionType.Icon"
       mat-icon-button
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -41,7 +14,7 @@
   <!-- Fab button -->
   <button 
       type="button"
-      *ngSwitchCase="'fab'"
+      *ngSwitchCase="ActionType.Fab"
       mat-fab
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -54,11 +27,30 @@
   <!-- Mini Fab button -->
   <button 
       type="button"
-      *ngSwitchCase="'mini-fab'"
+      *ngSwitchCase="ActionType.MiniFab"
       mat-mini-fab
       (click)="action.click && action.click($event)"
       [color]="action.color"
       [ngClass]="action.classArray"
+      [disabled]="action.disabled$ | async"
+      [tabIndex]="action.tabIndex">
+    <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
+  </button>
+
+  <button 
+      type="button"
+      *ngSwitchDefault
+      mat-button
+      [ngClass]="{        
+        'mat-raised-button': action.type === 'raised',
+        'mat-flat-button': action.type === 'flat',
+        'mat-stroked-button': action.type === 'stroked',
+        'mat-button': action.type === 'basic',
+        'mat-icon-button': action.type === 'icon'
+      }"
+      (click)="action.click && action.click($event)"
+      [color]="action.color"
+      [class]="action.classArray.join(' ')"
       [disabled]="action.disabled$ | async"
       [tabIndex]="action.tabIndex">
     <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>

@@ -2,20 +2,20 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ContentChild,
   ElementRef,
   EventEmitter,
+  HostBinding,
+  Inject,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
+  Optional,
+  Output,
+  TemplateRef,
   ViewChild,
   ViewEncapsulation,
-  Output,
-  Optional,
-  Inject,
-  ContentChild,
-  TemplateRef,
-  HostBinding,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
@@ -23,28 +23,28 @@ import { MatInput } from '@angular/material/input';
 import { BehaviorSubject, combineLatest, fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
-import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
-import { FsFilterConfig } from '../../models/filter-config';
+import { ActionsController } from '../../classes/actions-controller';
 import { objectsAreEquals } from '../../helpers/compare';
-import { FsFilterOverlayService } from '../../services/filter-overlay.service';
-import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
+import { FsFilterAction } from '../../interfaces/action.interface';
 import { FilterConfig, FilterSort, IFilterConfigItem } from '../../interfaces/config.interface';
+import { ISortingChangeEvent } from '../../interfaces/filter.interface';
+import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
+import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
-import { FsFilterItemsStore } from '../../services/items-store.service';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
-import { FocusControllerService } from '../../services/focus-controller.service';
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
-import { ISortingChangeEvent } from '../../interfaces/filter.interface';
-import { FsFilterAction } from '../../interfaces/action.interface';
-import { ActionsController } from '../../classes/actions-controller';
-import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
+import { FsFilterOverlayService } from '../../services/filter-overlay.service';
+import { FocusControllerService } from '../../services/focus-controller.service';
+import { FsFilterItemsStore } from '../../services/items-store.service';
+import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
+import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 
 
 @Component({
   selector: 'fs-filter',
-  styleUrls: [ './filter.component.scss' ],
+  styleUrls: ['./filter.component.scss'],
   templateUrl: './filter.component.html',
   encapsulation: ViewEncapsulation.None,
   providers: [
@@ -123,20 +123,20 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._updateWindowWidth();
 
     this._filterOverlay.attach$
-    .pipe(
-     takeUntil(this._destroy$)
-    )
-    .subscribe(() => {
-      this.showFilterMenu = true;
-    });
+      .pipe(
+        takeUntil(this._destroy$)
+      )
+      .subscribe(() => {
+        this.showFilterMenu = true;
+      });
 
     this._filterOverlay.detach$
-    .pipe(
-      takeUntil(this._destroy$)
-    )
-    .subscribe(() => {
-      this.showFilterMenu = false;
-    });
+      .pipe(
+        takeUntil(this._destroy$)
+      )
+      .subscribe(() => {
+        this.showFilterMenu = false;
+      });
 
     this._listenWindowResize();
   }
@@ -594,7 +594,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this._config = new FsFilterConfig(config);
-    this._actions.initActions(this._config.actions);
+    this._actions.setConfig(this._config);
     this._filterItems.setConfig(this._config);
     this._externalParams.setConfig(this._config);
 
@@ -732,10 +732,10 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   // We may need some time to recieve external params and after that ready can be emitted
   private _listenWhenFilterReady() {
     combineLatest(
-    [
-      this._externalParams.pending$,
-      this.itemsReady$,
-    ])
+      [
+        this._externalParams.pending$,
+        this.itemsReady$,
+      ])
       .pipe(
         filter(([pendingParams, itemsReady]) => !pendingParams && itemsReady),
         takeUntil(this._destroy$),
