@@ -57,9 +57,11 @@ fs-filter {
       display: flex;
       align-items: center;
       flex: 1;
+      min-width: 0;
 
       .search.mat-form-field {
         height: 100%;
+        max-width: 100%;
 
         &.mat-focused {
           .mat-icon {
