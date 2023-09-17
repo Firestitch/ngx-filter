@@ -58,13 +58,23 @@ fs-filter {
       align-items: center;
       flex: 1;
 
-      .mat-form-field {
+      .search.mat-form-field {
         height: 100%;
-        width: 100%;
 
-        .mat-form-field-flex {
-          align-items: center;
-          height: 100%;
+        &.mat-focused {
+          .mat-icon {
+            color: inherit;
+          }
+        }
+
+        &.mat-form-field-appearance-outline {
+          background: #fff;
+          border-radius: 5px;          
+          
+          .mat-form-field-suffix,
+          .mat-form-field-prefix {
+            top: 0;
+          }
         }
 
         &.mat-form-field-appearance-legacy {
@@ -79,18 +89,17 @@ fs-filter {
           .mat-form-field-wrapper {
             padding-bottom: 0;
           }
-
-          .mat-icon {
-            font-size: 22px;
-            color: #5b5b5b;
-          }
         }
 
-        &.mat-form-field-appearance-outline {
-          .mat-form-field-suffix,
-          .mat-form-field-prefix {
-            top: 0;
-          }
+
+        .mat-form-field-flex {
+          align-items: center;
+          height: 100%;
+        }
+
+        .mat-icon {
+          font-size: 22px;
+          color: #626262;
         }
       }
 
