@@ -23,31 +23,29 @@
                 <mat-icon>clear</mat-icon>
               </a>
             </div>
-            <div matSuffix>
-              <a 
-                  mat-icon-button
-                  (click)="reload($event)"
-                  class="reload"
-                  *ngIf="config.reload">
-                <mat-icon>refresh</mat-icon>
-              </a>
-            </div>
           </mat-form-field>
         </form>
       </div>
     </ng-container>
 
     <div class="filter-actions">
+      <a 
+          mat-icon-button
+          (click)="reload($event)"
+          class="reload"
+          *ngIf="config.reload">
+        <mat-icon>refresh</mat-icon>
+      </a>
       <ng-container *ngIf="hasVisibleItemOrSorting && filtersBtnVisible$ | async">
         <button
             mat-button
             class="filters-button"
             [ngClass]="{
-              'mat-raised-button': config.button.style === 'raised',
-              'mat-flat-button': config.button.style === 'flat',
-              'mat-stroked-button': config.button.style === 'stroked',
-              'mat-button': config.button.style === 'basic',
-              'mat-icon-button': config.button.style === 'icon'
+              'mat-raised-button': config.button.style === 'raised' && config.button.label,
+              'mat-flat-button': config.button.style === 'flat' && config.button.label,
+              'mat-stroked-button': config.button.style === 'stroked' && config.button.label,
+              'mat-button': config.button.style === 'basic' && config.button.label,
+              'mat-icon-button': config.button.style === 'icon' || !config.button.label  
             }"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             type="button"
