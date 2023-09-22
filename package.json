@@ -48,7 +48,7 @@
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.0.0",
     "@firestitch/common": "^12.3.0",
-    "@firestitch/component-tools": "^12.0.11",
+    "@firestitch/component-tools": "^12.0.17",
     "@firestitch/date": "^12.0.0",
     "@firestitch/datepicker": "^12.2.2",
     "@firestitch/dialog": "^12.0.1",
@@ -108,11 +108,11 @@
     "@firestitch/form": ">=12.0.1",
     "@firestitch/mask": ">=12.0.0",
     "@firestitch/menu": ">=12.0.1",
+    "@firestitch/popover": ">=12.2.0",
     "@firestitch/scroll": ">=12.0.0",
     "@firestitch/skeleton": ">=12.0.0",
     "@firestitch/store": ">=12.0.0",
-    "@firestitch/style": ">=12.1.0",
-    "@firestitch/popover": ">=12.2.0"
+    "@firestitch/style": ">=12.1.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
