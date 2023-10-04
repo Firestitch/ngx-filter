@@ -362,7 +362,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (item) {
       item.hide = false;
 
-      this._filterItems.updateVisibleItems();
+      this._filterItems.updateItemsVisiblity();
     }
   }
 
@@ -373,7 +373,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     item.hide = true;
 
-    this._filterItems.updateVisibleItems();
+    this._filterItems.updateItemsVisiblity();
   }
 
   public clearItem(name: string) {
@@ -395,7 +395,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     item.label = params.label ?? item.label;
     item.chipLabel = params.chipLabel ?? item.chipLabel;
 
-    this._filterItems.updateVisibleItems();
+    this._filterItems.updateItemsVisiblity();
   }
 
   public getItemValueChange$(name: string): Observable<any> | null {
@@ -414,7 +414,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public changeVisibility(state: boolean) {
-
     if (state === this.showFilterMenu) {
       return;
     }

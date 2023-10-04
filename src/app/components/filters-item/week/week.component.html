@@ -5,7 +5,7 @@
          [fsFilterFocusTrigger]="item"
          [(ngModel)]="item.model"
          [seedDate]="item.seedDate"
-         [clear]="item.clearAllowed"
+         [clear]="item.showClear"
          [name]="item.name">
   <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
 </mat-form-field>

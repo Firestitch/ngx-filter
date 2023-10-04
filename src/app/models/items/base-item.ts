@@ -10,14 +10,12 @@ import {
 
 import { ItemType } from '../../enums/item-type.enum';
 
+import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
 import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
-import { IFilterConfigItem } from '../../interfaces/config.interface';
 
 
 export abstract class BaseItem<T extends IFilterConfigItem> {
-
-  // Configurable properties
 
   public name: string;
   public label: string | string[];
@@ -26,19 +24,16 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public defaultValue: any | IFilterItemDefaultRange;
   public defaultValueFn: IFilterDefaultFn<unknown>;
   public persistedValue: unknown;
-  public clearAllowed: boolean;
+  public showClear: boolean;
 
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
-
-  // Internal properties
-
   public change: (item: BaseItem<T>) => void;
+  public init: (item: BaseItem<T>) => void;
 
   protected readonly _type: T['type'];
 
   protected _model: any;
-  // protected _initialized = false;
   protected _pendingValues = false;
   protected _pendingDefaultValue = false;
   protected _loading$ = new BehaviorSubject(false);
@@ -145,7 +140,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get values$(): Observable<unknown> {
-    return  this._values$.asObservable();
+    return this._values$.asObservable();
   }
 
   public get valueChange$() {
@@ -314,8 +309,9 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
 
     this.change = item.change;
+    this.init = item.init || ((item) => { });
     this.hide = item.hide;
-    this.clearAllowed = item.clear ?? true;
+    this.showClear = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
 
@@ -330,7 +326,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     const model = this.persistedValue ?? this.defaultValue;
 
     if (model !== undefined) {
-      this.model = model;
+      this._setModel(model);
     }
   }
 

@@ -7,7 +7,7 @@
     [fsDateRangeFrom]="item.name"
     [(ngModel)]="item.model.from"
     (ngModelChange)="itemChange()"
-    [clear]="item.clearAllowed"
+    [clear]="item.showClear"
     [view]="viewType"
     name="date_from">
 </mat-form-field>
@@ -21,7 +21,7 @@
     [fsDateRangeTo]="item.name"
     [(ngModel)]="item.model.to"
     (ngModelChange)="itemChange()"
-    [clear]="item.clearAllowed"
+    [clear]="item.showClear"
     [view]="viewType"
     name="date_to">
 </mat-form-field>

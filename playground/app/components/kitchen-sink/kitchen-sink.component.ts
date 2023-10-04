@@ -27,7 +27,8 @@ import { savedFilters } from './saved-filter';
 })
 export class KitchenSinkComponent implements OnInit {
 
-  @ViewChild('filter', { static: true }) public filterEl: FilterComponent;
+  @ViewChild('filter', { static: true })
+  public filterEl: FilterComponent;
 
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
@@ -199,7 +200,12 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
           clear: false,
-          change: (item) => { },
+          change: (item) => {
+            console.log('Item Change', item);
+          },
+          init: (item) => {
+            console.log('Item Init', item);
+          },
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(

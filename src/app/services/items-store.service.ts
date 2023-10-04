@@ -5,22 +5,22 @@ import { debounceTime, filter, finalize, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
 
+import { ItemType } from '../enums/item-type.enum';
+import { createFilterItem } from '../helpers/create-filter-item';
 import {
   FilterSort,
   IFilterConfigItem,
 } from '../interfaces/config.interface';
-import { ItemType } from '../enums/item-type.enum';
-import { BaseItem } from '../models/items/base-item';
-import { SimpleSelectItem } from '../models/items/select/simple-select-item';
+import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/filter-config';
-import { createFilterItem } from '../helpers/create-filter-item';
-import { RangeItem } from '../models/items/range-item';
+import { BaseItem } from '../models/items/base-item';
 import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
-import { ISortingChangeEvent } from '../interfaces/filter.interface';
-import { TextItem } from '../models/items/text-item';
-import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { RangeItem } from '../models/items/range-item';
 import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
+import { SimpleSelectItem } from '../models/items/select/simple-select-item';
+import { TextItem } from '../models/items/text-item';
 
 
 interface IValueAsQuery {
@@ -259,6 +259,11 @@ export class FsFilterItemsStore implements OnDestroy {
     this._initSortingItems(p);
     this.loadAsyncDefaults();
     this._subscribeToItemsChanges();
+
+    this.items
+      .forEach((item) => {
+        item.init(item);
+      });
   }
 
   public updateItemsWithValues(values: IFilterExternalParams) {
@@ -303,7 +308,7 @@ export class FsFilterItemsStore implements OnDestroy {
     }
   }
 
-  public updateVisibleItems(): void {
+  public updateItemsVisiblity(): void {
     this.visibleItems = this.items
       .filter((item) => !item.isTypeKeyword && !item.hide);
   }
@@ -373,7 +378,7 @@ export class FsFilterItemsStore implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.updateVisibleItems();
+        this.updateItemsVisiblity();
         this._setKeywordItem();
       });
   }

@@ -4,7 +4,7 @@
       *ngIf="item.model?.min || item.model?.from"
       [value]="item"
       [selectable]="false"
-      [removable]="item.clearAllowed"
+      [removable]="item.showClear"
       size="small"
       (click)="focusOnItem('from')"
       (removed)="removeItem($event, 'from')">
@@ -18,7 +18,7 @@
       *ngIf="item.model?.max || item.model?.to"
       [value]="item"
       [selectable]="false"
-      [removable]="item.clearAllowed"
+      [removable]="item.showClear"
       size="small"
       (click)="focusOnItem('to')"
       (removed)="removeItem($event, 'to')">
@@ -35,7 +35,7 @@
       *ngIf="itemVisible"
       [value]="item"
       [selectable]="false"
-      [removable]="item.clearAllowed"
+      [removable]="item.showClear"
       size="small"
       (click)="focusOnItem()"
       (removed)="removeItem($event)">
