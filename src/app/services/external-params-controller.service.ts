@@ -5,13 +5,13 @@ import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
 
 import { FsFilterConfig } from '../models/filter-config';
 
-import { FsFilterItemsStore } from './items-store.service';
+import { buildQueryParams } from '../helpers/build-query-params';
+import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { IFilterSavedFilter } from '../interfaces/saved-filters.interface';
 import { PersistanceParamsController } from './external-params/persistance-params-controller.service';
 import { QueryParamsController } from './external-params/query-params-controller.service';
 import { SavedFiltersController } from './external-params/saved-filters-controller.service';
-import { IFilterExternalParams } from '../interfaces/external-params.interface';
-import { buildQueryParams } from '../helpers/build-query-params';
-import { IFilterSavedFilter } from '../interfaces/saved-filters.interface';
+import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ExternalParamsController implements OnDestroy {
     private _persistanceStore: PersistanceParamsController,
     private _queryParams: QueryParamsController,
     private _savedFilters: SavedFiltersController,
-  ) {}
+  ) { }
 
   public get params(): IFilterExternalParams {
     const result: IFilterExternalParams = {};
@@ -97,6 +97,8 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public initItems(): void {
+    this._itemsStore.ready$
+
     this._pending$.next(true);
     if (this._savedFilters.enabled) {
       this._savedFilters
@@ -109,7 +111,7 @@ export class ExternalParamsController implements OnDestroy {
           this._initItemsValues();
           this._listenAndResetSavedFilters();
           this._pending$.next(false)
-        })
+        });
     } else {
       this._initItemsValues();
       this._pending$.next(false)
@@ -119,8 +121,7 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public _initItemsValues() {
-    this._itemsStore.initItemValues(this.params);
-
+    this._itemsStore.init(this.params);
     this._saveQueryParams();
     this._savePersistedParams();
   }

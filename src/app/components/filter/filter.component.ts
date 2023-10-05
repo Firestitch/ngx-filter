@@ -112,12 +112,12 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _destroy$ = new Subject<void>();
 
   constructor(
+    @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
-    @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig
   ) {
     this._listenWhenFilterReady();
     this._updateWindowWidth();
@@ -194,13 +194,13 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-
     // Avoid ngChanges error
     setTimeout(() => {
       if (this.config.autofocus) {
         this.focus();
       }
     });
+
 
     this._listenInternalItemsChange();
     this._initOverlay();
@@ -215,7 +215,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-
     this._destroyFilterDrawer();
 
     this._destroy$.next();
@@ -450,6 +449,14 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this._updateChipsVisibility();
+
+    // Waiting for external ViewChilds
+    setTimeout(() => {
+      this.items
+        .forEach((item) => {
+          item.init(item);
+        });
+    });
   }
 
   public clear(event = null) {
@@ -578,6 +585,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.config.items = items;
     this._filterItems.setConfig(this._config);
     this._externalParams.initItems();
+
     this._syncSearchInputWithKeyword();
     this._listenKeywordItemClear();
   }

@@ -28,7 +28,7 @@ import { savedFilters } from './saved-filter';
 export class KitchenSinkComponent implements OnInit {
 
   @ViewChild('filter', { static: true })
-  public filterEl: FilterComponent;
+  public filter: FilterComponent;
 
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
@@ -147,8 +147,7 @@ export class KitchenSinkComponent implements OnInit {
           disableQueryParams: true,
           chipLabel: 'Special Label',
           change: (item) => {
-
-            // const filterItem: FsFilterConfigItem = this.filterEl.config.getItem('multiselect');
+            // const filterItem: FsFilterConfigItem = this.filter.config.getItem('multiselect');
             // filterItem.values.pop();
             // //filterItem.clear();
           },
@@ -159,9 +158,7 @@ export class KitchenSinkComponent implements OnInit {
               { name: 'Option 1', value: 1 },
               { name: 'Option 2', value: 2 },
               { name: 'Option 3', value: 3 }
-            ]).pipe(
-              delay(3000)
-            )
+            ])
           }
         },
         {
@@ -187,8 +184,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Observable Select',
           clear: false,
           values: () => {
-
-            const filterItem = this.filterEl.getItem('simple_select') as SimpleSelectItem;
+            this.filter.getItem('simple_select') as SimpleSelectItem;
             return new BehaviorSubject(this.users)
               .pipe(
                 map((users) => shuffle(nameValue(users, 'name', 'id'))),
@@ -317,10 +313,7 @@ export class KitchenSinkComponent implements OnInit {
       savedFilters: {
         load: () => {
           console.log('<====== Load Saved Filters =====>');
-          return of(savedFilters)
-            .pipe(
-              delay(2000),
-            );
+          return of(savedFilters);
         },
         save: (filter) => {
           console.log('<====== Save Filter =====>');
@@ -473,9 +466,9 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Reorder',
         menu: true,
         click: (event) => {
-          this.filterEl.updateActions(this._doneAction());
-          this.filterEl.hideKeywordField();
-          this.filterEl.hideFiltersBtn();
+          this.filter.updateActions(this._doneAction());
+          this.filter.hideKeywordField();
+          this.filter.hideFiltersBtn();
         }
       },
       {
@@ -493,9 +486,9 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Done',
         primary: false,
         click: () => {
-          this.filterEl.updateActions(this._filterActions());
-          this.filterEl.showKeywordField();
-          this.filterEl.showFiltersBtn();
+          this.filter.updateActions(this._filterActions());
+          this.filter.showKeywordField();
+          this.filter.showFiltersBtn();
         },
       },
     ];

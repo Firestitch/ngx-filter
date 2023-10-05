@@ -250,7 +250,7 @@ export class FsFilterItemsStore implements OnDestroy {
     return params;
   }
 
-  public initItemValues(p: IFilterExternalParams) {
+  public init(p: IFilterExternalParams) {
     this.items
       .forEach((item) => {
         item.initValues(p[item.name]);
@@ -259,11 +259,6 @@ export class FsFilterItemsStore implements OnDestroy {
     this._initSortingItems(p);
     this.loadAsyncDefaults();
     this._subscribeToItemsChanges();
-
-    this.items
-      .forEach((item) => {
-        item.init(item);
-      });
   }
 
   public updateItemsWithValues(values: IFilterExternalParams) {
