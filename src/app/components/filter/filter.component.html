@@ -1,9 +1,13 @@
-<ng-container>
-  <div class="filter-container">
+<div class="filter-container">
+  <div class="filter-inner-container">
+    <ng-container *ngIf="!hasKeyword">
+      <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
+    </ng-container>
+
     <ng-container *ngIf="hasKeyword">
       <div class="filter-keyword">
         <form autocomplete="off" role="presentation" *ngIf="keywordVisible$ | async">
-          <mat-form-field [floatLabel]="'never'" class="form-field-padless" ngClass="search">
+          <mat-form-field [floatLabel]="'never'" class="form-field-padless" ngClass="search" appearance="outline">
             <span matPrefix>
               <mat-icon matPrefix>search</mat-icon>
             </span>
@@ -27,8 +31,7 @@
         </form>
       </div>
     </ng-container>
-
-    <div class="filter-actions">
+    <div class="filter-toobar">
       <a 
           mat-icon-button
           (click)="reload($event)"
@@ -37,7 +40,7 @@
         <mat-icon>refresh</mat-icon>
       </a>
       <ng-container *ngIf="hasVisibleItemOrSorting && filtersBtnVisible$ | async">
-        <button
+        <a
             mat-button
             class="filters-button"
             [ngClass]="{
@@ -48,13 +51,14 @@
               'mat-icon-button': config.button.style === 'icon' || !config.button.label  
             }"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
-            type="button"
             [color]="config.button.color">
           <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
           {{ config.button.label }}
-        </button>
+        </a>
       </ng-container>
-  
+    </div>
+
+    <div class="filter-actions">
       <fs-filter-actions
         *ngIf="actionsVisible$ | async"
         [actions]="actions$ | async"
@@ -62,14 +66,35 @@
       </fs-filter-actions>
     </div>
   </div>
-  <div class="filter-status-container">
-    <div class="filter-status" *ngIf="statusBar">
-      <ng-container *ngTemplateOutlet="statusBar"></ng-container>
+
+  <ng-container *ngIf="hasKeyword">
+    <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!hasKeyword">
+    <ng-container [ngTemplateOutlet]="chips"></ng-container>
+  </ng-container>
+</div>
+
+
+<ng-template #statusBarContainer>
+  <ng-container *ngIf="statusBar">
+    <div class="filter-status-container">
+      <div class="filter-status">
+        <ng-container *ngTemplateOutlet="statusBar"></ng-container>
+      </div>
+      <ng-container *ngIf="hasKeyword">
+        <ng-container [ngTemplateOutlet]="chips"></ng-container>
+      </ng-container>
     </div>
-    <fs-filter-chips
-      *ngIf="config.chips && hasFilterChips$ | async"
+  </ng-container>
+</ng-template>
+
+<ng-template #chips>
+  <ng-container *ngIf="config.chips && hasFilterChips$ | async">
+    <fs-filter-chips    
       class="filter-chips"
       [filters]="items">
     </fs-filter-chips>
-  </div>
-</ng-container>
+  </ng-container>
+</ng-template>

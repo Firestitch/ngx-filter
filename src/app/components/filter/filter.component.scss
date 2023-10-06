@@ -6,9 +6,12 @@ fs-filter {
   margin-bottom: 20px;
   display: block;
 
-  &:not(.has-keyword) {
+  &:not(.has-keyword) .filter-inner-container {
     display: flex;
-    flex-direction: row-reverse;
+  }
+
+  &:not(.has-keyword) .filter-toobar {
+    justify-content: flex-end;
   }
 
   .results {
@@ -18,33 +21,31 @@ fs-filter {
     overflow-y: hidden;
   }
 
+  fs-filter-chips {
+    margin-top: 4px;
+    display: block;
+  }
+
   .filter-status-container {
     flex-grow: 1;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin: 4px 0;
+    align-self: flex-end;
 
     .filter-status {
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 17px;
     }
-
-    .filter-status+fs-filter-chips {
-      margin-top: 4px;
-    }
-
-    fs-filter-chips {
-      display: block;
-    }
   }
 
-  .filter-container {
+  .filter-inner-container {
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
     position: relative;
+    align-items: center;
 
     form {
       width: 100%;
@@ -56,8 +57,7 @@ fs-filter {
       box-sizing: border-box;
       display: flex;
       align-items: center;
-      flex: 1;
-      min-width: 0;
+      min-width: 100px;
 
       .search.mat-form-field {
         height: 100%;
@@ -128,6 +128,19 @@ fs-filter {
     display: flex;
     align-items: center;
   }
+
+  .filter-toobar {
+    flex: 1;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+
+    a {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+    }
+  }
 }
 
 @media screen and (min-width: 599px) {
@@ -135,7 +148,7 @@ fs-filter {
     margin-left: 10px;
   }
 
-  .filters-button+fs-filter-actions:not(:empty) {
+  .filters-button + fs-filter-actions:not(:empty) {
     margin-left: 5px;
   }
 }
