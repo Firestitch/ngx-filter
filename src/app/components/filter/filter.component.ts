@@ -1,9 +1,7 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ContentChild,
-  ElementRef,
   EventEmitter,
   HostBinding,
   Inject,
@@ -15,9 +13,8 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 
 import { BehaviorSubject, combineLatest, fromEvent, Observable, Subject } from 'rxjs';
@@ -59,7 +56,7 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
+export class FilterComponent implements OnInit, OnDestroy {
 
   @Input('config')
   set setConfig(config) {
@@ -80,11 +77,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @ContentChild(FilterStatusBarDirective, { read: TemplateRef })
   public statusBar;
 
-  @ViewChild('searchTextInput')
-  public searchTextInput: ElementRef;
-
-  @ViewChild('searchTextInput', { read: MatInput })
-  public searchTextMatInput: MatInput;
+  @ViewChild('keywordMatInput', { read: MatInput })
+  public keywordMatInput: MatInput;
 
   @HostBinding('class.filters-open')
   public showFilterMenu = false;
@@ -100,8 +94,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._filterItems.hasKeyword;
   }
 
-  public searchText = new FormControl();
   public searchPlaceholder = 'Search';
+  public keyword = '';
 
   protected _config: FsFilterConfig = null;
 
@@ -109,6 +103,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _filtersBtnVisible$ = new BehaviorSubject(true);
   private _keywordVisible$ = new BehaviorSubject(true);
   private _hasFilterChips$ = new BehaviorSubject(false);
+  private _keyword$ = new Subject();
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -201,17 +196,9 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-
+    this._listenInputChanges()
     this._listenInternalItemsChange();
     this._initOverlay();
-  }
-
-  public ngAfterViewInit(): void {
-    this._listenInputKeyEvents();
-    // FIXME prevent fire change after init
-    setTimeout(() => {
-      this._listenInputChanges();
-    });
   }
 
   public ngOnDestroy() {
@@ -222,9 +209,7 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public focus() {
-    if (this.searchTextMatInput) {
-      this.searchTextMatInput.focus();
-    }
+    this.keywordMatInput?.focus();
   }
 
   public updateSort(sort: ISortingChangeEvent) {
@@ -316,20 +301,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.changeVisibility(value);
-  }
-
-  public filterInputEvent(event) {
-
-    if (!this.windowDesktop) {
-      return;
-    }
-    if (['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) >= 0) {
-      this.changeVisibility(false);
-
-      if (this.searchTextInput) {
-        this.searchTextInput.nativeElement.blur()
-      }
-    }
   }
 
   public get itemValues(): any[] {
@@ -433,13 +404,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._filterOverlay.open();
   }
 
-  public clearSearchText(event) {
-    event.stopPropagation();
-    this.searchText.setValue('');
-    this._filterItems.keywordItem.clear();
-    this.searchTextInput.nativeElement.focus();
-  }
-
   public init() {
     const data = this._filterItems.valuesAsQuery();
     this._sort = this._filterItems.getSort();
@@ -460,7 +424,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public clear(event = null) {
-
     if (event) {
       event.stopPropagation();
     }
@@ -470,6 +433,8 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.clear) {
       this.config.clear();
     }
+
+    this.keyword = '';
   }
 
   /**
@@ -587,7 +552,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._externalParams.initItems();
 
     this._syncSearchInputWithKeyword();
-    this._listenKeywordItemClear();
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
@@ -610,8 +574,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!!this.config.reloadWhenConfigChanged) {
       this.change();
     }
-
-    this._listenKeywordItemClear();
   }
 
   private _destroyFilterDrawer() {
@@ -638,28 +600,6 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private _listenInputKeyEvents() {
-    if (!this.searchTextInput) {
-      return;
-    }
-
-    this._zone.runOutsideAngular(() => {
-      fromEvent(this.searchTextInput.nativeElement, 'keydown')
-        .pipe(
-          debounceTime(500),
-          filter((event: KeyboardEvent) => {
-            return ['Enter', 'NumpadEnter', 'Escape'].indexOf(event.code) > -1;
-          }),
-          takeUntil(this._destroy$),
-        )
-        .subscribe((event: KeyboardEvent) => {
-          this._zone.run(() => {
-            this.filterInputEvent(event)
-          });
-        });
-    });
-  }
-
   private _listenWindowResize() {
     this._zone.runOutsideAngular(() => {
       fromEvent(window, 'resize')
@@ -675,49 +615,30 @@ export class FilterComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  public keywordChange(keyword) {
+    this._keyword$.next(keyword);
+  }
+
   private _listenInputChanges() {
-    this._zone.runOutsideAngular(() => {
-      this.searchText.valueChanges
-        .pipe(
-          debounceTime(200),
-          distinctUntilChanged(),
-          filter((value) => {
-            return value !== this._filterItems.keywordItem?.model;
-          }),
-          takeUntil(this._destroy$),
-        )
-        .subscribe((value) => {
-          this._zone.run(() => {
-            const keywordItem = this._filterItems.keywordItem;
-
-            if (keywordItem && keywordItem.value !== value) {
-              keywordItem.model = value;
-            }
-          });
-        });
-
-    });
+    this._keyword$
+      .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        takeUntil(this._destroy$),
+      )
+      .subscribe((value) => {
+        const keywordItem = this._filterItems.keywordItem;
+        keywordItem.model = value;
+        this.change();
+      });
   }
 
   private _syncSearchInputWithKeyword(): void {
     const keywordItem = this._filterItems.keywordItem;
     if (keywordItem) {
-      this.searchText.setValue(keywordItem.model);
+      this.keyword = keywordItem.model;
       this.searchPlaceholder = keywordItem.label as string || 'Search';
     }
-  }
-
-  private _listenKeywordItemClear() {
-    this._filterItems
-      .keywordItem
-      ?.clear$
-      .pipe(
-        takeUntil(this._filterItems.keywordItem.destroy$),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.searchText.setValue('');
-      })
   }
 
   private _listenInternalItemsChange() {

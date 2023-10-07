@@ -383,6 +383,7 @@ export class KitchenSinkComponent implements OnInit {
     return [
       {
         mode: ActionMode.Menu,
+        primary: false,
         label: 'Menu',
         items: [
           {
@@ -410,38 +411,19 @@ export class KitchenSinkComponent implements OnInit {
           },
         ],
       },
-      {
-        mode: ActionMode.Menu,
-        label: 'Another Menu',
-        items: [
-          {
-            label: 'Heh',
-            icon: 'image',
-            click: () => {
-              console.log('Heh clicked');
-            },
-          },
-          {
-            label: 'Feh',
-            click: () => {
-              console.log('Feh clicked');
-            },
-          }
-        ],
-      },
-      {
-        label: 'Columns',
-        customize: true,
-        primary: false,
-        color: 'warn',
-        tooltip: 'Tooltip',
-      },
+      // {
+      //   label: 'Columns',
+      //   customize: true,
+      //   primary: false,
+      //   color: 'warn',
+      //   tooltip: 'Tooltip',
+      // },
       {
         mode: ActionMode.File,
         label: 'Upload',
         menu: false,
         icon: 'cloud_upload',
-        color: 'accent',
+        primary: false,
         multiple: true,
         select: (file) => {
           console.log('Selected File', file);
