@@ -41,6 +41,11 @@
       mat-form-field {
         max-width: 100%;
         min-width: 100px;
+        margin-right: 5px;
+
+        .mat-form-field-wrapper {
+          margin-bottom: 0;
+        }
 
         .mat-form-field-prefix {
           .mat-icon {
@@ -57,10 +62,6 @@
         .mat-form-field-suffix {
           top: 0.45em;
         }
-      }
-
-      .mat-form-field-wrapper {
-        height: 100%;
       }
 
       .mat-form-field-suffix {
@@ -84,11 +85,6 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
-
-    a {
-      width: 36px;
-      line-height: 36px;
-    }
   }
 
   .results {

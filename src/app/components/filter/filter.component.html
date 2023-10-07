@@ -29,13 +29,6 @@
     </ng-container>
     <ng-container *ngIf="filtersBtnVisible$ | async">
       <div class="filter-toobar">
-        <a 
-            mat-icon-button
-            (click)="reload($event)"
-            class="reload"
-            *ngIf="config.reload">
-          <mat-icon>refresh</mat-icon>
-        </a>
         <ng-container *ngIf="hasVisibleItemOrSorting">
           <a
               mat-button
@@ -51,6 +44,13 @@
               [color]="config.button.color">
             <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
             {{ config.button.label }}
+          </a>
+          <a 
+              mat-icon-button
+              (click)="reload($event)"
+              class="reload"
+              *ngIf="config.reload">
+            <mat-icon>refresh</mat-icon>
           </a>
         </ng-container>
       </div>
