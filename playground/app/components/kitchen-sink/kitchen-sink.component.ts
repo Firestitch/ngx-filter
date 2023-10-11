@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 
 import { filter, nameValue } from '@firestitch/common';
 import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
@@ -14,7 +14,6 @@ import { shuffle } from 'lodash-es';
 import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
 
-import { Router } from '@angular/router';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 import { savedFilters } from './saved-filter';
@@ -23,12 +22,15 @@ import { savedFilters } from './saved-filter';
 @Component({
   selector: 'kitchen-sink',
   templateUrl: 'kitchen-sink.component.html',
-  styleUrls: ['kitchen-sink.component.css']
+  styleUrls: ['kitchen-sink.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KitchenSinkComponent implements OnInit {
 
-  @ViewChild('filter', { static: true })
+  @ViewChild(FilterComponent, { static: true })
   public filter: FilterComponent;
+
+  public status = false;
 
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
@@ -78,7 +80,7 @@ export class KitchenSinkComponent implements OnInit {
   ];
 
   public constructor(
-    private _router: Router,
+    private _cdRef: ChangeDetectorRef,
   ) { }
 
   public ngOnInit(): void {
@@ -376,8 +378,6 @@ export class KitchenSinkComponent implements OnInit {
     //   this.conf.items.pop();
     // },3000)
   }
-
-
 
   private _filterActions(): FsFilterAction[] {
     return [

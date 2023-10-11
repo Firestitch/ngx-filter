@@ -2,12 +2,24 @@
   margin-bottom: 20px;
   display: block;
 
-  &:not(.has-keyword) .filter-inner-container {
-    display: flex;
+  &.has-keyword {
+    .filter-status-container.has-status {
+      margin-top: 4px;
+    }
   }
 
-  &:not(.has-keyword) .filter-toobar {
-    justify-content: flex-end;
+  &:not(.has-keyword) {
+    .filter-status-container:not(.has-status) + fs-filter-chips {
+      margin-top: 0px;
+    }
+
+    .filter-inner-container {
+      display: flex;
+    }
+
+    .filter-toobar {
+      justify-content: flex-end;
+    }
   }
 
   .filter-status-container {
@@ -16,7 +28,6 @@
     justify-content: center;
     flex-direction: column;
     align-self: flex-end;
-    margin-top: 5px;
 
     .filter-status {
       overflow: hidden;

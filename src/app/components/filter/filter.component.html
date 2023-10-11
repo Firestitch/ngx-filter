@@ -1,97 +1,98 @@
 <div class="filter-container">
   <div class="filter-inner-container">
-    <ng-container *ngIf="!hasKeyword">
-      <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
-    </ng-container>
-
-    <ng-container *ngIf="hasKeyword">
-      <div class="filter-keyword">
-        <ng-container *ngIf="keywordVisible$ | async">
-          <mat-form-field 
-              [floatLabel]="'never'" 
-              class="form-field-padless" 
-              [ngClass]="search"
-              appearance="outline">
-            <span matPrefix>
-              <mat-icon matPrefix>search</mat-icon>
-            </span>
-            <input
-              #keywordMatInput
-              matInput
-              [(ngModel)]="keyword"
-              (ngModelChange)="keywordChange($event)"
-              name="filter-input"
-              [fsClear]="true"
-              [placeholder]="searchPlaceholder">
-          </mat-form-field>
-        </ng-container>
+    <ng-container *ngIf="!hasKeyword; else filterKeyword">
+      <div>
+        <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>      
       </div>
     </ng-container>
-    <ng-container *ngIf="filtersBtnVisible$ | async">
-      <div class="filter-toobar">
-        <ng-container *ngIf="hasVisibleItemOrSorting">
-          <a
-              mat-button
-              class="filters-button"
-              [ngClass]="{
-                'mat-raised-button': config.button.style === 'raised' && config.button.label,
-                'mat-flat-button': config.button.style === 'flat' && config.button.label,
-                'mat-stroked-button': config.button.style === 'stroked' && config.button.label,
-                'mat-button': config.button.style === 'basic' && config.button.label,
-                'mat-icon-button': config.button.style === 'icon' || !config.button.label  
-              }"
-              (click)="changeVisibilityClick(!showFilterMenu, $event)"
-              [color]="config.button.color">
-            <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
-            {{ config.button.label }}
-          </a>
-          <a 
-              mat-icon-button
-              (click)="reload($event)"
-              class="reload"
-              *ngIf="config.reload">
-            <mat-icon>refresh</mat-icon>
-          </a>
-        </ng-container>
-      </div>
-    </ng-container>
-    <div class="filter-actions">
-      <fs-filter-actions
-        *ngIf="actionsVisible$ | async"
-        [actions]="actions$ | async"
-        [kebabActions]="menuActions$ | async">
-      </fs-filter-actions>
-    </div>
+    
+    <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+    <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
 
   <ng-container *ngIf="hasKeyword">
-    <ng-container *ngTemplateOutlet="statusBarContainer"></ng-container>
-  </ng-container>
-
-  <ng-container *ngIf="!hasKeyword">
-    <ng-container [ngTemplateOutlet]="chips"></ng-container>
+    <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
   </ng-container>
 </div>
 
-
-<ng-template #statusBarContainer>
+<ng-template #filterStatusBarChips>
   <ng-container *ngIf="statusBar">
-    <div class="filter-status-container">
-      <div class="filter-status">
-        <ng-container *ngTemplateOutlet="statusBar"></ng-container>
+    <div class="filter-status-container" [ngClass]="{ 'has-status': filterStatus.childNodes.length !== 1 }">
+      <div class="filter-status" #filterStatus>
+        <ng-container *ngTemplateOutlet="statusBar.templateRef"></ng-container>
       </div>
-      <ng-container *ngIf="hasKeyword">
-        <ng-container [ngTemplateOutlet]="chips"></ng-container>
-      </ng-container>
     </div>
   </ng-container>
-</ng-template>
 
-<ng-template #chips>
   <ng-container *ngIf="config.chips && hasFilterChips$ | async">
     <fs-filter-chips    
       class="filter-chips"
       [filters]="items">
     </fs-filter-chips>
+  </ng-container>
+</ng-template>
+
+<ng-template #filterKeyword>
+  <div class="filter-keyword">
+    <ng-container *ngIf="keywordVisible$ | async">
+      <mat-form-field 
+          [floatLabel]="'never'" 
+          class="form-field-padless" 
+          [ngClass]="search"
+          appearance="outline">
+        <span matPrefix>
+          <mat-icon matPrefix>search</mat-icon>
+        </span>
+        <input
+          #keywordMatInput
+          matInput
+          [(ngModel)]="keyword"
+          (ngModelChange)="keywordChange($event)"
+          name="filter-input"
+          [fsClear]="true"
+          [placeholder]="searchPlaceholder">
+      </mat-form-field>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #filterActions>
+  <div class="filter-actions">
+    <fs-filter-actions
+      *ngIf="actionsVisible$ | async"
+      [actions]="actions$ | async"
+      [kebabActions]="menuActions$ | async">
+    </fs-filter-actions>
+  </div>
+</ng-template>
+
+<ng-template #filterToolbar>
+  <ng-container *ngIf="filtersBtnVisible$ | async">
+    <div class="filter-toobar">
+      <ng-container *ngIf="hasVisibleItemOrSorting">
+        <a
+            mat-button
+            class="filters-button"
+            [ngClass]="{
+              'mat-raised-button': config.button.style === 'raised' && config.button.label,
+              'mat-flat-button': config.button.style === 'flat' && config.button.label,
+              'mat-stroked-button': config.button.style === 'stroked' && config.button.label,
+              'mat-button': config.button.style === 'basic' && config.button.label,
+              'mat-icon-button': config.button.style === 'icon' || !config.button.label  
+            }"
+            (click)="changeVisibilityClick(!showFilterMenu, $event)"
+            [color]="config.button.color">
+          <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
+          {{ config.button.label }}
+        </a>
+        <a 
+            mat-icon-button
+            (click)="reload($event)"
+            class="reload"
+            *ngIf="config.reload">
+          <mat-icon>refresh</mat-icon>
+        </a>
+      </ng-container>
+    </div>
   </ng-container>
 </ng-template>

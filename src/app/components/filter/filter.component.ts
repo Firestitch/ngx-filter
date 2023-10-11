@@ -11,7 +11,6 @@ import {
   OnInit,
   Optional,
   Output,
-  TemplateRef,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -74,8 +73,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @Output() public opened = new EventEmitter<any>();
   @Output() public ready = new EventEmitter<void>();
 
-  @ContentChild(FilterStatusBarDirective, { read: TemplateRef })
-  public statusBar;
+  @ContentChild(FilterStatusBarDirective)
+  public statusBar: FilterStatusBarDirective;
 
   @ViewChild('keywordMatInput', { read: MatInput })
   public keywordMatInput: MatInput;

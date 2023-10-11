@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "12.12.8",
+  "version": "12.12.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"
@@ -46,7 +46,7 @@
     "@firestitch/autocomplete": "^12.0.0",
     "@firestitch/autocomplete-chips": "^12.4.1",
     "@firestitch/chip": "^12.0.0",
-    "@firestitch/clear": "^12.3.5",
+    "@firestitch/clear": "^12.3.6",
     "@firestitch/common": "^12.3.0",
     "@firestitch/component-tools": "^12.0.18",
     "@firestitch/date": "^12.0.0",
