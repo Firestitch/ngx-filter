@@ -21,7 +21,7 @@ export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   primary?: boolean;
   default?: unknown;
   change?: (item: BaseItem<any>) => void;
-  init?: (item: BaseItem<any>) => void;
+  init?: (item: BaseItem<any>, filter?) => void;
   clear?: boolean;
   disablePersist?: boolean;
   disableQueryParams?: boolean;

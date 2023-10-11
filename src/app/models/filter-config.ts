@@ -1,6 +1,6 @@
 import { ButtonStyle } from '../enums';
 import { FsFilterAction } from '../interfaces/action.interface';
-import { ChangeFn, Sort } from '../interfaces/config.interface';
+import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
 import {
   FilterButton,
@@ -25,7 +25,7 @@ export class FsFilterConfig {
   public sort: Sort = null;
   // public sortDirection = null;
   public queryParam = false;
-  public init: ChangeFn;
+  public init: (query?: any, sort?: FilterSort | null, filter?) => void;
   public change: ChangeFn;
   public reload: ChangeFn;
   public clear: ChangeFn;

@@ -409,18 +409,15 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._sort = this._filterItems.getSort();
 
     if (this.config.init) {
-      this.config.init(data, this._sort);
+      this.config.init(data, this._sort, this);
     }
 
     this._updateChipsVisibility();
 
-    // Waiting for external ViewChilds
-    setTimeout(() => {
-      this.items
-        .forEach((item) => {
-          item.init(item);
-        });
-    });
+    this.items
+      .forEach((item) => {
+        item.init(item, this);
+      });
   }
 
   public clear(event = null) {

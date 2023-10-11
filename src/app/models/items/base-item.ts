@@ -25,11 +25,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public defaultValueFn: IFilterDefaultFn<unknown>;
   public persistedValue: unknown;
   public showClear: boolean;
-
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
   public change: (item: BaseItem<T>) => void;
-  public init: (item: BaseItem<T>) => void;
+  public init: (item: BaseItem<T>, filter?) => void;
 
   protected readonly _type: T['type'];
 
