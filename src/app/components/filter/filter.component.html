@@ -17,7 +17,7 @@
 
 <ng-template #filterStatusBarChips>
   <ng-container *ngIf="statusBar">
-    <div class="filter-status-container" [ngClass]="{ 'has-status': filterStatus.childNodes.length !== 1 }">
+    <div class="filter-status-container" [ngClass]="{ 'has-status': !!filterStatus.textContent }">
       <div class="filter-status" #filterStatus>
         <ng-container *ngTemplateOutlet="statusBar.templateRef"></ng-container>
       </div>
