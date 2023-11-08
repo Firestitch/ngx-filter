@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { FS_FILTER_CONFIG } from './injectors/filter-config';
-import { FilterConfig } from './interfaces/config.interface';
 
 import { PortalModule } from '@angular/cdk/portal';
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -18,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsChipModule } from '@firestitch/chip';
+import { FsClearModule } from '@firestitch/clear';
 import { FsCommonModule } from '@firestitch/common';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsFileModule } from '@firestitch/file';
@@ -29,7 +28,6 @@ import { FsScrollModule } from '@firestitch/scroll';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsStore, FsStoreModule } from '@firestitch/store';
 
-import { FsClearModule } from '@firestitch/clear';
 import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
 import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
 import { FsFilterActionsComponent } from './components/actions/actions.component';
@@ -59,6 +57,8 @@ import { FsFilterSavedFilterEditComponent } from './components/saved-filter-edit
 import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/saved-filters-menu.component';
 import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
+import { FS_FILTER_CONFIG } from './injectors/filter-config';
+import { FilterConfig } from './interfaces/config.interface';
 import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 
 
@@ -139,16 +139,24 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsSavedFiltersMenuComponent,
   ],
   entryComponents: [
-    FilterDrawerComponent
-  ]
+    FilterDrawerComponent,
+  ],
 })
 export class FsFilterModule {
-  static forRoot(config: FilterConfig = {}): ModuleWithProviders<FsFilterModule> {
+  public static forRoot(config: FilterConfig = {}): ModuleWithProviders<FsFilterModule> {
     return {
       ngModule: FsFilterModule,
       providers: [
-        { provide: FS_FILTER_CONFIG, useValue: config || {} }
-      ]
+        {
+          provide: FS_FILTER_CONFIG,
+          useValue: {
+            button: {
+              label: '',
+            },
+            ...config,
+          } as FilterConfig,
+        },
+      ],
     };
   }
 }
