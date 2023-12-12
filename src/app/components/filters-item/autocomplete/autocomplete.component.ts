@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  KeyValueDiffers
+  KeyValueDiffers,
 } from '@angular/core';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { AutocompleteItem } from '../../../models/items/autocomplete-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }
@@ -28,6 +28,6 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
   };
 
   public fetch = (keyword) => {
-    return this.item.valuesFn(keyword);
-  }
+    return this.item.valuesFn(keyword, this.filter);
+  };
 }

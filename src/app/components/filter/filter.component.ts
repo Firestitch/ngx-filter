@@ -12,8 +12,9 @@ import {
   Optional,
   Output,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
+
 import { MatInput } from '@angular/material/input';
 
 import { BehaviorSubject, combineLatest, fromEvent, Observable, Subject } from 'rxjs';
@@ -34,6 +35,7 @@ import { SavedFiltersController } from '../../services/external-params/saved-fil
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
+
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 
@@ -58,12 +60,12 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 export class FilterComponent implements OnInit, OnDestroy {
 
   @Input('config')
-  set setConfig(config) {
+  public set setConfig(config) {
     this._initFilterWithConfig(config);
   }
 
   @Input('filter')
-  set setFilter(config) {
+  public set setFilter(config) {
     this._initFilterWithConfig(config);
   }
 
@@ -113,12 +115,14 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
   ) {
+    this._filterItems.filter = this;
+    this._filterOverlay.filter = this;
     this._listenWhenFilterReady();
     this._updateWindowWidth();
 
     this._filterOverlay.attach$
       .pipe(
-        takeUntil(this._destroy$)
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this.showFilterMenu = true;
@@ -126,7 +130,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this._filterOverlay.detach$
       .pipe(
-        takeUntil(this._destroy$)
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this.showFilterMenu = false;
@@ -164,7 +168,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get hasVisibleItemOrSorting(): boolean {
-    return this.visibleItems.length > 0 || !!this._filterItems.sortByItem
+    return this.visibleItems.length > 0 || !!this._filterItems.sortByItem;
   }
 
   public get filtersBtnVisible$(): Observable<boolean> {
@@ -195,7 +199,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._listenInputChanges()
+    this._listenInputChanges();
     this._listenInternalItemsChange();
     this._initOverlay();
   }
@@ -212,7 +216,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public updateSort(sort: ISortingChangeEvent) {
-    this._filterItems.updateSort(sort)
+    this._filterItems.updateSort(sort);
   }
 
   /**
@@ -338,7 +342,9 @@ export class FilterComponent implements OnInit, OnDestroy {
   public hideItem(name: string) {
     const item = this.getItem(name);
 
-    if (!item) { return }
+    if (!item) {
+      return;
+    }
 
     item.hide = true;
 
@@ -348,18 +354,22 @@ export class FilterComponent implements OnInit, OnDestroy {
   public clearItem(name: string) {
     const item = this.getItem(name);
 
-    if (!item) { return }
+    if (!item) {
+      return;
+    }
 
     item.clear();
   }
 
   public updateItemConfig(
     name: string,
-    params: IUpdateFilterItemConfig
+    params: IUpdateFilterItemConfig,
   ): void {
     const item = this.getItem(name);
 
-    if (!item) { return }
+    if (!item) {
+      return;
+    }
 
     item.label = params.label ?? item.label;
     item.chipLabel = params.chipLabel ?? item.chipLabel;
@@ -377,9 +387,10 @@ export class FilterComponent implements OnInit, OnDestroy {
             return item.model;
           }),
         );
-    } else {
-      return null;
     }
+
+    return null;
+
   }
 
   public changeVisibility(state: boolean) {
@@ -389,6 +400,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     if (!state) {
       this.closed.emit();
+
       return this._destroyFilterDrawer();
     }
 
@@ -492,6 +504,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   /**
    * Update filter actions config
+   *
    * @param actions
    */
   public updateActions(actions: FsFilterAction[]): void {
@@ -548,6 +561,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._externalParams.initItems();
 
     this._syncSearchInputWithKeyword();
+  }
+
+  public keywordChange(keyword) {
+    this._keyword$.next(keyword);
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
@@ -608,11 +625,7 @@ export class FilterComponent implements OnInit, OnDestroy {
             this._updateWindowWidth();
           });
         });
-    })
-  }
-
-  public keywordChange(keyword) {
-    this._keyword$.next(keyword);
+    });
   }
 
   private _listenInputChanges() {

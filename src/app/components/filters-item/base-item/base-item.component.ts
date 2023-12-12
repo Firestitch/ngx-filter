@@ -3,18 +3,18 @@ import {
   ChangeDetectorRef,
   Component,
   DoCheck,
-  EventEmitter,
   Input,
   KeyValueDiffer,
   KeyValueDiffers, OnChanges, OnDestroy,
-  Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { BaseItem } from '../../../models/items/base-item';
+
 import { IFilterConfigItem } from '../../../interfaces/config.interface';
+import { BaseItem } from '../../../models/items/base-item';
+import type { FilterComponent } from '../../filter/filter.component';
 
 
 @Component({
@@ -22,15 +22,23 @@ import { IFilterConfigItem } from '../../../interfaces/config.interface';
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements DoCheck, OnChanges, OnDestroy {
+export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>>
+  implements DoCheck, OnChanges, OnDestroy {
 
   @Input()
-  set item(value: T) {
+  public set item(value: T) {
     this._item = value;
-  };
+  }
+
+  public get item(): T {
+    return this._item;
+  }
 
   @Input()
   public inline = false;
+
+  @Input()
+  public filter: FilterComponent;
 
   public label!: string;
 
@@ -42,16 +50,11 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     this._kvDiffer = this._kvDiffers.find(this.item || {}).create();
     this.listenWithDebounce();
   }
-
-  get item(): T {
-    return this._item
-  }
-
   public ngDoCheck(): void {
     if (this._kvDiffer) {
       const changes = this._kvDiffer.diff(this.item);
@@ -64,11 +67,7 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.item) {
-      if (Array.isArray(this.item.label)) {
-        this.label = this.item.label[0];
-      } else {
-        this.label = this.item.label;
-      }
+      this.label = Array.isArray(this.item.label) ? this.item.label[0] : this.item.label;
     }
   }
 
@@ -85,7 +84,7 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
       )
       .subscribe(() => {
         this.item.valueChanged();
-      })
+      });
   }
 
   public itemChange() {

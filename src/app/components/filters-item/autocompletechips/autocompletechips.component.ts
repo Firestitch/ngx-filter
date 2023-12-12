@@ -4,10 +4,11 @@ import {
   Component,
   KeyValueDiffers,
 } from '@angular/core';
+
 import { remove as arrayRemove } from '@firestitch/common';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }
@@ -44,18 +45,18 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
   }
 
   public removeAutocompleteChipItem(event) {
-    arrayRemove(this.item.model, {value: event.data.value});
+    arrayRemove(this.item.model, { value: event.data.value });
     this.itemChange();
   }
 
   public clearAutocompleteChipItem() {
     this.item.clear();
-    this.itemChange()
+    this.itemChange();
   }
 
   public fetch = (keyword) => {
-    return this.item.valuesFn(keyword);
-  }
+    return this.item.valuesFn(keyword, this.filter);
+  };
 
   public compareItems(item1, item2): boolean {
     return item1?.value === item2?.value;

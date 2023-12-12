@@ -5,6 +5,7 @@ import { debounceTime, filter, finalize, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
 
+import type { FilterComponent } from '../components/filter/filter.component';
 import { ItemType } from '../enums/item-type.enum';
 import { createFilterItem } from '../helpers/create-filter-item';
 import {
@@ -35,6 +36,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public sortByItem: BaseItem<IFilterConfigItem> = null;
   public sortDirectionItem: BaseItem<IFilterConfigItem> = null;
   public keywordItem: TextItem = null;
+  public filter: FilterComponent;
 
   private _ready$ = new BehaviorSubject(false);
   private _items: BaseItem<IFilterConfigItem>[] = [];
@@ -48,7 +50,8 @@ export class FsFilterItemsStore implements OnDestroy {
   private _itemsChange$ = new Subject();
   private _destroy$ = new Subject<void>();
 
-  constructor() {
+  constructor(
+  ) {
     this._lazyInit();
   }
 
@@ -60,12 +63,12 @@ export class FsFilterItemsStore implements OnDestroy {
     return this._visibleItems$.getValue();
   }
 
-  public get visibleItems$(): Observable<BaseItem<IFilterConfigItem>[]> {
-    return this._visibleItems$.asObservable();
-  }
-
   public set visibleItems(items: BaseItem<IFilterConfigItem>[]) {
     this._visibleItems$.next(items);
+  }
+
+  public get visibleItems$(): Observable<BaseItem<IFilterConfigItem>[]> {
+    return this._visibleItems$.asObservable();
   }
 
   public get hasKeyword(): boolean {
@@ -117,7 +120,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (this.sortByItem) {
       if (this._config.sort) {
-        this.sortByItem.model = this._config.sort.value
+        this.sortByItem.model = this._config.sort.value;
       } else {
         this.sortByItem.clear(this.sortByItem.defaultValue);
       }
@@ -125,7 +128,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (this.sortDirectionItem) {
       if (this._config.sort) {
-        this.sortDirectionItem.model = this._config.sort.direction
+        this.sortDirectionItem.model = this._config.sort.direction;
       } else {
         this.sortDirectionItem.clear(this.sortDirectionItem.defaultValue);
       }
@@ -137,7 +140,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public loadAsyncValues() {
     this.items
       .filter((item) => item.hasPendingValues)
-      .forEach((item) => item.loadAsyncValues());
+      .forEach((item) => item.loadAsyncValues(this.filter));
   }
 
   public loadAsyncDefaults(): void {
@@ -164,11 +167,11 @@ export class FsFilterItemsStore implements OnDestroy {
 
           ...valuesToBeLoaded
             .map((item) => {
-              item.loadAsyncValues();
+              item.loadAsyncValues(this.filter);
 
               return item.loading$
                 .pipe();
-            })
+            }),
         ],
       )
         .pipe(
@@ -193,7 +196,7 @@ export class FsFilterItemsStore implements OnDestroy {
     return {
       value: sortBy,
       direction: sortDirection,
-    }
+    };
   }
 
   public getSortByValue() {
@@ -253,7 +256,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public init(p: IFilterExternalParams) {
     this.items
       .forEach((item) => {
-        item.initValues(p[item.name]);
+        item.initValues(this.filter, p[item.name]);
       });
 
     this._initSortingItems(p);
@@ -277,8 +280,12 @@ export class FsFilterItemsStore implements OnDestroy {
         }
       });
 
-    if (this.sortByItem) { this.sortByItem.clear(); }
-    if (this.sortDirectionItem) { this.sortDirectionItem.clear(); }
+    if (this.sortByItem) {
+      this.sortByItem.clear();
+    }
+    if (this.sortDirectionItem) {
+      this.sortDirectionItem.clear();
+    }
   }
 
   public destroyItems() {
@@ -344,7 +351,7 @@ export class FsFilterItemsStore implements OnDestroy {
           )
           .subscribe(() => {
             this._itemsChange$.next(item);
-          })
+          });
       });
 
     if (this._config.sortValues?.length) {
@@ -380,8 +387,8 @@ export class FsFilterItemsStore implements OnDestroy {
 
   private _initSortingItems(p: IFilterExternalParams): void {
     if (this.sortByItem && this.sortDirectionItem) {
-      this.sortByItem.initValues(p[this.sortByItem.name]);
-      this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
+      this.sortByItem.initValues(this.filter, p[this.sortByItem.name]);
+      this.sortDirectionItem.initValues(this.filter, p[this.sortDirectionItem.name]);
     }
   }
 
@@ -391,7 +398,7 @@ export class FsFilterItemsStore implements OnDestroy {
         name: SORT_BY_FIELD,
         type: ItemType.Select,
         label: 'Sort By',
-        values: this._config.sortValues
+        values: this._config.sortValues,
       } as IFilterConfigSelectItem;
 
 
@@ -410,8 +417,8 @@ export class FsFilterItemsStore implements OnDestroy {
         label: 'Sort Direction',
         values: [
           { name: 'Ascending', value: 'asc' },
-          { name: 'Descending', value: 'desc' }
-        ]
+          { name: 'Descending', value: 'desc' },
+        ],
       } as IFilterConfigSelectItem;
 
       if (this._config.sort && this._config.sort.direction) {
@@ -420,7 +427,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
       this.sortDirectionItem = new SimpleSelectItem(
         sortDirectionItem,
-        null
+        null,
       );
     }
   }

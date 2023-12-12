@@ -1,64 +1,78 @@
 <div class="filter filter-{{ item.type }}">
 
   <ng-container [ngSwitch]="item.type">
-    <filter-item-text class="interface"
-                      *ngSwitchCase="itemType.Text"
-                      [item]="textItem">
+    <filter-item-text 
+      class="interface"
+      *ngSwitchCase="itemType.Text"
+      [item]="textItem">
     </filter-item-text>
 
-    <filter-item-select class="interface"
-                        *ngSwitchCase="itemType.Select"
-                        [item]="baseSelectItem">
+    <filter-item-select 
+      class="interface"
+      *ngSwitchCase="itemType.Select"
+      [item]="baseSelectItem">
     </filter-item-select>
 
-    <filter-item-chips class="interface"
-                       *ngSwitchCase="itemType.Chips"
-                       [item]="chipsItem">
+    <filter-item-chips 
+      class="interface"
+      *ngSwitchCase="itemType.Chips"
+      [item]="chipsItem">
     </filter-item-chips>
 
-    <filter-item-range class="interface interface-range"
-                       *ngSwitchCase="itemType.Range"
-                       [item]="rangeItem">
+    <filter-item-range 
+      class="interface interface-range"
+      *ngSwitchCase="itemType.Range"
+      [item]="rangeItem">
     </filter-item-range>
 
-    <filter-item-autocomplete class="interface"
-                              *ngSwitchCase="itemType.AutoComplete"
-                              [item]="autocompleteItem">
+    <filter-item-autocomplete 
+      class="interface"
+      *ngSwitchCase="itemType.AutoComplete"
+      [item]="autocompleteItem"
+      [filter]="filter">
     </filter-item-autocomplete>
 
-    <filter-item-autocompletechips class="interface"
-                                   *ngSwitchCase="itemType.AutoCompleteChips"
-                                   [item]="autocompleteChipsItem">
+    <filter-item-autocompletechips 
+      class="interface"
+      *ngSwitchCase="itemType.AutoCompleteChips"
+      [item]="autocompleteChipsItem"
+      [filter]="filter">
     </filter-item-autocompletechips>
 
-    <filter-item-date class="interface interface-date"
-                      *ngSwitchCase="itemType.Date"
-                      [item]="dateItem">
+    <filter-item-date 
+      class="interface interface-date"
+      *ngSwitchCase="itemType.Date"
+      [item]="dateItem">
     </filter-item-date>
 
-    <filter-item-date class="interface interface-date"
-                      *ngSwitchCase="itemType.DateTime"
-                      [item]="dateTimeItem">
+    <filter-item-date 
+      class="interface interface-date"
+      *ngSwitchCase="itemType.DateTime"
+      [item]="dateTimeItem">
     </filter-item-date>
 
-    <filter-item-date-range class="interface interface-date"
-                            *ngSwitchCase="itemType.DateRange"
-                            [item]="dateRangeItem">
+    <filter-item-date-range 
+      class="interface interface-date"
+      *ngSwitchCase="itemType.DateRange"
+      [item]="dateRangeItem">
     </filter-item-date-range>
 
-    <filter-item-date-range class="interface interface-date"
-                            *ngSwitchCase="itemType.DateTimeRange"
-                            [item]="dateTimeRangeItem">
+    <filter-item-date-range 
+      class="interface interface-date"
+      *ngSwitchCase="itemType.DateTimeRange"
+      [item]="dateTimeRangeItem">
     </filter-item-date-range>
 
-    <filter-item-week class="interface"
-                      *ngSwitchCase="itemType.Week"
-                      [item]="weekItem">
+    <filter-item-week 
+      class="interface"
+      *ngSwitchCase="itemType.Week"
+      [item]="weekItem">
     </filter-item-week>
 
-    <filter-item-checkbox class="interface interface-checkbox"
-                          *ngSwitchCase="itemType.Checkbox"
-                          [item]="checkboxItem">
+    <filter-item-checkbox 
+      class="interface interface-checkbox"
+      *ngSwitchCase="itemType.Checkbox"
+      [item]="checkboxItem">
     </filter-item-checkbox>
   </ng-container>
 

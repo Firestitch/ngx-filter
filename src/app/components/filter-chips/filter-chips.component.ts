@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BaseItem } from '../../models/items/base-item';
+
 import { ItemType } from '../../enums';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({

@@ -1,4 +1,3 @@
-import { isFunction } from 'lodash-es';
 
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
 import {
@@ -8,8 +7,10 @@ import {
   tap,
 } from 'rxjs/operators';
 
-import { ItemType } from '../../enums/item-type.enum';
+import { isFunction } from 'lodash-es';
 
+import type { FilterComponent } from '../../components/filter/filter.component';
+import { ItemType } from '../../enums/item-type.enum';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
 import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
@@ -22,7 +23,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public chipLabel: string | string[];
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
-  public defaultValueFn: IFilterDefaultFn<unknown>;
+  public defaultValueFn: IFilterDefaultFn;
   public persistedValue: unknown;
   public showClear: boolean;
   public persistanceDisabled: boolean;
@@ -39,7 +40,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _value$ = new BehaviorSubject(null);
   protected _valueChange$ = new Subject<void>();
   protected _values$ = new BehaviorSubject(null);
-  protected _valuesFn: (query?: string) => Observable<unknown> | unknown;
+  protected _valuesFn: (query?: string, filter?: FilterComponent) => Observable<unknown> | unknown;
 
   protected _destroy$ = new Subject<void>();
 
@@ -47,7 +48,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   constructor(
     itemConfig: T,
-    protected _additionalConfig: unknown
+    protected _additionalConfig: unknown,
   ) {
     this._type = itemConfig.type;
     this._parseConfig(itemConfig);
@@ -216,11 +217,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
         }),
         finalize(() => {
           this._pendingDefaultValue = false;
-        })
-      )
+        }),
+      );
   }
 
-  public initValues(persistedValue: unknown) {
+  public initValues(filter: FilterComponent, persistedValue: unknown) {
     // this._initialized = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
@@ -228,7 +229,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
 
     if (this._valuesFn && !isAutocomplete) {
-      const valuesResult = this._valuesFn();
+      const valuesResult = this._valuesFn(null, filter);
 
       if (isObservable(valuesResult)) {
         this._pendingValues = true;
@@ -246,14 +247,14 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
   }
 
-  public loadAsyncValues(reload = true) {
+  public loadAsyncValues(filter: FilterComponent, reload = true) {
     if (reload || (!this.loading && this.hasPendingValues)) {
       this.loading = true;
 
-      (this._valuesFn() as Observable<unknown>)
+      (this._valuesFn(null, filter) as Observable<unknown>)
         .pipe(
           take(1),
-          takeUntil(this._destroy$)
+          takeUntil(this._destroy$),
         )
         .subscribe((values) => {
           this.values = values;
@@ -272,12 +273,12 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       console.warn(`
         Filter ${this.name} can not be cleared with .clear() method!
         Use special .clearRange() or clearDateRange() instead.
-      `)
+      `);
     }
 
     this._clear$.next(defaultValue);
     this._clearValue(defaultValue);
-  };
+  }
 
   public getChipsContent(type): string {
     return '';
@@ -288,9 +289,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._destroy$.next();
     this._destroy$.complete();
   }
-
-  protected abstract _init();
-  protected abstract _validateModel();
 
   protected _setModel(value) {
     this._model = value;
@@ -319,7 +317,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     } else {
       this.values = item.values;
     }
-  };
+  }
 
   protected _initDefaultModel() {
     const model = this.persistedValue ?? this.defaultValue;
@@ -332,4 +330,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? undefined;
   }
+
+  protected abstract _init();
+  protected abstract _validateModel();
 }

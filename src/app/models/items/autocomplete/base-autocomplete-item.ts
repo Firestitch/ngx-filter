@@ -1,6 +1,6 @@
-import { BaseItem } from '../base-item';
-import { IFilterConfigAutocompleteItem } from '../../../interfaces/items/autocomplete.interface';
 import { IFilterConfigAutocompleteChipsItem } from '../../../interfaces/items/autocomplete-chips.interface';
+import { IFilterConfigAutocompleteItem } from '../../../interfaces/items/autocomplete.interface';
+import { BaseItem } from '../base-item';
 
 type AutoCompleteItem = IFilterConfigAutocompleteItem | IFilterConfigAutocompleteChipsItem;
 
@@ -15,6 +15,7 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
   }
 
   protected _validateModel() {
+    //
   }
 
   protected _parseConfig(item: T) {

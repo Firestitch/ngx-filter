@@ -138,9 +138,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FilterStatusBarDirective,
     FsSavedFiltersMenuComponent,
   ],
-  entryComponents: [
-    FilterDrawerComponent,
-  ],
 })
 export class FsFilterModule {
   public static forRoot(config: FilterConfig = {}): ModuleWithProviders<FsFilterModule> {

@@ -1,5 +1,6 @@
-import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 import { findValue } from '../../../helpers/find-value';
+import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
+
 import { BaseSelectItem } from './base-select-item';
 
 
@@ -7,7 +8,7 @@ export class SimpleSelectItem extends BaseSelectItem {
 
   constructor(
     itemConfig: IFilterConfigSelectItem,
-    _persistedValues: any
+    _persistedValues: any,
   ) {
     super(itemConfig, _persistedValues);
   }
@@ -26,16 +27,16 @@ export class SimpleSelectItem extends BaseSelectItem {
     if (this.children) {
       const itemValue = findValue(this.values, this.model, this.children);
 
-      return itemValue && itemValue.name
-    } else {
-      const itemValue = this.values.find((val) => val.value === this.model);
-
-      if (itemValue) {
-        return itemValue.name
-      } else if (this.isolate) {
-        return this.isolate.label
-      }
+      return itemValue && itemValue.name;
     }
+    const itemValue = this.values.find((val) => val.value === this.model);
+
+    if (itemValue) {
+      return itemValue.name;
+    } else if (this.isolate) {
+      return this.isolate.label;
+    }
+
   }
 
   public get isChipVisible(): boolean {
@@ -68,14 +69,14 @@ export class SimpleSelectItem extends BaseSelectItem {
   }
 
   protected _validateModel() {
-    const item = this.values.find(value => {
+    const item = this.values.find((value) => {
       return value.value == this.model;
     });
 
     const value = item ? item.value : '__all';
 
     if (this._model !== value) {
-      this.model = value
+      this.model = value;
     }
   }
 

@@ -7,22 +7,24 @@ import {
   FilterComponent,
   FilterConfig,
   ItemDateMode,
-  ItemType
+  ItemType,
 } from '@firestitch/filter';
 
-import { shuffle } from 'lodash-es';
 import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
 
+import { shuffle } from 'lodash-es';
+
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
+
 import { savedFilters } from './saved-filter';
 
 
 @Component({
   selector: 'kitchen-sink',
-  templateUrl: 'kitchen-sink.component.html',
-  styleUrls: ['kitchen-sink.component.css'],
+  templateUrl: './kitchen-sink.component.html',
+  styleUrls: ['./kitchen-sink.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KitchenSinkComponent implements OnInit {
@@ -40,7 +42,7 @@ export class KitchenSinkComponent implements OnInit {
   public users = [
     { id: 1, name: 'John Doe', color: 'red' },
     { id: 2, name: 'Jane Doe' },
-    { id: 3, name: 'Bob Tom' }
+    { id: 3, name: 'Bob Tom' },
   ];
 
   public weekdays = [
@@ -75,11 +77,11 @@ export class KitchenSinkComponent implements OnInit {
         { value: 8, name: 'Prayer Letter 4' },
         { value: 9, name: 'Prayer Letter 5' },
         { value: 10, name: 'Prayer Letter 6' },
-      ]
+      ],
     },
   ];
 
-  public constructor(
+  constructor(
     private _cdRef: ChangeDetectorRef,
   ) { }
 
@@ -92,7 +94,7 @@ export class KitchenSinkComponent implements OnInit {
       queryParam: true,
       sorts: [
         { name: 'Name', value: 'name' },
-        { name: 'Date', value: 'date' }
+        { name: 'Date', value: 'date' },
       ],
       actions: this._filterActions(),
       sort: {
@@ -140,7 +142,7 @@ export class KitchenSinkComponent implements OnInit {
           hide: true,
           values: (keyword) => {
             return of([]);
-          }
+          },
         },
         {
           name: 'simpleSelect',
@@ -159,9 +161,9 @@ export class KitchenSinkComponent implements OnInit {
               { name: 'All', value: '__all' },
               { name: 'Option 1', value: 1 },
               { name: 'Option 2', value: 2 },
-              { name: 'Option 3', value: 3 }
-            ])
-          }
+              { name: 'Option 3', value: 3 },
+            ]);
+          },
         },
         {
           name: 'groupSelect',
@@ -171,7 +173,7 @@ export class KitchenSinkComponent implements OnInit {
           children: 'types',
           values: () => {
             return this.subject;
-          }
+          },
         },
         {
           name: 'range',
@@ -187,11 +189,12 @@ export class KitchenSinkComponent implements OnInit {
           clear: false,
           values: () => {
             this.filter.getItem('simple_select') as SimpleSelectItem;
+
             return new BehaviorSubject(this.users)
               .pipe(
                 map((users) => shuffle(nameValue(users, 'name', 'id'))),
-              )
-          }
+              );
+          },
         },
         {
           name: 'autocompleteUserId',
@@ -204,14 +207,14 @@ export class KitchenSinkComponent implements OnInit {
           init: (item) => {
             console.log('Item Init', item);
           },
-          values: (keyword) => {
+          values: (keyword, filterComponent: FilterComponent) => {
             return new BehaviorSubject(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword)),
                 map((users) => nameValue(users, 'name', 'id')),
-              )
-          }
+              );
+          },
         },
         {
           name: 'autocompletechipsUserId',
@@ -220,7 +223,7 @@ export class KitchenSinkComponent implements OnInit {
           chipImage: 'data.image',
           chipColor: '#fff',
           chipBackground: 'color',
-          values: (keyword) => {
+          values: (keyword, filterComponent: FilterComponent) => {
             return new BehaviorSubject(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
@@ -234,20 +237,20 @@ export class KitchenSinkComponent implements OnInit {
                   return user;
                 })),
                 tap(console.log),
-              )
-          }
+              );
+          },
         },
         {
           name: 'daysChips',
           label: 'Weekdays',
           type: ItemType.Chips,
           multiple: true,
-          values: (keyword) => {
+          values: (keyword, filterComponent: FilterComponent) => {
             return of(this.weekdays)
               .pipe(
                 map((weekdays) => nameValue(weekdays, 'name', 'id')),
-              )
-          }
+              );
+          },
         },
         {
           name: 'date',
@@ -288,9 +291,9 @@ export class KitchenSinkComponent implements OnInit {
           values: [
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' }
+            { name: 'Deleted', value: 'deleted' },
           ],
-          isolate: { label: 'Show Deleted', value: 'deleted' }
+          isolate: { label: 'Show Deleted', value: 'deleted' },
         },
         {
           name: 'multiselect',
@@ -301,8 +304,8 @@ export class KitchenSinkComponent implements OnInit {
             { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' }
-          ]
+            { name: 'Deleted', value: 'deleted' },
+          ],
         },
         {
           name: 'maxPrice',
@@ -310,11 +313,12 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Max Price',
           prefix: '$&nbsp;',
           suffix: '%',
-        }
+        },
       ],
       savedFilters: {
         load: () => {
           console.log('<====== Load Saved Filters =====>');
+
           return of(savedFilters);
         },
         save: (filter) => {
@@ -332,7 +336,7 @@ export class KitchenSinkComponent implements OnInit {
             filter = {
               ...filter,
               id: 999,
-            }
+            };
             savedFilters.push(filter);
           }
 
@@ -366,7 +370,7 @@ export class KitchenSinkComponent implements OnInit {
 
     this.sortUpdated.emit({
       sortBy: 't',
-      sortDirection: 'desc'
+      sortDirection: 'desc',
     });
 
     // setTimeout(() => {
@@ -407,7 +411,7 @@ export class KitchenSinkComponent implements OnInit {
                   console.log('Group 1 Sub Item clicked');
                 },
               },
-            ]
+            ],
           },
         ],
       },
@@ -435,14 +439,14 @@ export class KitchenSinkComponent implements OnInit {
         },
         icon: 'delete',
         primary: false,
-        label: 'Secondary Button'
+        label: 'Secondary Button',
       },
       {
         click: (event) => {
           // this.list.enableOrder();
         },
         label: 'Kebab only button',
-        menu: true
+        menu: true,
       },
       {
         label: 'Reorder',
@@ -451,14 +455,14 @@ export class KitchenSinkComponent implements OnInit {
           this.filter.updateActions(this._doneAction());
           this.filter.hideKeywordField();
           this.filter.hideFiltersBtn();
-        }
+        },
       },
       {
         click: (event) => {
           console.log(event);
         },
-        label: 'Primary Button'
-      }
+        label: 'Primary Button',
+      },
     ];
   }
 
@@ -479,6 +483,6 @@ export class KitchenSinkComponent implements OnInit {
   private _filterUsersByKeyword(users, keyword) {
     return filter(users, (user) => {
       return user.name.toLowerCase().match(new RegExp(`${keyword}`));
-    })
+    });
   }
 }

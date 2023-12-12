@@ -2,16 +2,17 @@ import { filter, isArrayEqual } from '@firestitch/common';
 
 import { clone } from 'lodash-es';
 
-import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
-import { BaseSelectItem } from './base-select-item';
 import { arraysAreEquals } from '../../../helpers/compare';
+import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
+
+import { BaseSelectItem } from './base-select-item';
 
 
 export class MultipleSelectItem extends BaseSelectItem {
 
   constructor(
     itemConfig: IFilterConfigSelectItem,
-    _persistedValues: any
+    _persistedValues: any,
   ) {
     super(itemConfig, _persistedValues);
   }
@@ -51,7 +52,7 @@ export class MultipleSelectItem extends BaseSelectItem {
       }
 
       if (!acc.includes(itemLabel)) {
-        acc.push(itemLabel)
+        acc.push(itemLabel);
       }
 
       return acc;
@@ -86,10 +87,11 @@ export class MultipleSelectItem extends BaseSelectItem {
       value = value.map((val) => {
         if (isNaN(val)) {
           return val;
-        } else {
-          return +val;
         }
-      })
+
+        return +val;
+
+      });
     }
 
     super._setModel(value);
@@ -97,7 +99,7 @@ export class MultipleSelectItem extends BaseSelectItem {
 
   protected _validateModel() {
     const possibleValues = filter(this.model || [], (item) => {
-      return this.values.find(value => {
+      return this.values.find((value) => {
         return value.value == item;
       });
     });

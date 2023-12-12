@@ -8,11 +8,11 @@ import {
 import { combineLatest, Observable, Subject, timer } from 'rxjs';
 import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil } from 'rxjs/operators';
 
-import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
-import { RangeItem } from '../../models/items/range-item';
+import { BaseItem } from '../../models/items/base-item';
 import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
+import { RangeItem } from '../../models/items/range-item';
 import { FocusControllerService } from '../../services/focus-controller.service';
 
 
@@ -41,6 +41,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   constructor(
     private _cdRef: ChangeDetectorRef,
     private _focusController: FocusControllerService,
+    // private _filter: FilterComponent,
   ) {
   }
 
@@ -53,7 +54,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._updateVisibility();
 
     if (this.item.hasPendingValues) {
-      this.item.loadAsyncValues(false);
+      this.item.loadAsyncValues(null, false);
 
       this.item.values$
         .pipe(
@@ -107,7 +108,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   private _initDelayRender() {
     this.chipDelayedRender$ = combineLatest([
       this.item.values$,
-      this._chipRenderTimer$.pipe(startWith(false))
+      this._chipRenderTimer$.pipe(startWith(false)),
     ])
       .pipe(
         map(([values, timerValue]) => {
