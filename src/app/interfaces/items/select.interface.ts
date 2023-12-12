@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 
 import { ItemType } from '../../enums/item-type.enum';
+
 import { IFilterConfigBaseItem } from './base.interface';
 
 
@@ -13,12 +14,12 @@ export interface IFilterConfigSelectItem extends IFilterConfigBaseItem<ItemType.
 }
 
 export interface IFilterConfigSelectIsolate {
-  label: string,
+  label: string;
   value: number | string | boolean | number[] | string[] | boolean[];
 }
 
 export interface IFilterSelectValue {
-  name: string,
+  name: string;
   value?: number | string | boolean;
   types?: any;
 }

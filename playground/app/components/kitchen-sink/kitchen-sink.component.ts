@@ -140,7 +140,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Payment Method',
           type: ItemType.AutoComplete,
           hide: true,
-          values: (keyword) => {
+          values: (keyword, filterComponent: FilterComponent) => {
             return of([]);
           },
         },

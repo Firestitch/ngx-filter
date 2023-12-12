@@ -16,7 +16,8 @@ export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar
 // Interfaces
 export {
   FsFilterAction,
-  FsFilterActionClickFn, FsFilterActionDisabledFn, FsFilterActionShowFn, FsFilterFileActionErrorFn,
+  FsFilterActionClickFn, FsFilterActionDisabledFn, FsFilterActionShowFn,
+  FsFilterFileActionErrorFn,
   FsFilterFileActionSelectFn, IFsFilterButtonAction,
   IFsFilterFileAction, IFsFilterMenuAction, IFsFilterMenuActionGroupItem,
   IFsFilterMenuActionItem, IFsFilterMenuActionLink

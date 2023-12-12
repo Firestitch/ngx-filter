@@ -40,7 +40,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _value$ = new BehaviorSubject(null);
   protected _valueChange$ = new Subject<void>();
   protected _values$ = new BehaviorSubject(null);
-  protected _valuesFn: (query?: string, filter?: FilterComponent) => Observable<unknown> | unknown;
+  protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<unknown> | unknown;
 
   protected _destroy$ = new Subject<void>();
 
