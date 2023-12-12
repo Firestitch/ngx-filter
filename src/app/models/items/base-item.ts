@@ -28,7 +28,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public showClear: boolean;
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
-  public change: (item: BaseItem<T>) => void;
+  public change: (item: BaseItem<T>, filter: FilterComponent) => void;
   public init: (item: BaseItem<T>, filter?) => void;
 
   protected readonly _type: T['type'];
@@ -49,12 +49,17 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   constructor(
     itemConfig: T,
     protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
   ) {
     this._type = itemConfig.type;
     this._parseConfig(itemConfig);
   }
 
   public abstract get value();
+
+  public get filter(): FilterComponent {
+    return this._filter;
+  }
 
   ///
   public get isTypeAutocomplete() {
@@ -179,7 +184,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._value$.next(this.value);
 
     if (this.change) {
-      this.change(this);
+      this.change(this, this._filter);
     }
 
     if (this.initialized) {
@@ -221,7 +226,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       );
   }
 
-  public initValues(filter: FilterComponent, persistedValue: unknown) {
+  public initValues(persistedValue: unknown) {
     // this._initialized = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
@@ -229,7 +234,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
 
     if (this._valuesFn && !isAutocomplete) {
-      const valuesResult = this._valuesFn(null, filter);
+      const valuesResult = this._valuesFn(null, this._filter);
 
       if (isObservable(valuesResult)) {
         this._pendingValues = true;
@@ -247,11 +252,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
   }
 
-  public loadAsyncValues(filter: FilterComponent, reload = true) {
+  public loadAsyncValues(reload = true) {
     if (reload || (!this.loading && this.hasPendingValues)) {
       this.loading = true;
 
-      (this._valuesFn(null, filter) as Observable<unknown>)
+      (this._valuesFn(null, this._filter) as Observable<unknown>)
         .pipe(
           take(1),
           takeUntil(this._destroy$),
@@ -306,7 +311,9 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
 
     this.change = item.change;
-    this.init = item.init || ((item) => { });
+    this.init = item.init || ((_) => {
+      //
+    });
     this.hide = item.hide;
     this.showClear = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;

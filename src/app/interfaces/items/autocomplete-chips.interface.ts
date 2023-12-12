@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import type { FilterComponent } from '../../components/filter';
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
 
 import { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './base.interface';

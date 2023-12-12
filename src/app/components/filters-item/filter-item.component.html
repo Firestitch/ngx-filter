@@ -28,15 +28,13 @@
     <filter-item-autocomplete 
       class="interface"
       *ngSwitchCase="itemType.AutoComplete"
-      [item]="autocompleteItem"
-      [filter]="filter">
+      [item]="autocompleteItem">
     </filter-item-autocomplete>
 
     <filter-item-autocompletechips 
       class="interface"
       *ngSwitchCase="itemType.AutoCompleteChips"
-      [item]="autocompleteChipsItem"
-      [filter]="filter">
+      [item]="autocompleteChipsItem">
     </filter-item-autocompletechips>
 
     <filter-item-date 

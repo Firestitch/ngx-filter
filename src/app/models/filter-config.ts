@@ -2,11 +2,12 @@ import { ButtonStyle } from '../enums';
 import { FsFilterAction } from '../interfaces/action.interface';
 import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
+
 import {
   FilterButton,
   FilterConfig,
   FsFilterPersistance,
-  IFilterConfigItem
+  IFilterConfigItem,
 } from './../interfaces/config.interface';
 
 export const SORT_BY_FIELD = 'sortName';
@@ -93,7 +94,7 @@ export class FsFilterConfig {
     }
 
     if (this.clear === undefined) {
-      this.clear = () => { }
+      this.clear = () => { };
     }
   }
 }

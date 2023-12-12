@@ -1,16 +1,13 @@
 import { clone } from 'lodash-es';
 
-import { ItemType } from '../../enums/item-type.enum';
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigAutocompleteChipsItem } from '../../interfaces/items/autocomplete-chips.interface';
 
 import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
 
 
-export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAutocompleteChipsItem> {
-
-  public static create(config: IFilterConfigAutocompleteChipsItem) {
-    return new AutocompleteChipsItem(config, null);
-  }
+export class AutocompleteChipsItem
+  extends BaseAutocompleteItem<IFilterConfigAutocompleteChipsItem> {
 
   public chipImage: string;
   public chipIcon: string;
@@ -18,6 +15,10 @@ export class AutocompleteChipsItem extends BaseAutocompleteItem<IFilterConfigAut
   public chipIconColor: string;
   public chipBackground: string;
   public chipClass: string;
+
+  public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {
+    return new AutocompleteChipsItem(config, null, filter);
+  }
 
   public get value() {
     if (Array.isArray(this.model) && this.model.length === 0) {

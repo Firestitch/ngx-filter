@@ -2,6 +2,7 @@ import { filter, isArrayEqual } from '@firestitch/common';
 
 import { clone } from 'lodash-es';
 
+import type { FilterComponent } from '../../../components/filter/filter.component';
 import { arraysAreEquals } from '../../../helpers/compare';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 
@@ -13,8 +14,9 @@ export class MultipleSelectItem extends BaseSelectItem {
   constructor(
     itemConfig: IFilterConfigSelectItem,
     _persistedValues: any,
+    _filter: FilterComponent,
   ) {
-    super(itemConfig, _persistedValues);
+    super(itemConfig, _persistedValues, _filter);
   }
 
   public get value() {
@@ -33,7 +35,7 @@ export class MultipleSelectItem extends BaseSelectItem {
     return Array.isArray(this.model) && this.model.length > 0;
   }
 
-  protected get isolateOptionNotSelected() {
+  public get isolateOptionNotSelected() {
     const modelValue = this.model;
     const isolate = this.isolate;
 
@@ -100,7 +102,7 @@ export class MultipleSelectItem extends BaseSelectItem {
   protected _validateModel() {
     const possibleValues = filter(this.model || [], (item) => {
       return this.values.find((value) => {
-        return value.value == item;
+        return value.value === item;
       });
     });
 

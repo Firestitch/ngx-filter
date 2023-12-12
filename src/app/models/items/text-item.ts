@@ -1,6 +1,7 @@
-import { ItemType } from '../../enums/item-type.enum';
+
+import type { FilterComponent } from '../../components/filter/filter.component';
 import {
-  IFilterConfigTextItem
+  IFilterConfigTextItem,
 } from '../../interfaces/items/text.interface';
 
 import { BaseItem } from './base-item';
@@ -8,12 +9,12 @@ import { BaseItem } from './base-item';
 
 export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
-  public static create(config: IFilterConfigTextItem) {
-    return new TextItem(config, null);
-  }
-
   public prefix: string;
   public suffix: string;
+
+  public static create(config: IFilterConfigTextItem, filter: FilterComponent) {
+    return new TextItem(config, null, filter);
+  }
 
   public get value() {
     return !!this.model ? this.model : undefined;
@@ -33,7 +34,9 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return this.model;
   }
 
-  protected _validateModel() {}
+  protected _validateModel() {
+    //
+  }
 
   protected _parseConfig(item: IFilterConfigTextItem) {
     this.prefix = item.prefix;
@@ -42,7 +45,9 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     super._parseConfig(item);
   }
 
-  protected _init() {}
+  protected _init() {
+    //
+  }
 
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? '';

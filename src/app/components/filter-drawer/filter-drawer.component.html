@@ -12,20 +12,17 @@
           <filter-item 
             *ngFor="let filterItem of items$ | async"
             class="filter-group"
-            [item]="filterItem"
-            [filter]="filter">
+            [item]="filterItem">
           </filter-item>
 
           <ng-container *ngIf="sortItem && sortItem.values && sortItem.values.length > 0">
             <filter-item 
               class="filter-group sort"
-              [item]="sortItem"
-              [filter]="filter">
+              [item]="sortItem">
             </filter-item>
             <filter-item 
               class="filter-group sort"
-              [item]="sortDirectionItem"
-              [filter]="filter">
+              [item]="sortDirectionItem">
             </filter-item>
           </ng-container>
         </ng-container>

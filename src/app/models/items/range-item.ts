@@ -1,6 +1,8 @@
-import { clone, isObject } from 'lodash-es';
 import { isEmpty } from '@firestitch/common';
 
+import { clone, isObject } from 'lodash-es';
+
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { getRangeName } from '../../helpers/get-range-name';
 import {
   IFilterConfigRangeItem,
@@ -12,16 +14,16 @@ import { BaseItem } from './base-item';
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
-  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown) {
-    return new RangeItem(config, additionalConfig);
+  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
+    return new RangeItem(config, additionalConfig, filter);
   }
 
   public case: 'snake' | 'camel';
-  public options: { scale?: number }
+  public options: { scale?: number };
   public prefix: string;
   public suffix: string;
 
-  protected readonly _additionalConfig: { case: 'camel' | 'snake' }
+  protected readonly _additionalConfig: { case: 'camel' | 'snake' };
 
   public get value() {
     let value = clone(this.model);
@@ -59,9 +61,11 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public getChipsContent(type): string {
     if (type === 'from') {
       const min = this.model.min;
+
       return `${min}`;
     } else if (type === 'to') {
       const max = this.model.max;
+
       return `${max}`;
     }
   }
@@ -84,11 +88,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
       this.model = { ...this.model };
     } else {
-      if (defaultValue) {
-        this.model = { ...defaultValue };
-      } else {
-        this.model = {};
-      }
+      this.model = defaultValue ? { ...defaultValue } : {};
     }
   }
 

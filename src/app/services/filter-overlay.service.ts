@@ -7,7 +7,6 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
-import { FilterComponent } from '../components/filter/filter.component';
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
 import { FS_FILTER_META, FsFilterMeta } from '../providers/filter-meta';
@@ -20,7 +19,6 @@ export class FsFilterOverlayService implements OnDestroy {
 
   public detach$ = new Subject();
   public attach$ = new Subject();
-  public filter: FilterComponent;
 
   private _clearFn: Function;
   private _doneFn: Function;
@@ -108,7 +106,6 @@ export class FsFilterOverlayService implements OnDestroy {
     const data = {
       done: this._doneFn,
       clear: this._clearFn,
-      filter: this.filter,
     };
     const injector = this._createInjector(this._injector, data, this._overlayRef);
     const containerPortal = new ComponentPortal(FilterDrawerComponent, undefined, injector);

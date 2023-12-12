@@ -1,3 +1,4 @@
+import type { FilterComponent } from '../../../components/filter/filter.component';
 import { findValue } from '../../../helpers/find-value';
 import { IFilterConfigSelectItem } from '../../../interfaces/items/select.interface';
 
@@ -9,14 +10,15 @@ export class SimpleSelectItem extends BaseSelectItem {
   constructor(
     itemConfig: IFilterConfigSelectItem,
     _persistedValues: any,
+    _filter: FilterComponent,
   ) {
-    super(itemConfig, _persistedValues);
+    super(itemConfig, _persistedValues, _filter);
   }
 
   public get value() {
     let value = this.model;
 
-    if (value == '__all' || value === undefined) {
+    if (value === '__all' || value === undefined) {
       value = undefined;
     }
 

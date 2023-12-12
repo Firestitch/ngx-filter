@@ -24,7 +24,6 @@ import { RangeItem } from '../../models/items/range-item';
 import { BaseSelectItem } from '../../models/items/select/base-select-item';
 import { TextItem } from '../../models/items/text-item';
 import { WeekItem } from '../../models/items/week-item';
-import type { FilterComponent } from '../filter/filter.component';
 
 
 @Component({
@@ -35,7 +34,6 @@ import type { FilterComponent } from '../filter/filter.component';
 export class FilterItemComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<any>;
-  @Input() public filter: FilterComponent;
 
   public itemType = ItemType;
 

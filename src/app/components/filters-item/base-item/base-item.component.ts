@@ -14,7 +14,6 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../../interfaces/config.interface';
 import { BaseItem } from '../../../models/items/base-item';
-import type { FilterComponent } from '../../filter/filter.component';
 
 
 @Component({
@@ -36,9 +35,6 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>>
 
   @Input()
   public inline = false;
-
-  @Input()
-  public filter: FilterComponent;
 
   public label!: string;
 

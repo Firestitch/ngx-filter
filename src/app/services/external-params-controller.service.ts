@@ -3,11 +3,11 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
 
-import { FsFilterConfig } from '../models/filter-config';
-
 import { buildQueryParams } from '../helpers/build-query-params';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import { IFilterSavedFilter } from '../interfaces/saved-filters.interface';
+import { FsFilterConfig } from '../models/filter-config';
+
 import { PersistanceParamsController } from './external-params/persistance-params-controller.service';
 import { QueryParamsController } from './external-params/query-params-controller.service';
 import { SavedFiltersController } from './external-params/saved-filters-controller.service';
@@ -18,10 +18,9 @@ import { FsFilterItemsStore } from './items-store.service';
 export class ExternalParamsController implements OnDestroy {
 
   protected _init;
-  protected _pending$ = new BehaviorSubject(false);
 
+  private _pending$ = new BehaviorSubject(false);
   private _shouldResetSavedFilters = true;
-
   private _config: FsFilterConfig;
   private _destroy$ = new Subject<void>();
 
@@ -97,8 +96,6 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public initItems(): void {
-    this._itemsStore.ready$
-
     this._pending$.next(true);
     if (this._savedFilters.enabled) {
       this._savedFilters
@@ -110,11 +107,11 @@ export class ExternalParamsController implements OnDestroy {
           this._savedFilters.updateActiveFilter();
           this._initItemsValues();
           this._listenAndResetSavedFilters();
-          this._pending$.next(false)
+          this._pending$.next(false);
         });
     } else {
       this._initItemsValues();
-      this._pending$.next(false)
+      this._pending$.next(false);
     }
 
     this._listenItemsChange();
@@ -135,7 +132,7 @@ export class ExternalParamsController implements OnDestroy {
     this._persistanceStore.init(
       this._config.persist,
       this._config.namespace,
-      this._config.case
+      this._config.case,
     );
   }
 
@@ -157,7 +154,7 @@ export class ExternalParamsController implements OnDestroy {
       .subscribe(() => {
         this._saveQueryParams();
         this._savePersistedParams();
-      })
+      });
 
     this._itemsStore
       .itemsChange$
@@ -198,7 +195,7 @@ export class ExternalParamsController implements OnDestroy {
       this._itemsStore.valuesAsQuery({
         onlyPresented: false,
         items: targetItems,
-        persisted: true
+        persisted: true,
       }),
       targetItems,
     );
@@ -214,7 +211,7 @@ export class ExternalParamsController implements OnDestroy {
       this._itemsStore.valuesAsQuery({
         onlyPresented: false,
         items: targetItems,
-        persisted: true
+        persisted: true,
       }),
       targetItems,
     );

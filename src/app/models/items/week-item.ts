@@ -5,19 +5,21 @@ import { formatPeriodObject } from '@firestitch/datepicker';
 import { isDate, isValid, parseISO } from 'date-fns';
 import { clone, isObject, isString } from 'lodash-es';
 
-import { BaseItem } from './base-item';
-import { IFilterConfigWeekItem } from '../../interfaces/items/week.interface';
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { getRangeName } from '../../helpers/get-range-name';
 import { parseDate } from '../../helpers/parse-date';
+import { IFilterConfigWeekItem } from '../../interfaces/items/week.interface';
+
+import { BaseItem } from './base-item';
 
 
 export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
 
-  public static create(config: IFilterConfigWeekItem) {
-    return new WeekItem(config, null);
-  }
-
   public seedDate: Date;
+
+  public static create(config: IFilterConfigWeekItem, filter: FilterComponent) {
+    return new WeekItem(config, null, filter);
+  }
 
   public get value() {
     let value = clone(this.model);
@@ -58,11 +60,7 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     }
 
     if (period) {
-      if (isString(period)) {
-        value.period = parseInt(period, 10);
-      } else {
-        value.period = period;
-      }
+      value.period = isString(period) ? parseInt(period, 10) : period;
     }
 
 
@@ -96,14 +94,14 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
       [paramFromName]: paramFromValue,
       [paramToName]: paramToValue,
       [paramPeriodName]: query[paramPeriodName],
-    }
+    };
   }
 
   public getChipsContent(type = null): string {
     return formatPeriodObject(this.value);
   }
 
-  protected _validateModel() {}
+  protected _validateModel() { }
 
   protected _setModel(value) {
     if (value) {
@@ -121,7 +119,7 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     this.seedDate = item.seedDate;
   }
 
-  protected _init() {}
+  protected _init() { }
 
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? undefined;

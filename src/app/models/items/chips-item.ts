@@ -1,18 +1,18 @@
 import { clone } from 'lodash-es';
 
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
 
-import { ItemType } from '../../enums/item-type.enum';
 import { BaseItem } from './base-item';
 
 
 export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
-  public static create(config: IFilterConfigChipsItem) {
-    return new ChipsItem(config, null);
-  }
-
   public multiple: boolean;
+
+  public static create(config: IFilterConfigChipsItem, filter: FilterComponent) {
+    return new ChipsItem(config, null, filter);
+  }
 
   public get isTypeChips(): boolean {
     return true;
@@ -37,7 +37,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     const name = this.name;
 
     return {
-      [name]: value
+      [name]: value,
     };
   }
 
@@ -65,17 +65,20 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       .join(', ');
   }
 
-  protected _validateModel() {}
+  protected _validateModel() {
+    //
+  }
 
   protected _setModel(value) {
     if (Array.isArray(value)) {
       value = value.map((val) => {
         if (isNaN(val)) {
           return val;
-        } else {
-          return +val;
         }
-      })
+
+        return +val;
+
+      });
     }
 
     this._model = value;
@@ -96,7 +99,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       if (Number.isInteger(this.model[0])) {
         this._model = this.model.map((id) => {
           return this.values.find((value) => value.value === id);
-        })
+        });
       }
     }
 

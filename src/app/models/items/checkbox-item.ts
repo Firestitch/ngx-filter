@@ -1,5 +1,6 @@
 import { toString } from 'lodash-es';
 
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigCheckboxItem } from '../../interfaces/items/checkbox.interface';
 
 import { BaseItem } from './base-item';
@@ -7,12 +8,12 @@ import { BaseItem } from './base-item';
 
 export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
-  public static create(config: IFilterConfigCheckboxItem) {
-    return new CheckboxItem(config, null);
-  }
-
   public checked: unknown;
   public unchecked: unknown;
+
+  public static create(config: IFilterConfigCheckboxItem, filter: FilterComponent) {
+    return new CheckboxItem(config, null, filter);
+  }
 
   public get isTypeCheckbox(): boolean {
     return true;
@@ -46,7 +47,9 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return this.label as string;
   }
 
-  protected _validateModel() {}
+  protected _validateModel() {
+    //
+  }
 
   protected _parseConfig(item: IFilterConfigCheckboxItem) {
     this.checked = item.checked;
@@ -61,7 +64,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
   protected _init() {
     if (this.model === undefined) {
-      this._model = this.checked == this.defaultValue;
+      this._model = this.checked === this.defaultValue;
     }
   }
 

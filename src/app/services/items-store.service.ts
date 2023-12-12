@@ -140,7 +140,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public loadAsyncValues() {
     this.items
       .filter((item) => item.hasPendingValues)
-      .forEach((item) => item.loadAsyncValues(this.filter));
+      .forEach((item) => item.loadAsyncValues());
   }
 
   public loadAsyncDefaults(): void {
@@ -167,7 +167,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
           ...valuesToBeLoaded
             .map((item) => {
-              item.loadAsyncValues(this.filter);
+              item.loadAsyncValues();
 
               return item.loading$
                 .pipe();
@@ -256,7 +256,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public init(p: IFilterExternalParams) {
     this.items
       .forEach((item) => {
-        item.initValues(this.filter, p[item.name]);
+        item.initValues(p[item.name]);
       });
 
     this._initSortingItems(p);
@@ -328,7 +328,7 @@ export class FsFilterItemsStore implements OnDestroy {
         }
       })
       .map((item) => {
-        const filterItem = createFilterItem(item, { case: this._config.case });
+        const filterItem = createFilterItem(item, { case: this._config.case }, this.filter);
 
         if (filterItem.type === ItemType.Keyword) {
           this._hasKeyword = true;
@@ -387,8 +387,8 @@ export class FsFilterItemsStore implements OnDestroy {
 
   private _initSortingItems(p: IFilterExternalParams): void {
     if (this.sortByItem && this.sortDirectionItem) {
-      this.sortByItem.initValues(this.filter, p[this.sortByItem.name]);
-      this.sortDirectionItem.initValues(this.filter, p[this.sortDirectionItem.name]);
+      this.sortByItem.initValues(p[this.sortByItem.name]);
+      this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);
     }
   }
 
@@ -409,6 +409,7 @@ export class FsFilterItemsStore implements OnDestroy {
       this.sortByItem = new SimpleSelectItem(
         sortByItem,
         null,
+        this.filter,
       );
 
       const sortDirectionItem = {
@@ -428,6 +429,7 @@ export class FsFilterItemsStore implements OnDestroy {
       this.sortDirectionItem = new SimpleSelectItem(
         sortDirectionItem,
         null,
+        this.filter,
       );
     }
   }

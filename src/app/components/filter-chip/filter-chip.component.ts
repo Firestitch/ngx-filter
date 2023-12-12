@@ -41,7 +41,6 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   constructor(
     private _cdRef: ChangeDetectorRef,
     private _focusController: FocusControllerService,
-    // private _filter: FilterComponent,
   ) {
   }
 
@@ -54,7 +53,7 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._updateVisibility();
 
     if (this.item.hasPendingValues) {
-      this.item.loadAsyncValues(null, false);
+      this.item.loadAsyncValues(false);
 
       this.item.values$
         .pipe(

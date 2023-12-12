@@ -1,22 +1,22 @@
 import { format } from '@firestitch/date';
 
-import { IFilterConfigDateItem } from '../../interfaces/items/date.interface';
-import { ItemType } from '../../enums/item-type.enum';
+import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemDateMode } from '../../enums/item-date-mode.enum';
+import { IFilterConfigDateItem } from '../../interfaces/items/date.interface';
 
 import { BaseDateItem } from './date/base-date-item';
 
 
 export class DateItem extends BaseDateItem {
 
-  public static create(config: IFilterConfigDateItem) {
-    return new DateItem(config, null);
+  public static create(config: IFilterConfigDateItem, filter: FilterComponent) {
+    return new DateItem(config, null, filter);
   }
 
   public getChipsContent(type = null): string {
     let dateFormat = 'date';
 
-    if (this.mode == ItemDateMode.ScrollMonthYear) {
+    if (this.mode === ItemDateMode.ScrollMonthYear) {
       dateFormat = 'full-date-dayless';
     }
 

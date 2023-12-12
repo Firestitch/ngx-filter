@@ -116,7 +116,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _actions: ActionsController,
   ) {
     this._filterItems.filter = this;
-    this._filterOverlay.filter = this;
     this._listenWhenFilterReady();
     this._updateWindowWidth();
 

@@ -150,10 +150,12 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Simple Select',
           disableQueryParams: true,
           chipLabel: 'Special Label',
-          change: (item) => {
-            // const filterItem: FsFilterConfigItem = this.filter.config.getItem('multiselect');
-            // filterItem.values.pop();
-            // //filterItem.clear();
+          change: (item, filterComponent: FilterComponent) => {
+            const filterItem = filterComponent.getItem('multiselect');
+            filterItem.values.pop();
+            setTimeout(() => {
+              filterItem.clear();
+            }, 2000);
           },
           values: () => {
 
@@ -201,7 +203,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
           clear: false,
-          change: (item) => {
+          change: (item, filterComponent: FilterComponent) => {
             console.log('Item Change', item);
           },
           init: (item) => {

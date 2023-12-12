@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 
@@ -6,6 +7,7 @@ import { SavedFiltersController } from '../../services/external-params/saved-fil
 @Component({
   selector: 'fs-filter-drawer-actions',
   templateUrl: './filter-drawer-actions.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterDrawerActionsComponent {
 
@@ -15,7 +17,7 @@ export class FsFilterDrawerActionsComponent {
   @Output('done')
   private _done = new EventEmitter<void>();
 
-  constructor(public externalParams: ExternalParamsController) {}
+  constructor(public externalParams: ExternalParamsController) { }
 
   public get savedFilters(): SavedFiltersController {
     return this.externalParams.savedFiltersController;

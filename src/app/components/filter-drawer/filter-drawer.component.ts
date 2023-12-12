@@ -16,7 +16,6 @@ import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
-import type { FilterComponent } from '../filter/filter.component';
 
 type Item = BaseItem<any>;
 
@@ -31,23 +30,21 @@ export class FilterDrawerComponent {
   @Input() public inline = false;
 
   public windowDesktop = false;
-  public filter: FilterComponent;
 
   protected _clear: Function;
   protected _done: Function;
 
   constructor(
+    @Inject(FILTER_DRAWER_OVERLAY) private _overlayRef: OverlayRef,
+    @Inject(FILTER_DRAWER_DATA) private _data,
     public externalParams: ExternalParamsController,
     protected _cd: ChangeDetectorRef,
     protected _itemsStore: FsFilterItemsStore,
-    @Inject(FILTER_DRAWER_OVERLAY) private _overlayRef: OverlayRef,
-    @Inject(FILTER_DRAWER_DATA) private _data,
   ) {
     this._itemsStore.prepareItems();
 
-    this._clear = _data.clear;
-    this._done = _data.done;
-    this.filter = _data.filter;
+    this._clear = this._data.clear;
+    this._done = this._data.done;
 
     this.updateWindowWidth();
   }

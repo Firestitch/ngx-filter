@@ -28,6 +28,6 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
   };
 
   public fetch = (keyword) => {
-    return this.item.valuesFn(keyword, this.filter);
+    return this.item.valuesFn(keyword, this.item.filter);
   };
 }
