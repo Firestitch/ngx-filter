@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit, Optional, Self,
 } from '@angular/core';
-import { MatSelect } from '@angular/material/select';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 
 import {
   DateRangePickerFromComponent, DateRangePickerToComponent,

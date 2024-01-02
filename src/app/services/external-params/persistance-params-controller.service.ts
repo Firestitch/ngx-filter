@@ -1,7 +1,7 @@
 import { Injectable, Optional } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 import { DrawerRef } from '@firestitch/drawer';
 import { FsPersistanceStore } from '@firestitch/store';
