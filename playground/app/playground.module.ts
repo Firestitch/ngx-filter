@@ -14,7 +14,6 @@ import { FsMessageModule } from '@firestitch/message';
 import { FsScrollbarModule } from '@firestitch/scrollbar';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { ExamplesComponent, KitchenSinkComponent, NofiltersComponent } from './components';
@@ -36,7 +35,6 @@ import { AppMaterialModule } from './material.module';
     FsFormModule.forRoot(),
     FsExampleModule.forRoot({ iframeObserveBody: true }),
     FsMessageModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot([
       { path: '', component: ExamplesComponent, pathMatch: 'full' },
       { path: 'nofilters', component: NofiltersComponent },

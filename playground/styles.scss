@@ -1,17 +1,17 @@
-@use '@angular/material' as mat;
-@use '~@firestitch/component-tools/assets/playground.scss';
-@use '~@firestitch/style/variables' with (
+@use 'node_modules/@angular/material' as mat;
+@use 'node_modules/@firestitch/component-tools/assets/playground.scss';
+@use 'node_modules/@firestitch/style/variables' with (
   $palette: playground.$primary-palette
 );
-@use '~@firestitch/style/styles' as fs-style;
+@use 'node_modules/@firestitch/style/styles' as fs-style;
 
-@import '~@firestitch/datepicker/styles';
-@import "~@firestitch/scrollbar/styles.scss";
-@import '~@firestitch/chip/styles';
-@import '~@firestitch/style/styles';
-@import '~@firestitch/skeleton/styles';
-@import '~@firestitch/form/styles';
-@import '~@firestitch/file/styles';
+@import 'node_modules/@firestitch/datepicker/styles';
+@import "node_modules/@firestitch/scrollbar/styles.scss";
+@import 'node_modules/@firestitch/chip/styles';
+@import 'node_modules/@firestitch/style/styles';
+@import 'node_modules/@firestitch/skeleton/styles';
+@import 'node_modules/@firestitch/form/styles';
+@import 'node_modules/@firestitch/file/styles';
 @import '../src/app/styles';
 
 @include fs-style.core();

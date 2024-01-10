@@ -7,6 +7,7 @@ import {
 
 import { AutocompleteItem } from '../../../models/items/autocomplete-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
     return data ? data.name : data;
   };
 
-  public fetch = (keyword) => {
+  public fetch = (keyword): Observable<any> => {
     return this.item.valuesFn(keyword, this.item.filter);
   };
 }

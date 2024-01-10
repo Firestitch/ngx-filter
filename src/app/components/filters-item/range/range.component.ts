@@ -14,6 +14,7 @@ import { RangeItem } from '../../../models/items/range-item';
 @Component({
   selector: 'filter-item-range',
   templateUrl: './range.component.html',
+  styleUrls: ['./range.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RangeComponent extends BaseItemComponent<RangeItem> implements OnInit {

@@ -1,27 +1,29 @@
-<div class="fs-row form-field">
+<div class="form-field">
   <mat-form-field class="filter-range-min">
     <mat-label>{{item.label[0]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
-    <input matInput
-           [fsFilterFocusTrigger]="item"
-           [focusTargetType]="'from'"
-           type="text"
-           inputmode="decimal"
-           [(ngModel)]="item.model.min"
-           #from>
+    <input 
+      matInput
+      [fsFilterFocusTrigger]="item"
+      [focusTargetType]="'from'"
+      type="text"
+      inputmode="decimal"
+      [(ngModel)]="item.model.min"
+      #from>
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
 
   <mat-form-field class="filter-range-max">
     <mat-label>{{item.label[1]}}</mat-label>
     <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
-    <input matInput
-           [fsFilterFocusTrigger]="item"
-           [focusTargetType]="'to'"
-           type="text"
-           inputmode="decimal"
-           [(ngModel)]="item.model.max"
-           #to>
+    <input 
+      matInput
+      [fsFilterFocusTrigger]="item"
+      [focusTargetType]="'to'"
+      type="text"
+      inputmode="decimal"
+      [(ngModel)]="item.model.max"
+      #to>
     <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
   </mat-form-field>
 </div>
