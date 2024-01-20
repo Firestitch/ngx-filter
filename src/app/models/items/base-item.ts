@@ -36,6 +36,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _model: any;
   protected _pendingValues = false;
   protected _pendingDefaultValue = false;
+  protected _initializedValues = false;
   protected _loading$ = new BehaviorSubject(false);
   protected _value$ = new BehaviorSubject(null);
   protected _valueChange$ = new Subject<void>();
@@ -61,7 +62,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this._filter;
   }
 
-  ///
   public get isTypeAutocomplete() {
     return this.type === ItemType.AutoComplete;
   }
@@ -105,7 +105,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public get isTypeKeyword() {
     return this.type === ItemType.Keyword;
   }
-  ////
 
   public get isChipVisible(): boolean {
     return !!this.model;
@@ -177,7 +176,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   protected get _initialized(): boolean {
-    return !this._pendingDefaultValue && !this._pendingValues;
+    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
   }
 
   public valueChanged() {
@@ -227,7 +226,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public initValues(persistedValue: unknown) {
-    // this._initialized = false;
+    this._initializedValues = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
 
@@ -240,15 +239,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
         this._pendingValues = true;
       } else {
         this.values = valuesResult;
-
-        // Move to some other place
         this._init();
-        // this._initialized = true;
+        this._initializedValues = true;
       }
 
     } else {
       this._init();
-      // this._initialized = true;
+      this._initializedValues = true;
     }
   }
 
@@ -267,7 +264,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
           this.loading = false;
           this._init();
           this._validateModel();
-          // this._initialized = true;
+          this._initializedValues = true;
         });
 
     }
