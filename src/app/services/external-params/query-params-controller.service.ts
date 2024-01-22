@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
-import { Location } from '@angular/common';
 import { restoreItems } from '../../helpers/restore-items';
 import { FsFilterItemsStore } from '../items-store.service';
 
@@ -14,9 +13,7 @@ export class QueryParamsController {
   private _fetchedParams: Record<string, any>;
 
   constructor(
-    private _router: Router,
     private _route: ActivatedRoute,
-    private _location: Location,
     private _itemsStore: FsFilterItemsStore
   ) {}
 
@@ -69,6 +66,6 @@ export class QueryParamsController {
         url.searchParams.set(name,data[name]);
       });
 
-    history.replaceState({}, null, url.search);
+    history.replaceState({}, null, url.pathname + url.search);
   }
 }
