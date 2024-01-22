@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FsFilterItemsStore } from '../items-store.service';
-import { restoreItems } from '../../helpers/restore-items';
 import { Location } from '@angular/common';
+import { restoreItems } from '../../helpers/restore-items';
+import { FsFilterItemsStore } from '../items-store.service';
 
 
 @Injectable()
@@ -38,27 +38,9 @@ export class QueryParamsController {
   }
 
   public writeStateToQueryParams(params) {
-    if (!this._enabled) { return }
-
-    this._location.replaceState(
-      this._router.createUrlTree([],
-          {      
-            relativeTo: this._route,
-            queryParams: params,
-            queryParamsHandling: 'merge',
-            preserveFragment: true,
-          }
-      ).toString()
-    );
-    
-    // Trying replacing the URL without triggering an Angular navigation change
-    // // Update query
-    // this._router.navigate([], {
-    //   replaceUrl: true,
-    //   relativeTo: this._route,
-    //   queryParams: params,
-    //   queryParamsHandling: 'merge',
-    // }).then(() => {});
+    if (this._enabled) { 
+      this._replaceState(params);
+    }
   }
 
   /**
@@ -76,5 +58,17 @@ export class QueryParamsController {
       items,
       this._paramsCase
     );
+  }
+
+  private _replaceState(data) {
+    const url = new URL(window.location.href);
+
+    Object.keys(data)
+      .filter((name) => data[name] !== undefined && data[name] !== null)
+      .forEach((name) => {
+        url.searchParams.set(name,data[name]);
+      });
+
+    history.replaceState({}, null, url.search);
   }
 }

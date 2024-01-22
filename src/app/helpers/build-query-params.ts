@@ -2,15 +2,16 @@ import { list as arrayList } from '@firestitch/common';
 
 import { isObject } from 'lodash-es';
 
-import { filterToQueryParam } from './query-param-transformers';
-import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
-import { BaseItem } from '../models/items/base-item';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { BaseItem } from '../models/items/base-item';
+import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
 import { arraysAreEquals } from './compare';
+import { filterToQueryParam } from './query-param-transformers';
 
 
 export function buildQueryParams(flattenedParams: Record<string, unknown>, items: BaseItem<IFilterConfigItem>[]) {
-  items.forEach(filterItem => {
+  items
+   .forEach((filterItem) => {
     if (filterItem instanceof MultipleSelectItem && filterItem.isolate) {
       if (filterItem.multiple && filterItem.value) {
         const isolated = arrayList(filterItem.values, 'value').sort();
