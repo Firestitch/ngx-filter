@@ -33,7 +33,14 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
 
   public get queryObject(): Record<string, unknown> {
-    const value = this.value;
+    if(!this.value) {
+      return {};
+    }
+
+    const value = this.value
+      .map((item) => item.value)
+      .join(',');
+    
     const name = this.name;
 
     return {
