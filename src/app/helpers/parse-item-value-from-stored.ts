@@ -1,7 +1,6 @@
 import { ItemType } from '../enums/item-type.enum';
-import { filterFromQueryParam } from './query-param-transformers';
-import { tryConvertToNumber } from './try-convert-to-number';
 import { getRangeName } from './get-range-name';
+import { filterFromQueryParam } from './query-param-transformers';
 
 export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'camel') {
   const param = params[item.name];
@@ -64,11 +63,12 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
 
       return {
         name: filterParts[1],
-        value: tryConvertToNumber(filterParts[0])
+        value: filterParts[0]
       }
     }
 
-    case ItemType.AutoCompleteChips: case ItemType.Chips: {
+    case ItemType.AutoCompleteChips: 
+    case ItemType.Chips: {
       const filterParts = param.split(',');
 
       return filterParts.reduce((arry, value) => {
@@ -77,7 +77,7 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
 
         arry.push({
           name: chipParts[1],
-          value: tryConvertToNumber(chipParts[0]),
+          value: chipParts[0],
         });
 
         return arry;

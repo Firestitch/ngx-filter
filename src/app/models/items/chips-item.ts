@@ -92,7 +92,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
 
   protected _parseConfig(item: IFilterConfigChipsItem) {
-    this.multiple = item.multiple;
+    this.multiple = item.multiple ?? true;
 
     super._parseConfig(item);
   }

@@ -61,9 +61,12 @@ export class QueryParamsController {
     const url = new URL(window.location.href);
 
     Object.keys(data)
-      .filter((name) => data[name] !== undefined && data[name] !== null)
       .forEach((name) => {
-        url.searchParams.set(name,data[name]);
+        if(data[name] === undefined || data[name] === null) {
+          url.searchParams.delete(name);
+        } else {
+          url.searchParams.set(name,data[name]);
+        }
       });
 
     history.replaceState({}, null, url.pathname + url.search);

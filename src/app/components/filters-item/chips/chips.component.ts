@@ -5,8 +5,8 @@ import {
   KeyValueDiffers
 } from '@angular/core';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { ChipsItem } from '../../../models/items/chips-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -29,6 +29,6 @@ export class ChipsComponent extends BaseItemComponent<ChipsItem> {
   }
 
   public compareFn(modelValue, chipValue) {
-    return modelValue.value === chipValue.value;
+    return String(modelValue.value) === String(chipValue.value);
   }
 }

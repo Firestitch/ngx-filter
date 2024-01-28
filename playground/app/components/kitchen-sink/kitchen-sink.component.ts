@@ -46,13 +46,13 @@ export class KitchenSinkComponent implements OnInit {
   ];
 
   public weekdays = [
-    { id: 1, name: 'Monday' },
-    { id: 2, name: 'Tuesday' },
-    { id: 3, name: 'Wednesday' },
-    { id: 4, name: 'Thursday' },
-    { id: 5, name: 'Friday' },
-    { id: 6, name: 'Saturday' },
-    { id: 7, name: 'Sunday' },
+    { id: '11', name: 'Monday' },
+    { id: '12', name: 'Tuesday' },
+    { id: '13', name: 'Wednesday' },
+    { id: '14', name: 'Thursday' },
+    { id: '15', name: 'Friday' },
+    { id: '16', name: 'Saturday' },
+    { id: '17', name: 'Sunday' },
   ];
 
   public subject = [
@@ -87,7 +87,7 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      persist: true,
+      persist: false,
       inline: false,
       chips: true,
       autofocus: true,
