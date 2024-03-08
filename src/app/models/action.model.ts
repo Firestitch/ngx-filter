@@ -23,6 +23,7 @@ export class Action {
   public icon: string;
   public iconPlacement: 'left' | 'right';
   public label: string;
+  public value: any;
   public menu: boolean;
   public color: ThemePalette;
   public customize: boolean;
@@ -40,17 +41,15 @@ export class Action {
   public maxWidth: number;
   public maxHeight: number;
   public imageQuality: number;
-
+  public change: (value) => void;
+  public values: any[];
   public mode: ActionMode;
-
   public isReorderAction = false;
-
   public classArray: string[] = [];
   public items: ActionMenuItem[] = [];
 
   private _visible$ = new BehaviorSubject<boolean>(true);
   private _disabled$ = new BehaviorSubject<boolean>(false);
-
   private _showFn: FsFilterActionShowFn;
   private _disabledFn: FsFilterActionDisabledFn;
 
@@ -145,6 +144,12 @@ export class Action {
         if (config.items && Array.isArray(config.items)) {
           this.items = config.items.map((item) => new ActionMenuItem(item));
         }
+      } break;
+
+      case ActionMode.SelectButton: {
+        this.values = config.values;
+        this.value = config.default;
+        this.change = config.change;
       } break;
 
       case ActionMode.File: {

@@ -3,6 +3,8 @@ import {
   Component,
   Input,
 } from '@angular/core';
+
+import { ActionMode, ActionType } from '../../enums';
 import { Action } from '../../models/action.model';
 
 
@@ -19,4 +21,14 @@ export class FsFilterActionsComponent {
 
   @Input()
   public actions: Action[] = [];
+
+  public ActionType = ActionType;
+  public ActionMode = ActionMode;
+
+  public actionChange(action, value): void {
+    if(action.change) {
+      action.change(value);
+    }
+  }
+
 }

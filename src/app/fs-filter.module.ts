@@ -25,6 +25,7 @@ import { FsLabelModule } from '@firestitch/label';
 import { FsMenuModule } from '@firestitch/menu';
 import { FsPopoverModule } from '@firestitch/popover';
 import { FsScrollModule } from '@firestitch/scroll';
+import { FsSelectButtonModule } from '@firestitch/selectbutton';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsStore, FsStoreModule } from '@firestitch/store';
 
@@ -90,6 +91,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsSkeletonModule,
     FsFormModule,
     FsFileModule,
+    FsSelectButtonModule,
     FsClearModule,
     FsPopoverModule,
 

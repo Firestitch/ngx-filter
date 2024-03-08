@@ -7,7 +7,7 @@ import {
   FilterComponent,
   FilterConfig,
   ItemDateMode,
-  ItemType,
+  ItemType
 } from '@firestitch/filter';
 
 import { BehaviorSubject, of } from 'rxjs';
@@ -434,6 +434,23 @@ export class KitchenSinkComponent implements OnInit {
         select: (file) => {
           console.log('Selected File', file);
         },
+      },
+      {
+        mode: ActionMode.SelectButton,
+        label: 'View',
+        primary: false,
+        default: 'week',
+        change: (value) => {
+          console.log('Select button change',value);
+        },
+        values: [
+          { name: 'Month', value: 'month' },
+          { name: 'Week', value: 'week' },
+          { name: 'Day', value: 'day' },
+        ]
+        // change: (file) => {
+        //   console.log('Selected File', file);
+        // },
       },
       {
         click: (event) => {

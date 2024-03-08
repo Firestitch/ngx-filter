@@ -1,17 +1,18 @@
-<!-- Buttons -->
 <ng-container *ngFor="let action of actions">
   <ng-container [ngSwitch]="action.mode">
-    <ng-container *ngSwitchCase="'button'">
+    <ng-container *ngSwitchCase="ActionMode.Button">
       <fs-filter-action-button
         [action]="action"
+        class="action"
         fsPopover
         [enabled]="!!action.tooltip"
         [text]="action.tooltip">
       </fs-filter-action-button>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'menu'">
+    <ng-container *ngSwitchCase="ActionMode.Menu">
       <fs-filter-action-button
+        class="action"
         [action]="action"
         [fsMenuTriggerFor]="someRef"
         fsPopover
@@ -19,7 +20,7 @@
         [text]="action.tooltip">
       </fs-filter-action-button>
 
-      <fs-menu #someRef>
+      <fs-menu #someRef class="action">
         <ng-container *ngFor="let childAction of action.items">
           <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
             <fs-menu-group [label]="childAction.label">
@@ -51,9 +52,30 @@
       </fs-menu>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'file'">
+    <ng-container *ngSwitchCase="ActionMode.SelectButton">
+      <mat-select 
+          class="action"
+          [ngClass]="{ 
+            'mat-stroked-button': action.type === ActionType.Stroked,
+            'mat-raised-button': action.type === ActionType.Raised,
+            'mat-flat-button': action.type === ActionType.Flat,
+            'mat-basic-button': action.type === ActionType.Basic
+          }"
+          [placeholder]="action.label"
+          [(ngModel)]="action.value" 
+          (ngModelChange)="actionChange(action, $event)"
+          fsSelectButton>
+        <mat-option 
+            *ngFor="let item of action.values" 
+            [value]="item.value">
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="ActionMode.File">
       <fs-file
-          class="action-button"
+          class="action action-button"
           [accept]="action.accept || '*'"
           [multiple]="action.multiple"
           [minWidth]="action.minWidth"
@@ -73,8 +95,6 @@
     </ng-container>
   </ng-container>
 </ng-container>
-<!-- /Buttons -->
-<!-- menu -->
 <ng-container *ngIf="kebabActions?.length">
   <fs-filter-action-kebab-actions
     [kebabActions]="kebabActions">
