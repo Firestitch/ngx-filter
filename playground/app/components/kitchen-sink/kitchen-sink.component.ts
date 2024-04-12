@@ -295,7 +295,7 @@ export class KitchenSinkComponent implements OnInit {
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' },
           ],
-          isolate: { label: 'Show Deleted', value: 'deleted' },
+          isolate: { label: 'Show deleted', value: 'deleted' },
         },
         {
           name: 'multiselect',

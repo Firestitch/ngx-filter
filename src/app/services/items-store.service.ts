@@ -397,7 +397,7 @@ export class FsFilterItemsStore implements OnDestroy {
       const sortByItem = {
         name: SORT_BY_FIELD,
         type: ItemType.Select,
-        label: 'Sort By',
+        label: 'Sort by',
         values: this._config.sortValues,
       } as IFilterConfigSelectItem;
 
@@ -415,7 +415,7 @@ export class FsFilterItemsStore implements OnDestroy {
       const sortDirectionItem = {
         name: SORT_DIRECTION_FIELD,
         type: ItemType.Select,
-        label: 'Sort Direction',
+        label: 'Sort direction',
         values: [
           { name: 'Ascending', value: 'asc' },
           { name: 'Descending', value: 'desc' },
