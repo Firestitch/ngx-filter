@@ -148,7 +148,7 @@
 }
 
 @media screen and (min-width: 1200px) {
-  body.fs-filter-open {
+  html.fs-filter-open body {
     margin-right: 350px;
   }
 
@@ -157,9 +157,6 @@
   }
 }
 
-body.fs-filter-open {
-  &::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-  }
+html.fs-filter-open {
+  scrollbar-width: none;
 }

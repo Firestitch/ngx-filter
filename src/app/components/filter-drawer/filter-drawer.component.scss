@@ -1,3 +1,5 @@
+@use '@firestitch/style/styles' as fs-style;
+
 :host ::ng-deep {
   mat-form-field {
     width: 100%;
@@ -48,7 +50,7 @@
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
                 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
                 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-    width: 85vw;
+    width: 100vw;
     max-width: 350px;
     display: flex;
     flex-direction: column;
@@ -134,4 +136,13 @@
   right: 0;
   z-index: 900;
   outline: none;
+}
+
+
+@media (max-width: fs-style.$break-xsmall) {
+  .filters {
+    .filters-wrap {
+      max-width: none;
+    }
+  }
 }

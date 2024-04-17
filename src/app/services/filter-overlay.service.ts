@@ -6,6 +6,8 @@ import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
+import { HtmlClassRenderer } from '@firestitch/html';
+
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
@@ -31,6 +33,7 @@ export class FsFilterOverlayService implements OnDestroy {
     private _injector: Injector,
     private _overlay: Overlay,
     private _focusController: FocusControllerService,
+    private _htmlClassRenderer: HtmlClassRenderer,
   ) {
     this._openWhenChipClicked();
   }
@@ -127,7 +130,7 @@ export class FsFilterOverlayService implements OnDestroy {
     this._filterMeta.openedFilters--;
 
     if (this._filterMeta.openedFilters === 0) {
-      window.document.body.classList.remove('fs-filter-open');
+      this._htmlClassRenderer.removeClass('fs-filter-open');
     }
   }
 
@@ -135,7 +138,7 @@ export class FsFilterOverlayService implements OnDestroy {
     this._filterMeta.openedFilters++;
 
     if (this._filterMeta.openedFilters === 1) {
-      window.document.body.classList.add('fs-filter-open');
+      this._htmlClassRenderer.addClass('fs-filter-open');
     }
   }
 
