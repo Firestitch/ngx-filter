@@ -1,6 +1,6 @@
-<button type="button" mat-button color="primary" (click)="done()">Done</button>
-<button type="button" mat-button (click)="clear()">Clear</button>
+<a mat-button color="primary" (click)="done()">Done</a>
+<a mat-button (click)="clear()">Clear</a>
 <ng-container *ngIf="savedFilters.enabled$ | async">
-  <button type="button" mat-button (click)="saveFilters()">Save</button>
+  <a mat-button (click)="saveFilters()">Save</a>
 </ng-container>
 

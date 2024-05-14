@@ -1,0 +1,8 @@
+@use '@firestitch/style/styles' as fs-style;
+
+
+@media (max-width: fs-style.$break-xsmall) {
+  a {
+    width: 100%;
+  }
+}

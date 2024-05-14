@@ -7,6 +7,7 @@ import { SavedFiltersController } from '../../services/external-params/saved-fil
 @Component({
   selector: 'fs-filter-drawer-actions',
   templateUrl: './filter-drawer-actions.component.html',
+  styleUrls: ['./filter-drawer-actions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsFilterDrawerActionsComponent {
