@@ -29,6 +29,7 @@ import { WeekItem } from '../../models/items/week-item';
 @Component({
   selector: 'filter-item',
   templateUrl: './filter-item.component.html',
+  styleUrls: ['./filter-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterItemComponent implements OnInit, OnDestroy {

@@ -56,7 +56,10 @@ import { AppMaterialModule } from './material.module';
     DialogComponent,
   ],
   providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { floatLabel: 'auto' } },
+    { 
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, 
+      useValue: { floatLabel: 'auto', appearance: 'outline' } 
+    },
   ],
 })
 export class PlaygroundModule {

@@ -1,7 +1,12 @@
 <div class="form-field">
   <mat-form-field class="filter-range-min">
     <mat-label>{{item.label[0]}}</mat-label>
-    <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
+    <span 
+      matPrefix 
+      class="text-prefix"
+      *ngIf="item.prefix"
+      [innerHtml]="item.prefix">
+    </span>
     <input 
       matInput
       [fsFilterFocusTrigger]="item"
@@ -10,12 +15,22 @@
       inputmode="decimal"
       [(ngModel)]="item.model.min"
       #from>
-    <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
+    <span 
+      matSuffix 
+      class="text-suffix"
+      *ngIf="item.suffix" 
+      [innerHtml]="item.suffix">
+    </span>
   </mat-form-field>
 
   <mat-form-field class="filter-range-max">
     <mat-label>{{item.label[1]}}</mat-label>
-    <span matPrefix *ngIf="item.prefix" [innerHtml]="item.prefix"></span>
+    <span 
+      matPrefix 
+      class="text-prefix"
+      *ngIf="item.prefix"
+      [innerHtml]="item.prefix">
+    </span>
     <input 
       matInput
       [fsFilterFocusTrigger]="item"
@@ -24,6 +39,11 @@
       inputmode="decimal"
       [(ngModel)]="item.model.max"
       #to>
-    <span matSuffix *ngIf="item.suffix" [innerHtml]="item.suffix"></span>
+    <span 
+      matSuffix 
+      class="text-suffix"
+      *ngIf="item.suffix"
+      [innerHtml]="item.suffix">
+    </span>
   </mat-form-field>
 </div>

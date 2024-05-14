@@ -313,8 +313,6 @@ export class KitchenSinkComponent implements OnInit {
           name: 'maxPrice',
           type: ItemType.Text,
           label: 'Max Price',
-          prefix: '$&nbsp;',
-          suffix: '%',
         },
       ],
       savedFilters: {

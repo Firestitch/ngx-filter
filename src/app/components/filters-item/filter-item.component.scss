@@ -1,0 +1,20 @@
+
+:host ::ng-deep {
+  mat-form-field {
+    .mat-form-field-prefix, 
+    .mat-form-field-suffix {     
+      .text-prefix, 
+      .text-suffix {
+        top: -.25em;
+        position: relative;
+      }  
+    }  
+
+    &:not(.mat-form-field-should-float) {
+      .mat-form-field-prefix .text-prefix, 
+      .mat-form-field-suffix .text-suffix {
+        display: none;
+      }   
+    }
+  }
+} 
