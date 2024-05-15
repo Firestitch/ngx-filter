@@ -38,6 +38,7 @@ import { FsFilterItemsStore } from '../../services/items-store.service';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
+import { TextItem } from '../../models/items/text-item';
 
 
 @Component({
@@ -156,6 +157,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public get visibleItems() {
     return this._filterItems.visibleItems;
+  }
+
+  public get keywordItem(): TextItem | null {
+    return this._filterItems.keywordItem;
   }
 
   public get itemsReady$(): Observable<boolean> {

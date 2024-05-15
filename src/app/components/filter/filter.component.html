@@ -2,10 +2,10 @@
   <div class="filter-inner-container">
     <ng-container *ngIf="!hasKeyword; else filterKeyword">
       <div>
-        <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>      
+        <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       </div>
     </ng-container>
-    
+
     <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
@@ -25,7 +25,7 @@
   </ng-container>
 
   <ng-container *ngIf="config.chips && hasFilterChips$ | async">
-    <fs-filter-chips    
+    <fs-filter-chips
       class="filter-chips"
       [filters]="items">
     </fs-filter-chips>
@@ -34,10 +34,10 @@
 
 <ng-template #filterKeyword>
   <div class="filter-keyword">
-    <ng-container *ngIf="keywordVisible$ | async">
-      <mat-form-field 
-          [floatLabel]="'never'" 
-          class="form-field-padless" 
+    <ng-container *ngIf="(keywordVisible$ | async) && !keywordItem?.hide ">
+      <mat-form-field
+          [floatLabel]="'never'"
+          class="form-field-padless"
           [ngClass]="search"
           appearance="outline">
         <span matPrefix>
@@ -78,7 +78,7 @@
               'mat-flat-button': config.button.style === 'flat' && config.button.label,
               'mat-stroked-button': config.button.style === 'stroked' && config.button.label,
               'mat-button': config.button.style === 'basic' && config.button.label,
-              'mat-icon-button': config.button.style === 'icon' || !config.button.label  
+              'mat-icon-button': config.button.style === 'icon' || !config.button.label
             }"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             [color]="config.button.color">
@@ -87,7 +87,7 @@
         </a>
       </ng-container>
     </ng-container>
-    <a 
+    <a
         mat-icon-button
         (click)="reload($event)"
         class="reload"
