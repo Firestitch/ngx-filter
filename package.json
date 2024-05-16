@@ -74,7 +74,7 @@
     "@firestitch/selectbutton": "^12.0.4",
     "@firestitch/skeleton": "^12.0.0",
     "@firestitch/store": "^12.0.0",
-    "@firestitch/style": "^13.1.1",
+    "@firestitch/style": "^13.1.5",
     "@types/jest": "^26.0.15",
     "babel-jest": "^26.6.1",
     "date-fns": "^2.15.0",
