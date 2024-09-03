@@ -87,27 +87,21 @@
         </a>
       </ng-container>
     </ng-container>    
-    <ng-container *ngIf="config.autoReload">
-      <a          
-          #autoReloadEl
-          mat-icon-button
-          [matTooltip]="'Auto reload every ' + config.autoReload.seconds + ' seconds'"
-          (click)="autoReload($event)"
-          class="reload">
-        <mat-icon 
-            class="auto-reload-icon">
-          autorenew
-        </mat-icon>
-      </a>
-    </ng-container>
-    <ng-container *ngIf="!config.autoReload">
+    <ng-container *ngIf="config.reload">
       <a
           mat-icon-button
           (click)="reload($event)"
-          class="reload"
-          *ngIf="config.reload">
-        <mat-icon>refresh</mat-icon>
+          class="reload">
+        <mat-icon #reloadEl>refresh</mat-icon>
       </a>
+    </ng-container>
+    <ng-container *ngIf="config.autoReload">
+      <mat-slide-toggle 
+          name="autoReload" 
+          class="auto-reload"
+          [(ngModel)]="autoReload">
+        Auto refresh
+      </mat-slide-toggle>
     </ng-container>
   </div>
 </ng-template>

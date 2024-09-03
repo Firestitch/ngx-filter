@@ -1,4 +1,4 @@
-.fs-filter {
+:host {
   margin-bottom: 20px;
   display: block;
 
@@ -12,121 +12,121 @@
     .filter-status-container:not(.has-status) + fs-filter-chips {
       margin-top: 0px;
     }
-
+  
     .filter-inner-container {
       display: flex;
     }
-
+  
     .filter-toobar {
       justify-content: flex-end;
     }
   }
+}
 
-  .filter-status-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-self: flex-end;
+.filter-status-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-self: flex-end;
 
-    .filter-status {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 17px;
-    }
+  .filter-status {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 17px;
   }
+}
 
-  .filter-container {
-    width: 100%;
-  }
+.filter-container {
+  width: 100%;
+}
 
-  .filter-inner-container {
+.filter-inner-container {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  align-items: center;
+
+  .filter-keyword {
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
-    position: relative;
     align-items: center;
+    min-width: 0;
 
-    .filter-keyword {
-      flex-direction: row;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      min-width: 0;
+    mat-form-field {
+      max-width: 100%;
+      min-width: 100px;
+      margin-right: 6px;
 
-      mat-form-field {
-        max-width: 100%;
-        min-width: 100px;
-        margin-right: 6px;
+      .mat-form-field-wrapper {
+        margin-bottom: 0;
+      }
 
-        .mat-form-field-wrapper {
-          margin-bottom: 0;
-        }
-
-        .mat-form-field-prefix {
-          .mat-icon {
-            font-size: 22px;
-            color: #626262;
-          }
-        }
-
-        .mat-form-field-infix {
-          width: 250px;
-        }
-
-        .mat-form-field-prefix,
-        .mat-form-field-suffix {
-          top: 0.45em;
+      .mat-form-field-prefix {
+        .mat-icon {
+          font-size: 22px;
+          color: #626262;
         }
       }
 
+      .mat-form-field-infix {
+        width: 250px;
+      }
+
+      .mat-form-field-prefix,
       .mat-form-field-suffix {
-        display: flex;
+        top: 0.45em;
+      }
+    }
 
-        .mat-icon-button {
-          height: 24px;
-          width: 24px;
-        }
+    .mat-form-field-suffix {
+      display: flex;
+
+      .mat-icon-button {
+        height: 24px;
+        width: 24px;
       }
     }
   }
-
-  .filter-actions {
-    display: flex;
-    align-items: center;
-  }
-
-  .filter-toobar {
-    flex: 1;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-
-    .reload {
-      margin-left: -6px;
-    }
-  }
-
-  .results {
-    min-height: 90px;
-    position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  fs-filter-chips {
-    margin-top: 4px;
-    display: block;
-  }
-
 }
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+}
+
+.filter-toobar {
+  flex: 1;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+
+  .reload {
+    margin-left: -6px;
+  }
+}
+
+.results {
+  min-height: 90px;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+fs-filter-chips {
+  margin-top: 4px;
+  display: block;
+}
+
 
 @media screen and (min-width: 599px) {
   .filter-actions {
     margin-left: 10px;
   }
 
-  .filters-button+fs-filter-actions:not(:empty) {
+  .filters-button + fs-filter-actions:not(:empty) {
     margin-left: 5px;
   }
 }
@@ -159,4 +159,36 @@
 
 html.fs-filter-open {
   scrollbar-width: none;
+}
+
+:host ::ng-deep {
+  .auto-reload {
+    &.mat-checked {
+      .mat-slide-toggle-thumb-container {
+        transform: translate3d(12px, 0, 0);
+      } 
+    }
+
+    &:not(.mat-checked) {
+      .mat-slide-toggle-content {
+        color: #ccc;
+      }
+    }
+
+    .mat-slide-toggle-thumb,
+    .mat-slide-toggle-thumb-container {
+      height: 15px;
+      width: 15px;
+    }
+    
+    .mat-slide-toggle-content {
+      font-size: 90%;
+    }
+    
+    .mat-slide-toggle-bar {
+      width: 26px;
+      height: 10px;
+      border-radius: 10px;
+    }
+  }
 }

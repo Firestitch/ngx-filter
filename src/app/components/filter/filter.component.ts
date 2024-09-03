@@ -13,7 +13,6 @@ import {
   Optional,
   Output,
   ViewChild,
-  ViewEncapsulation,
 } from '@angular/core';
 
 import { MatInput } from '@angular/material/input';
@@ -46,7 +45,6 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   selector: 'fs-filter',
   styleUrls: ['./filter.component.scss'],
   templateUrl: './filter.component.html',
-  encapsulation: ViewEncapsulation.None,
   providers: [
     FsFilterOverlayService,
     ExternalParamsController,
@@ -83,8 +81,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @ViewChild('keywordMatInput', { read: MatInput })
   public keywordMatInput: MatInput;
 
-  @ViewChild('autoReloadEl', { read: ElementRef })
-  public autoReloadEl: ElementRef;
+  @ViewChild('reloadEl', { read: ElementRef })
+  public reloadEl: ElementRef;
 
   @HostBinding('class.filters-open')
   public showFilterMenu = false;
@@ -102,6 +100,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public searchPlaceholder = 'Search';
   public keyword = '';
+  public autoReload = true;
 
   protected _config: FsFilterConfig = null;
 
@@ -461,21 +460,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.changeVisibilityClick(false, event);
   }
 
-  public autoReload(event) {
-    const el = this.autoReloadEl?.nativeElement;
-    this.reload(event);
-
-    if(el) {
-      el.style.transition = 'all 0.75s 0.25s';
-      el.style.transform = 'rotate(360deg)';
-
-      setTimeout(() => {
-        el.style.transition = null;
-        el.style.transform = null;
-      }, 1000);
-    }
-  }
-
   public reload(event = null) {
     if (event) {
       event.preventDefault();
@@ -483,6 +467,17 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     const data = this._filterItems.valuesAsQuery();
+    const el = this.reloadEl?.nativeElement;
+
+    if(el) {
+      el.style.transition = 'all 0.75s 0.0s';
+      el.style.transform = 'rotate(360deg)';
+
+      setTimeout(() => {
+        el.style.transition = null;
+        el.style.transform = null;
+      }, 1000);
+    }
 
     if (this.config.reload) {
       this.config.reload(data, this._filterItems.getSort());
@@ -656,10 +651,11 @@ export class FilterComponent implements OnInit, OnDestroy {
     if(this.config.autoReload) {
       interval(this.config.autoReload.seconds * 1000)
         .pipe(
+          filter(() => this.autoReload),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
-          this.autoReload(null);
+          this.reload(null);
         });
     }
   }

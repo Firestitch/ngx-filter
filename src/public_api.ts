@@ -1,4 +1,3 @@
-// Controllers
 export { ExternalParamsController } from './app/services/external-params-controller.service';
 export { SavedFiltersController } from './app/services/external-params/saved-filters-controller.service';
 
