@@ -86,13 +86,28 @@
           {{ config.button.label }}
         </a>
       </ng-container>
+    </ng-container>    
+    <ng-container *ngIf="config.autoReload">
+      <a          
+          #autoReloadEl
+          mat-icon-button
+          [matTooltip]="'Auto reload every ' + config.autoReload.seconds + ' seconds'"
+          (click)="autoReload($event)"
+          class="reload">
+        <mat-icon 
+            class="auto-reload-icon">
+          autorenew
+        </mat-icon>
+      </a>
     </ng-container>
-    <a
-        mat-icon-button
-        (click)="reload($event)"
-        class="reload"
-        *ngIf="config.reload">
-      <mat-icon>refresh</mat-icon>
-    </a>
+    <ng-container *ngIf="!config.autoReload">
+      <a
+          mat-icon-button
+          (click)="reload($event)"
+          class="reload"
+          *ngIf="config.reload">
+        <mat-icon>refresh</mat-icon>
+      </a>
+    </ng-container>
   </div>
 </ng-template>

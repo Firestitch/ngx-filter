@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
@@ -78,6 +79,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     MatAutocompleteModule,
     MatButtonModule,
     MatDialogModule,
+    MatTooltipModule,
 
     FsChipModule,
     FsCommonModule,

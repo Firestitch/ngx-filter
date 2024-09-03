@@ -1,6 +1,6 @@
 import { ButtonStyle } from '../enums';
 import { FsFilterAction } from '../interfaces/action.interface';
-import { ChangeFn, FilterSort, Sort } from '../interfaces/config.interface';
+import { ChangeFn, FilterSort, FsFilterConfigAutoReload, Sort } from '../interfaces/config.interface';
 import { IFilterSavedFiltersConfig } from '../interfaces/saved-filters.interface';
 
 import {
@@ -29,6 +29,7 @@ export class FsFilterConfig {
   public init: (query?: any, sort?: FilterSort | null, filter?) => void;
   public change: ChangeFn;
   public reload: ChangeFn;
+  public autoReload: FsFilterConfigAutoReload;
   public clear: ChangeFn;
   public sortChange: ChangeFn;
   public case: 'snake' | 'camel' = 'camel';
@@ -56,6 +57,7 @@ export class FsFilterConfig {
     this.init = data.init;
     this.change = data.change;
     this.reload = data.reload;
+    this.autoReload = data.autoReload;
     this.clear = data.clear;
     this.sortChange = data.sortChange;
     this.case = data.case ?? 'camel';

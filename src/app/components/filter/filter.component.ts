@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ContentChild,
+  ElementRef,
   EventEmitter,
   HostBinding,
   Inject,
@@ -17,7 +18,7 @@ import {
 
 import { MatInput } from '@angular/material/input';
 
-import { BehaviorSubject, combineLatest, fromEvent, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
@@ -28,6 +29,7 @@ import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
+import { TextItem } from '../../models/items/text-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
@@ -38,7 +40,6 @@ import { FsFilterItemsStore } from '../../services/items-store.service';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
-import { TextItem } from '../../models/items/text-item';
 
 
 @Component({
@@ -81,6 +82,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChild('keywordMatInput', { read: MatInput })
   public keywordMatInput: MatInput;
+
+  @ViewChild('autoReloadEl', { read: ElementRef })
+  public autoReloadEl: ElementRef;
 
   @HostBinding('class.filters-open')
   public showFilterMenu = false;
@@ -203,6 +207,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       }
     });
 
+    this._initAutoReload();
     this._listenInputChanges();
     this._listenInternalItemsChange();
     this._initOverlay();
@@ -328,7 +333,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public getItemValue(name: string) {
     const item = this.items
-      .find((item) => item.name === name);
+      .find((_item) => _item.name === name);
 
     return item?.value;
   }
@@ -454,6 +459,21 @@ export class FilterComponent implements OnInit, OnDestroy {
    */
   public search(event) {
     this.changeVisibilityClick(false, event);
+  }
+
+  public autoReload(event) {
+    const el = this.autoReloadEl?.nativeElement;
+    this.reload(event);
+
+    if(el) {
+      el.style.transition = 'all 0.75s 0.25s';
+      el.style.transform = 'rotate(360deg)';
+
+      setTimeout(() => {
+        el.style.transition = null;
+        el.style.transform = null;
+      }, 1000);
+    }
   }
 
   public reload(event = null) {
@@ -588,7 +608,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this._syncSearchInputWithKeyword();
 
-    if (!!this.config.reloadWhenConfigChanged) {
+    if (this.config.reloadWhenConfigChanged) {
       this.change();
     }
   }
@@ -630,6 +650,18 @@ export class FilterComponent implements OnInit, OnDestroy {
           });
         });
     });
+  }
+
+  private _initAutoReload() {
+    if(this.config.autoReload) {
+      interval(this.config.autoReload.seconds * 1000)
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this.autoReload(null);
+        });
+    }
   }
 
   private _listenInputChanges() {

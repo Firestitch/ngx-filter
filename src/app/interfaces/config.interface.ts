@@ -1,4 +1,5 @@
 import { ButtonStyle } from '../enums';
+
 import { FsFilterAction } from './action.interface';
 import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
 import { IFilterConfigAutocompleteItem } from './items/autocomplete.interface';
@@ -33,6 +34,11 @@ export interface FilterConfig {
   button?: FilterButton;
   savedFilters?: IFilterSavedFiltersConfig;
   actions?: FsFilterAction[];
+  autoReload?: FsFilterConfigAutoReload;  
+}
+
+export interface FsFilterConfigAutoReload {
+  seconds: number;
 }
 
 export type IFilterConfigItem =

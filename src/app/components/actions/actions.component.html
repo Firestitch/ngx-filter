@@ -29,7 +29,7 @@
                     fs-menu-item
                     [link]="subAction.routerLink?.link"
                     [queryParams]="subAction.routerLink?.queryParams"
-                    [hidden]="!(subAction.visible$ | async)"
+                    [hidden]="(subAction.visible$ | async) === false"
                     (click)="subAction.click($event)">
                   <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
                   {{subAction.label}}
@@ -42,7 +42,7 @@
                 fs-menu-item
                 [link]="childAction.routerLink?.link"
                 [queryParams]="childAction.routerLink?.queryParams"
-                [hidden]="!(childAction.visible$ | async)"
+                [hidden]="(childAction.visible$ | async) === false"
                 (click)="childAction.click($event);">
               <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
               {{childAction.label}}

@@ -1,8 +1,9 @@
 import { BehaviorSubject, Observable } from 'rxjs';
+
 import {
   FsFilterAction, FsFilterActionClickFn, FsFilterActionShowFn,
   IFsFilterMenuActionGroupItem,
-  IFsFilterMenuActionItem, IFsFilterMenuActionLink
+  IFsFilterMenuActionItem, IFsFilterMenuActionLink,
 } from '../interfaces/action.interface';
 
 
@@ -51,7 +52,7 @@ export class ActionMenuItem {
   }
 
   public updateVisibility(): void {
-    const visible = !!this._showFn ? this._showFn() : true;
+    const visible = this._showFn ? this._showFn() : true;
 
     if (!visible || !this.isGroup) {
       this._visible$.next(visible);

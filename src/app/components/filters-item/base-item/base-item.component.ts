@@ -22,7 +22,7 @@ import { BaseItem } from '../../../models/items/base-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>>
-  implements DoCheck, OnChanges, OnDestroy {
+implements DoCheck, OnChanges, OnDestroy {
 
   @Input()
   public set item(value: T) {

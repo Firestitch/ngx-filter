@@ -218,15 +218,16 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public values(onlyPresented = false): Record<string, unknown> {
-    return this.items.reduce((acc, item) => {
-      const value = item.value;
+    return this.items
+      .reduce((acc, item) => {
+        const value = item.value;
 
-      if (!onlyPresented || value !== null) {
-        acc[item.name] = value;
-      }
+        if (!onlyPresented || value !== null) {
+          acc[item.name] = value;
+        }
 
-      return acc;
-    }, {});
+        return acc;
+      }, {});
   }
 
   public valuesAsQuery({
@@ -236,13 +237,14 @@ export class FsFilterItemsStore implements OnDestroy {
   }: IValueAsQuery = {}): Record<string, unknown> {
     const params = {};
 
-    (items || this.items).forEach((filterItem: BaseItem<any>) => {
-      const values = persisted
-        ? filterItem.persistanceObject
-        : filterItem.queryObject;
+    (items || this.items)
+      .forEach((filterItem: BaseItem<any>) => {
+        const values = persisted
+          ? filterItem.persistanceObject
+          : filterItem.queryObject;
 
-      Object.assign(params, values);
-    });
+        Object.assign(params, values);
+      });
 
     if (onlyPresented) {
       return pickBy(params, (val) => {

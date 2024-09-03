@@ -7,7 +7,7 @@ import {
   FilterComponent,
   FilterConfig,
   ItemDateMode,
-  ItemType
+  ItemType,
 } from '@firestitch/filter';
 
 import { BehaviorSubject, of } from 'rxjs';
@@ -100,6 +100,9 @@ export class KitchenSinkComponent implements OnInit {
       sort: {
         direction: 'desc',
         value: 'name',
+      },
+      autoReload: {
+        seconds: 5,
       },
       change: (query, sort) => {
         console.log('Change', query, sort);
@@ -321,29 +324,29 @@ export class KitchenSinkComponent implements OnInit {
 
           return of(savedFilters);
         },
-        save: (filter) => {
+        save: (savedFilter) => {
           console.log('<====== Save Filter =====>');
           const filterIndex = savedFilters.findIndex((f) => {
-            return f.id === filter.id;
+            return f.id === savedFilter.id;
           });
 
           if (filterIndex > -1) {
             // Here I'm emulating like backend returend filter which automatically activated
-            filter.active = true;
-            savedFilters[filterIndex] = filter;
+            savedFilter.active = true;
+            savedFilters[filterIndex] = savedFilter;
           } else {
             // Here I'm emulating like backend returend new filter with ID to me
-            filter = {
-              ...filter,
+            savedFilter = {
+              ...savedFilter,
               id: 999,
             };
-            savedFilters.push(filter);
+            savedFilters.push(savedFilter);
           }
 
-          console.log('Save Filter', filter);
+          console.log('Save Filter', savedFilter);
           console.log('Saved Filters: ', savedFilters);
 
-          return of(filter)
+          return of(savedFilter)
             .pipe(
               delay(2000),
             );
@@ -354,7 +357,7 @@ export class KitchenSinkComponent implements OnInit {
 
           return of();
         },
-        delete: (filter) => {
+        delete: (savedFilter) => {
           console.log('<====== Delete Saved Filter =====>');
           console.log('order filters', filter);
 
@@ -445,7 +448,7 @@ export class KitchenSinkComponent implements OnInit {
           { name: 'Month', value: 'month' },
           { name: 'Week', value: 'week' },
           { name: 'Day', value: 'day' },
-        ]
+        ],
         // change: (file) => {
         //   console.log('Selected File', file);
         // },
