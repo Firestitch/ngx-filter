@@ -16,12 +16,20 @@ export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar
 // Interfaces
 export {
   FsFilterAction,
-  FsFilterActionClickFn, FsFilterActionDisabledFn, FsFilterActionShowFn,
+  FsFilterActionClickFn,
+  FsFilterActionDisabledFn,
+  FsFilterActionShowFn,
+  FsFilterAutoReload,
   FsFilterFileActionErrorFn,
-  FsFilterFileActionSelectFn, IFsFilterButtonAction,
-  IFsFilterFileAction, IFsFilterMenuAction, IFsFilterMenuActionGroupItem,
-  IFsFilterMenuActionItem, IFsFilterMenuActionLink
-} from './app/interfaces/action.interface';
+  FsFilterFileActionSelectFn,
+  IFsFilterButtonAction,
+  IFsFilterFileAction,
+  IFsFilterMenuAction,
+  IFsFilterMenuActionGroupItem,
+  IFsFilterMenuActionItem,
+  IFsFilterMenuActionLink,
+} from './app/interfaces';
+
 export { IFilterConfigAutocompleteChipsItem } from './app/interfaces/items/autocomplete-chips.interface';
 export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';
 export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
@@ -34,12 +42,12 @@ export { FilterValuesReturnFn, IFilterConfigSelectIsolate, IFilterConfigSelectIt
 export { IFilterConfigTextItem } from './app/interfaces/items/text.interface';
 
 export {
-  ChangeFn, FilterConfig, FilterSort, FsFilterPersistance, IFilterConfigItem, Sort, SortItem
+  ChangeFn, FilterConfig, FilterSort, FsFilterPersistance, IFilterConfigItem, Sort, SortItem,
 } from './app/interfaces/config.interface';
 
 export {
   FilterRemoteDelete, FilterRemoteLoad, FilterRemoteOrder, FilterRemoteSave, IFilterSavedFilter,
-  IFilterSavedFiltersConfig
+  IFilterSavedFiltersConfig,
 } from './app/interfaces/saved-filters.interface';
 
 // Enums

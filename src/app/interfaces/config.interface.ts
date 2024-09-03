@@ -34,10 +34,10 @@ export interface FilterConfig {
   button?: FilterButton;
   savedFilters?: IFilterSavedFiltersConfig;
   actions?: FsFilterAction[];
-  autoReload?: FsFilterConfigAutoReload;  
+  autoReload?: FsFilterAutoReload;  
 }
 
-export interface FsFilterConfigAutoReload {
+export interface FsFilterAutoReload {
   seconds: number;
 }
 
