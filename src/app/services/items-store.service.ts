@@ -11,6 +11,7 @@ import { createFilterItem } from '../helpers/create-filter-item';
 import {
   FilterSort,
   IFilterConfigItem,
+  SortItem,
 } from '../interfaces/config.interface';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
@@ -288,6 +289,10 @@ export class FsFilterItemsStore implements OnDestroy {
     if (this.sortDirectionItem) {
       this.sortDirectionItem.clear();
     }
+  }
+
+  public updateSortingItemsValues(items: SortItem[]) {
+    this.sortByItem.values = items;
   }
 
   public destroyItems() {

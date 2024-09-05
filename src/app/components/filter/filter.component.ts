@@ -23,7 +23,7 @@ import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs
 import { ActionsController } from '../../classes/actions-controller';
 import { objectsAreEquals } from '../../helpers/compare';
 import { FsFilterAction } from '../../interfaces/action.interface';
-import { FilterConfig, FilterSort, IFilterConfigItem } from '../../interfaces/config.interface';
+import { FilterConfig, FilterSort, IFilterConfigItem, SortItem } from '../../interfaces/config.interface';
 import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
@@ -584,6 +584,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public keywordChange(keyword) {
     this._keyword$.next(keyword);
+  }
+
+  public updateSortings(items: SortItem[]): void {
+    this._filterItems.updateSortingItemsValues(items);
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
