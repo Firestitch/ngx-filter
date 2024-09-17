@@ -64,7 +64,8 @@
           [placeholder]="action.label"
           [(ngModel)]="action.value" 
           (ngModelChange)="actionChange(action, $event)"
-          fsSelectButton>
+          fsSelectButton
+          [deselectOnChange]="false">
         <mat-option 
             *ngFor="let item of action.values" 
             [value]="item.value">
