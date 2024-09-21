@@ -10,8 +10,8 @@
       (removed)="removeItem($event, 'from')">
       <ng-template
         [ngTemplateOutlet]="chipContent"
-        [ngTemplateOutletContext]="{ item: item, type: 'from' }"
-      ></ng-template>
+        [ngTemplateOutletContext]="{ item: item, type: 'from' }">
+      </ng-template>
     </fs-chip>
 
     <fs-chip
@@ -24,8 +24,8 @@
       (removed)="removeItem($event, 'to')">
       <ng-template
         [ngTemplateOutlet]="chipContent"
-        [ngTemplateOutletContext]="{ item: item, type: 'to' }"
-      ></ng-template>
+        [ngTemplateOutletContext]="{ item: item, type: 'to' }">
+      </ng-template>
     </fs-chip>
 
   </ng-container>
@@ -41,8 +41,8 @@
       (removed)="removeItem($event)">
       <ng-template
         [ngTemplateOutlet]="chipContent"
-        [ngTemplateOutletContext]="{ item: item }"
-      ></ng-template>
+        [ngTemplateOutletContext]="{ item: item }">
+      </ng-template>
     </fs-chip>
   </ng-template>
 

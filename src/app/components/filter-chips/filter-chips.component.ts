@@ -15,5 +15,4 @@ export class FsFilterChipsComponent {
   @Input() public filters: BaseItem<any>[];
 
   public ItemType = ItemType;
-  public chips = [];
 }
