@@ -42,11 +42,11 @@
       *ngSwitchDefault
       mat-button
       [ngClass]="{        
-        'mat-raised-button': action.type === 'raised',
-        'mat-flat-button': action.type === 'flat',
-        'mat-stroked-button': action.type === 'stroked',
-        'mat-button': action.type === 'basic',
-        'mat-icon-button': action.type === 'icon'
+        'mat-raised-button': action.type === ActionType.Raised,
+        'mat-flat-button': action.type === ActionType.Flat,
+        'mat-stroked-button': action.type === ActionType.Stroked,
+        'mat-button': action.type === ActionType.Basic,
+        'mat-icon-button': action.type === ActionType.Icon
       }"
       (click)="action.click && action.click($event)"
       [color]="action.color"

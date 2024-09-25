@@ -12,7 +12,9 @@ import {
   FsFilterFileActionErrorFn,
   FsFilterFileActionSelectFn,
   IFsFilterFileAction,
+  IFsFilterSelectButtonAction,
 } from '../interfaces/action.interface';
+
 import { ActionMenuItem } from './action-menu-item.model';
 import { FsFilterConfig } from './filter-config';
 
@@ -41,10 +43,11 @@ export class Action {
   public maxWidth: number;
   public maxHeight: number;
   public imageQuality: number;
-  public change: (value) => void;
+  public change: (value: any) => void;
   public values: any[];
   public mode: ActionMode;
   public isReorderAction = false;
+  public deselect = false;
   public classArray: string[] = [];
   public items: ActionMenuItem[] = [];
 
@@ -78,7 +81,7 @@ export class Action {
   }
 
   public updateVisibility(): void {
-    const visible = !!this._showFn ? this._showFn() : true;
+    const visible = this._showFn ? this._showFn() : true;
 
     if (!visible || this.mode !== ActionMode.Menu) {
       this._visible$.next(visible);
@@ -98,43 +101,14 @@ export class Action {
 
   private _init(filterConfig: FsFilterConfig, config: FsFilterAction = {}): void {
     config.mode = config.mode ?? ActionMode.Button;
-    this.primary = config.primary ?? true;
-    this.color = config.color;
-    this.tooltip = config.tooltip;
-    this.label = config.label;
-    this.mode = config.mode;
-    this.icon = config.icon;
-    this.iconPlacement = config.iconPlacement;
-    this._showFn = config.show;
-    this.tabIndex = config.tabIndex ?? 0;
-    this.menu = config.menu;
-
-    if (!this.type) {
-      this.type = (config.type || filterConfig.button?.style || ActionType.Raised) as any;
-
-      if (this.type === ActionType.Stroked && this.primary) {
-        this.type = ActionType.Flat
-      }
-    }
-
-    if ((<IFsFilterFileAction>config).multiple !== undefined) {
-      this.multiple = (<IFsFilterFileAction>config).multiple;
-    }
-
-    if (config.className) {
-      this.className = config.className;
-      this.classArray = this.className
-        .split(' ');
-    }
-
-    if (this.primary) {
-      this.color = 'primary';
-    }
-
+    this._initCore(filterConfig, config);
+    
     switch (config.mode) {
       case ActionMode.Button: {
         this.customize = config.customize;
-        this.click = config.click ?? (() => { });
+        this.click = config.click ?? (() => { 
+          // do nothing
+        });
         this._disabledFn = config.disabled;
 
         this.updateDisabledState();
@@ -147,28 +121,74 @@ export class Action {
       } break;
 
       case ActionMode.SelectButton: {
-        this.values = config.values;
-        this.value = config.default;
-        this.change = config.change;
+        this._initSelectButton(config);
       } break;
 
       case ActionMode.File: {
-        this.fileSelected = config.select;
-        this.fileError = config.error;
-        this.accept = config.accept;
-        this.imageQuality = config.imageQuality;
-        this.minWidth = config.minWidth;
-        this.minHeight = config.minHeight;
-        this.maxWidth = config.maxWidth;
-        this.maxHeight = config.maxHeight;
-
-        this.click = config.click ?? (() => { });
-        this._disabledFn = config.disabled;
-
-        this.updateDisabledState();
+        this._initFile(config);
       } break;
     }
 
     this.updateVisibility();
+  }
+
+  private _initCore(filterConfig: FsFilterConfig, config: FsFilterAction): void {
+    this.primary = config.primary ?? true;
+    this.color = config.color;
+    this.tooltip = config.tooltip;
+    this.label = config.label;
+    this.mode = config.mode;
+    this.icon = config.icon;
+    this.iconPlacement = config.iconPlacement;
+    this._showFn = config.show;
+    this.tabIndex = config.tabIndex ?? 0;
+    this.menu = config.menu;
+
+    if (!this.type) {
+      this.type = (config.type || (filterConfig.button?.style as any) || ActionType.Raised);
+
+      if (this.type === ActionType.Stroked && this.primary) {
+        this.type = ActionType.Flat;
+      }
+    }
+
+    if (config.className) {
+      this.className = config.className;
+      this.classArray = this.className
+        .split(' ');
+    }
+
+    if (this.primary) {
+      this.color = 'primary';
+    }
+
+  }
+
+  private _initSelectButton(config: IFsFilterSelectButtonAction): void {
+    this.values = config.values;
+    this.value = config.default;
+    this.change = config.change;
+    this.deselect = config.deselect ?? false;
+  }
+
+  private _initFile(config: IFsFilterFileAction): void {
+    this.fileSelected = config.select;
+    this.fileError = config.error;
+    this.accept = config.accept;
+    this.imageQuality = config.imageQuality;
+    this.minWidth = config.minWidth;
+    this.minHeight = config.minHeight;
+    this.maxWidth = config.maxWidth;
+    this.maxHeight = config.maxHeight;
+    this.click = config.click ?? (() => { 
+      //
+    });
+    this._disabledFn = config.disabled;
+
+    if ((config).multiple !== undefined) {
+      this.multiple = (config).multiple;
+    }
+
+    this.updateDisabledState();
   }
 }

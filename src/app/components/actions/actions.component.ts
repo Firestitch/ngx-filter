@@ -4,6 +4,8 @@ import {
   Input,
 } from '@angular/core';
 
+import { MatSelect } from '@angular/material/select';
+
 import { ActionMode, ActionType } from '../../enums';
 import { Action } from '../../models/action.model';
 
@@ -25,9 +27,13 @@ export class FsFilterActionsComponent {
   public ActionType = ActionType;
   public ActionMode = ActionMode;
 
-  public actionChange(action, value): void {
+  public actionChange(action: Action, value: any, selectButton: MatSelect): void {
     if(action.change) {
-      action.change(value);
+      action.change(value);      
+
+      if(action.deselect) {
+        selectButton.writeValue(null);
+      }
     }
   }
 

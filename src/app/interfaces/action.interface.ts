@@ -1,6 +1,7 @@
 import { ThemePalette } from '@angular/material/core';
 
 import { FsFile } from '@firestitch/file';
+
 import { ActionMode } from '../enums/action-mode.enum';
 import { ActionType } from '../enums/action-type.enum';
 
@@ -43,6 +44,7 @@ export interface IFsFilterSelectButtonAction extends IFsFilterBaseAction {
   values?: { name: string, value: any }[];
   default?: any;
   change?: (value) => void;
+  deselect?: boolean;
 }
 
 export interface IFsFilterMenuAction extends IFsFilterBaseAction {

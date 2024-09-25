@@ -1,9 +1,11 @@
+import { ButtonStyle } from './button-style';
+
 export enum ActionType {
-  Basic = 'basic',
-  Raised = 'raised',
-  Icon = 'icon',
-  Fab = 'fab',
-  MiniFab = 'mini-fab',
-  Flat = 'flat',
-  Stroked = 'stroked',
+  Basic = ButtonStyle.Basic,
+  Raised = ButtonStyle.Raised,
+  Icon = ButtonStyle.Icon,
+  Fab = ButtonStyle.Fab,
+  MiniFab = ButtonStyle.MiniFab,
+  Flat = ButtonStyle.Flat,
+  Stroked = ButtonStyle.Stroked,  
 }
