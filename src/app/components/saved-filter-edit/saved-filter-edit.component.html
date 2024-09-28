@@ -7,11 +7,13 @@
       <mat-label>Save as</mat-label>
       <mat-select [(ngModel)]="saveAsFilter" name="saveAs">
         <mat-option value="new">New filter</mat-option>
-        <mat-optgroup label="Saved filters:">
-          <ng-container *ngFor="let filter of savedFilters">
-            <mat-option [value]="filter">{{ filter.name }}</mat-option>
-          </ng-container>
-        </mat-optgroup>
+        <ng-container *ngIf="savedFilters.length">
+          <mat-optgroup label="Saved filters">
+            <ng-container *ngFor="let filter of savedFilters">
+              <mat-option [value]="filter">{{ filter.name }}</mat-option>
+            </ng-container>
+          </mat-optgroup>
+        </ng-container>
       </mat-select>
     </mat-form-field>
     <br>
@@ -21,15 +23,17 @@
     </mat-form-field>
   </div>
   <div mat-dialog-actions>
-    <button mat-button
-            type="submit"
-            color="primary">
+    <button 
+        mat-button
+        type="submit"
+        color="primary">
       {{ saveAsFilter === 'new' ? 'Create' : 'Save' }}
     </button>
 
-    <button mat-button
-            type="button"
-            [mat-dialog-close]="null">
+    <button 
+        mat-button
+        type="button"
+        [mat-dialog-close]="null">
       Cancel
     </button>
   </div>

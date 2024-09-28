@@ -18,7 +18,7 @@ import { shuffle } from 'lodash-es';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
 
-import { savedFilters } from './saved-filter';
+import { SavedFilters } from './saved-filter';
 
 
 @Component({
@@ -322,29 +322,29 @@ export class KitchenSinkComponent implements OnInit {
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 
-          return of(savedFilters);
+          return of(SavedFilters);
         },
         save: (savedFilter) => {
           console.log('<====== Save Filter =====>');
-          const filterIndex = savedFilters.findIndex((f) => {
+          const filterIndex = SavedFilters.findIndex((f) => {
             return f.id === savedFilter.id;
           });
 
           if (filterIndex > -1) {
             // Here I'm emulating like backend returend filter which automatically activated
             savedFilter.active = true;
-            savedFilters[filterIndex] = savedFilter;
+            SavedFilters[filterIndex] = savedFilter;
           } else {
             // Here I'm emulating like backend returend new filter with ID to me
             savedFilter = {
               ...savedFilter,
               id: 999,
             };
-            savedFilters.push(savedFilter);
+            SavedFilters.push(savedFilter);
           }
 
           console.log('Save Filter', savedFilter);
-          console.log('Saved Filters: ', savedFilters);
+          console.log('Saved Filters: ', SavedFilters);
 
           return of(savedFilter)
             .pipe(

@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+
 import { IFilterExternalParams } from './external-params.interface';
 
 export interface IFilterSavedFiltersConfig {

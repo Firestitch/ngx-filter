@@ -11,15 +11,15 @@ import {
 } from 'rxjs/operators';
 
 import {
-  FsFilterSavedFilterEditComponent
+  FsFilterSavedFilterEditComponent,
 } from '../../components/saved-filter-edit/saved-filter-edit.component';
+import { buildQueryParams } from '../../helpers/build-query-params';
+import { restoreItems } from '../../helpers/restore-items';
+import { IFilterExternalParams } from '../../interfaces/external-params.interface';
 import {
   IFilterSavedFilter,
-  IFilterSavedFiltersConfig
+  IFilterSavedFiltersConfig,
 } from '../../interfaces/saved-filters.interface';
-import { IFilterExternalParams } from '../../interfaces/external-params.interface';
-import { restoreItems } from '../../helpers/restore-items';
-import { buildQueryParams } from '../../helpers/build-query-params';
 import { FsFilterItemsStore } from '../items-store.service';
 
 
@@ -28,13 +28,10 @@ export class SavedFiltersController implements OnDestroy {
 
   protected _config: IFilterSavedFiltersConfig;
 
-  protected _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
-  protected _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
-
-  protected _enabled$ = new BehaviorSubject<boolean>(false);
-
-  protected _paramsCase: 'snake' | 'camel';
-
+  private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
+  private _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
+  private _enabled$ = new BehaviorSubject<boolean>(false);
+  private _paramsCase: 'snake' | 'camel';
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -57,6 +54,10 @@ export class SavedFiltersController implements OnDestroy {
     return this._savedFilters$.getValue();
   }
 
+  public set savedFilters(filters: IFilterSavedFilter[]) {
+    this._savedFilters$.next(filters);
+  }
+
   public get savedFilters$(): Observable<IFilterSavedFilter[]> {
     return this._savedFilters$
       .pipe(
@@ -77,10 +78,6 @@ export class SavedFiltersController implements OnDestroy {
 
   public get activeFilterData(): IFilterExternalParams {
     return this._activeFilter$.getValue()?.filters;
-  }
-
-  public set savedFilters(filters: IFilterSavedFilter[]) {
-    this._savedFilters$.next(filters);
   }
 
   public ngOnDestroy(): void {
@@ -109,7 +106,7 @@ export class SavedFiltersController implements OnDestroy {
       savedFilter.filters = restoreItems(
         savedFilter.filters,
         this._itemsStore.items,
-        this._paramsCase
+        this._paramsCase,
       );
     });
 
@@ -136,7 +133,7 @@ export class SavedFiltersController implements OnDestroy {
           this.savedFilters = [
             ...response,
           ];
-        })
+        }),
       );
   }
 
@@ -146,7 +143,7 @@ export class SavedFiltersController implements OnDestroy {
         tap((response) => {
           this.savedFilters = this.savedFilters
             .filter((f) => f.id !== response.id);
-        })
+        }),
       );
   }
 
@@ -156,7 +153,7 @@ export class SavedFiltersController implements OnDestroy {
         .find((f) => f.id === savedFilter.id);
 
       if (!existingFilter) {
-        throw new Error('Saved filter cannot be activated, because it does not exists. Filter ID = ' + savedFilter.id);
+        throw new Error(`Saved filter cannot be activated, because it does not exists. Filter ID = ${savedFilter.id}`);
       }
 
       this._activeFilter$.next(existingFilter);
@@ -170,7 +167,6 @@ export class SavedFiltersController implements OnDestroy {
       this._itemsStore.valuesAsQuery(),
       this._itemsStore.items,
     );
-    const values = this._itemsStore.values(true);
 
     const dialogConfig = {
       data: {
@@ -191,13 +187,13 @@ export class SavedFiltersController implements OnDestroy {
         if (updatedFilter) {
           // get already saved related filter object
           const savedFilter = this.savedFilters
-            .find((f) => f.id === updatedFilter.id)
+            .find((f) => f.id === updatedFilter.id);
 
           // restore values from query string
           updatedFilter.filters = restoreItems(
             updatedFilter.filters,
             this._itemsStore.items,
-            this._paramsCase
+            this._paramsCase,
           );
 
 
@@ -207,15 +203,13 @@ export class SavedFiltersController implements OnDestroy {
             this.resetActiveFilter();
             this.savedFilters = [
               ...this.savedFilters,
-              updatedFilter
+              updatedFilter,
             ];
           }
 
           this.updateActiveFilter();
         }
-      })
-
-
+      });
   }
 
   public updateActiveFilter(): void {
@@ -238,6 +232,6 @@ export class SavedFiltersController implements OnDestroy {
   }
 
   private _setEnabledStatus(value: boolean): void {
-    this._enabled$.next(value)
+    this._enabled$.next(value);
   }
 }

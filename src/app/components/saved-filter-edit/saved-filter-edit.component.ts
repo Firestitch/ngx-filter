@@ -3,16 +3,17 @@ import {
   Component,
   Inject,
 } from '@angular/core';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
+import { IFilterExternalParams } from '../../interfaces/external-params.interface';
 import {
   FilterRemoteSave,
-  IFilterSavedFilter
+  IFilterSavedFilter,
 } from '../../interfaces/saved-filters.interface';
-import { IFilterExternalParams } from '../../interfaces/external-params.interface';
 
 
 @Component({
@@ -24,11 +25,9 @@ export class FsFilterSavedFilterEditComponent {
   public filterParams: IFilterExternalParams;
   public saveAsFilter: IFilterSavedFilter | 'new' = 'new';
   public savedFilters: IFilterSavedFilter[];
-
   public savedFilterName = '';
 
   private _saveCallback: FilterRemoteSave;
-
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -40,20 +39,15 @@ export class FsFilterSavedFilterEditComponent {
   }
 
   public save = () => {
-    let savedFilter: IFilterSavedFilter;
-
-    if (this.saveAsFilter === 'new') {
-      savedFilter = {
+    const savedFilter: IFilterSavedFilter = this.saveAsFilter === 'new' ? 
+      {
         name: this.savedFilterName,
         active: true,
         filters: this.data.params,
-      };
-    } else {
-      savedFilter = {
+      } : {
         ...this.saveAsFilter,
         filters: this.data.params,
-      }
-    }
+      };
 
     return this._saveCallback(savedFilter)
       .pipe(
@@ -62,6 +56,6 @@ export class FsFilterSavedFilterEditComponent {
         }),
         takeUntil(this._destroy$),
       );
-  }
+  };
 
 }

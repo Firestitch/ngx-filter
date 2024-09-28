@@ -22,9 +22,9 @@ import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs
 
 import { ActionsController } from '../../classes/actions-controller';
 import { objectsAreEquals } from '../../helpers/compare';
+import { IFilterSavedFilter, ISortingChangeEvent } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import { FilterConfig, FilterSort, IFilterConfigItem, SortItem } from '../../interfaces/config.interface';
-import { ISortingChangeEvent } from '../../interfaces/filter.interface';
 import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
@@ -118,6 +118,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _externalParams: ExternalParamsController,
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
+    private _savedFiltersController: SavedFiltersController,
   ) {
     this._filterItems.filter = this;
     this._listenWhenFilterReady();
@@ -196,6 +197,18 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public get menuActions$() {
     return this._actions.menuActions$;
+  }
+
+  public set activeSavedFilter(saveFilter: IFilterSavedFilter) {
+    this._savedFiltersController.setActiveFilter(saveFilter);
+  }
+
+  public get activeSavedFilter(): IFilterSavedFilter {
+    return this._savedFiltersController.activeFilter;
+  }
+
+  public get savedFilters(): IFilterSavedFilter[] {
+    return this._savedFiltersController.savedFilters;
   }
 
   public ngOnInit() {
