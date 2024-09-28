@@ -119,6 +119,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
     private _savedFiltersController: SavedFiltersController,
+    private _externalParamsController: ExternalParamsController,
   ) {
     this._filterItems.filter = this;
     this._listenWhenFilterReady();
@@ -199,8 +200,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._actions.menuActions$;
   }
 
-  public set activeSavedFilter(saveFilter: IFilterSavedFilter) {
-    this._savedFiltersController.setActiveFilter(saveFilter);
+  public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
+    this._externalParams.setActiveSavedFilter(savedFilter);
   }
 
   public get activeSavedFilter(): IFilterSavedFilter {
