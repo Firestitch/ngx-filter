@@ -6,16 +6,18 @@
       None
     </ng-template>
   </ng-container>
-  <ng-container *ngFor="let filter of filters$ | async">
-    <ng-template fs-menu-item (click)="selectFilter(filter)">
-      {{ filter.name }}
-    </ng-template>
+  <ng-container *ngIf="(filters$ | async).length !==0">
+    <ng-container *ngFor="let filter of filters$ | async">
+      <ng-template fs-menu-item (click)="selectFilter(filter)">
+        {{ filter.name }}
+      </ng-template>
+    </ng-container>
+    <ng-template fs-menu-divider-item></ng-template>
   </ng-container>
-  <!-- TODO: Implement -->
-  <!-- <ng-template 
+  <ng-template 
       fs-menu-item 
       class="saved-filter-last-item" 
       (click)="manageFilters()">
     Manage
-  </ng-template> -->
+  </ng-template>
 </fs-menu>

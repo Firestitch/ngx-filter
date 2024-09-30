@@ -5,12 +5,15 @@ import {
   Output,
 } from '@angular/core';
 
+import { MatDialog } from '@angular/material/dialog';
+
 import { Observable } from 'rxjs';
 
-import { IFilterSavedFilter } from '../../interfaces/saved-filters.interface';
-import { ExternalParamsController } from '../../services/external-params-controller.service';
-import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
-import { FsFilterItemsStore } from '../../services/items-store.service';
+import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
+import { ExternalParamsController } from '../../../services/external-params-controller.service';
+import { SavedFiltersController } from '../../../services/external-params/saved-filters-controller.service';
+import { FsFilterItemsStore } from '../../../services/items-store.service';
+import { FsFilterSavedFilterManageComponent } from '../saved-filter-manage';
 
 
 @Component({
@@ -28,6 +31,7 @@ export class FsSavedFiltersMenuComponent {
     private _itemsStore: FsFilterItemsStore,
     private _externalParams: ExternalParamsController,
     private _savedFilters: SavedFiltersController,
+    private _dialog: MatDialog,
   ) {}
 
   public get filters$(): Observable<IFilterSavedFilter[]> {
@@ -50,6 +54,10 @@ export class FsSavedFiltersMenuComponent {
   }
 
   public manageFilters(): void {
-    // TODO: Implement
+    this._dialog.open(FsFilterSavedFilterManageComponent, {
+      data: {
+        savedFiltersController: this._savedFilters,
+      },
+    });
   }
 }

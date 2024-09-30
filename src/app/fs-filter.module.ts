@@ -3,6 +3,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PortalModule } from '@angular/cdk/portal';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,8 +57,9 @@ import { SelectComponent } from './components/filters-item/select/select.compone
 import { SelectSimpleComponent } from './components/filters-item/select/simple/simple.component';
 import { TextComponent } from './components/filters-item/text/text.component';
 import { WeekComponent } from './components/filters-item/week/week.component';
-import { FsFilterSavedFilterEditComponent } from './components/saved-filter-edit/saved-filter-edit.component';
-import { FsSavedFiltersMenuComponent } from './components/saved-filters-menu/saved-filters-menu.component';
+import { FsFilterSavedFilterManageComponent } from './components/saved-filter';
+import { FsFilterSavedFilterEditComponent } from './components/saved-filter/saved-filter-edit/saved-filter-edit.component';
+import { FsSavedFiltersMenuComponent } from './components/saved-filter/saved-filters-menu/saved-filters-menu.component';
 import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './injectors/filter-config';
@@ -71,7 +73,9 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-
+    
+    DragDropModule,
+    
     MatIconModule,
     MatInputModule,
     MatSelectModule,
@@ -129,6 +133,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsFilterActionsComponent,
     FsFilterActionButtonComponent,
     FsFilterActionKebabActionsComponent,
+    FsFilterSavedFilterManageComponent,
 
     FilterStatusBarDirective,
     FocusToItemDirective,

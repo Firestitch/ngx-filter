@@ -12,7 +12,7 @@ import {
 
 import {
   FsFilterSavedFilterEditComponent,
-} from '../../components/saved-filter-edit/saved-filter-edit.component';
+} from '../../components/saved-filter/saved-filter-edit/saved-filter-edit.component';
 import { buildQueryParams } from '../../helpers/build-query-params';
 import { restoreItems } from '../../helpers/restore-items';
 import { IFilterExternalParams } from '../../interfaces/external-params.interface';
@@ -129,9 +129,9 @@ export class SavedFiltersController implements OnDestroy {
   public order(savedFilters: IFilterSavedFilter[]): Observable<IFilterSavedFilter[]> {
     return this._config.order(savedFilters)
       .pipe(
-        tap((response) => {
+        tap(() => {
           this.savedFilters = [
-            ...response,
+            ...savedFilters,
           ];
         }),
       );
@@ -140,9 +140,9 @@ export class SavedFiltersController implements OnDestroy {
   public delete(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
     return this._config.delete(savedFilter)
       .pipe(
-        tap((response) => {
+        tap(() => {
           this.savedFilters = this.savedFilters
-            .filter((f) => f.id !== response.id);
+            .filter((f) => f.id !== savedFilter.id);
         }),
       );
   }

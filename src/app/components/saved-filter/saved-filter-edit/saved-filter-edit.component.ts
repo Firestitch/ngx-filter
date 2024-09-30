@@ -9,11 +9,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
-import { IFilterExternalParams } from '../../interfaces/external-params.interface';
+import { IFilterExternalParams } from '../../../interfaces/external-params.interface';
 import {
   FilterRemoteSave,
   IFilterSavedFilter,
-} from '../../interfaces/saved-filters.interface';
+} from '../../../interfaces/saved-filters.interface';
 
 
 @Component({

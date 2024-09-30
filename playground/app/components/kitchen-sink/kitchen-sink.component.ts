@@ -355,13 +355,14 @@ export class KitchenSinkComponent implements OnInit {
           console.log('<====== Order Saved Filters =====>');
           console.log('order filters', filters);
 
-          return of();
+          return of(null);
         },
         delete: (savedFilter) => {
           console.log('<====== Delete Saved Filter =====>');
           console.log('order filters', filter);
 
-          return of();
+
+          return of(null);
         },
       },
       // button: {

@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>
+  Manage saved filters
+</h1>
+<div mat-dialog-content>
+  <div
+      cdkDropList 
+      [cdkDropListData]="savedFilters"
+      cdkDropListOrientation="vertical"
+      (cdkDropListDropped)="drop($event)">  
+    <ng-container 
+        *ngFor="let savedFilter of savedFilters">
+      <div class="chip-container">
+        <fs-chip 
+            cdkDrag
+            (removed)="remove(savedFilter)">
+          {{savedFilter.name}}
+        </fs-chip>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button 
+      mat-button
+      type="button"
+      [mat-dialog-close]="null">
+    Done
+  </button>
+</div>
