@@ -32,18 +32,34 @@ export class ExternalParamsController implements OnDestroy {
   ) { }
 
   public get params(): IFilterExternalParams {
-    const result: IFilterExternalParams = {};
+    let result: IFilterExternalParams = {};
 
     if (this._persistanceStore.enabled) {
-      Object.assign(result, this._persistanceStore.value?.data);
+      result = {
+        ...result, 
+        ...this._persistanceStore.value?.data,
+      };
     }
 
     if (this._savedFilters.enabled && this._savedFilters.activeFilter) {
-      Object.assign(result, this._savedFilters.activeFilterData);
-    }
+      const query = Object.keys(result)
+        .filter((key) => !this._itemsStore.itemNames.includes(key))
+        .reduce((acc, key) => {
+          return {
+            ...acc,
+            [key]: result[key],
+          };
+        }, {});
 
-    if (this._queryParams.enabled) {
-      Object.assign(result, this._queryParams.fetchedParams);
+      result = {
+        ...query, 
+        ...this._savedFilters.activeFilterData,
+      };
+    } else if (this._queryParams.enabled) {
+      result = {
+        ...result, 
+        ...this._queryParams.fetchedParams,
+      };
     }
 
     return result;

@@ -1,9 +1,10 @@
-import { RangeItem } from '../models/items/range-item';
-import { getRangeName } from './get-range-name';
 import { DateRangeItem } from '../models/items/date-range-item';
 import { DateTimeRangeItem } from '../models/items/date-time-range-item';
-import { parseItemValueFromStored } from './parse-item-value-from-stored';
+import { RangeItem } from '../models/items/range-item';
 import { WeekItem } from '../models/items/week-item';
+
+import { getRangeName } from './get-range-name';
+import { parseItemValueFromStored } from './parse-item-value-from-stored';
 
 
 /**

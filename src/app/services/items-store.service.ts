@@ -60,6 +60,10 @@ export class FsFilterItemsStore implements OnDestroy {
     return this._items;
   }
 
+  public get itemNames(): string[] {
+    return this._items.map((item) => item.name);
+  }
+
   public get visibleItems(): BaseItem<IFilterConfigItem>[] {
     return this._visibleItems$.getValue();
   }

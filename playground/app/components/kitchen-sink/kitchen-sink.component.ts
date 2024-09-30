@@ -57,12 +57,8 @@ export class KitchenSinkComponent implements OnInit {
 
   public subject = [
     {
-      value: 1,
+      value: undefined,
       name: 'Any',
-    },
-    {
-      value: 2,
-      name: 'None',
     },
     {
       value: 3,
