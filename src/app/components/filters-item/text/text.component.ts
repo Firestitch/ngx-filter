@@ -6,7 +6,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
@@ -23,7 +23,7 @@ import { TextItem } from '../../../models/items/text-item';
 })
 export class TextComponent extends BaseItemComponent<TextItem> implements OnInit, OnDestroy {
 
-  public textControl = new FormControl();
+  public textControl = new UntypedFormControl();
   public destroy$ = new Subject();
 
   constructor(
