@@ -18,7 +18,7 @@ import { parseItemValueFromStored } from './parse-item-value-from-stored';
  * @param items
  * @param paramsCase
  */
-export function restoreItems(params, items, paramsCase) {
+export function restoreItems(params, items) {
   const result = {};
 
   Object.keys(params)
@@ -26,7 +26,7 @@ export function restoreItems(params, items, paramsCase) {
       const item = findItemWidthName(items, name);
 
       if (item) {
-        result[item.name] = parseItemValueFromStored(item, params, paramsCase);
+        result[item.name] = parseItemValueFromStored(item, params);
       }
     });
 
@@ -37,15 +37,15 @@ function findItemWidthName(items, name) {
   return items
     .find((filterItem) => {
       if (filterItem instanceof RangeItem) {
-        return  name === getRangeName(filterItem.case, filterItem.name, 'min') ||
-          name === getRangeName(filterItem.case, filterItem.name, 'max') ||
+        return  name === getRangeName(filterItem.name, 'min') ||
+          name === getRangeName(filterItem.name, 'max') ||
           name === filterItem.name;
       } else if (filterItem instanceof DateRangeItem || filterItem instanceof DateTimeRangeItem) {
-        return name === getRangeName(filterItem.case, filterItem.name, 'from') ||
-          name ===  getRangeName(filterItem.case, filterItem.name, 'to');
+        return name === getRangeName(filterItem.name, 'from') ||
+          name ===  getRangeName(filterItem.name, 'to');
       } else if (filterItem instanceof WeekItem) {
-        return name === getRangeName('camel', filterItem.name, 'from')
-          || name ===  getRangeName('camel', filterItem.name, 'to')
+        return name === getRangeName(filterItem.name, 'from')
+          || name ===  getRangeName(filterItem.name, 'to')
           || name ===  `${filterItem.name}Period`;
       }
 

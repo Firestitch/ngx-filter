@@ -14,16 +14,12 @@ import { BaseItem } from './base-item';
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
-  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
-    return new RangeItem(config, additionalConfig, filter);
-  }
-
-  public case: 'snake' | 'camel';
   public options: { scale?: number };
   public prefix: string;
   public suffix: string;
-
-  protected readonly _additionalConfig: { case: 'camel' | 'snake' };
+  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
+    return new RangeItem(config, additionalConfig, filter);
+  }
 
   public get value() {
     let value = clone(this.model);
@@ -40,8 +36,8 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     const value = this.value;
     const name = this.name;
     const params = {};
-    const paramMinName = getRangeName(this.case, name, 'min');
-    const paramMaxName = getRangeName(this.case, name, 'max');
+    const paramMinName = getRangeName(name, 'min');
+    const paramMaxName = getRangeName(name, 'max');
 
     if (isObject(value)) {
       params[paramMinName] = value.min || undefined;
@@ -99,7 +95,6 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     this.options = item.options;
     this.prefix = item.prefix;
     this.suffix = item.suffix;
-    this.case = this._additionalConfig?.case ?? 'camel';
 
     super._parseConfig(item);
   }

@@ -14,7 +14,7 @@ export class QueryParamsController {
 
   constructor(
     private _route: ActivatedRoute,
-    private _itemsStore: FsFilterItemsStore
+    private _itemsStore: FsFilterItemsStore,
   ) {}
 
   public get enabled(): boolean {
@@ -53,7 +53,6 @@ export class QueryParamsController {
     this._fetchedParams = restoreItems(
       this._route.snapshot.queryParams,
       items,
-      this._paramsCase
     );
   }
 

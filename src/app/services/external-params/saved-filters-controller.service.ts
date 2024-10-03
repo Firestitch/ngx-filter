@@ -106,7 +106,6 @@ export class SavedFiltersController implements OnDestroy {
       savedFilter.filters = restoreItems(
         savedFilter.filters,
         this._itemsStore.items,
-        this._paramsCase,
       );
     });
 
@@ -193,7 +192,6 @@ export class SavedFiltersController implements OnDestroy {
           updatedFilter.filters = restoreItems(
             updatedFilter.filters,
             this._itemsStore.items,
-            this._paramsCase,
           );
 
 

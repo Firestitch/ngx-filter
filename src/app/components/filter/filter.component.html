@@ -36,11 +36,10 @@
   <div class="filter-keyword">
     <ng-container *ngIf="(keywordVisible$ | async) && !keywordItem?.hide ">
       <mat-form-field
-          [floatLabel]="'never'"
           class="form-field-padless"
           [ngClass]="search"
           appearance="outline">
-        <span matPrefix>
+        <span matPrefix class="icon">
           <mat-icon matPrefix>search</mat-icon>
         </span>
         <input
@@ -71,15 +70,8 @@
     <ng-container *ngIf="filtersBtnVisible$ | async">
       <ng-container *ngIf="hasVisibleItemOrSorting">
         <a
-            mat-button
+            mat-icon-button
             class="filters-button"
-            [ngClass]="{
-              'mat-raised-button': config.button.style === 'raised' && config.button.label,
-              'mat-flat-button': config.button.style === 'flat' && config.button.label,
-              'mat-stroked-button': config.button.style === 'stroked' && config.button.label,
-              'mat-button': config.button.style === 'basic' && config.button.label,
-              'mat-icon-button': config.button.style === 'icon' || !config.button.label
-            }"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             [color]="config.button.color">
           <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>

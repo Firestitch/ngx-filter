@@ -1,23 +1,20 @@
 import { isEmpty } from '@firestitch/common';
 import { format, simpleFormat } from '@firestitch/date';
-import { ItemType } from '../../../enums/item-type.enum';
+
 
 import { isDate, isValid, parseISO } from 'date-fns';
-
 import { clone, isObject, isString } from 'lodash-es';
-import { BaseItem } from '../base-item';
+
+import { ItemType } from '../../../enums/item-type.enum';
 import { getRangeName } from '../../../helpers/get-range-name';
 import {
   IFilterConfigDateRangeItem,
   IFilterItemDefaultDateRange,
 } from '../../../interfaces/items/date-range.interface';
+import { BaseItem } from '../base-item';
 
 
 export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeItem> {
-
-  public case: 'snake' | 'camel';
-
-  protected readonly _additionalConfig: { case: 'camel' | 'snake' }
 
   public get isTypeDateRange(): boolean {
     return this.type === ItemType.DateRange;
@@ -74,8 +71,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   public get queryObject(): Record<string, Date> {
     const value = this.value || {};
     const name = this.name;
-    const paramFromName = getRangeName(this.case, name, 'from');
-    const paramToName = getRangeName(this.case, name, 'to');
+    const paramFromName = getRangeName(name, 'from');
+    const paramToName = getRangeName(name, 'to');
 
     return {
       [paramFromName]: value.from || undefined,
@@ -88,11 +85,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
     return Object.keys(this.queryObject)
       .reduce((acc, key) => {
-        if (!!query[key]) {
-          acc[key] = simpleFormat(query[key]);
-        } else {
-          acc[key] = query[key];
-        }
+        acc[key] = query[key] ? simpleFormat(query[key]) : query[key];
 
         return acc;
       }, {});
@@ -103,9 +96,11 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
     if (type === 'from') {
       const from = this.model.from;
+
       return `${format(from, formatTo)}`;
     } else if (type === 'to') {
       const to = this.model.to;
+
       return `${format(to, formatTo)}`;
     }
   }
@@ -128,11 +123,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
       this.model = { ...this.model };
     } else {
-      if (defaultValue) {
-        this.model = { ...defaultValue };
-      } else {
-        this.model = {};
-      }
+      this.model = defaultValue ? { ...defaultValue } : {};
     }
   }
 
@@ -153,8 +144,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   }
 
   protected _parseConfig(item: IFilterConfigDateRangeItem) {
-    this.case = this._additionalConfig?.case ?? 'camel';
-
     super._parseConfig(item);
   }
 

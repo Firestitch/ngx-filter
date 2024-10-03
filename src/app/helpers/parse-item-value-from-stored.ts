@@ -1,29 +1,30 @@
 import { ItemType } from '../enums/item-type.enum';
+
 import { getRangeName } from './get-range-name';
 import { filterFromQueryParam } from './query-param-transformers';
 
-export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'camel') {
+export function parseItemValueFromStored(item, params) {
   const param = params[item.name];
 
   switch (item.type) {
     case ItemType.Range: {
-      const min = params[getRangeName(paramCase, item.name, 'min')];
-      const max = params[getRangeName(paramCase, item.name, 'max')];
+      const min = params[getRangeName(item.name, 'min')];
+      const max = params[getRangeName(item.name, 'max')];
 
       return { min: min, max: max };
     }
 
     case ItemType.DateRange: case ItemType.DateTimeRange: {
-      const from = params[getRangeName(item.case, item.name, 'from')];
-      const to = params[getRangeName(item.case, item.name, 'to')];
+      const from = params[getRangeName(item.name, 'from')];
+      const to = params[getRangeName(item.name, 'to')];
 
       return { from: from, to: to };
     }
 
     case ItemType.Week: {
-      const from = params[getRangeName('camel', item.name, 'from')];
-      const to = params[getRangeName('camel', item.name, 'to')];
-      const period = params[`${item.name}Period`]
+      const from = params[getRangeName(item.name, 'from')];
+      const to = params[getRangeName(item.name, 'to')];
+      const period = params[`${item.name}Period`];
 
       return { from, to, period };
     }
@@ -35,7 +36,7 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
         if (item.isolate) {
           const isolatedValue = Array.isArray(item.isolate.value)
             ? item.isolate.value
-            : [ item.isolate.value ];
+            : [item.isolate.value];
 
           item.isolate.enabled = arraysHaveSameElements(isolatedValue, values);
 
@@ -45,17 +46,19 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
         }
 
         return values;
-      } else {
-        return param;
       }
+ 
+      return param;
+      
     }
 
     case ItemType.Checkbox: {
       if (param === 'true') {
-        return true === item.checked;
-      } else {
-        return param === item.checked;
+        return item.checked === true;
       }
+ 
+      return param === item.checked;
+      
     }
 
     case ItemType.AutoComplete: {
@@ -63,8 +66,8 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
 
       return {
         name: filterParts[1],
-        value: filterParts[0]
-      }
+        value: filterParts[0],
+      };
     }
 
     case ItemType.AutoCompleteChips: 
@@ -81,7 +84,7 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
         });
 
         return arry;
-      }, [])
+      }, []);
     }
 
     default: {
@@ -92,8 +95,8 @@ export function parseItemValueFromStored(item, params, paramCase: 'snake' | 'cam
 
 function arraysHaveSameElements(arr1: unknown[], arr2: unknown[]): boolean {
 
-  arr1 = [ ...arr1 ].sort();
-  arr2 = [ ...arr2 ].sort();
+  arr1 = [...arr1].sort();
+  arr2 = [...arr2].sort();
 
   return arr1.some((item) => {
     return arr2.includes(item);

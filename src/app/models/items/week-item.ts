@@ -70,8 +70,8 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   public get queryObject() {
     const value = this.value;
     const name = this.name;
-    const paramFromName = getRangeName('camel', name, 'from');
-    const paramToName = getRangeName('camel', name, 'to');
+    const paramFromName = getRangeName(name, 'from');
+    const paramToName = getRangeName(name, 'to');
     const paramPeriodName = `${name}Period`;
 
     return {
@@ -84,9 +84,9 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   public get persistanceObject(): Record<string, string> {
     const query = this.queryObject;
     const name = this.name;
-    const paramFromName = getRangeName('camel', name, 'from');
+    const paramFromName = getRangeName(name, 'from');
     const paramFromValue = query[paramFromName] && simpleFormat(query[paramFromName]) || query[paramFromName];
-    const paramToName = getRangeName('camel', name, 'to');
+    const paramToName = getRangeName(name, 'to');
     const paramToValue = query[paramToName] && simpleFormat(query[paramToName]) || query[paramToName];
     const paramPeriodName = `${name}Period`;
 

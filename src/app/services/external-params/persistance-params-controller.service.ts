@@ -1,15 +1,15 @@
-import { Injectable, Optional } from '@angular/core';
 import { Location } from '@angular/common';
+import { Injectable, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { DrawerRef } from '@firestitch/drawer';
-import { FsPersistanceStore } from '@firestitch/store';
 import { getNormalizedPath } from '@firestitch/common';
-import { FsStore } from '@firestitch/store';
+import { DrawerRef } from '@firestitch/drawer';
+import { FsPersistanceStore, FsStore } from '@firestitch/store';
 
-import { FsFilterPersistance } from '../../interfaces/config.interface';
 import { restoreItems } from '../../helpers/restore-items';
+import { FsFilterPersistance } from '../../interfaces/config.interface';
 import { FsFilterItemsStore } from '../items-store.service';
 
 const FILTER_STORE_KEY = 'fs-filter-persist';
@@ -62,7 +62,6 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
       this._value.data = restoreItems(
         this._value.data,
         items,
-        this._paramsCase
       );
     }
   }
