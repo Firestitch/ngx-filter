@@ -23,32 +23,3 @@
     {{ object.name }}
   </ng-template>
 </fs-autocomplete-chips>
-
-<!--<mat-form-field floatLabel="auto">
-  <mat-label>{{item.label}}</mat-label>
-  <mat-chip-list #chipList>
-    <mat-chip *ngFor="let item of item.model"
-              (removed)="removeAutocompleteChipItem(item)">
-      {{ item.name }}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-
-    <input #chipsInput
-           type="text"
-           matInput
-           [(ngModel)]="item.selectedValue"
-           (ngModelChange)="onAutocompleteChipsChange(chipsInput)"
-           [name]="item.name"
-           [matChipInputFor]="chipList"
-           [matAutocomplete]="autocompleteChipsInput">
-  </mat-chip-list>
-
-  <mat-autocomplete #autocompleteChipsInput="matAutocomplete"
-                    (optionSelected)="addAutocompleteChipItem( $event)"
-  >
-    <mat-option *ngFor="let item of item.values$ | async" [value]="item">
-      {{ item.name }}
-    </mat-option>
-  </mat-autocomplete>
-  <mat-placeholder *ngIf="inline">{{ item.label }}</mat-placeholder>
-</mat-form-field>-->
