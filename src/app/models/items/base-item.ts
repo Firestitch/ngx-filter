@@ -19,7 +19,7 @@ import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface'
 export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public name: string;
-  public label: string | string[];
+  public label: any;
   public chipLabel: string | string[];
   public hide: boolean;
   public defaultValue: any | IFilterItemDefaultRange;
