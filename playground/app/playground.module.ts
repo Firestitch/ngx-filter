@@ -40,7 +40,7 @@ import { AppMaterialModule } from './material.module';
       { path: 'nofilters', component: NofiltersComponent },
       { path: 'dialog', component: DialogExampleComponent },
     ],
-      { relativeLinkResolution: 'legacy' }),
+      {}),
     FsFileModule.forRoot({
       allowDownload: true,
       allowRemove: true,
