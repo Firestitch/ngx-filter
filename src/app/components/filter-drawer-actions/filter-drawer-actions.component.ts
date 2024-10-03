@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
-import { ExternalParamsController } from '../../services/external-params-controller.service';
-import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
-
 
 @Component({
   selector: 'fs-filter-drawer-actions',
@@ -18,12 +15,6 @@ export class FsFilterDrawerActionsComponent {
   @Output('done')
   private _done = new EventEmitter<void>();
 
-  constructor(public externalParams: ExternalParamsController) { }
-
-  public get savedFilters(): SavedFiltersController {
-    return this.externalParams.savedFiltersController;
-  }
-
   public done(): void {
     this._done.emit();
   }
@@ -31,10 +22,5 @@ export class FsFilterDrawerActionsComponent {
   public clear(): void {
     this._clear.emit();
   }
-
-  public saveFilters() {
-    this.externalParams
-      .savedFiltersController
-      .openSavedFilterEditDialog();
-  }
+ 
 }

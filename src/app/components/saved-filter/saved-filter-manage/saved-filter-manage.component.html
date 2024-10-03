@@ -11,6 +11,7 @@
         *ngFor="let savedFilter of savedFilters">
       <div class="chip-container">
         <fs-chip 
+            class="saved-filter-manage-chip"
             cdkDrag
             (removed)="remove(savedFilter)">
           {{savedFilter.name}}
@@ -22,6 +23,7 @@
 <div mat-dialog-actions>
   <button 
       mat-button
+      color="primary"
       type="button"
       [mat-dialog-close]="null">
     Done

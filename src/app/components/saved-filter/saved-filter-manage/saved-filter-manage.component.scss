@@ -1,9 +1,17 @@
 
 .chip-container {
-  padding: 5px 0;
+  padding: 5px 0;  
+}
 
-  fs-chip {
+::ng-deep {
+  fs-chip.saved-filter-manage-chip {
     cursor: move; 
+    width: 100%;
+    box-sizing: border-box;
+
+    .fs-chip-content {
+      flex: 1;
+    }
   }
 }
 

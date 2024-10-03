@@ -53,6 +53,13 @@ export class FsSavedFiltersMenuComponent {
     this.clear.emit();
   }
 
+  public saveFilters() {
+    this._externalParams
+      .savedFiltersController
+      .openSavedFilterEditDialog();
+  }
+
+
   public manageFilters(): void {
     this._dialog.open(FsFilterSavedFilterManageComponent, {
       data: {
