@@ -39,7 +39,7 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
   }
 
   public ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(null);
     this.destroy$.complete();
   }
 

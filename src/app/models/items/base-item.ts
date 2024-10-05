@@ -187,7 +187,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
 
     if (this.initialized) {
-      this._valueChange$.next();
+      this._valueChange$.next(null);
     }
   }
 
@@ -288,7 +288,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
 
   public destroy() {
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 

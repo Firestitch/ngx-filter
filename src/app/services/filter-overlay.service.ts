@@ -75,7 +75,7 @@ export class FsFilterOverlayService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.detach$.next();
+        this.detach$.next(null);
       });
 
     this._overlayRef.attachments()
@@ -83,7 +83,7 @@ export class FsFilterOverlayService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.attach$.next();
+        this.attach$.next(null);
       });
 
     this._addFilterClass();
@@ -92,7 +92,7 @@ export class FsFilterOverlayService implements OnDestroy {
   }
 
   public ngOnDestroy() {
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 

@@ -68,7 +68,7 @@ implements DoCheck, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
@@ -84,6 +84,6 @@ implements DoCheck, OnChanges, OnDestroy {
   }
 
   public itemChange() {
-    this._debouncer$.next();
+    this._debouncer$.next(null);
   }
 }

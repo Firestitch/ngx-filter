@@ -91,7 +91,7 @@ export class FsFilterItemsStore implements OnDestroy {
   public ngOnDestroy() {
     this.destroyItems();
 
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
