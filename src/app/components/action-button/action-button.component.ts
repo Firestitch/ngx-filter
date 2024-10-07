@@ -7,6 +7,7 @@ import { Action } from '../../models/action.model';
 @Component({
   selector: 'fs-filter-action-button',
   templateUrl: './action-button.component.html',
+  styleUrl: './action-button.component.scss',
   host: { class: 'action-button' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

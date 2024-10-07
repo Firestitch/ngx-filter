@@ -84,7 +84,7 @@ export class FsFilterConfig {
     }
 
     if (this.button.icon === undefined) {
-      this.button.icon = 'tune';
+      this.button.icon = 'filter_alt';
     }
 
     if (this.button.style === undefined) {

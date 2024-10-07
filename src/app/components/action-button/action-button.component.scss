@@ -1,0 +1,29 @@
+:host ::ng-deep {
+  .button-basic {
+    .mdc-button__label {
+      display: flex;
+      align-self: center;
+
+      mat-icon {
+        flex-shrink: 0;
+      }
+    }
+
+    &.icon-placement-right {
+      .mdc-button__label {
+        flex-direction: row-reverse;
+        mat-icon {
+          margin-left: 5px;
+        }
+      }
+    }
+
+    &:not(.icon-placement-right) {
+      .mdc-button__label {
+        mat-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

@@ -71,7 +71,7 @@
       <ng-container *ngIf="hasVisibleItemOrSorting">
         <a
             mat-icon-button
-            class="filters-button"
+            class="button-filters"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             [color]="config.button.color">
           <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
@@ -83,7 +83,7 @@
       <a
           mat-icon-button
           (click)="reload($event)"
-          class="reload">
+          class="button-reload">
         <mat-icon #reloadEl>refresh</mat-icon>
       </a>
     </ng-container>

@@ -64,7 +64,7 @@
         margin-left: 10px;
 
         mat-icon {
-          font-size: 22px;
+          font-size: 24px;
           color: #626262;
         }
       }
@@ -89,8 +89,13 @@
   display: flex;
   align-items: center;
 
-  .reload {
+  .button-reload {
     margin-left: -6px;
+  }
+
+  .button-filters,
+  .button-reload {
+    display: flex;
   }
 }
 
@@ -112,13 +117,13 @@ fs-filter-chips {
     margin-left: 10px;
   }
 
-  .filters-button + fs-filter-actions:not(:empty) {
+  .button-filters + fs-filter-actions:not(:empty) {
     margin-left: 5px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .filter-actions {
+  .button-filters {
     margin-left: 5px;
 
     .filters-button {

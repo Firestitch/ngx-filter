@@ -54,12 +54,11 @@
 
     <ng-container *ngSwitchCase="ActionMode.SelectButton">
       <mat-select 
-          class="action"
+          class="action action-select-button"
           [ngClass]="{ 
-            'mat-stroked-button': action.type === ActionType.Stroked,
-            'mat-raised-button': action.type === ActionType.Raised,
-            'mat-flat-button': action.type === ActionType.Flat,
-            'mat-basic-button': action.type === ActionType.Basic
+            'mat-mdc-raised-button': action.type === ActionType.Raised,
+            'mat-mdc-unelevated-button': action.type === ActionType.Flat,
+            'mat-mdc-outlined-button': action.type === ActionType.Stroked,
           }"
           [placeholder]="action.label"
           [(ngModel)]="action.value" 

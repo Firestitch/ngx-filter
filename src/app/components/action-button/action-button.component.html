@@ -41,12 +41,13 @@
       type="button"
       *ngSwitchDefault
       mat-button
+      class="button-basic"
       [ngClass]="{        
-        'mat-raised-button': action.type === ActionType.Raised,
-        'mat-flat-button': action.type === ActionType.Flat,
-        'mat-stroked-button': action.type === ActionType.Stroked,
-        'mat-button': action.type === ActionType.Basic,
-        'mat-icon-button': action.type === ActionType.Icon
+        'mat-mdc-raised-button': action.type === ActionType.Raised,
+        'mat-mdc-unelevated-button': action.type === ActionType.Flat,
+        'mat-mdc-outlined-button': action.type === ActionType.Stroked,
+        'mat-mdc-icon-button': action.type === ActionType.Icon,
+        'icon-placement-right': action.iconPlacement === 'right'
       }"
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -62,9 +63,8 @@
     </ng-container>
 
     <ng-template #withIcon>
-      <mat-icon *ngIf="!action.iconPlacement || action.iconPlacement === 'left'">{{action.icon}}</mat-icon>
+      <mat-icon>{{action.icon}}</mat-icon>
       {{action.label}}
-      <mat-icon *ngIf="action.iconPlacement === 'right'">{{action.icon}}</mat-icon>
     </ng-template>
   </ng-template>
 </ng-container>

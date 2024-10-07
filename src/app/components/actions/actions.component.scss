@@ -1,17 +1,18 @@
 :host {
   display: inline-flex;
+  align-items: center;
 }
 
 .action-button {
   display: block;
 }
 
-.action + .action {
-  margin-left: 5px;
-}
+.action {
+  &.action-select-button {
+    width: auto;
+  }
 
-.menu-button {
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
+  + .action {
+    margin-left: 5px;
+  }
 }
