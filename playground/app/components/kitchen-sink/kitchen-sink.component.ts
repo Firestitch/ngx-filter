@@ -4,6 +4,7 @@ import { filter, nameValue } from '@firestitch/common';
 import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 import {
   ActionMode,
+  ActionType,
   FilterComponent,
   FilterConfig,
   ItemDateMode,
@@ -139,7 +140,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Payment Method',
           type: ItemType.AutoComplete,
           hide: true,
-          values: (keyword, filterComponent: FilterComponent) => {
+          values: () => {
             return of([]);
           },
         },
@@ -202,13 +203,13 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
           clear: false,
-          change: (item, filterComponent: FilterComponent) => {
+          change: (item) => {
             console.log('Item Change', item);
           },
           init: (item) => {
             console.log('Item Init', item);
           },
-          values: (keyword, filterComponent: FilterComponent) => {
+          values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
@@ -224,7 +225,7 @@ export class KitchenSinkComponent implements OnInit {
           chipImage: 'data.image',
           chipColor: '#fff',
           chipBackground: 'color',
-          values: (keyword, filterComponent: FilterComponent) => {
+          values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
@@ -246,7 +247,7 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Weekdays',
           type: ItemType.Chips,
           multiple: true,
-          values: (keyword, filterComponent: FilterComponent) => {
+          values: () => {
             return of(this.weekdays)
               .pipe(
                 map((weekdays) => nameValue(weekdays, 'name', 'id')),
@@ -353,7 +354,7 @@ export class KitchenSinkComponent implements OnInit {
 
           return of(null);
         },
-        delete: (savedFilter) => {
+        delete: () => {
           console.log('<====== Delete Saved Filter =====>');
           console.log('order filters', filter);
 
@@ -385,6 +386,17 @@ export class KitchenSinkComponent implements OnInit {
 
   private _filterActions(): FsFilterAction[] {
     return [
+      {
+        mode: ActionMode.File,
+        type: ActionType.Icon,
+        menu: false,
+        icon: 'cloud_upload',
+        primary: false,
+        multiple: true,
+        select: (file) => {
+          console.log('Selected File', file);
+        },
+      },
       {
         mode: ActionMode.Menu,
         primary: false,
@@ -423,17 +435,6 @@ export class KitchenSinkComponent implements OnInit {
       //   tooltip: 'Tooltip',
       // },
       {
-        mode: ActionMode.File,
-        label: 'Upload',
-        menu: false,
-        icon: 'cloud_upload',
-        primary: false,
-        multiple: true,
-        select: (file) => {
-          console.log('Selected File', file);
-        },
-      },
-      {
         mode: ActionMode.SelectButton,
         label: 'View',
         primary: false,
@@ -454,12 +455,11 @@ export class KitchenSinkComponent implements OnInit {
         click: (event) => {
           console.log(event);
         },
-        icon: 'delete',
         primary: false,
-        label: 'Secondary Button',
+        label: 'Secondary',
       },
       {
-        click: (event) => {
+        click: () => {
           // this.list.enableOrder();
         },
         label: 'Kebab only button',
@@ -468,7 +468,7 @@ export class KitchenSinkComponent implements OnInit {
       {
         label: 'Reorder',
         menu: true,
-        click: (event) => {
+        click: () => {
           this.filter.updateActions(this._doneAction());
           this.filter.hideKeywordField();
           this.filter.hideFiltersBtn();
@@ -478,7 +478,7 @@ export class KitchenSinkComponent implements OnInit {
         click: (event) => {
           console.log(event);
         },
-        label: 'Primary Button',
+        label: 'Primary',
       },
     ];
   }
