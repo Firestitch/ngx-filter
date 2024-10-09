@@ -13,7 +13,6 @@ import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
-import { IFilterItemDefaultRange } from '../../interfaces/items/range.interface';
 
 
 export abstract class BaseItem<T extends IFilterConfigItem> {
@@ -22,7 +21,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public label: any;
   public chipLabel: string | string[];
   public hide: boolean;
-  public defaultValue: any | IFilterItemDefaultRange;
+  public defaultValue: any;
   public defaultValueFn: IFilterDefaultFn;
   public persistedValue: unknown;
   public showClear: boolean;
@@ -33,18 +32,17 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   protected readonly _type: T['type'];
 
-  protected _model: any;
+  protected _model: any = undefined;
   protected _pendingValues = false;
   protected _pendingDefaultValue = false;
   protected _initializedValues = false;
-  protected _loading$ = new BehaviorSubject(false);
-  protected _value$ = new BehaviorSubject(null);
-  protected _valueChange$ = new Subject<void>();
-  protected _values$ = new BehaviorSubject(null);
-  protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any;
+  protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
-  protected _destroy$ = new Subject<void>();
-
+  private _loading$ = new BehaviorSubject(false);
+  private _value$ = new BehaviorSubject(null);
+  private _valueChange$ = new Subject<void>();
+  private _values$ = new BehaviorSubject(null);
+  private _destroy$ = new Subject<void>();
   private _clear$ = new Subject<unknown>();
 
   constructor(
@@ -55,9 +53,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._type = itemConfig.type;
     this._parseConfig(itemConfig);
   }
-
-  public abstract get value();
-
+  
   public get filter(): FilterComponent {
     return this._filter;
   }
@@ -175,10 +171,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._loading$.next(value);
   }
 
-  protected get _initialized(): boolean {
-    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
-  }
-
   public valueChanged() {
     this._value$.next(this.value);
 
@@ -282,11 +274,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._clearValue(defaultValue);
   }
 
-  public getChipsContent(type): string {
-    return '';
-  }
-
-
   public destroy() {
     this._destroy$.next(null);
     this._destroy$.complete();
@@ -307,10 +294,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       this.defaultValue = item.default;
     }
 
-    this.change = item.change;
-    this.init = item.init || ((_) => {
+    this.init = item.init || (() => {
       //
     });
+    this.change = item.change;
     this.hide = item.hide;
     this.showClear = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
@@ -334,6 +321,14 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? undefined;
   }
+
+  protected get _initialized(): boolean {
+    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
+  }
+
+
+  public abstract get value();
+  public abstract getChipsContent(type): any;
 
   protected abstract _init();
   protected abstract _validateModel();

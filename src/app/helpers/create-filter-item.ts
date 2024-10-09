@@ -1,13 +1,8 @@
 import type { FilterComponent } from '../components/filter/filter.component';
 import { ItemType } from '../enums/item-type.enum';
 import { IFilterConfigItem } from '../interfaces/config.interface';
-import { IFilterConfigAutocompleteChipsItem } from '../interfaces/items/autocomplete-chips.interface';
-import { IFilterConfigAutocompleteItem } from '../interfaces/items/autocomplete.interface';
-import { IFilterConfigCheckboxItem } from '../interfaces/items/checkbox.interface';
-import { IFilterConfigChipsItem } from '../interfaces/items/chips.interface';
 import { IFilterConfigDateRangeItem } from '../interfaces/items/date-range.interface';
 import { IFilterConfigDateItem } from '../interfaces/items/date.interface';
-import { IFilterConfigRangeItem } from '../interfaces/items/range.interface';
 import { IFilterConfigTextItem } from '../interfaces/items/text.interface';
 import { IFilterConfigWeekItem } from '../interfaces/items/week.interface';
 import { AutocompleteChipsItem } from '../models/items/autocomplete-chips-item';
@@ -31,11 +26,11 @@ export function createFilterItem(item: IFilterConfigItem, config: any, filter: F
     }
 
     case ItemType.Chips: {
-      return ChipsItem.create(item as IFilterConfigChipsItem, filter);
+      return ChipsItem.create(item, filter);
     }
 
     case ItemType.Range: {
-      return RangeItem.create(item as IFilterConfigRangeItem, config, filter);
+      return RangeItem.create(item, config, filter);
     }
 
     case ItemType.DateRange: {
@@ -59,15 +54,15 @@ export function createFilterItem(item: IFilterConfigItem, config: any, filter: F
     }
 
     case ItemType.AutoComplete: {
-      return AutocompleteItem.create(item as IFilterConfigAutocompleteItem, filter);
+      return AutocompleteItem.create(item, filter);
     }
 
     case ItemType.AutoCompleteChips: {
-      return AutocompleteChipsItem.create(item as IFilterConfigAutocompleteChipsItem, filter);
+      return AutocompleteChipsItem.create(item, filter);
     }
 
     case ItemType.Checkbox: {
-      return CheckboxItem.create(item as IFilterConfigCheckboxItem, filter);
+      return new CheckboxItem(item, null, filter);
     }
 
     case ItemType.Keyword: case ItemType.Text: {

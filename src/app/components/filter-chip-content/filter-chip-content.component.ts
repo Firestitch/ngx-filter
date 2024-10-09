@@ -10,8 +10,8 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { BaseItem } from '../../models/items/base-item';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
+import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
@@ -58,26 +58,29 @@ export class FsFilterChipContentComponent implements OnInit, OnDestroy {
     if (this.item.chipLabel !== undefined) {
       if (this.item.chipLabel === '') {
         return `${result}`;
-      } else {
-        if (Array.isArray(this.item.chipLabel)) {
-          const label = getLabelFromArray(this.item.chipLabel, this.type);
-          return `${label}: ${result}`;
-        } else {
-          return `${this.item.chipLabel}: ${result}`;
-        }
-      }
-    } else {
-      if (Array.isArray(this.item.label)) {
-        const label = getLabelFromArray(this.item.label, this.type);
+      } 
+      if (Array.isArray(this.item.chipLabel)) {
+        const label = getLabelFromArray(this.item.chipLabel, this.type);
+
         return `${label}: ${result}`;
-      } else {
-        if (this.item.isTypeCheckbox) {
-          return result;
-        } else {
-          return `${this.item.label}: ${result}`;
-        }
       }
+ 
+      return `${this.item.chipLabel}: ${result}`;
+        
+      
+    } 
+    if (Array.isArray(this.item.label)) {
+      const label = getLabelFromArray(this.item.label, this.type);
+
+      return `${label}: ${result}`;
+    } 
+    if (this.item.isTypeCheckbox) {
+      return result;
     }
+ 
+    return `${this.item.label}: ${result}`;
+      
+    
   }
 }
 
@@ -86,7 +89,8 @@ function getLabelFromArray(labelArr, type) {
     return `${labelArr[0]}`;
   } else if (type === 'to' && labelArr[1]) {
     return `${labelArr[1]}`;
-  } else {
-    return '';
   }
+ 
+  return '';
+  
 }

@@ -2,13 +2,14 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component, ElementRef,
-  KeyValueDiffers, OnInit, ViewChild
+  KeyValueDiffers, OnInit, ViewChild,
 } from '@angular/core';
+
 import { fromEvent, merge } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { RangeItem } from '../../../models/items/range-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }
@@ -39,20 +40,20 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
   public listenChanges() {
     const fromListener = fromEvent(this.from.nativeElement, 'keyup')
       .pipe(
-        distinctUntilChanged()
+        distinctUntilChanged(),
       );
 
     const toListener = fromEvent(this.to.nativeElement, 'keyup')
       .pipe(
-        distinctUntilChanged()
+        distinctUntilChanged(),
       );
 
     merge(fromListener, toListener)
       .pipe(
-        takeUntil(this._destroy$),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.itemChange();
-      })
+      });
   }
 }

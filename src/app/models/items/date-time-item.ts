@@ -12,6 +12,10 @@ export class DateTimeItem extends BaseDateItem {
     return new DateTimeItem(config, null, filter);
   }
 
+  public getChipsContent() { 
+    return null;
+  }
+
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? undefined;
   }

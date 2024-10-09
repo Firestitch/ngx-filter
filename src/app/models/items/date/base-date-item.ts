@@ -1,16 +1,17 @@
+import { simpleFormat } from '@firestitch/date';
+
 import { isDate, isValid, parseISO } from 'date-fns';
 import { clone } from 'lodash-es';
 
-import { BaseItem } from '../base-item';
-import { IFilterConfigDateItem } from '../../../interfaces/items/date.interface';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
-import { simpleFormat } from '@firestitch/date';
+import { IFilterConfigDateItem } from '../../../interfaces/items/date.interface';
+import { BaseItem } from '../base-item';
 
 
 export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
   public maxYear: number;
-  public mode: ItemDateMode
+  public mode: ItemDateMode;
 
   public get value() {
     const value = clone(this.model);
@@ -37,7 +38,7 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
     return {
       [this.name]: value ? simpleFormat(value) : undefined,
-    }
+    };
   }
 
   protected _validateModel() {

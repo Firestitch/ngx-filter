@@ -12,13 +12,10 @@ import { restoreItems } from '../../helpers/restore-items';
 import { FsFilterPersistance } from '../../interfaces/config.interface';
 import { FsFilterItemsStore } from '../items-store.service';
 
-const FILTER_STORE_KEY = 'fs-filter-persist';
-
 
 @Injectable()
 export class PersistanceParamsController extends FsPersistanceStore<FsFilterPersistance> {
 
-  protected STORE_KEY = FILTER_STORE_KEY;
   protected _paramsCase: 'snake' | 'camel';
 
   constructor(

@@ -3,16 +3,14 @@ import {
   ChangeDetectorRef,
   Component,
   KeyValueDiffers,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil, debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
 import { TextItem } from '../../../models/items/text-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -21,14 +19,13 @@ import { TextItem } from '../../../models/items/text-item';
   styleUrls: ['./text.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TextComponent extends BaseItemComponent<TextItem> implements OnInit, OnDestroy {
+export class TextComponent extends BaseItemComponent<TextItem> implements OnInit {
 
   public textControl = new UntypedFormControl();
-  public destroy$ = new Subject();
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }
@@ -36,11 +33,6 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
   public ngOnInit(): void {
     this._listenControlValueChanges();
     this._listenModelChanges();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next(null);
-    this.destroy$.complete();
   }
 
   private _listenControlValueChanges(): void {
@@ -62,7 +54,7 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
       )
       .subscribe(() => {
         this.textControl.setValue(this.item.model, { emitEvent: false });
-      })
+      });
   }
 
 }

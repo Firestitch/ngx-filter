@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
+
 import { AutocompleteItem } from '../../../models/items/autocomplete-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
@@ -29,6 +30,6 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
   };
 
   public fetch = (keyword): Observable<any> => {
-    return this.item.valuesFn(keyword, this.item.filter);
+    return this.item.valuesFn(keyword, this.item.filter) as Observable<any>;
   };
 }

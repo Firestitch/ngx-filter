@@ -40,9 +40,8 @@ export class FsFilterItemsStore implements OnDestroy {
   public filter: FilterComponent;
 
   private _ready$ = new BehaviorSubject(false);
-  private _items: BaseItem<IFilterConfigItem>[] = [];
   private _visibleItems$ = new BehaviorSubject<BaseItem<IFilterConfigItem>[]>([]);
-  private _itemsByName = new Map<string, BaseItem<IFilterConfigItem>>();
+  private _items = new Map<string, BaseItem<IFilterConfigItem>>();
 
   private _itemsValuesLoaded = false;
   private _hasKeyword = false;
@@ -57,11 +56,11 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
-    return this._items;
+    return Array.from(this._items.values());
   }
 
   public get itemNames(): string[] {
-    return this._items.map((item) => item.name);
+    return this.items.map((item) => item.name);
   }
 
   public get visibleItems(): BaseItem<IFilterConfigItem>[] {
@@ -96,13 +95,12 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public setConfig(config) {
-    this._itemsByName.clear();
     this._config = config;
     this.initItems(config.items);
   }
 
   public getItemByName(name: string): BaseItem<IFilterConfigItem> {
-    return this._itemsByName.get(name);
+    return this._items.get(name);
   }
 
   public initItems(items: IFilterConfigItem[]) {
@@ -253,7 +251,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
     if (onlyPresented) {
       return pickBy(params, (val) => {
-        return val !== void 0;
+        return val !== undefined;
       });
     }
 
@@ -305,7 +303,7 @@ export class FsFilterItemsStore implements OnDestroy {
     this.sortByItem?.destroy();
     this.sortDirectionItem?.destroy();
 
-    this._items = [];
+    this._items.clear();
     this.sortByItem = null;
     this.sortDirectionItem = null;
   }
@@ -327,28 +325,28 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   private _createItems(items: IFilterConfigItem[]) {
-    this._items = items
-      .filter((item) => !item.disable)
-      .filter((item) => {
-        if (this._itemsByName.has(item.name)) {
-          throw Error('Filter init error. Items name must be unique.');
-        } else {
-          this._itemsByName.set(item.name, null);
+    this._items = new Map(
+      items
+        .filter((item) => !item.disable)
+        .filter((item) => {
+          if (this._items.has(item.name)) {
+            throw Error('Filter init error. Items name must be unique.');
+          }
 
           return true;
-        }
-      })
-      .map((item) => {
-        const filterItem = createFilterItem(item, { case: this._config.case }, this.filter);
+        })
+        .map((item) => {
+          const filterItem = createFilterItem(item, { case: this._config.case }, this.filter);
 
-        if (filterItem.type === ItemType.Keyword) {
-          this._hasKeyword = true;
-        }
+          if (filterItem.type === ItemType.Keyword) {
+            this._hasKeyword = true;
+          }
 
-        this._itemsByName.set(item.name, filterItem);
+          this._items.set(item.name, filterItem);
 
-        return filterItem;
-      });
+          return [item.name, filterItem];
+        }),
+    );
 
     this._createSortingItems();
   }

@@ -1,5 +1,7 @@
 <fs-label-field>
-  <mat-checkbox [(ngModel)]="item.model">
+  <mat-checkbox 
+      [(ngModel)]="item.model" 
+      [name]="item.name">
     {{ item.label }}
   </mat-checkbox>
 </fs-label-field>

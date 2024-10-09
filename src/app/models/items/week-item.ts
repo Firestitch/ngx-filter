@@ -101,7 +101,9 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     return formatPeriodObject(this.value);
   }
 
-  protected _validateModel() { }
+  protected _validateModel() { 
+    //
+  }
 
   protected _setModel(value) {
     if (value) {

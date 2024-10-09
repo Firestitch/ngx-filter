@@ -8,11 +8,16 @@ import { BaseItem } from './base-item';
 
 export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
-  public checked: unknown;
-  public unchecked: unknown;
+  private _checked;
+  private _unchecked;
 
-  public static create(config: IFilterConfigCheckboxItem, filter: FilterComponent) {
-    return new CheckboxItem(config, null, filter);
+  constructor(
+    config: IFilterConfigCheckboxItem, _additionalConfig, filter: FilterComponent,
+  ) {  
+    super(config, null, filter);
+    this.defaultValue = config.default === undefined ? this._unchecked : toString(this.defaultValue);
+    this._checked = config.checked ? toString(config.checked) : true;
+    this._unchecked = config.unchecked ? toString(config.unchecked) : false;
   }
 
   public get isTypeCheckbox(): boolean {
@@ -20,11 +25,11 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
   }
 
   public get isChipVisible() {
-    return this.value === (this as any).checked;
+    return this.value === this._checked;
   }
 
   public get value() {
-    const value = this.model ? this.checked : this.unchecked;
+    const value = this.model ? this._checked || 'true' : this._unchecked;
 
     if (!value) {
       return undefined;
@@ -51,20 +56,9 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     //
   }
 
-  protected _parseConfig(item: IFilterConfigCheckboxItem) {
-    this.checked = item.checked;
-    this.unchecked = item.unchecked;
-
-    this.checked = item.checked ? toString(item.checked) : true;
-    this.unchecked = item.unchecked ? toString(item.unchecked) : false;
-    this.defaultValue = item.default === undefined ? this.unchecked : toString(this.defaultValue);
-
-    super._parseConfig(item);
-  }
-
   protected _init() {
-    if (this.model === undefined) {
-      this._model = this.checked === this.defaultValue;
+    if (this.model === undefined && this.defaultValue !== undefined) {
+      this._model = this._checked === this.defaultValue;
     }
   }
 

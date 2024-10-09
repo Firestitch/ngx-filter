@@ -1,28 +1,30 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  KeyValueDiffers,
   Component,
-  ViewChild,
   DoCheck,
+  KeyValueDiffers,
+  OnChanges,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { BaseItemComponent } from '../base-item/base-item.component';
-import { SelectSimpleComponent } from './simple/simple.component';
-import { SelectMultipleComponent } from './multiple/multiple.component';
 import { BaseSelectItem } from '../../../models/items/select/base-select-item';
 import { MultipleSelectItem } from '../../../models/items/select/multiple-select-item';
 import { SimpleSelectItem } from '../../../models/items/select/simple-select-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
+
+import { SelectMultipleComponent } from './multiple/multiple.component';
+import { SelectSimpleComponent } from './simple/simple.component';
 
 @Component({
   selector: 'filter-item-select',
   templateUrl: './select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent extends BaseItemComponent<BaseSelectItem> implements DoCheck {
+export class SelectComponent extends BaseItemComponent<BaseSelectItem> implements DoCheck, OnChanges {
 
   @ViewChild('selectItem')
   public selectedItem: SelectSimpleComponent | SelectMultipleComponent;
@@ -42,7 +44,7 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }

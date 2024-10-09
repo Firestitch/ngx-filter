@@ -3,15 +3,16 @@ import {
   ChangeDetectorRef,
   Component,
   KeyValueDiffers,
-  OnInit
+  OnInit,
 } from '@angular/core';
-import { BaseItemComponent } from '../base-item/base-item.component';
-import { ItemType } from '../../../enums/item-type.enum';
+
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
-import { BaseDateItem } from '../../../models/items/date/base-date-item';
+import { ItemType } from '../../../enums/item-type.enum';
+import { PickerViewType } from '../../../enums/picker-view-type.enum';
 import { DateItem } from '../../../models/items/date-item';
 import { DateTimeItem } from '../../../models/items/date-time-item';
-import { PickerViewType } from '../../../enums/picker-view-type.enum';
+import { BaseDateItem } from '../../../models/items/date/base-date-item';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 
 @Component({
@@ -30,17 +31,13 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef
+    protected _cd: ChangeDetectorRef,
   ) {
     super(_kvDiffers, _cd);
   }
 
   public ngOnInit() {
-    if (this.item.type === ItemType.DateTime) {
-      this.viewType = PickerViewType.DateTime;
-    } else {
-      this.viewType = PickerViewType.Date;
-    }
+    this.viewType = this.item.type === ItemType.DateTime ? PickerViewType.DateTime : PickerViewType.Date;
 
     if ((this.item as BaseDateItem).mode === ItemDateMode.ScrollMonthYear) {
       this.showDay = false;

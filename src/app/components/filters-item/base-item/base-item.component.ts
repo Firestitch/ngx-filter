@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../../interfaces/config.interface';
@@ -40,8 +40,8 @@ implements DoCheck, OnChanges, OnDestroy {
 
   protected _item: T;
   protected _kvDiffer: KeyValueDiffer<string, any>;
-  protected _destroy$ = new Subject();
 
+  private _destroy$ = new Subject();
   private _debouncer$ = new Subject();
 
   constructor(
@@ -51,6 +51,15 @@ implements DoCheck, OnChanges, OnDestroy {
     this._kvDiffer = this._kvDiffers.find(this.item || {}).create();
     this.listenWithDebounce();
   }
+
+  public get destroy$(): Observable<any> {
+    return this._destroy$.asObservable();
+  }
+
+  public destroy() {
+    return this._destroy$.asObservable();
+  }
+
   public ngDoCheck(): void {
     if (this._kvDiffer) {
       const changes = this._kvDiffer.diff(this.item);
