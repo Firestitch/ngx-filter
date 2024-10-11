@@ -96,6 +96,13 @@
   .button-filters,
   .button-reload {
     display: flex;
+    width: 40px;
+    padding: 8px;
+    height: 40px;
+
+    ::ng-deep svg {
+      display: flex;
+    }
   }
 }
 

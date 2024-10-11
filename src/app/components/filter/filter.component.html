@@ -74,7 +74,9 @@
             class="button-filters"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             [color]="config.button.color">
-          <mat-icon *ngIf="config.button.icon">{{config.button.icon}}</mat-icon>
+          @if(config.button.icon) { 
+            <mat-icon svgIcon="filterOutline"></mat-icon>
+          }
           {{ config.button.label }}
         </a>
       </ng-container>

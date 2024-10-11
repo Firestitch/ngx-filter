@@ -10,8 +10,8 @@ import {
   IFilterConfigItem,
 } from './../interfaces/config.interface';
 
-export const SORT_BY_FIELD = 'sortName';
-export const SORT_DIRECTION_FIELD = 'sortDirection';
+export const SortByField = 'sortName';
+export const SortDirectionField = 'sortDirection';
 
 
 export class FsFilterConfig {
@@ -24,7 +24,6 @@ export class FsFilterConfig {
   public chips = false;
   public sortValues: any[] = null;
   public sort: Sort = null;
-  // public sortDirection = null;
   public queryParam = false;
   public init: (query?: any, sort?: FilterSort | null, filter?) => void;
   public change: ChangeFn;
@@ -84,7 +83,7 @@ export class FsFilterConfig {
     }
 
     if (this.button.icon === undefined) {
-      this.button.icon = 'filter_alt';
+      this.button.icon = 'filterOutline';
     }
 
     if (this.button.style === undefined) {

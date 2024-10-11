@@ -16,7 +16,7 @@ import {
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
-import { FsFilterConfig, SORT_BY_FIELD, SORT_DIRECTION_FIELD } from '../models/filter-config';
+import { FsFilterConfig, SortByField, SortDirectionField } from '../models/filter-config';
 import { BaseItem } from '../models/items/base-item';
 import { BaseDateRangeItem } from '../models/items/date-range/base-date-range-item';
 import { RangeItem } from '../models/items/range-item';
@@ -404,7 +404,7 @@ export class FsFilterItemsStore implements OnDestroy {
   private _createSortingItems(): void {
     if (this._config.sortValues?.length > 0) {
       const sortByItem = {
-        name: SORT_BY_FIELD,
+        name: SortByField,
         type: ItemType.Select,
         label: 'Sort by',
         values: this._config.sortValues,
@@ -422,7 +422,7 @@ export class FsFilterItemsStore implements OnDestroy {
       );
 
       const sortDirectionItem = {
-        name: SORT_DIRECTION_FIELD,
+        name: SortDirectionField,
         type: ItemType.Select,
         label: 'Sort direction',
         values: [
