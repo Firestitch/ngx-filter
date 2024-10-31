@@ -80,8 +80,7 @@
                     [imageWidth]="childAction.maxWidth"
                     [imageHeight]="childAction.maxHeight"
                     (select)="childAction.fileSelected($event)"
-                    [hidden]="(childAction.visible$ | async) === false"
-                    (click)="childAction.click($event)">
+                    [hidden]="(childAction.visible$ | async) === false">
                   <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
                   {{childAction.label}}
                 </ng-template>
