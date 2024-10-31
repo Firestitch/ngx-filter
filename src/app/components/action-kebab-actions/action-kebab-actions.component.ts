@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
 import { Action } from '../../models/action.model';
 
 
@@ -13,4 +14,9 @@ export class FsFilterActionKebabActionsComponent {
   @Input()
   public kebabActions: Action[];
 
+  public actionClick(action, event: MouseEvent) {
+    if(action.click) {
+      action.click(event);
+    }
+  }
 }

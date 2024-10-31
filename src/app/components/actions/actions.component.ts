@@ -37,4 +37,10 @@ export class FsFilterActionsComponent {
     }
   }
 
+  public actionClick(action, event: MouseEvent) {
+    if(action.click) {
+      action.click(event);
+    }
+  }
+
 }
