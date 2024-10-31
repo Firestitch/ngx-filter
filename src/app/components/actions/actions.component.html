@@ -25,28 +25,68 @@
           <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
             <fs-menu-group [label]="childAction.label">
               <ng-container *ngFor="let subAction of childAction.items">
-                <ng-template
-                    fs-menu-item
-                    [link]="subAction.routerLink?.link"
-                    [queryParams]="subAction.routerLink?.queryParams"
-                    [hidden]="(subAction.visible$ | async) === false"
-                    (click)="subAction.click($event)">
-                  <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
-                  {{subAction.label}}
-                </ng-template>
+                <ng-container [ngSwitch]="subAction.mode">
+                  <ng-container *ngSwitchCase="'menu'">
+                    <ng-template
+                        fs-menu-item
+                        [link]="subAction.routerLink?.link"
+                        [queryParams]="subAction.routerLink?.queryParams"
+                        [hidden]="(subAction.visible$ | async) === false"
+                        (click)="subAction.click($event)">
+                      <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
+                      {{subAction.label}}
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'file'">
+                    <ng-template
+                        fs-menu-file-item
+                        [multiple]="subAction.multiple"
+                        [accept]="subAction.accept || '*'"
+                        [minWidth]="subAction.minWidth"
+                        [minHeight]="subAction.minHeight"
+                        [imageWidth]="subAction.maxWidth"
+                        [imageHeight]="subAction.maxHeight"
+                        (select)="subAction.fileSelected($event)"
+                        [hidden]="(subAction.visible$ | async) === false"
+                        (click)="subAction.click($event)">
+                      <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
+                      {{subAction.label}}
+                    </ng-template>
+                  </ng-container>
+                </ng-container>
               </ng-container>
             </fs-menu-group>
           </ng-container>
           <ng-template #simpleMenuItem>
-            <ng-template
-                fs-menu-item
-                [link]="childAction.routerLink?.link"
-                [queryParams]="childAction.routerLink?.queryParams"
-                [hidden]="(childAction.visible$ | async) === false"
-                (click)="childAction.click($event);">
-              <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
-              {{childAction.label}}
-            </ng-template>
+            <ng-container [ngSwitch]="childAction.mode">
+              <ng-container *ngSwitchCase="'menu'">
+                <ng-template
+                    fs-menu-item
+                    [link]="childAction.routerLink?.link"
+                    [queryParams]="childAction.routerLink?.queryParams"
+                    [hidden]="(childAction.visible$ | async) === false"
+                    (click)="childAction.click($event);">
+                  <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
+                  {{childAction.label}}
+                </ng-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'file'">
+                <ng-template
+                    fs-menu-file-item
+                    [multiple]="childAction.multiple"
+                    [accept]="childAction.accept || '*'"
+                    [minWidth]="childAction.minWidth"
+                    [minHeight]="childAction.minHeight"
+                    [imageWidth]="childAction.maxWidth"
+                    [imageHeight]="childAction.maxHeight"
+                    (select)="childAction.fileSelected($event)"
+                    [hidden]="(childAction.visible$ | async) === false"
+                    (click)="childAction.click($event)">
+                  <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
+                  {{childAction.label}}
+                </ng-template>
+              </ng-container>
+            </ng-container>
           </ng-template>
         </ng-container>
       </fs-menu>

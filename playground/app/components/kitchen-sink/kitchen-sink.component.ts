@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, On
 
 import { filter, nameValue } from '@firestitch/common';
 import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
+import { FsFile } from '@firestitch/file';
 import {
   ActionMode,
   ActionType,
@@ -15,6 +16,7 @@ import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
 
 import { shuffle } from 'lodash-es';
+import { MenuActionMode } from 'src/app/enums';
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 import { SimpleSelectItem } from '../../../../src/app/models/items/select/simple-select-item';
@@ -415,12 +417,28 @@ export class KitchenSinkComponent implements OnInit {
             },
           },
           {
+            label: 'File Upload',
+            mode: MenuActionMode.File,
+            multiple: true,
+            fileSelected: (files: FsFile[]) => {
+              console.log('File Upload', files);
+            },
+          },
+          {
             label: 'Group 1',
             items: [
               {
                 label: 'Sub Item',
                 click: () => {
                   console.log('Group 1 Sub Item clicked');
+                },
+              },
+              {
+                label: 'File Upload',
+                mode: MenuActionMode.File,
+                multiple: true,
+                fileSelected: (files: FsFile[]) => {
+                  console.log('File Upload', files);
                 },
               },
             ],

@@ -1,7 +1,11 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { MenuActionMode } from '../enums';
 import {
-  FsFilterAction, FsFilterActionClickFn, FsFilterActionShowFn,
+  FsFilterActionClickFn, FsFilterActionShowFn,
+  FsFilterFileActionErrorFn,
+  FsFilterFileActionSelectFn,
+  IFsFilterMenuActionFileItem,
   IFsFilterMenuActionGroupItem,
   IFsFilterMenuActionItem, IFsFilterMenuActionLink,
 } from '../interfaces/action.interface';
@@ -11,6 +15,16 @@ export class ActionMenuItem {
 
   public icon: string;
   public label: string;
+  public mode: MenuActionMode;
+  public fileSelected: FsFilterFileActionSelectFn;
+  public fileError: FsFilterFileActionErrorFn;
+  public multiple: boolean;
+  public accept: string;
+  public minWidth: number;
+  public minHeight: number;
+  public maxWidth: number;
+  public maxHeight: number;
+  public imageQuality: number;
   public click: FsFilterActionClickFn;
   public routerLink: IFsFilterMenuActionLink;
   public items: ActionMenuItem[] = [];
@@ -21,7 +35,7 @@ export class ActionMenuItem {
   private _disabled$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    config: FsFilterAction = {},
+    config: IFsFilterMenuActionGroupItem | IFsFilterMenuActionItem = {},
     private _parent?: ActionMenuItem,
   ) {
     this._init(config);
@@ -74,10 +88,28 @@ export class ActionMenuItem {
     this._visible$.next(!!numberOfVisibleChildren);
   }
 
-  private _init(config: IFsFilterMenuActionGroupItem | IFsFilterMenuActionItem) {
+  private _initFile(config: IFsFilterMenuActionFileItem): void {
+    this.multiple = config.multiple;
+    this.accept = config.accept;
+    this.minWidth = config.minWidth;
+    this.minHeight = config.minHeight;
+    this.maxWidth = config.maxWidth;
+    this.maxHeight = config.maxHeight;
+    this.imageQuality = config.imageQuality;
+    this.fileSelected = config.fileSelected;
+  }
+
+  private _init(
+    config: IFsFilterMenuActionGroupItem | IFsFilterMenuActionItem | IFsFilterMenuActionFileItem,
+  ) {
     this.label = config.label;
     this.icon = config.icon;
+    this.mode = config.mode || MenuActionMode.Menu;
     this._showFn = config.show;
+
+    if (this.mode === MenuActionMode.File) {
+      this._initFile(config as IFsFilterMenuActionFileItem);
+    }
 
     if ('items' in config) {
       this._isGroup = true;

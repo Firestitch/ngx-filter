@@ -2,6 +2,7 @@ import { ThemePalette } from '@angular/material/core';
 
 import { FsFile } from '@firestitch/file';
 
+import { MenuActionMode } from '../enums';
 import { ActionMode } from '../enums/action-mode.enum';
 import { ActionType } from '../enums/action-type.enum';
 
@@ -15,6 +16,7 @@ export type FsFilterActionDisabledFn = () => boolean;
 export type FsFilterActionClickFn = (event?: MouseEvent) => void;
 export type FsFilterFileActionSelectFn = (file: FsFile | FsFile[]) => void;
 export type FsFilterFileActionErrorFn = (error: unknown) => void;
+export type FsFilterMenuAction = IFsFilterMenuActionGroupItem | IFsFilterMenuActionItem | IFsFilterMenuActionFileItem;
 
 
 interface IFsFilterBaseAction {
@@ -50,7 +52,7 @@ export interface IFsFilterSelectButtonAction extends IFsFilterBaseAction {
 export interface IFsFilterMenuAction extends IFsFilterBaseAction {
   mode: ActionMode.Menu;
   label?: string;
-  items: XOR<IFsFilterMenuActionGroupItem, IFsFilterMenuActionItem>[];
+  items: FsFilterMenuAction[];
 }
 
 export interface IFsFilterFileAction extends IFsFilterBaseAction {
@@ -72,7 +74,8 @@ export interface IFsFilterMenuActionGroupItem {
   label?: string;
   icon?: string;
   show?: FsFilterActionShowFn;
-  items: IFsFilterMenuActionItem[];
+  items: FsFilterMenuAction[];
+  mode?: MenuActionMode.Group;
 }
 
 export interface IFsFilterMenuActionItem {
@@ -81,6 +84,20 @@ export interface IFsFilterMenuActionItem {
   click?: FsFilterActionClickFn;
   link?: IFsFilterMenuActionLink;
   show?: FsFilterActionShowFn;
+  mode?: MenuActionMode;
+}
+
+export interface IFsFilterMenuActionFileItem extends IFsFilterMenuActionItem {
+  mode?: MenuActionMode.File;
+  fileSelected?: FsFilterFileActionSelectFn;
+  fileError?: FsFilterFileActionErrorFn;
+  multiple?: boolean;
+  accept?: string;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+  imageQuality?: number;
 }
 
 export interface IFsFilterMenuActionLink {

@@ -24,6 +24,7 @@ export {
   IFsFilterButtonAction,
   IFsFilterFileAction,
   IFsFilterMenuAction,
+  IFsFilterMenuActionFileItem,
   IFsFilterMenuActionGroupItem,
   IFsFilterMenuActionItem,
   IFsFilterMenuActionLink,
@@ -54,7 +55,7 @@ export { ActionType, ButtonStyle } from './app/enums';
 export { ActionMode } from './app/enums/action-mode.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
 export { ItemType } from './app/enums/item-type.enum';
-
+export { MenuActionMode } from './app/enums/menu-action-mode.enum';
 // Models
 export { AutocompleteChipsItem } from './app/models/items/autocomplete-chips-item';
 export { AutocompleteItem } from './app/models/items/autocomplete-item';
