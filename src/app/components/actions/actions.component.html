@@ -32,7 +32,7 @@
                         [link]="subAction.routerLink?.link"
                         [queryParams]="subAction.routerLink?.queryParams"
                         [hidden]="(subAction.visible$ | async) === false"
-                        (click)="subAction.click($event)">
+                        (click)="subAction?.click($event)">
                       <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
                       {{subAction.label}}
                     </ng-template>
@@ -48,7 +48,7 @@
                         [imageHeight]="subAction.maxHeight"
                         (select)="subAction.fileSelected($event)"
                         [hidden]="(subAction.visible$ | async) === false"
-                        (click)="subAction.click($event)">
+                        (click)="subAction?.click($event)">
                       <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
                       {{subAction.label}}
                     </ng-template>
