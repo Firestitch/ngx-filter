@@ -3,8 +3,9 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+
 import { MatSelect } from '@angular/material/select';
 
 import { MultipleSelectItem } from '../../../../models/items/select/multiple-select-item';
@@ -24,7 +25,9 @@ export class SelectMultipleComponent {
   @ViewChild('select', { static: true })
   public select: MatSelect;
 
-  constructor(public cd: ChangeDetectorRef) {}
+  constructor(
+    private _cd: ChangeDetectorRef,
+  ) {}
 
   public changed() {
 
@@ -44,6 +47,10 @@ export class SelectMultipleComponent {
 
   public close() {
     this.select.close();
+  }
+
+  public markForCheck() {
+    this._cd.markForCheck();
   }
 
   public isolateChange(filter) {

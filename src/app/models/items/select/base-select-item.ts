@@ -1,8 +1,8 @@
-import { BaseItem } from '../base-item';
 import {
   IFilterConfigSelectIsolate,
-  IFilterConfigSelectItem
+  IFilterConfigSelectItem,
 } from '../../../interfaces/items/select.interface';
+import { BaseItem } from '../base-item';
 
 export interface IFilterIsolate extends IFilterConfigSelectIsolate {
   enabled: boolean;
@@ -14,19 +14,21 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
   public multiple: boolean;
   public isolate: IFilterIsolate;
 
-  protected _parseConfig(item: IFilterConfigSelectItem) {
-    this.multiple = item.multiple;
-    this.children = item.children;
+  constructor(
+    itemConfig: IFilterConfigSelectItem,
+    _persistedValues: any,
+    _filter,
+  ) {
+    super(itemConfig, _persistedValues, _filter);
+    this.multiple = itemConfig.multiple;
+    this.children = itemConfig.children;
 
-    // TODO nullish
-    if (item.isolate) {
+    if (itemConfig.isolate) {
       this.isolate = {
-        ...item.isolate,
-        enabled: false,
+        ...itemConfig.isolate,
+        enabled: true,
       };
     }
-
-    super._parseConfig(item);
   }
 
   protected _init() {
@@ -35,13 +37,14 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
     }
 
     // TODO Refactor
-     if (this.isolate) {
+    if (this.isolate) {
       this.values = this.values.filter((item) => {
         if (Array.isArray(this.isolate.value)) {
           return (this.isolate.value as unknown[]).indexOf(item.value) === -1;
-        } else {
-          return item.value !== this.isolate.value;
         }
+ 
+        return item.value !== this.isolate.value;
+        
       });
     }
   }

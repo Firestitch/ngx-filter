@@ -27,7 +27,9 @@ import { ActionsController } from '../../classes/actions-controller';
 import { objectsAreEquals } from '../../helpers/compare';
 import { IFilterSavedFilter, ISortingChangeEvent } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
-import { FilterConfig, FilterSort, IFilterConfigItem, SortItem } from '../../interfaces/config.interface';
+import {
+  FilterConfig, FilterSort, IFilterConfigItem, SortItem,
+} from '../../interfaces/config.interface';
 import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';

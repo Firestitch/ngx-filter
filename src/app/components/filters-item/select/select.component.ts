@@ -22,9 +22,12 @@ import { SelectSimpleComponent } from './simple/simple.component';
 @Component({
   selector: 'filter-item-select',
   templateUrl: './select.component.html',
+  styleUrl: './select.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent extends BaseItemComponent<BaseSelectItem> implements DoCheck, OnChanges {
+export class SelectComponent 
+  extends BaseItemComponent<BaseSelectItem> 
+  implements DoCheck, OnChanges {
 
   @ViewChild('selectItem')
   public selectedItem: SelectSimpleComponent | SelectMultipleComponent;
@@ -63,7 +66,7 @@ export class SelectComponent extends BaseItemComponent<BaseSelectItem> implement
         this._cd.markForCheck();
 
         if (this.selectedItem) {
-          this.selectedItem.cd.markForCheck();
+          this.selectedItem.markForCheck();
         }
       }
     }

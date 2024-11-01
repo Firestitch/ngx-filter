@@ -24,7 +24,9 @@ export class SelectSimpleComponent {
   @ViewChild('select', { static: true }) 
   public select: MatSelect;
 
-  constructor(public cd: ChangeDetectorRef) {}
+  constructor(
+    private _cd: ChangeDetectorRef,
+  ) {}
 
   public changed() {
     if (this.item.isolate) {
@@ -34,5 +36,9 @@ export class SelectSimpleComponent {
 
   public isolateChange(filter) {
     filter.model = filter.isolate.enabled ? filter.isolate.value : null;
+  }
+
+  public markForCheck() {
+    this._cd.markForCheck();
   }
 }
