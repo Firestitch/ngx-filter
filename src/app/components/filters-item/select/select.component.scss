@@ -3,6 +3,7 @@
     .mat-mdc-form-field-hint-wrapper {
       padding-left: 0;
       padding-right: 0;
+      padding-top: 8px;
 
       mat-hint {       
         .mat-internal-form-field {
@@ -13,8 +14,9 @@
           }
 
           .mdc-label {
-            margin-left: 36px;
+            margin-left: 32px;
             font-size: smaller;
+            line-height: normal;
           }  
         }
       }
