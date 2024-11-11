@@ -14,9 +14,10 @@ import { BaseItem } from './base-item';
 
 export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
 
-  public options: { scale?: number };
-  public prefix: string;
-  public suffix: string;
+  public declare options: { scale?: number };
+  public declare prefix: string;
+  public declare suffix: string;
+
   public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
     return new RangeItem(config, additionalConfig, filter);
   }

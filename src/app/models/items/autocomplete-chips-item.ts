@@ -9,12 +9,12 @@ import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
 export class AutocompleteChipsItem
   extends BaseAutocompleteItem<IFilterConfigAutocompleteChipsItem> {
 
-  public chipImage: string;
-  public chipIcon: string;
-  public chipColor: string;
-  public chipIconColor: string;
-  public chipBackground: string;
-  public chipClass: string;
+  public declare chipImage: string;
+  public declare chipIcon: string;
+  public declare chipColor: string;
+  public declare chipIconColor: string;
+  public declare chipBackground: string;
+  public declare chipClass: string;
 
   public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {
     return new AutocompleteChipsItem(config, null, filter);

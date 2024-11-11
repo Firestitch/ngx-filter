@@ -8,7 +8,7 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
 
   public search: string;
 
-  public fetchOnFocus: boolean;
+  public declare fetchOnFocus: boolean;
 
   public get valuesFn() {
     return this._valuesFn;

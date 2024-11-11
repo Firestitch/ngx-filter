@@ -8,7 +8,7 @@ import { BaseItem } from './base-item';
 
 export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
-  public multiple: boolean;
+  public declare multiple: boolean;
 
   public static create(config: IFilterConfigChipsItem, filter: FilterComponent) {
     return new ChipsItem(config, null, filter);
@@ -40,7 +40,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     const value = this.value
       .map((item) => item.value)
       .join(',');
-    
+
     const name = this.name;
 
     return {

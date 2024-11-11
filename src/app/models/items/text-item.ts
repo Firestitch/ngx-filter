@@ -9,8 +9,8 @@ import { BaseItem } from './base-item';
 
 export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
-  public prefix: string;
-  public suffix: string;
+  public declare prefix: string;
+  public declare suffix: string;
 
   public static create(config: IFilterConfigTextItem, filter: FilterComponent) {
     return new TextItem(config, null, filter);

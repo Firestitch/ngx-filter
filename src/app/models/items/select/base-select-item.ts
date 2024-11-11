@@ -10,25 +10,22 @@ export interface IFilterIsolate extends IFilterConfigSelectIsolate {
 
 export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
 
-  public children: string;
-  public multiple: boolean;
-  public isolate: IFilterIsolate;
+  public declare children: string;
+  public declare multiple: boolean;
+  public declare isolate: IFilterIsolate;
 
-  constructor(
-    itemConfig: IFilterConfigSelectItem,
-    _persistedValues: any,
-    _filter,
-  ) {
-    super(itemConfig, _persistedValues, _filter);
+  protected _parseConfig(itemConfig: IFilterConfigSelectItem) {
     this.multiple = itemConfig.multiple;
     this.children = itemConfig.children;
 
     if (itemConfig.isolate) {
       this.isolate = {
         ...itemConfig.isolate,
-        enabled: true,
+        enabled: false,
       };
     }
+
+    super._parseConfig(itemConfig);
   }
 
   protected _init() {
@@ -42,9 +39,9 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
         if (Array.isArray(this.isolate.value)) {
           return (this.isolate.value as unknown[]).indexOf(item.value) === -1;
         }
- 
+
         return item.value !== this.isolate.value;
-        
+
       });
     }
   }

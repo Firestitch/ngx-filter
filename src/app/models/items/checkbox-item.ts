@@ -8,17 +8,8 @@ import { BaseItem } from './base-item';
 
 export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
-  private _checked;
-  private _unchecked;
-
-  constructor(
-    config: IFilterConfigCheckboxItem, _additionalConfig, filter: FilterComponent,
-  ) {  
-    super(config, null, filter);
-    this.defaultValue = config.default === undefined ? this._unchecked : toString(this.defaultValue);
-    this._checked = config.checked ? toString(config.checked) : true;
-    this._unchecked = config.unchecked ? toString(config.unchecked) : false;
-  }
+  private declare _checked;
+  private declare _unchecked;
 
   public get isTypeCheckbox(): boolean {
     return true;
@@ -56,8 +47,17 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     //
   }
 
+  protected _parseConfig(item: IFilterConfigCheckboxItem) {
+
+    this._checked = item.checked ? toString(item.checked) : true;
+    this._unchecked = item.unchecked ? toString(item.unchecked) : false;
+    this.defaultValue = item.default === undefined ? this._unchecked : toString(this.defaultValue);
+
+    super._parseConfig(item);
+  }
+
   protected _init() {
-    if (this.model === undefined && this.defaultValue !== undefined) {
+    if (this.model === undefined) {
       this._model = this._checked === this.defaultValue;
     }
   }

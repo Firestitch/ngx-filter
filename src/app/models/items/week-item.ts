@@ -15,7 +15,7 @@ import { BaseItem } from './base-item';
 
 export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
 
-  public seedDate: Date;
+  public declare seedDate: Date;
 
   public static create(config: IFilterConfigWeekItem, filter: FilterComponent) {
     return new WeekItem(config, null, filter);
@@ -101,7 +101,7 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     return formatPeriodObject(this.value);
   }
 
-  protected _validateModel() { 
+  protected _validateModel() {
     //
   }
 
