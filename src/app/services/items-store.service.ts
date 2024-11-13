@@ -294,6 +294,10 @@ export class FsFilterItemsStore implements OnDestroy {
   }
 
   public updateSortingItemsValues(items: SortItem[]) {
+    if (!this.sortByItem) {
+      return
+    }
+
     this.sortByItem.values = items;
   }
 
