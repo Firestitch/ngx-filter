@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { combineLatest, Observable, Subject, timer } from 'rxjs';
-import { distinctUntilChanged, map, mapTo, startWith, take, takeUntil } from 'rxjs/operators';
+import { map, mapTo, startWith } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { BaseItem } from '../../models/items/base-item';
@@ -26,7 +26,6 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<IFilterConfigItem>;
 
-  public itemVisible: boolean;
   public rangeItem: boolean;
 
   public chipDelayedRender$: Observable<boolean>;
@@ -49,21 +48,8 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
       || this.item.isTypeRange
       || this.item.isTypeDateTimeRange;
 
-    this.listenValueChangesForRanges();
-    this._updateVisibility();
-
     if (this.item.hasPendingValues) {
       this.item.loadAsyncValues(false);
-
-      this.item.values$
-        .pipe(
-          take(2),
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this._updateVisibility();
-          this._cdRef.markForCheck();
-        });
 
       this._initDelayRender();
     }
@@ -86,22 +72,6 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     } else {
       this.item.clear();
     }
-  }
-
-  public listenValueChangesForRanges() {
-    this.item.value$
-      .pipe(
-        distinctUntilChanged(),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this._updateVisibility();
-        this._cdRef.markForCheck();
-      });
-  }
-
-  private _updateVisibility() {
-    this.itemVisible = this.item.isChipVisible;
   }
 
   private _initDelayRender() {

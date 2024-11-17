@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 
-import { filter } from '@firestitch/common';
+import { filter, nameValue } from '@firestitch/common';
+import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 import { FsFile } from '@firestitch/file';
 import {
   ActionMode,
@@ -10,10 +11,13 @@ import {
   ItemType,
 } from '@firestitch/filter';
 
-import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
-import { MenuActionMode } from 'src/app/enums';
+import { BehaviorSubject, of } from 'rxjs';
+import { delay, map, tap } from 'rxjs/operators';
+
+import { shuffle } from 'lodash-es';
+import { ItemDateMode, MenuActionMode } from 'src/app/enums';
+import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item';
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
@@ -120,169 +124,169 @@ export class KitchenSinkComponent implements OnInit {
         this.sort = sort;
       },
       items: [
-        // {
-        //   name: 'keyword',
-        //   type: ItemType.Keyword,
-        //   label: 'Search',
-        // },
-        // {
-        //   name: 'notUsed',
-        //   type: ItemType.Select,
-        //   label: 'Not Used',
-        //   default: '1',
-        //   values: () => [],
-        //   disable: true,
-        // },
-        // {
-        //   name: 'paymentMethodId',
-        //   label: 'Payment Method',
-        //   type: ItemType.AutoComplete,
-        //   hide: true,
-        //   values: () => {
-        //     return of([]);
-        //   },
-        // },
-        // {
-        //   name: 'simpleSelect',
-        //   type: ItemType.Select,
-        //   label: 'Simple Select',
-        //   disableQueryParams: true,
-        //   chipLabel: 'Special Label',
-        //   change: (item, filterComponent: FilterComponent) => {
-        //     const filterItem = filterComponent.getItem('multiselect');
-        //     filterItem.values.pop();
-        //     setTimeout(() => {
-        //       filterItem.clear();
-        //     }, 2000);
-        //   },
-        //   values: () => {
+        {
+          name: 'keyword',
+          type: ItemType.Keyword,
+          label: 'Search',
+        },
+        {
+          name: 'notUsed',
+          type: ItemType.Select,
+          label: 'Not Used',
+          default: '1',
+          values: () => [],
+          disable: true,
+        },
+        {
+          name: 'paymentMethodId',
+          label: 'Payment Method',
+          type: ItemType.AutoComplete,
+          hide: true,
+          values: () => {
+            return of([]);
+          },
+        },
+        {
+          name: 'simpleSelect',
+          type: ItemType.Select,
+          label: 'Simple Select',
+          disableQueryParams: true,
+          chipLabel: 'Special Label',
+          change: (item, filterComponent: FilterComponent) => {
+            const filterItem = filterComponent.getItem('multiselect');
+            filterItem.values.pop();
+            setTimeout(() => {
+              filterItem.clear();
+            }, 2000);
+          },
+          values: () => {
 
-        //     return of([
-        //       { name: 'All', value: '__all' },
-        //       { name: 'Option 1', value: 1 },
-        //       { name: 'Option 2', value: 2 },
-        //       { name: 'Option 3', value: 3 },
-        //     ]);
-        //   },
-        // },
-        // {
-        //   name: 'groupSelect',
-        //   type: ItemType.Select,
-        //   label: 'Group Select',
-        //   disablePersist: true,
-        //   children: 'types',
-        //   values: () => {
-        //     return this.subject;
-        //   },
-        // },
-        // {
-        //   name: 'range',
-        //   type: ItemType.Range,
-        //   prefix: '$&nbsp;',
-        //   label: ['Min Price', 'Max Price'],
-        //   chipLabel: ['Custom Min Price', 'Custom Max Price'],
-        // },
-        // {
-        //   name: 'observableSelect',
-        //   type: ItemType.Select,
-        //   label: 'Observable Select',
-        //   clear: false,
-        //   values: () => {
-        //     this.filter.getItem('simple_select') as SimpleSelectItem;
+            return of([
+              { name: 'All', value: '__all' },
+              { name: 'Option 1', value: 1 },
+              { name: 'Option 2', value: 2 },
+              { name: 'Option 3', value: 3 },
+            ]);
+          },
+        },
+        {
+          name: 'groupSelect',
+          type: ItemType.Select,
+          label: 'Group Select',
+          disablePersist: true,
+          children: 'types',
+          values: () => {
+            return this.subject;
+          },
+        },
+        {
+          name: 'range',
+          type: ItemType.Range,
+          prefix: '$&nbsp;',
+          label: ['Min Price', 'Max Price'],
+          chipLabel: ['Custom Min Price', 'Custom Max Price'],
+        },
+        {
+          name: 'observableSelect',
+          type: ItemType.Select,
+          label: 'Observable Select',
+          clear: false,
+          values: () => {
+            this.filter.getItem('simpleSelect') as SimpleSelectItem;
 
-        //     return new BehaviorSubject(this.users)
-        //       .pipe(
-        //         map((users) => shuffle(nameValue(users, 'name', 'id'))),
-        //       );
-        //   },
-        // },
-        // {
-        //   name: 'autocompleteUserId',
-        //   label: 'Autocomplete User',
-        //   type: ItemType.AutoComplete,
-        //   clear: false,
-        //   change: (item) => {
-        //     console.log('Item Change', item);
-        //   },
-        //   init: (item) => {
-        //     console.log('Item Init', item);
-        //   },
-        //   values: (keyword) => {
-        //     return new BehaviorSubject(this.users)
-        //       .pipe(
-        //         tap(() => console.log('load autocomplete_user_id')),
-        //         map((users) => this._filterUsersByKeyword(users, keyword)),
-        //         map((users) => nameValue(users, 'name', 'id')),
-        //       );
-        //   },
-        // },
-        // {
-        //   name: 'autocompletechipsUserId',
-        //   label: 'Autocomplete Chips User',
-        //   type: ItemType.AutoCompleteChips,
-        //   chipImage: 'data.image',
-        //   chipColor: '#fff',
-        //   chipBackground: 'color',
-        //   values: (keyword) => {
-        //     return new BehaviorSubject(this.users)
-        //       .pipe(
-        //         tap(() => console.log('load autocomplete_user_id')),
-        //         map((users) => this._filterUsersByKeyword(users, keyword || '')),
-        //         map((users) => nameValue(users, 'name', 'id')),
-        //         map((users) => users.map((user, index) => {
-        //           user.data = {
-        //             image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
-        //           };
+            return new BehaviorSubject(this.users)
+              .pipe(
+                map((users) => shuffle(nameValue(users, 'name', 'id'))),
+              );
+          },
+        },
+        {
+          name: 'autocompleteUserId',
+          label: 'Autocomplete User',
+          type: ItemType.AutoComplete,
+          clear: false,
+          change: (item) => {
+            console.log('Item Change', item);
+          },
+          init: (item) => {
+            console.log('Item Init', item);
+          },
+          values: (keyword) => {
+            return new BehaviorSubject(this.users)
+              .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
+                map((users) => this._filterUsersByKeyword(users, keyword)),
+                map((users) => nameValue(users, 'name', 'id')),
+              );
+          },
+        },
+        {
+          name: 'autocompletechipsUserId',
+          label: 'Autocomplete Chips User',
+          type: ItemType.AutoCompleteChips,
+          chipImage: 'data.image',
+          chipColor: '#fff',
+          chipBackground: 'color',
+          values: (keyword) => {
+            return new BehaviorSubject(this.users)
+              .pipe(
+                tap(() => console.log('load autocomplete_user_id')),
+                map((users) => this._filterUsersByKeyword(users, keyword || '')),
+                map((users) => nameValue(users, 'name', 'id')),
+                map((users) => users.map((user, index) => {
+                  user.data = {
+                    image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
+                  };
 
-        //           return user;
-        //         })),
-        //         tap(console.log),
-        //       );
-        //   },
-        // },
-        // {
-        //   name: 'daysChips',
-        //   label: 'Weekdays',
-        //   type: ItemType.Chips,
-        //   multiple: true,
-        //   values: () => {
-        //     return of(this.weekdays)
-        //       .pipe(
-        //         map((weekdays) => nameValue(weekdays, 'name', 'id')),
-        //       );
-        //   },
-        // },
-        // {
-        //   name: 'date',
-        //   type: ItemType.Date,
-        //   label: 'Date',
-        //   clear: false,
-        // },
-        // {
-        //   name: 'scrollDate',
-        //   type: ItemType.Date,
-        //   label: 'Scroll Date',
-        //   maxYear: (new Date()).getFullYear(),
-        //   mode: ItemDateMode.ScrollMonthYear,
-        //   clear: false,
-        // },
-        // {
-        //   name: 'dateRange',
-        //   type: ItemType.DateRange,
-        //   label: ['From Date', 'To Date'],
-        //   clear: false,
-        // },
-        // {
-        //   name: 'week',
-        //   type: ItemType.Week,
-        //   label: 'Week',
-        //   default: getPeriodForDate(new Date(), getFirstDayOfFirstYearWeek(new Date()), 1),
-        // },
-        // {
-        //   name: 'checkbox',
-        //   type: ItemType.Checkbox,
-        //   label: 'Checkbox',
-        // },
+                  return user;
+                })),
+                tap(console.log),
+              );
+          },
+        },
+        {
+          name: 'daysChips',
+          label: 'Weekdays',
+          type: ItemType.Chips,
+          multiple: true,
+          values: () => {
+            return of(this.weekdays)
+              .pipe(
+                map((weekdays) => nameValue(weekdays, 'name', 'id')),
+              );
+          },
+        },
+        {
+          name: 'date',
+          type: ItemType.Date,
+          label: 'Date',
+          clear: false,
+        },
+        {
+          name: 'scrollDate',
+          type: ItemType.Date,
+          label: 'Scroll Date',
+          maxYear: (new Date()).getFullYear(),
+          mode: ItemDateMode.ScrollMonthYear,
+          clear: false,
+        },
+        {
+          name: 'dateRange',
+          type: ItemType.DateRange,
+          label: ['From Date', 'To Date'],
+          clear: false,
+        },
+        {
+          name: 'week',
+          type: ItemType.Week,
+          label: 'Week',
+          default: getPeriodForDate(new Date(), getFirstDayOfFirstYearWeek(new Date()), 1),
+        },
+        {
+          name: 'checkbox',
+          type: ItemType.Checkbox,
+          label: 'Checkbox',
+        },
         {
           name: 'state',
           type: ItemType.Select,
@@ -295,23 +299,23 @@ export class KitchenSinkComponent implements OnInit {
           ],
           isolate: { label: 'Show deleted', value: 'deleted' },
         },
-        // {
-        //   name: 'multiselect',
-        //   type: ItemType.Select,
-        //   label: 'Multi Select Status',
-        //   multiple: true,
-        //   values: [
-        //     { name: 'All', value: '__all' },
-        //     { name: 'Active', value: 'active' },
-        //     { name: 'Pending', value: 'pending' },
-        //     { name: 'Deleted', value: 'deleted' },
-        //   ],
-        // },
-        // {
-        //   name: 'maxPrice',
-        //   type: ItemType.Text,
-        //   label: 'Max Price',
-        // },
+        {
+          name: 'multiselect',
+          type: ItemType.Select,
+          label: 'Multi Select Status',
+          multiple: true,
+          values: [
+            { name: 'All', value: '__all' },
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' },
+          ],
+        },
+        {
+          name: 'maxPrice',
+          type: ItemType.Text,
+          label: 'Max Price',
+        },
       ],
       savedFilters: {
         load: () => {

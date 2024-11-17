@@ -2,11 +2,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
-  Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+
 import { MatSelect } from '@angular/material/select';
 
 @Component({
@@ -16,12 +15,16 @@ import { MatSelect } from '@angular/material/select';
 })
 export class SelectGroupsComponent {
 
-  @ViewChild('select', { static: true }) select: MatSelect;
+  @ViewChild('select', { static: true }) public select: MatSelect;
   @Input() public item;
 
   constructor(public cd: ChangeDetectorRef) {}
 
   public compare(o1, o2) {
     return o1 == o2;
+  }
+
+  public markForCheck() {
+    this.cd.markForCheck();
   }
 }

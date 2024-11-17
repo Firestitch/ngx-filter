@@ -114,8 +114,10 @@
 }
 
 fs-filter-chips {
-  margin-top: 4px;
-  display: block;
+  margin: 4px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 
