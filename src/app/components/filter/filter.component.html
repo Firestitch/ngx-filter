@@ -5,25 +5,25 @@
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       </div>
     </ng-container>
-
     <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
-
   <ng-container *ngIf="hasKeyword">
     <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
   </ng-container>
 </div>
-
 <ng-template #filterStatusBarChips>
   <ng-container *ngIf="statusBar">
-    <div class="filter-status-container" [ngClass]="{ 'has-status': !!filterStatus.textContent }">
-      <div class="filter-status" #filterStatus>
+    <div
+        class="filter-status-container"
+        [ngClass]="{ 'has-status': !!filterStatus.textContent }">
+      <div
+          class="filter-status"
+          #filterStatus>
         <ng-container *ngTemplateOutlet="statusBar.templateRef"></ng-container>
       </div>
     </div>
   </ng-container>
-
   <ng-container *ngIf="config.chips && hasFilterChips$ | async">
     <fs-filter-chips
       class="filter-chips"
@@ -31,16 +31,20 @@
     </fs-filter-chips>
   </ng-container>
 </ng-template>
-
 <ng-template #filterKeyword>
   <div class="filter-keyword">
     <ng-container *ngIf="(keywordVisible$ | async) && !keywordItem?.hide ">
       <mat-form-field
-          class="form-field-padless"
-          [ngClass]="search"
-          appearance="outline">
-        <span matPrefix class="icon">
-          <mat-icon matPrefix>search</mat-icon>
+          class="search-form-field form-field-padless form-field-lineless"
+          [ngClass]="{
+            'has-keyword': !!keyword
+          }">
+        <span
+            matPrefix
+            class="icon">
+          <mat-icon matPrefix>
+            search
+          </mat-icon>
         </span>
         <input
           #keywordMatInput
@@ -54,7 +58,6 @@
     </ng-container>
   </div>
 </ng-template>
-
 <ng-template #filterActions>
   <div class="filter-actions">
     <fs-filter-actions
@@ -64,7 +67,6 @@
     </fs-filter-actions>
   </div>
 </ng-template>
-
 <ng-template #filterToolbar>
   <div class="filter-toobar">
     <ng-container *ngIf="filtersBtnVisible$ | async">
@@ -74,24 +76,26 @@
             class="button-filters"
             (click)="changeVisibilityClick(!showFilterMenu, $event)"
             [color]="config.button.color">
-          @if(config.button.icon) { 
+          @if (config.button.icon) {
             <mat-icon svgIcon="filterOutline"></mat-icon>
           }
           {{ config.button.label }}
         </a>
       </ng-container>
-    </ng-container>    
+    </ng-container>
     <ng-container *ngIf="config.reload">
       <a
           mat-icon-button
           (click)="reload($event)"
           class="button-reload">
-        <mat-icon #reloadEl>refresh</mat-icon>
+        <mat-icon #reloadEl>
+          refresh
+        </mat-icon>
       </a>
     </ng-container>
     <ng-container *ngIf="config.autoReload">
-      <mat-slide-toggle 
-          name="autoReload" 
+      <mat-slide-toggle
+          name="autoReload"
           class="auto-reload"
           [(ngModel)]="autoReload">
         Auto refresh

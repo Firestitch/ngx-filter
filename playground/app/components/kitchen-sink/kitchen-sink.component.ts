@@ -89,7 +89,7 @@ export class KitchenSinkComponent implements OnInit {
       persist: false,
       inline: false,
       chips: true,
-      autofocus: true,
+      autofocus: false,
       queryParam: true,
       sorts: [
         { name: 'Name', value: 'name' },

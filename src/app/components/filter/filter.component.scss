@@ -55,10 +55,17 @@
     align-items: center;
     min-width: 0;
 
-    mat-form-field {
+    mat-form-field.search-form-field {
       max-width: 100%;
-      min-width: 100px;
-      margin-right: 6px;
+      width: 100px;
+      transition: width .2s ease-in-out;
+      margin-top: 0;
+      
+      &.has-keyword,
+      &.mat-focused {
+        width: 400px;
+        transition: width .2s ease-in-out;
+      }
 
       .icon {
         margin-left: 10px;
@@ -100,7 +107,12 @@
     padding: 8px;
     height: 40px;
 
+    mat-icon {
+      color: #626262;
+    }
+
     ::ng-deep svg {
+      color: #626262;
       display: flex;
     }
   }
