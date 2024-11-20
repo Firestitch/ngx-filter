@@ -69,8 +69,8 @@
 </ng-template>
 <ng-template #filterToolbar>
   <div class="filter-toobar">
-    <ng-container *ngIf="filtersBtnVisible$ | async">
-      <ng-container *ngIf="hasVisibleItemOrSorting">
+    @if (filtersBtnVisible$ | async) {
+      @if (hasVisibleItemOrSorting) {
         <a
             mat-icon-button
             class="button-filters"
@@ -81,25 +81,29 @@
           }
           {{ config.button.label }}
         </a>
-      </ng-container>
-    </ng-container>
-    <ng-container *ngIf="config.reload">
-      <a
-          mat-icon-button
-          (click)="reload($event)"
-          class="button-reload">
-        <mat-icon #reloadEl>
-          refresh
-        </mat-icon>
-      </a>
-    </ng-container>
-    <ng-container *ngIf="config.autoReload">
-      <mat-slide-toggle
-          name="autoReload"
-          class="auto-reload"
-          [(ngModel)]="autoReload">
-        Auto refresh
-      </mat-slide-toggle>
-    </ng-container>
+      }
+    }
+    @if (config.reload || config.autoReload) {
+      <div class="filter-reload">
+        @if (config.reload) {
+          <a
+              mat-icon-button
+              (click)="reload($event)"
+              class="button-reload">
+            <mat-icon #reloadEl>
+              refresh
+            </mat-icon>
+          </a>
+        }
+        @if (config.autoReload) {
+          <mat-slide-toggle
+              name="autoReload"
+              class="auto-reload"
+              [(ngModel)]="autoReload">
+            Auto refresh
+          </mat-slide-toggle>
+        }
+      </div>
+    }
   </div>
 </ng-template>

@@ -57,7 +57,7 @@
 
     mat-form-field.search-form-field {
       max-width: 100%;
-      width: 100px;
+      width: 95px;
       transition: width .2s ease-in-out;
       margin-top: 0;
       
@@ -69,11 +69,7 @@
 
       .icon {
         margin-left: 10px;
-
-        mat-icon {
-          font-size: 24px;
-          color: #626262;
-        }
+        color: #626262;
       }
 
       ::ng-deep {
@@ -95,10 +91,7 @@
   white-space: nowrap;
   display: flex;
   align-items: center;
-
-  .button-reload {
-    margin-left: -6px;
-  }
+  justify-content: space-between;
 
   .button-filters,
   .button-reload {
@@ -107,14 +100,13 @@
     padding: 8px;
     height: 40px;
 
-    mat-icon {
-      color: #626262;
-    }
-
     ::ng-deep svg {
-      color: #626262;
       display: flex;
     }
+  }
+
+  .filter-reload {
+    margin-right: 5px;
   }
 }
 
@@ -130,33 +122,6 @@ fs-filter-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-}
-
-
-@media screen and (min-width: 599px) {
-  .filter-actions {
-    margin-left: 10px;
-  }
-
-  .button-filters + fs-filter-actions:not(:empty) {
-    margin-left: 5px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .button-filters {
-    margin-left: 5px;
-
-    .filters-button {
-      font-size: 0;
-      padding: 0;
-      min-width: unset;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      box-shadow: unset !important;
-    }
-  }
 }
 
 @media screen and (min-width: 1200px) {
