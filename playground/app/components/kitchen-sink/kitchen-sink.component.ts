@@ -100,9 +100,9 @@ export class KitchenSinkComponent implements OnInit {
         direction: 'desc',
         value: 'name',
       },
-      // autoReload: {
-      //   seconds: 5,
-      // },
+      autoReload: {
+        seconds: 5,
+      },
       change: (query, sort) => {
         console.log('Change', query, sort);
         this.query = query;

@@ -57,7 +57,7 @@
 
     mat-form-field.search-form-field {
       max-width: 100%;
-      width: 95px;
+      width: 100px;
       transition: width .2s ease-in-out;
       margin-top: 0;
       
@@ -107,6 +107,16 @@
 
   .filter-reload {
     margin-right: 5px;
+    display: flex;
+    align-items: center;
+
+    .auto-reload {
+      margin-right: 5px;
+
+      span {
+        font-size: 80%;
+      }
+    }
   }
 }
 
