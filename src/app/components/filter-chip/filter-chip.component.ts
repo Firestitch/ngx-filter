@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { combineLatest, Observable, Subject, timer } from 'rxjs';
-import { map, mapTo, startWith } from 'rxjs/operators';
+import { map, mapTo, startWith, takeUntil } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { BaseItem } from '../../models/items/base-item';
@@ -48,6 +48,8 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
       || this.item.isTypeRange
       || this.item.isTypeDateTimeRange;
 
+    this.listenValueChangesForRanges();
+
     if (this.item.hasPendingValues) {
       this.item.loadAsyncValues(false);
 
@@ -72,6 +74,16 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     } else {
       this.item.clear();
     }
+  }
+
+  public listenValueChangesForRanges() {
+    this.item.valueChange$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._cdRef.markForCheck();
+      });
   }
 
   private _initDelayRender() {
