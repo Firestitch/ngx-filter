@@ -1,9 +1,11 @@
 fs-chip {
   cursor: pointer;
+  min-width: 0;
 }
 
 :host {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+  max-width: 100%;
 }
