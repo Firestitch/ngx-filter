@@ -54,18 +54,12 @@
     display: flex;
     align-items: center;
     min-width: 0;
+    margin-right: 3px;
 
     mat-form-field.search-form-field {
       max-width: 100%;
-      width: 100px;
-      transition: width .2s ease-in-out;
+      width: 250px;
       margin-top: 0;
-      
-      &.has-keyword,
-      &.mat-focused {
-        width: 400px;
-        transition: width .2s ease-in-out;
-      }
 
       .icon {
         margin-left: 10px;
@@ -91,7 +85,6 @@
   white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
   .button-filters,
   .button-reload {
@@ -106,7 +99,7 @@
   }
 
   .filter-reload {
-    margin-right: 5px;
+    margin-left: 10px;
     display: flex;
     align-items: center;
 

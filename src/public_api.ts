@@ -51,7 +51,7 @@ export {
 } from './app/interfaces/saved-filters.interface';
 
 // Enums
-export { ActionType, ButtonStyle } from './app/enums';
+export { ButtonStyle } from './app/enums';
 export { ActionMode } from './app/enums/action-mode.enum';
 export { ItemDateMode } from './app/enums/item-date-mode.enum';
 export { ItemType } from './app/enums/item-type.enum';

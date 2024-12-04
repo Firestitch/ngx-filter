@@ -8,7 +8,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsExampleModule } from '@firestitch/example';
 import { FsFileModule } from '@firestitch/file';
-import { FsFilterModule } from '@firestitch/filter';
+import { ButtonStyle, FsFilterModule } from '@firestitch/filter';
 import { FsFormModule } from '@firestitch/form';
 import { FsMessageModule } from '@firestitch/message';
 import { FsScrollbarModule } from '@firestitch/scrollbar';
@@ -26,7 +26,9 @@ import { AppMaterialModule } from './material.module';
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    FsFilterModule.forRoot(),
+    FsFilterModule.forRoot({
+      buttonStyle: ButtonStyle.Flat,
+    }),
     FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
     AppMaterialModule,
@@ -40,7 +42,7 @@ import { AppMaterialModule } from './material.module';
       { path: 'nofilters', component: NofiltersComponent },
       { path: 'dialog', component: DialogExampleComponent },
     ],
-      {}),
+    {}),
     FsFileModule.forRoot({
       allowDownload: true,
       allowRemove: true,
@@ -58,7 +60,7 @@ import { AppMaterialModule } from './material.module';
   providers: [
     { 
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, 
-      useValue: { floatLabel: 'auto', appearance: 'outline' } 
+      useValue: { floatLabel: 'auto', appearance: 'outline' }, 
     },
   ],
 })

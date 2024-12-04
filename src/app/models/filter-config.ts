@@ -22,6 +22,7 @@ export class FsFilterConfig {
   public inline = false;
   public autofocus = false;
   public chips = false;
+  public buttonStyle: ButtonStyle;
   public sortValues: any[] = null;
   public sort: Sort = null;
   public queryParam = false;
@@ -36,7 +37,6 @@ export class FsFilterConfig {
   public button: FilterButton;
   public items: IFilterConfigItem[];
   public actions: FsFilterAction[];
-
   public namespace: string; // for persistance
 
   constructor(data: FilterConfig = {}) {
@@ -44,27 +44,28 @@ export class FsFilterConfig {
   }
 
   private _init(data: FilterConfig = {}) {
-    this.load = data.load ?? true;
-    this.persist = data.persist;
-    this.savedFilters = data.savedFilters;
-    this.inline = data.inline ?? false;
-    this.autofocus = data.autofocus ?? false;
-    this.chips = data.chips ?? false;
-    this.sortValues = data.sorts;
-    this.sort = data.sort;
-    this.queryParam = data.queryParam ?? false;
-    this.init = data.init;
-    this.change = data.change;
-    this.reload = data.reload;
-    this.autoReload = data.autoReload;
-    this.clear = data.clear;
-    this.sortChange = data.sortChange;
-    this.case = data.case ?? 'camel';
-    this.reloadWhenConfigChanged = data.reloadWhenConfigChanged;
-    this.button = data.button;
-    this.items = data.items;
-    this.actions = data.actions;
-    this.case = data.case ?? 'camel';
+    Object.assign(this, {
+      load: data.load ?? true,
+      persist: data.persist,
+      savedFilters: data.savedFilters,
+      inline: data.inline ?? false,
+      autofocus: data.autofocus ?? false,
+      chips: data.chips ?? false,
+      sortValues: data.sorts,
+      sort: data.sort,
+      queryParam: data.queryParam ?? false,
+      init: data.init,
+      change: data.change,
+      reload: data.reload,
+      autoReload: data.autoReload,
+      clear: data.clear,
+      sortChange: data.sortChange,
+      case: data.case ?? 'camel',
+      reloadWhenConfigChanged: data.reloadWhenConfigChanged,
+      items: data.items,
+      actions: data.actions,
+      buttonStyle: data.buttonStyle || ButtonStyle.Raised,
+    });
 
     if (this.persist) {
       if (typeof this.persist === 'object') {
@@ -74,6 +75,17 @@ export class FsFilterConfig {
       }
     }
 
+    if (this.clear === undefined) {
+      this.clear = () => { 
+        //
+      };
+    }
+
+    this._initButton(data);
+  }
+
+  private _initButton(data: FilterConfig): void {
+    this.button = data.button;
     if (!this.button) {
       this.button = {};
     }
@@ -92,10 +104,6 @@ export class FsFilterConfig {
 
     if (this.button.color === undefined) {
       this.button.color = 'default';
-    }
-
-    if (this.clear === undefined) {
-      this.clear = () => { };
     }
   }
 }

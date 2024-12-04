@@ -1,7 +1,7 @@
-<ng-container [ngSwitch]="action.type">
+<ng-container [ngSwitch]="action.style">
   <button
       type="button"
-      *ngSwitchCase="ActionType.Icon"
+      *ngSwitchCase="ButtonStyle.Icon"
       mat-icon-button
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -10,11 +10,10 @@
       [tabIndex]="action.tabIndex">
     <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
   </button>
-
   <!-- Fab button -->
-  <button 
+  <button
       type="button"
-      *ngSwitchCase="ActionType.Fab"
+      *ngSwitchCase="ButtonStyle.Fab"
       mat-fab
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -23,11 +22,10 @@
       [tabIndex]="action.tabIndex">
     <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
   </button>
-
   <!-- Mini Fab button -->
-  <button 
+  <button
       type="button"
-      *ngSwitchCase="ActionType.MiniFab"
+      *ngSwitchCase="ButtonStyle.MiniFab"
       mat-mini-fab
       (click)="action.click && action.click($event)"
       [color]="action.color"
@@ -36,17 +34,16 @@
       [tabIndex]="action.tabIndex">
     <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
   </button>
-
-  <button 
+  <button
       type="button"
       *ngSwitchDefault
       mat-button
       class="button-basic"
       [ngClass]="{        
-        'mat-mdc-raised-button': action.type === ActionType.Raised,
-        'mat-mdc-unelevated-button': action.type === ActionType.Flat,
-        'mat-mdc-outlined-button': action.type === ActionType.Stroked,
-        'mat-mdc-icon-button': action.type === ActionType.Icon,
+        'mat-mdc-raised-button': action.style === ButtonStyle.Raised,
+        'mat-mdc-unelevated-button': action.style === ButtonStyle.Flat,
+        'mat-mdc-outlined-button': action.style === ButtonStyle.Stroked,
+        'mat-mdc-icon-button': action.style === ButtonStyle.Icon,
         'icon-placement-right': action.iconPlacement === 'right'
       }"
       (click)="action.click && action.click($event)"
@@ -56,15 +53,15 @@
       [tabIndex]="action.tabIndex">
     <ng-template [ngTemplateOutlet]="buttonContent"></ng-template>
   </button>
-
   <ng-template #buttonContent>
     <ng-container *ngIf="!action.icon else withIcon">
-      {{action.label}}
+      {{ action.label }}
     </ng-container>
-
     <ng-template #withIcon>
-      <mat-icon>{{action.icon}}</mat-icon>
-      {{action.label}}
+      <mat-icon>
+        {{ action.icon }}
+      </mat-icon>
+      {{ action.label }}
     </ng-template>
   </ng-template>
 </ng-container>

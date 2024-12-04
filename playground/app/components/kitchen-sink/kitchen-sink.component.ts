@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild,
+} from '@angular/core';
 
 import { filter, nameValue } from '@firestitch/common';
 import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 import { FsFile } from '@firestitch/file';
 import {
   ActionMode,
-  ActionType,
   FilterComponent,
   FilterConfig,
   ItemType,
 } from '@firestitch/filter';
-
 
 import { BehaviorSubject, of } from 'rxjs';
 import { delay, map, tap } from 'rxjs/operators';
@@ -390,8 +390,6 @@ export class KitchenSinkComponent implements OnInit {
     return [
       {
         mode: ActionMode.File,
-        type: ActionType.Icon,
-        menu: false,
         icon: 'cloud_upload',
         primary: false,
         multiple: true,

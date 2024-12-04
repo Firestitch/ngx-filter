@@ -35,7 +35,7 @@
   <div class="filter-keyword">
     <ng-container *ngIf="(keywordVisible$ | async) && !keywordItem?.hide ">
       <mat-form-field
-          class="search-form-field form-field-padless form-field-lineless"
+          class="search-form-field form-field-padless"
           [ngClass]="{
             'has-keyword': !!keyword
           }">
@@ -83,7 +83,17 @@
         </a>
       }
     }
-    @if (config.reload || config.autoReload) {
+    @if (config.reload) {
+      <a
+          mat-icon-button
+          (click)="reload($event)"
+          class="button-reload">
+        <mat-icon #reloadEl>
+          refresh
+        </mat-icon>
+      </a>
+    }
+    @if (config.autoReload) {
       <div class="filter-reload">
         @if (config.autoReload) {
           <mat-slide-toggle
@@ -94,16 +104,6 @@
               Auto refresh
             </span>
           </mat-slide-toggle>
-        }
-        @if (config.reload) {
-          <a
-              mat-icon-button
-              (click)="reload($event)"
-              class="button-reload">
-            <mat-icon #reloadEl>
-              refresh
-            </mat-icon>
-          </a>
         }
       </div>
     }

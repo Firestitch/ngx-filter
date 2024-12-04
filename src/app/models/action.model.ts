@@ -2,8 +2,8 @@ import { ThemePalette } from '@angular/material/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { ButtonStyle } from '../enums';
 import { ActionMode } from '../enums/action-mode.enum';
-import { ActionType } from '../enums/action-type.enum';
 import {
   FsFilterAction,
   FsFilterActionClickFn,
@@ -31,7 +31,7 @@ export class Action {
   public customize: boolean;
   public className: string;
   public click: FsFilterActionClickFn;
-  public type: ActionType;
+  public style: ButtonStyle;
   public tabIndex: number;
   public fileSelected: FsFilterFileActionSelectFn;
   public fileError: FsFilterFileActionErrorFn;
@@ -144,11 +144,13 @@ export class Action {
     this.tabIndex = config.tabIndex ?? 0;
     this.menu = config.menu;
 
-    if (!this.type) {
-      this.type = (config.type || (filterConfig.button?.style as any) || ActionType.Raised);
+    if (!this.style) {
+      this.style = config.icon && !config.label ? 
+        ButtonStyle.Icon : 
+        (config.style || filterConfig.buttonStyle || ButtonStyle.Raised);
 
-      if (this.type === ActionType.Stroked && this.primary) {
-        this.type = ActionType.Flat;
+      if(!this.primary && this.style === ButtonStyle.Flat) {
+        this.style = ButtonStyle.Stroked;
       }
     }
 

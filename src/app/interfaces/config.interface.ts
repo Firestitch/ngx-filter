@@ -32,6 +32,7 @@ export interface FilterConfig {
   reloadWhenConfigChanged?: boolean;
   case?: 'snake' | 'camel';
   button?: FilterButton;
+  buttonStyle?: ButtonStyle;
   savedFilters?: IFilterSavedFiltersConfig;
   actions?: FsFilterAction[];
   autoReload?: FsFilterAutoReload;  

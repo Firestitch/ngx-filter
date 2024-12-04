@@ -2,9 +2,8 @@ import { ThemePalette } from '@angular/material/core';
 
 import { FsFile } from '@firestitch/file';
 
-import { MenuActionMode } from '../enums';
+import { ButtonStyle, MenuActionMode } from '../enums';
 import { ActionMode } from '../enums/action-mode.enum';
-import { ActionType } from '../enums/action-type.enum';
 
 
 type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
@@ -20,7 +19,7 @@ export type FsFilterMenuAction = IFsFilterMenuActionGroupItem | IFsFilterMenuAct
 
 
 interface IFsFilterBaseAction {
-  type?: ActionType;
+  style?: ButtonStyle;
   className?: string;
   color?: ThemePalette;
   tooltip?: string;

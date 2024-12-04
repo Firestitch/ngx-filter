@@ -9,7 +9,6 @@
         [text]="action.tooltip">
       </fs-filter-action-button>
     </ng-container>
-
     <ng-container *ngSwitchCase="ActionMode.Menu">
       <fs-filter-action-button
         class="action"
@@ -19,8 +18,9 @@
         [enabled]="!!action.tooltip"
         [text]="action.tooltip">
       </fs-filter-action-button>
-
-      <fs-menu #someRef class="action">
+      <fs-menu
+          #someRef
+          class="action">
         <ng-container *ngFor="let childAction of action.items">
           <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
             <fs-menu-group [label]="childAction.label">
@@ -33,8 +33,10 @@
                         [queryParams]="subAction.routerLink?.queryParams"
                         [hidden]="(subAction.visible$ | async) === false"
                         (click)="actionClick(subAction, $event)">
-                      <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
-                      {{subAction.label}}
+                      <mat-icon *ngIf="subAction.icon">
+                        {{ subAction.icon }}
+                      </mat-icon>
+                      {{ subAction.label }}
                     </ng-template>
                   </ng-container>
                   <ng-container *ngSwitchCase="'file'">
@@ -49,8 +51,10 @@
                         (select)="subAction.fileSelected($event)"
                         [hidden]="(subAction.visible$ | async) === false"
                         (click)="actionClick(subAction, $event)">
-                      <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
-                      {{subAction.label}}
+                      <mat-icon *ngIf="subAction.icon">
+                        {{ subAction.icon }}
+                      </mat-icon>
+                      {{ subAction.label }}
                     </ng-template>
                   </ng-container>
                 </ng-container>
@@ -66,8 +70,10 @@
                     [queryParams]="childAction.routerLink?.queryParams"
                     [hidden]="(childAction.visible$ | async) === false"
                     (click)="childAction.click($event);">
-                  <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
-                  {{childAction.label}}
+                  <mat-icon *ngIf="childAction.icon">
+                    {{ childAction.icon }}
+                  </mat-icon>
+                  {{ childAction.label }}
                 </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'file'">
@@ -81,8 +87,10 @@
                     [imageHeight]="childAction.maxHeight"
                     (select)="childAction.fileSelected($event)"
                     [hidden]="(childAction.visible$ | async) === false">
-                  <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
-                  {{childAction.label}}
+                  <mat-icon *ngIf="childAction.icon">
+                    {{ childAction.icon }}
+                  </mat-icon>
+                  {{ childAction.label }}
                 </ng-template>
               </ng-container>
             </ng-container>
@@ -90,29 +98,28 @@
         </ng-container>
       </fs-menu>
     </ng-container>
-
     <ng-container *ngSwitchCase="ActionMode.SelectButton">
-      <mat-select 
+      <mat-select
           class="action action-select-button"
+          [buttonType]="'basic'"
           [ngClass]="{ 
-            'mat-mdc-raised-button': action.type === ActionType.Raised,
-            'mat-mdc-unelevated-button': action.type === ActionType.Flat,
-            'mat-mdc-outlined-button': action.type === ActionType.Stroked,
+            'mat-mdc-raised-button': action.style === ButtonStyle.Raised,
+            'mat-mdc-unelevated-button': action.style === ButtonStyle.Flat,
+            'mat-mdc-outlined-button': action.style === ButtonStyle.Stroked,
           }"
           [placeholder]="action.label"
-          [(ngModel)]="action.value" 
+          [(ngModel)]="action.value"
           (ngModelChange)="actionChange(action, $event, selectButton)"
           fsSelectButton
           #selectButton
           [deselectOnChange]="false">
-        <mat-option 
-            *ngFor="let item of action.values" 
+        <mat-option
+            *ngFor="let item of action.values"
             [value]="item.value">
           {{ item.name }}
         </mat-option>
       </mat-select>
     </ng-container>
-
     <ng-container *ngSwitchCase="ActionMode.File">
       <fs-file
           class="action action-button"
@@ -128,15 +135,11 @@
           fsPopover
           [enabled]="!!action.tooltip"
           [text]="action.tooltip">
-        <fs-filter-action-button 
-          [action]="action">
-        </fs-filter-action-button>
+        <fs-filter-action-button [action]="action"></fs-filter-action-button>
       </fs-file>
     </ng-container>
   </ng-container>
 </ng-container>
 <ng-container *ngIf="kebabActions?.length">
-  <fs-filter-action-kebab-actions
-    [kebabActions]="kebabActions">
-  </fs-filter-action-kebab-actions>
+  <fs-filter-action-kebab-actions [kebabActions]="kebabActions"></fs-filter-action-kebab-actions>
 </ng-container>
