@@ -103,7 +103,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get isChipVisible(): boolean {
-    return !!this.model;
+    return !!this.model && !this.isTypeKeyword;
   }
 
   public get destroy$() {
