@@ -41,6 +41,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return value;
   }
 
+  public get checked(): boolean {
+    return this._checked;
+  }
+
   public get queryObject(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
