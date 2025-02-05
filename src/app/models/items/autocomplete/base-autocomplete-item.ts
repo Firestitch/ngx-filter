@@ -1,3 +1,4 @@
+import type { FilterComponent } from '../../../components/filter/filter.component';
 import { IFilterConfigAutocompleteChipsItem } from '../../../interfaces/items/autocomplete-chips.interface';
 import { IFilterConfigAutocompleteItem } from '../../../interfaces/items/autocomplete.interface';
 import { BaseItem } from '../base-item';
@@ -13,14 +14,18 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
   public get valuesFn() {
     return this._valuesFn;
   }
+  
+  constructor(
+    itemConfig: T,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.fetchOnFocus = itemConfig.fetchOnFocus ?? true;
+  }
 
   protected _validateModel() {
     //
   }
 
-  protected _parseConfig(item: T) {
-    this.fetchOnFocus = item.fetchOnFocus ?? true;
-
-    super._parseConfig(item);
-  }
 }

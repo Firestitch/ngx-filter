@@ -11,19 +11,19 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { ItemType } from '../../enums/item-type.enum';
-import { AutocompleteChipsItem } from '../../models/items/autocomplete-chips-item';
-import { AutocompleteItem } from '../../models/items/autocomplete-item';
-import { BaseItem } from '../../models/items/base-item';
-import { CheckboxItem } from '../../models/items/checkbox-item';
-import { ChipsItem } from '../../models/items/chips-item';
-import { DateItem } from '../../models/items/date-item';
-import { DateRangeItem } from '../../models/items/date-range-item';
-import { DateTimeItem } from '../../models/items/date-time-item';
-import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
-import { RangeItem } from '../../models/items/range-item';
-import { BaseSelectItem } from '../../models/items/select/base-select-item';
-import { TextItem } from '../../models/items/text-item';
-import { WeekItem } from '../../models/items/week-item';
+import type { AutocompleteChipsItem } from '../../models/items/autocomplete-chips-item';
+import type { AutocompleteItem } from '../../models/items/autocomplete-item';
+import type { BaseItem } from '../../models/items/base-item';
+import type { CheckboxItem } from '../../models/items/checkbox-item';
+import type { ChipsItem } from '../../models/items/chips-item';
+import type { DateItem } from '../../models/items/date-item';
+import type { DateRangeItem } from '../../models/items/date-range-item';
+import type { DateTimeItem } from '../../models/items/date-time-item';
+import type { DateTimeRangeItem } from '../../models/items/date-time-range-item';
+import type { RangeItem } from '../../models/items/range-item';
+import type { BaseSelectItem } from '../../models/items/select/base-select-item';
+import type { TextItem } from '../../models/items/text-item';
+import type { WeekItem } from '../../models/items/week-item';
 
 
 @Component({

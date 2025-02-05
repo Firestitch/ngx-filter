@@ -51,7 +51,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     protected _filter: FilterComponent,
   ) {
     this._type = itemConfig.type;
-    this._parseConfig(itemConfig);
+    this._initConfig(itemConfig);
   }
   
   public get filter(): FilterComponent {
@@ -283,7 +283,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._model = value;
   }
 
-  protected _parseConfig(item: T) {
+  private _initConfig(item: T) {
     this.name = item.name;
     this.label = item.label;
     this.chipLabel = item.chipLabel;

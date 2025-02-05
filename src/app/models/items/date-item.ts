@@ -13,7 +13,7 @@ export class DateItem extends BaseDateItem {
     return new DateItem(config, null, filter);
   }
 
-  public getChipsContent(type = null): string {
+  public getChipsContent(): string {
     let dateFormat = 'date';
 
     if (this.mode === ItemDateMode.ScrollMonthYear) {

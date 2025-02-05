@@ -143,10 +143,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     super._setModel(value);
   }
 
-  protected _parseConfig(item: IFilterConfigDateRangeItem) {
-    super._parseConfig(item);
-  }
-
   protected _init() {
     if (!this.label) {
       this.label = ['Date From', 'Date To'];

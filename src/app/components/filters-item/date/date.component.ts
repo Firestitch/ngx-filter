@@ -9,9 +9,9 @@ import {
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
 import { ItemType } from '../../../enums/item-type.enum';
 import { PickerViewType } from '../../../enums/picker-view-type.enum';
-import { DateItem } from '../../../models/items/date-item';
-import { DateTimeItem } from '../../../models/items/date-time-item';
-import { BaseDateItem } from '../../../models/items/date/base-date-item';
+import type { DateItem } from '../../../models/items/date-item';
+import type { DateTimeItem } from '../../../models/items/date-time-item';
+import type { BaseDateItem } from '../../../models/items/date/base-date-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 

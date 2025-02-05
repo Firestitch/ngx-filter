@@ -16,6 +16,15 @@ import { BaseItem } from './base-item';
 export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
 
   public declare seedDate: Date;
+  
+  constructor(
+    itemConfig: IFilterConfigWeekItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.seedDate = itemConfig.seedDate;
+  }
 
   public static create(config: IFilterConfigWeekItem, filter: FilterComponent) {
     return new WeekItem(config, null, filter);
@@ -62,7 +71,6 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     if (period) {
       value.period = isString(period) ? parseInt(period, 10) : period;
     }
-
 
     return value;
   }
@@ -113,12 +121,6 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     }
 
     super._setModel(value);
-  }
-
-  protected _parseConfig(item: IFilterConfigWeekItem) {
-    super._parseConfig(item);
-
-    this.seedDate = item.seedDate;
   }
 
   protected _init() { }

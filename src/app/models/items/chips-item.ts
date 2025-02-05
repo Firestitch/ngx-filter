@@ -10,6 +10,15 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
   public declare multiple: boolean;
 
+  constructor(
+    itemConfig: IFilterConfigChipsItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.multiple = itemConfig.multiple ?? true;
+  }
+  
   public static create(config: IFilterConfigChipsItem, filter: FilterComponent) {
     return new ChipsItem(config, null, filter);
   }
@@ -53,11 +62,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     const name = this.name;
     const params = {};
 
-    if (Array.isArray(value)) {
-      params[name] = value.join(',');
-    } else {
-      params[name] = undefined;
-    }
+    params[name] = Array.isArray(value) ? value.join(',') : undefined;
 
     return params;
   }
@@ -89,12 +94,6 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     }
 
     this._model = value;
-  }
-
-  protected _parseConfig(item: IFilterConfigChipsItem) {
-    this.multiple = item.multiple ?? true;
-
-    super._parseConfig(item);
   }
 
   protected _init() {

@@ -16,6 +16,20 @@ export class AutocompleteChipsItem
   public declare chipBackground: string;
   public declare chipClass: string;
 
+  constructor(
+    itemConfig: IFilterConfigAutocompleteChipsItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.chipImage = itemConfig.chipImage ?? 'image';
+    this.chipIcon = itemConfig.chipIcon;
+    this.chipIconColor = itemConfig.chipIconColor;
+    this.chipColor = itemConfig.chipColor;
+    this.chipBackground = itemConfig.chipBackground;
+    this.chipClass = itemConfig.chipClass;
+  }
+
   public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {
     return new AutocompleteChipsItem(config, null, filter);
   }
@@ -63,17 +77,6 @@ export class AutocompleteChipsItem
     if (this.model === undefined) {
       this._model = [];
     }
-  }
-
-  protected _parseConfig(item: IFilterConfigAutocompleteChipsItem) {
-    this.chipImage = item.chipImage ?? 'image';
-    this.chipIcon = item.chipIcon;
-    this.chipIconColor = item.chipIconColor;
-    this.chipColor = item.chipColor;
-    this.chipBackground = item.chipBackground;
-    this.chipClass = item.chipClass;
-
-    super._parseConfig(item);
   }
 
   protected _clearValue(defaultValue: unknown = undefined) {

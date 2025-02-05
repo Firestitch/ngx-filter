@@ -12,12 +12,22 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   public declare prefix: string;
   public declare suffix: string;
 
+  constructor(
+    itemConfig: IFilterConfigTextItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.prefix = itemConfig.prefix;
+    this.suffix = itemConfig.suffix;
+  }
+
   public static create(config: IFilterConfigTextItem, filter: FilterComponent) {
     return new TextItem(config, null, filter);
   }
 
   public get value() {
-    return !!this.model ? this.model : undefined;
+    return this.model ? this.model : undefined;
   }
 
   public get queryObject() {
@@ -36,13 +46,6 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
   protected _validateModel() {
     //
-  }
-
-  protected _parseConfig(item: IFilterConfigTextItem) {
-    this.prefix = item.prefix;
-    this.suffix = item.suffix;
-
-    super._parseConfig(item);
   }
 
   protected _init() {

@@ -1,3 +1,4 @@
+import type { FilterComponent } from '../../../components/filter/filter.component';
 import {
   IFilterConfigSelectIsolate,
   IFilterConfigSelectItem,
@@ -14,7 +15,12 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
   public declare multiple: boolean;
   public declare isolate: IFilterIsolate;
 
-  protected _parseConfig(itemConfig: IFilterConfigSelectItem) {
+  constructor(
+    itemConfig: IFilterConfigSelectItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
     this.multiple = itemConfig.multiple;
     this.children = itemConfig.children;
 
@@ -24,10 +30,8 @@ export abstract class BaseSelectItem extends BaseItem<IFilterConfigSelectItem> {
         enabled: false,
       };
     }
-
-    super._parseConfig(itemConfig);
   }
-
+  
   protected _init() {
     if (!Array.isArray(this.values)) {
       this.values = [];

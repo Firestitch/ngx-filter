@@ -17,6 +17,17 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public declare options: { scale?: number };
   public declare prefix: string;
   public declare suffix: string;
+  
+  constructor(
+    itemConfig: IFilterConfigRangeItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this.options = itemConfig.options;
+    this.prefix = itemConfig.prefix;
+    this.suffix = itemConfig.suffix;
+  }
 
   public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
     return new RangeItem(config, additionalConfig, filter);
@@ -90,14 +101,6 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   }
 
   protected _validateModel() {
-  }
-
-  protected _parseConfig(item: IFilterConfigRangeItem) {
-    this.options = item.options;
-    this.prefix = item.prefix;
-    this.suffix = item.suffix;
-
-    super._parseConfig(item);
   }
 
   protected _init() {

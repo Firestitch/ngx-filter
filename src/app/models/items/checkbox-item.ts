@@ -11,6 +11,18 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
   private declare _checked;
   private declare _unchecked;
 
+  constructor(
+    itemConfig: IFilterConfigCheckboxItem,
+    protected _additionalConfig: unknown,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _additionalConfig, _filter);
+    this._checked = itemConfig.checked ? toString(itemConfig.checked) : true;
+    this._unchecked = itemConfig.unchecked ? toString(itemConfig.unchecked) : false;
+    this.defaultValue = itemConfig.default === undefined ? this._unchecked : toString(this.defaultValue);
+  }
+
+
   public get isTypeCheckbox(): boolean {
     return true;
   }
@@ -39,21 +51,12 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return params;
   }
 
-  public getChipsContent(type = null): string {
+  public getChipsContent(): string {
     return this.label as string;
   }
 
   protected _validateModel() {
     //
-  }
-
-  protected _parseConfig(item: IFilterConfigCheckboxItem) {
-
-    this._checked = item.checked ? toString(item.checked) : true;
-    this._unchecked = item.unchecked ? toString(item.unchecked) : false;
-    this.defaultValue = item.default === undefined ? this._unchecked : toString(this.defaultValue);
-
-    super._parseConfig(item);
   }
 
   protected _init() {
