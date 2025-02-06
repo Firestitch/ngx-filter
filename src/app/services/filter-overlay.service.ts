@@ -3,10 +3,10 @@ import { Inject, Injectable, Injector, OnDestroy } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
 
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-
 import { HtmlClassRenderer } from '@firestitch/html';
+
+import { Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
@@ -19,11 +19,10 @@ import { FocusControllerService } from './focus-controller.service';
 @Injectable()
 export class FsFilterOverlayService implements OnDestroy {
 
-  public detach$ = new Subject();
-  public attach$ = new Subject();
-
-  private _clearFn: Function;
-  private _doneFn: Function;
+  private _detach$ = new Subject<void>();
+  private _attach$ = new Subject<void>();
+  private _clearFn: () => void;
+  private _doneFn: () => void;
 
   private _destroy$ = new Subject();
   private _overlayRef: OverlayRef;
@@ -38,28 +37,38 @@ export class FsFilterOverlayService implements OnDestroy {
     this._openWhenChipClicked();
   }
 
+  public get detach$(): Observable<void> {
+    return this._detach$.asObservable();
+  }
+
+  public get attach$(): Observable<void> {
+    return this._attach$.asObservable();
+  }
+
   public get isOpened() {
     return !!this._overlayRef;
   }
 
-  public setClearFn(fn: Function) {
+  public setClearFn(fn: () => void) {
     this._clearFn = fn;
   }
 
-  public setDoneFn(fn: Function) {
+  public setDoneFn(fn: () => void) {
     this._doneFn = fn;
   }
 
   public close() {
     if (this._overlayRef) {
       this._overlayRef.detach();
-      this._overlayRef = null;
-
       this._removeFilterClass();
-    }
+    } 
   }
 
   public open() {
+    if (this._overlayRef) {
+      return;
+    }
+
     this._overlayRef = this._createOverlay();
 
     this._overlayRef.backdropClick()
@@ -75,7 +84,8 @@ export class FsFilterOverlayService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.detach$.next(null);
+        this._detach$.next(null);
+        this._overlayRef = null;
       });
 
     this._overlayRef.attachments()
@@ -83,7 +93,7 @@ export class FsFilterOverlayService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.attach$.next(null);
+        this._attach$.next(null);
       });
 
     this._addFilterClass();

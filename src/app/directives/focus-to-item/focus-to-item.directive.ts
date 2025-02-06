@@ -5,22 +5,23 @@ import {
   OnDestroy,
   OnInit, Optional, Self,
 } from '@angular/core';
+
 import { MatSelect } from '@angular/material/select';
 
+import { FsAutocompleteComponent } from '@firestitch/autocomplete';
+import { FsAutocompleteChipsComponent } from '@firestitch/autocomplete-chips';
 import {
   DateRangePickerFromComponent, DateRangePickerToComponent,
   FsDatePickerComponent,
-  FsDateScrollPickerComponent
+  FsDateScrollPickerComponent,
 } from '@firestitch/datepicker';
-import { FsAutocompleteComponent } from '@firestitch/autocomplete';
-import { FsAutocompleteChipsComponent } from '@firestitch/autocomplete-chips';
 
 import { Subject } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
 
-import { FocusControllerService } from '../../services/focus-controller.service';
-import { ItemType } from '../../enums/item-type.enum';
 import { ItemDateMode } from '../../enums/item-date-mode.enum';
+import { ItemType } from '../../enums/item-type.enum';
+import { FocusControllerService } from '../../services/focus-controller.service';
 
 
 @Directive({
@@ -57,7 +58,7 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this._focus();
-      })
+      });
   }
 
   public ngOnDestroy() {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { BehaviorSubject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 
@@ -17,7 +18,7 @@ export class FocusControllerService {
   }
 
   public click(item: BaseItem<any>, type: 'from' | 'to' = null) {
-    this._focusOn.next({ item, type })
+    this._focusOn.next({ item, type });
   }
 
   public listenFocusFor$(targetItem: BaseItem<any>, targetType: 'from' | 'to' = null) {
@@ -28,7 +29,7 @@ export class FocusControllerService {
           return targetItem === item && targetType === type;
         }),
         tap(() => this.clearFocus()),
-      )
+      );
   }
 
   public clearFocus() {

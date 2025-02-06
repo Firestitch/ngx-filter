@@ -67,7 +67,6 @@ export class FilterDrawerComponent {
 
   public clear() {
     this._clear();
-    // this.overlayRef.detach();
   }
 
   public done() {
