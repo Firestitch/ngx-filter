@@ -9,7 +9,6 @@ import { FsFilterItemsStore } from '../items-store.service';
 export class QueryParamsController {
 
   private _enabled = false;
-  private _paramsCase: 'snake' | 'camel';
   private _fetchedParams: Record<string, any>;
 
   constructor(
@@ -25,9 +24,8 @@ export class QueryParamsController {
     return this._fetchedParams;
   }
 
-  public init(enabled: boolean, paramsCase: 'snake' | 'camel') {
+  public init(enabled: boolean) {
     this._enabled = enabled;
-    this._paramsCase = paramsCase;
 
     if (this.enabled) {
       this.fetchFromQueryParams();
@@ -48,7 +46,8 @@ export class QueryParamsController {
       ...this._itemsStore.items,
       this._itemsStore.sortByItem,
       this._itemsStore.sortDirectionItem,
-    ].filter((item) => !!item);
+    ]
+      .filter((item) => !!item);
 
     this._fetchedParams = restoreItems(
       this._route.snapshot.queryParams,

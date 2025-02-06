@@ -3,7 +3,6 @@ import {
 } from '@angular/core';
 
 import { filter, nameValue } from '@firestitch/common';
-import { getFirstDayOfFirstYearWeek, getPeriodForDate } from '@firestitch/datepicker';
 import { FsFile } from '@firestitch/file';
 import {
   ActionMode,
@@ -13,7 +12,7 @@ import {
 } from '@firestitch/filter';
 
 import { BehaviorSubject, of } from 'rxjs';
-import { delay, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { shuffle } from 'lodash-es';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
@@ -21,7 +20,6 @@ import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
-import { SavedFilters } from './saved-filter';
 
 
 @Component({
@@ -86,7 +84,7 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      persist: false,
+      //persist: false,
       inline: false,
       chips: true,
       autofocus: false,
@@ -133,7 +131,7 @@ export class KitchenSinkComponent implements OnInit {
           name: 'notUsed',
           type: ItemType.Select,
           label: 'Not Used',
-          default: '1',
+          //default: '1',
           values: () => [],
           disable: true,
         },
@@ -280,7 +278,14 @@ export class KitchenSinkComponent implements OnInit {
           name: 'week',
           type: ItemType.Week,
           label: 'Week',
-          default: getPeriodForDate(new Date(), getFirstDayOfFirstYearWeek(new Date()), 1),
+        },
+        
+        {
+          name: 'showDeleted',
+          type: ItemType.Checkbox,
+          label: 'Show Deleted',
+          unchecked: 'active',
+          checked: 'deleted',
         },
         {
           name: 'checkbox',
@@ -317,53 +322,53 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Max Price',
         },
       ],
-      savedFilters: {
-        load: () => {
-          console.log('<====== Load Saved Filters =====>');
+      // savedFilters: {
+      //   load: () => {
+      //     console.log('<====== Load Saved Filters =====>');
 
-          return of(SavedFilters);
-        },
-        save: (savedFilter) => {
-          console.log('<====== Save Filter =====>');
-          const filterIndex = SavedFilters.findIndex((f) => {
-            return f.id === savedFilter.id;
-          });
+      //     return of(SavedFilters);
+      //   },
+      //   save: (savedFilter) => {
+      //     console.log('<====== Save Filter =====>');
+      //     const filterIndex = SavedFilters.findIndex((f) => {
+      //       return f.id === savedFilter.id;
+      //     });
 
-          if (filterIndex > -1) {
-            // Here I'm emulating like backend returend filter which automatically activated
-            savedFilter.active = true;
-            SavedFilters[filterIndex] = savedFilter;
-          } else {
-            // Here I'm emulating like backend returend new filter with ID to me
-            savedFilter = {
-              ...savedFilter,
-              id: 999,
-            };
-            SavedFilters.push(savedFilter);
-          }
+      //     if (filterIndex > -1) {
+      //       // Here I'm emulating like backend returend filter which automatically activated
+      //       savedFilter.active = true;
+      //       SavedFilters[filterIndex] = savedFilter;
+      //     } else {
+      //       // Here I'm emulating like backend returend new filter with ID to me
+      //       savedFilter = {
+      //         ...savedFilter,
+      //         id: 999,
+      //       };
+      //       SavedFilters.push(savedFilter);
+      //     }
 
-          console.log('Save Filter', savedFilter);
-          console.log('Saved Filters: ', SavedFilters);
+      //     console.log('Save Filter', savedFilter);
+      //     console.log('Saved Filters: ', SavedFilters);
 
-          return of(savedFilter)
-            .pipe(
-              delay(2000),
-            );
-        },
-        order: (filters) => {
-          console.log('<====== Order Saved Filters =====>');
-          console.log('order filters', filters);
+      //     return of(savedFilter)
+      //       .pipe(
+      //         delay(2000),
+      //       );
+      //   },
+      //   order: (filters) => {
+      //     console.log('<====== Order Saved Filters =====>');
+      //     console.log('order filters', filters);
 
-          return of(null);
-        },
-        delete: () => {
-          console.log('<====== Delete Saved Filter =====>');
-          console.log('order filters', filter);
+      //     return of(null);
+      //   },
+      //   delete: () => {
+      //     console.log('<====== Delete Saved Filter =====>');
+      //     console.log('order filters', filter);
 
 
-          return of(null);
-        },
-      },
+      //     return of(null);
+      //   },
+      // },
       // button: {
       //   label: '',
       //   style: ButtonStyle.Stroked,
@@ -454,7 +459,7 @@ export class KitchenSinkComponent implements OnInit {
         mode: ActionMode.SelectButton,
         label: 'View',
         primary: false,
-        default: 'week',
+        //default: 'week',
         change: (value) => {
           console.log('Select button change',value);
         },

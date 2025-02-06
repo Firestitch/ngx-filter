@@ -17,40 +17,34 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     protected _filter: FilterComponent,
   ) {
     super(itemConfig, _additionalConfig, _filter);
-    this._checked = itemConfig.checked ? toString(itemConfig.checked) : true;
-    this._unchecked = itemConfig.unchecked ? toString(itemConfig.unchecked) : false;
-    this.defaultValue = itemConfig.default === undefined ? this._unchecked : toString(this.defaultValue);
+    this._checked = itemConfig.checked ? toString(itemConfig.checked) : 'true';
+    this._unchecked = itemConfig.unchecked ? toString(itemConfig.unchecked) : undefined;
+    this.defaultValue = itemConfig.default;
   }
-
 
   public get isTypeCheckbox(): boolean {
     return true;
   }
 
   public get isChipVisible() {
-    return this.value === this._checked;
+    return this.model;
   }
 
   public get value() {
-    const value = this.model ? this._checked || 'true' : this._unchecked;
-
-    if (!value) {
-      return undefined;
-    }
-
-    return value;
+    return this.model;
   }
 
   public get checked(): boolean {
     return this._checked;
   }
 
-  public get queryObject(): Record<string, unknown> {
-    const value = this.value;
-    const name = this.name;
-    const params = {};
+  public get unchecked(): boolean {
+    return this._unchecked;
+  }
 
-    params[name] = this.model ? value : undefined;
+  public get queryObject(): Record<string, unknown> {
+    const params = {};
+    params[this.name] = this.model ? this.checked : this.unchecked;
 
     return params;
   }
@@ -63,14 +57,18 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     //
   }
 
+  public get isQueryParamVisible(): boolean {
+    return this.model === true;
+  }
+
   protected _init() {
     if (this.model === undefined) {
-      this._model = this._checked === this.defaultValue;
+      this._model = this.defaultValue;
     }
   }
 
   protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? false;
+    this.model = false;
   }
 
 }

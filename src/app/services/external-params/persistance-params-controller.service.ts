@@ -16,8 +16,6 @@ import { FsFilterItemsStore } from '../items-store.service';
 @Injectable()
 export class PersistanceParamsController extends FsPersistanceStore<FsFilterPersistance> {
 
-  protected _paramsCase: 'snake' | 'camel';
-
   constructor(
     _store: FsStore,
     _route: ActivatedRoute,
@@ -32,10 +30,7 @@ export class PersistanceParamsController extends FsPersistanceStore<FsFilterPers
   public init(
     persistanceConfig: FsFilterPersistance,
     namespace: string,
-    paramsCase: 'snake' | 'camel',
   ): void {
-    this._paramsCase = paramsCase;
-
     namespace = namespace ?? getNormalizedPath(this._location);
     const persistanceDisabled = !!this._dialogRef || !!this._drawerRef;
 

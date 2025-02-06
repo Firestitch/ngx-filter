@@ -32,7 +32,6 @@ export class FsFilterConfig {
   public autoReload: FsFilterAutoReload;
   public clear: ChangeFn;
   public sortChange: ChangeFn;
-  public case: 'snake' | 'camel' = 'camel';
   public reloadWhenConfigChanged: boolean;
   public button: FilterButton;
   public items: IFilterConfigItem[];

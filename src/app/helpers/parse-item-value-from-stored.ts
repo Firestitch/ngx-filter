@@ -53,12 +53,7 @@ export function parseItemValueFromStored(item, params) {
     }
 
     case ItemType.Checkbox: {
-      if (param === 'true') {
-        return item.checked === true;
-      }
- 
       return param === item.checked;
-      
     }
 
     case ItemType.AutoComplete: {

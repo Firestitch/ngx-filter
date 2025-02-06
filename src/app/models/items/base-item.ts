@@ -53,7 +53,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._type = itemConfig.type;
     this._initConfig(itemConfig);
   }
-  
+
   public get filter(): FilterComponent {
     return this._filter;
   }
@@ -171,16 +171,8 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._loading$.next(value);
   }
 
-  public valueChanged() {
-    this._value$.next(this.value);
-
-    if (this.change) {
-      this.change(this, this._filter);
-    }
-
-    if (this.initialized) {
-      this._valueChange$.next(null);
-    }
+  public get isQueryParamVisible(): boolean {
+    return true;
   }
 
   public get queryObject(): Record<string, unknown> {
@@ -217,12 +209,25 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       );
   }
 
+  public valueChanged() {
+    this._value$.next(this.value);
+
+    if (this.change) {
+      this.change(this, this._filter);
+    }
+
+    if (this.initialized) {
+      this._valueChange$.next(null);
+    }
+  }
+
   public initValues(persistedValue: unknown) {
     this._initializedValues = false;
     this.persistedValue = persistedValue;
     this._initDefaultModel();
 
-    const isAutocomplete = this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips;
+    const isAutocomplete = this.type === ItemType.AutoComplete || 
+      this.type === ItemType.AutoCompleteChips;
 
     if (this._valuesFn && !isAutocomplete) {
       const valuesResult = this._valuesFn(null, this._filter);
@@ -283,6 +288,22 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._model = value;
   }
 
+  protected _initDefaultModel() {
+    const model = this.persistedValue ?? this.defaultValue;
+
+    if (model !== undefined) {
+      this._setModel(model);
+    }
+  }
+
+  protected _clearValue(defaultValue: unknown = undefined) {
+    this.model = defaultValue ?? undefined;
+  }
+
+  protected get _initialized(): boolean {
+    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
+  }
+
   private _initConfig(item: T) {
     this.name = item.name;
     this.label = item.label;
@@ -310,26 +331,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
   }
 
-  protected _initDefaultModel() {
-    const model = this.persistedValue ?? this.defaultValue;
-
-    if (model !== undefined) {
-      this._setModel(model);
-    }
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? undefined;
-  }
-
-  protected get _initialized(): boolean {
-    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
-  }
-
-
+  
   public abstract get value();
   public abstract getChipsContent(type): any;
 
   protected abstract _init();
   protected abstract _validateModel();
+  
 }

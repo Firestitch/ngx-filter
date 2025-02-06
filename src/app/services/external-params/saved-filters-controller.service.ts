@@ -31,7 +31,6 @@ export class SavedFiltersController implements OnDestroy {
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
   private _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
   private _enabled$ = new BehaviorSubject<boolean>(false);
-  private _paramsCase: 'snake' | 'camel';
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -87,7 +86,6 @@ export class SavedFiltersController implements OnDestroy {
 
   public init(
     remoteParamsConfig: IFilterSavedFiltersConfig,
-    paramsCase: 'snake' | 'camel',
   ): void {
     if (!remoteParamsConfig) {
       this._setEnabledStatus(false);
@@ -96,7 +94,6 @@ export class SavedFiltersController implements OnDestroy {
     }
     this._setEnabledStatus(true);
 
-    this._paramsCase = paramsCase;
     this._config = remoteParamsConfig;
   }
 

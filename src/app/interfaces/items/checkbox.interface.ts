@@ -1,5 +1,6 @@
 import { ItemType } from '../../enums/item-type.enum';
-import { IFilterConfigBaseItem, IFilterDefaultFn } from './base.interface';
+
+import { IFilterConfigBaseItem } from './base.interface';
 
 
 export interface IFilterConfigCheckboxItem extends IFilterConfigBaseItem<ItemType.Checkbox> {

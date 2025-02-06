@@ -5,6 +5,7 @@ import {
   KeyValueDiffers,
 } from '@angular/core';
 
+
 import { CheckboxItem } from '../../../models/items/checkbox-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
@@ -23,4 +24,5 @@ export class CheckboxComponent extends BaseItemComponent<CheckboxItem> {
   ) {
     super(_kvDiffers, _cd);
   }
+  
 }

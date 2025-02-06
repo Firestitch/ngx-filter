@@ -148,16 +148,15 @@ export class ExternalParamsController implements OnDestroy {
     this._persistanceStore.init(
       this._config.persist,
       this._config.namespace,
-      this._config.case,
     );
   }
 
   private _initQueryParams() {
-    this._queryParams.init(this._config.queryParam, this._config.case);
+    this._queryParams.init(this._config.queryParam);
   }
 
   private _initSavedFilters() {
-    this._savedFilters.init(this._config.savedFilters, this._config.case);
+    this._savedFilters.init(this._config.savedFilters);
   }
 
   private _listenItemsChange() {
@@ -204,17 +203,22 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _saveQueryParams() {
-    const targetItems = this._itemsStore.items
-      .filter((item) => !item.queryParamsDisabled);
 
     const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery({
-        onlyPresented: false,
-        items: targetItems,
-        persisted: true,
-      }),
-      targetItems,
+      this._itemsStore
+        .valuesAsQuery({
+          onlyPresented: false,
+          items: this._itemsStore.items,
+          persisted: true,
+        }),
+      this._itemsStore.items,
     );
+   
+    this._itemsStore.items
+      .filter((item) => item.queryParamsDisabled || !item.isQueryParamVisible)
+      .forEach((item) => {
+        params[item.name] = undefined;
+      });
 
     this._queryParams.writeStateToQueryParams(params);
   }

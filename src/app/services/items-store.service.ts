@@ -295,7 +295,7 @@ export class FsFilterItemsStore implements OnDestroy {
 
   public updateSortingItemsValues(items: SortItem[]) {
     if (!this.sortByItem) {
-      return
+      return;
     }
 
     this.sortByItem.values = items;
@@ -340,7 +340,7 @@ export class FsFilterItemsStore implements OnDestroy {
           return true;
         })
         .map((item) => {
-          const filterItem = createFilterItem(item, { case: this._config.case }, this.filter);
+          const filterItem = createFilterItem(item, { }, this.filter);
 
           if (filterItem.type === ItemType.Keyword) {
             this._hasKeyword = true;
