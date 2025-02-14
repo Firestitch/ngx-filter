@@ -70,15 +70,6 @@ export class FsFilterOverlayService implements OnDestroy {
     }
 
     this._overlayRef = this._createOverlay();
-
-    this._overlayRef.backdropClick()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this._overlayRef.detach();
-      });
-
     this._overlayRef.detachments()
       .pipe(
         takeUntil(this._destroy$),
@@ -108,8 +99,7 @@ export class FsFilterOverlayService implements OnDestroy {
 
   private _createOverlay() {
     const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      backdropClass: 'fs-filter-backdrop',
+      hasBackdrop: false,
     });
 
     return this._overlay.create(overlayConfig);
