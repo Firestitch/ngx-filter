@@ -84,6 +84,7 @@ export class MultipleSelectItem extends BaseSelectItem {
       this.model = [];
     }
   }
+  
   protected _setModel(value) {
     if (Array.isArray(value)) {
       value = value.map((val) => {
@@ -92,9 +93,11 @@ export class MultipleSelectItem extends BaseSelectItem {
         }
 
         return +val;
-
       });
+
+      value = value.length === 0 ? undefined : value;
     }
+    
 
     super._setModel(value);
   }

@@ -21,7 +21,6 @@ import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 
-
 @Component({
   selector: 'kitchen-sink',
   templateUrl: './kitchen-sink.component.html',
@@ -84,7 +83,9 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      //persist: false,
+      persist: {
+        name: 'kitchen-sink',
+      },
       inline: false,
       chips: true,
       autofocus: false,

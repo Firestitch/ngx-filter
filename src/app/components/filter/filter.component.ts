@@ -17,8 +17,11 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+
+import { DrawerRef } from '@firestitch/drawer';
 
 import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
@@ -35,8 +38,8 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
 import { TextItem } from '../../models/items/text-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
-import { PersistanceParamsController } from '../../services/external-params/persistance-params-controller.service';
 import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
+import { QueryPersistanceController } from '../../services/external-params/query-persistance-controller.service';
 import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
@@ -53,7 +56,7 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   providers: [
     FsFilterOverlayService,
     ExternalParamsController,
-    PersistanceParamsController,
+    QueryPersistanceController,
     QueryParamsController,
     FocusControllerService,
     FsFilterItemsStore,
@@ -115,12 +118,15 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _hasFilterChips$ = new BehaviorSubject(false);
   private _keyword$ = new Subject();
   private _destroy$ = new Subject<void>();
+  private _dialogRef = inject(MatDialogRef, { optional: true });
+  private _drawerRef = inject(DrawerRef, { optional: true });  
 
   constructor(
     @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig,
     private _filterOverlay: FsFilterOverlayService,
     private _zone: NgZone,
     private _externalParams: ExternalParamsController,
+    private _persistanceParams: QueryPersistanceController,
     private _filterItems: FsFilterItemsStore,
     private _actions: ActionsController,
     private _savedFiltersController: SavedFiltersController,
@@ -160,6 +166,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public get filterParams() {
     return this._filterItems.values();
+  }
+
+  public get inDialog() {
+    return !!this._dialogRef || !!this._drawerRef;
   }
 
   public get filterParamsQuery(): Record<string, unknown> {
@@ -626,6 +636,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this._config = new FsFilterConfig(config);
     this._actions.setConfig(this._config);
+    this._persistanceParams.setConfig(this._config, this.inDialog);
     this._filterItems.setConfig(this._config);
     this._externalParams.setConfig(this._config);
 

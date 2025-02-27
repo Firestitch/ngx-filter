@@ -4,13 +4,12 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
 
 import { buildQueryParams } from '../helpers/build-query-params';
-import { IFilterExternalParams } from '../interfaces/external-params.interface';
-import { IFilterSavedFilter } from '../interfaces/saved-filters.interface';
+import { IFilterExternalParams, IFilterSavedFilter } from '../interfaces';
 import { FsFilterConfig } from '../models/filter-config';
 
-import { PersistanceParamsController } from './external-params/persistance-params-controller.service';
-import { QueryParamsController } from './external-params/query-params-controller.service';
-import { SavedFiltersController } from './external-params/saved-filters-controller.service';
+import {
+  QueryParamsController, QueryPersistanceController, SavedFiltersController,
+} from './external-params';
 import { FsFilterItemsStore } from './items-store.service';
 
 
@@ -26,7 +25,7 @@ export class ExternalParamsController implements OnDestroy {
 
   constructor(
     private _itemsStore: FsFilterItemsStore,
-    private _persistanceStore: PersistanceParamsController,
+    private _persistanceStore: QueryPersistanceController,
     private _queryParams: QueryParamsController,
     private _savedFilters: SavedFiltersController,
   ) { }
@@ -34,10 +33,10 @@ export class ExternalParamsController implements OnDestroy {
   public get params(): IFilterExternalParams {
     let result: IFilterExternalParams = {};
 
-    if (this._persistanceStore.enabled) {
+    if (this._persistanceStore.queryEnabled) {
       result = {
         ...result, 
-        ...this._persistanceStore.value?.data,
+        ...this._persistanceStore.getQuery(),
       };
     }
 
@@ -89,7 +88,6 @@ export class ExternalParamsController implements OnDestroy {
   public setConfig(config) {
     this._config = config;
 
-    this._initPersistance();
     this._initQueryParams();
     this._initSavedFilters();
     this.initItems();
@@ -142,13 +140,6 @@ export class ExternalParamsController implements OnDestroy {
   public fetchQueryParams(): void {
     this._initQueryParams();
     this._itemsStore.updateItemsWithValues(this.params);
-  }
-
-  private _initPersistance() {
-    this._persistanceStore.init(
-      this._config.persist,
-      this._config.namespace,
-    );
   }
 
   private _initQueryParams() {
@@ -224,18 +215,17 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _savePersistedParams() {
-    const targetItems = this._itemsStore.items
-      .filter((item) => !item.persistanceDisabled);
+    if(this._persistanceStore.queryEnabled) {
+      const targetItems = this._itemsStore.items
+        .filter((item) => !item.persistanceDisabled)
+        .filter((item) => item.value !== undefined)
+        .reduce((acc, item) => {
+          acc[item.name] = item.model;
 
-    const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery({
-        onlyPresented: false,
-        items: targetItems,
-        persisted: true,
-      }),
-      targetItems,
-    );
+          return acc;
+        }, {});
 
-    this._persistanceStore.save(params);
+      this._persistanceStore.setQuery(targetItems);
+    }
   }
 }
