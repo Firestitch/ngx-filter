@@ -85,7 +85,7 @@ export interface FilterSort {
 export interface FsFilterPersistanceConfig {
   name?: string;
   timeout?: number;
-  queryEnabled?: boolean;
+  persistQuery?: boolean;
 }
 
 export type FsFilterPersistance = boolean | FsFilterPersistanceConfig;

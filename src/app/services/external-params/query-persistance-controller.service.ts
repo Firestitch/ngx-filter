@@ -23,7 +23,7 @@ export class QueryPersistanceController {
     const config = this._initConfig(filterConfig.persist, inDialog);
 
     if(config) {
-      this.queryEnabled = config.queryEnabled;
+      this.queryEnabled = config.persistQuery;
       this._name = config.name;
       this._data = this._get() || {};
     }
@@ -61,7 +61,7 @@ export class QueryPersistanceController {
     if(persistanceConfig) {
       persistanceConfig = {
         name: persistanceConfig.name || getNormalizedPath(this._location),
-        queryEnabled: !inDialog || !!persistanceConfig.name,
+        persistQuery: !inDialog || !!persistanceConfig.name,
         ...persistanceConfig,
       };
     }
