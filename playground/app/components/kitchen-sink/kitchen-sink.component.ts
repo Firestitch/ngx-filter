@@ -103,7 +103,20 @@ export class KitchenSinkComponent implements OnInit {
         seconds: 5,
       },
       change: (query, sort) => {
-        console.log('Change', query, sort);
+        const hasValues = this.filter.items
+          .filter((item) => item.hasValue)
+          .reduce((accum, item) => {
+            return {
+              ...accum,
+              [item.name]: {
+                value: item.value,
+                model: item.model,
+              },
+            };
+          }, {});
+
+        console.log('Change', query, sort );
+        console.log('Has Values', hasValues);
         this.query = query;
         this.sort = sort;
       },

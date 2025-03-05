@@ -105,7 +105,10 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     }
   }
 
-  public clearDateRange(type: 'from' | 'to' = null, defaultValue: IFilterItemDefaultDateRange = undefined) {
+  public clearDateRange(
+    type: 'from' | 'to' = null, 
+    defaultValue: IFilterItemDefaultDateRange = undefined,
+  ) {
     if (type === 'from') {
       delete this.model.from;
 
@@ -128,6 +131,10 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   }
 
   protected _validateModel() {
+  }
+
+  public get hasModelValue() {
+    return this.model;
   }
 
   protected _setModel(value) {

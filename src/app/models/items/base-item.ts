@@ -122,6 +122,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this._pendingDefaultValue;
   }
 
+  public get hasValue() {
+    return this.value !== undefined;
+  }
+
   public get model() {
     return this._model;
   }
