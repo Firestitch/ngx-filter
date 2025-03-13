@@ -102,11 +102,11 @@ export class Action {
   private _init(filterConfig: FsFilterConfig, config: FsFilterAction = {}): void {
     config.mode = config.mode ?? ActionMode.Button;
     this._initCore(filterConfig, config);
-    
+
     switch (config.mode) {
       case ActionMode.Button: {
         this.customize = config.customize;
-        this.click = config.click ?? (() => { 
+        this.click = config.click ?? (() => {
           // do nothing
         });
         this._disabledFn = config.disabled;
@@ -145,8 +145,8 @@ export class Action {
     this.menu = config.menu;
 
     if (!this.style) {
-      this.style = config.icon && !config.label ? 
-        ButtonStyle.Icon : 
+      this.style = config.icon && !config.label ?
+        ButtonStyle.Icon :
         (config.style || filterConfig.buttonStyle || ButtonStyle.Raised);
 
       if(!this.primary && this.style === ButtonStyle.Flat) {
@@ -158,6 +158,10 @@ export class Action {
       this.className = config.className;
       this.classArray = this.className
         .split(' ');
+    }
+
+    if (!this.primary && this.mode === ActionMode.SelectButton) {
+      this.color = null; // should be null because of styles logic in select-button
     }
 
     if (this.primary) {
@@ -182,7 +186,7 @@ export class Action {
     this.minHeight = config.minHeight;
     this.maxWidth = config.maxWidth;
     this.maxHeight = config.maxHeight;
-    this.click = config.click ?? (() => { 
+    this.click = config.click ?? (() => {
       //
     });
     this._disabledFn = config.disabled;
