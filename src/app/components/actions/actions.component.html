@@ -109,6 +109,7 @@
           }"
           [placeholder]="action.label"
           [(ngModel)]="action.value"
+          [color]="action.color"
           (ngModelChange)="actionChange(action, $event, selectButton)"
           fsSelectButton
           #selectButton
