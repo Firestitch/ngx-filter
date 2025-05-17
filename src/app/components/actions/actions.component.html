@@ -102,7 +102,7 @@
       <mat-select
           class="action action-select-button"
           [buttonType]="'basic'"
-          [ngClass]="{ 
+          [ngClass]="{
             'mat-mdc-raised-button': action.style === ButtonStyle.Raised,
             'mat-mdc-unelevated-button': action.style === ButtonStyle.Flat,
             'mat-mdc-outlined-button': action.style === ButtonStyle.Stroked,
@@ -113,7 +113,7 @@
           (ngModelChange)="actionChange(action, $event, selectButton)"
           fsSelectButton
           #selectButton
-          [deselectOnChange]="false">
+          [deselectOnChange]="action.deselect">
         <mat-option
             *ngFor="let item of action.values"
             [value]="item.value">
