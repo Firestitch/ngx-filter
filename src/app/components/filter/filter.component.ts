@@ -205,7 +205,12 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get keywordVisible$(): Observable<boolean> {
-    return this._keywordVisible$.asObservable();
+    return this._keywordVisible$.asObservable()
+      .pipe(
+        map((visible) => {
+          return visible && this.hasKeyword;
+        }),
+      );
   }
 
   public get actionsVisible$() {
