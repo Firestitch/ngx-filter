@@ -36,6 +36,8 @@ export interface FilterConfig {
   savedFilters?: IFilterSavedFiltersConfig;
   actions?: FsFilterAction[];
   autoReload?: FsFilterAutoReload;  
+  heading?: string;
+  subheading?: string;
 }
 
 export interface FsFilterAutoReload {

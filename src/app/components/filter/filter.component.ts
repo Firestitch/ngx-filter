@@ -100,11 +100,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.fs-filter')
   public fsFilterClass = true;
 
-  @HostBinding('class.has-keyword')
-  public get hasKeyword() {
-    return this._filterItems.hasKeyword;
-  }
-
   public searchPlaceholder = 'Search';
   public keyword = '';
   public autoReload = true;
@@ -207,11 +202,19 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordVisible$.asObservable()
       .pipe(
         map((visible) => {
-          return visible && this.hasKeyword;
+          return visible && this._filterItems.hasKeyword;
         }),
       );
   }
 
+  public get keywordNotVisible$(): Observable<boolean> {
+    return this._keywordVisible$.asObservable()
+      .pipe(
+        map((visible) => {
+          return !visible;
+        }),
+      );
+  }
   public get actionsVisible$() {
     return this._actions.visible$;
   }
@@ -727,7 +730,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private _initKeywordVisibility() {
-    this._keywordVisible$.next(!this.keywordItem?.hide);
+    this._keywordVisible$.next(!!this.keywordItem && !this.keywordItem?.hide);
   }
 
   private _listenInternalItemsChange() {

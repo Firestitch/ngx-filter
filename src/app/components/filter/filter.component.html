@@ -1,19 +1,49 @@
 <div class="filter-container">
+  @if (keywordVisible$ | async) {
+    <ng-container *ngTemplateOutlet="heading"></ng-container>
+  }
   <div class="filter-inner-container">
-    <ng-container *ngIf="!hasKeyword; else filterKeyword">
+    @if (keywordVisible$ | async) {
+      <div class="filter-keyword">
+        <mat-form-field
+            class="search-form-field form-field-padless"
+            [ngClass]="{
+                'has-keyword': !!keyword
+              }">
+          <span
+              matPrefix
+              class="icon">
+            <mat-icon matPrefix>
+              search
+            </mat-icon>
+          </span>
+          <input
+            #keywordMatInput
+            matInput
+            [(ngModel)]="keyword"
+            (ngModelChange)="keywordChange($event)"
+            name="filter-input"
+            [fsClear]="true"
+            [placeholder]="searchPlaceholder">
+        </mat-form-field>
+      </div>
+    } @else {
       <div>
+        @if (keywordNotVisible$ | async) {
+          <ng-container *ngTemplateOutlet="heading"></ng-container>
+        }
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       </div>
-    </ng-container>
+    }
     <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
-  <ng-container *ngIf="hasKeyword">
+  @if (keywordVisible$ | async) {
     <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
-  </ng-container>
+  }
 </div>
 <ng-template #filterStatusBarChips>
-  <ng-container *ngIf="statusBar">
+  @if (statusBar) {
     <div
         class="filter-status-container"
         [ngClass]="{ 'has-status': !!filterStatus.textContent }">
@@ -23,48 +53,22 @@
         <ng-container *ngTemplateOutlet="statusBar.templateRef"></ng-container>
       </div>
     </div>
-  </ng-container>
-  <ng-container *ngIf="config.chips && hasFilterChips$ | async">
+  }
+  @if (config.chips && hasFilterChips$ | async) {
     <fs-filter-chips
       class="filter-chips"
       [filters]="items">
     </fs-filter-chips>
-  </ng-container>
-</ng-template>
-<ng-template #filterKeyword>
-  <div class="filter-keyword">
-    <ng-container *ngIf="(keywordVisible$ | async)">
-      <mat-form-field
-          class="search-form-field form-field-padless"
-          [ngClass]="{
-            'has-keyword': !!keyword
-          }">
-        <span
-            matPrefix
-            class="icon">
-          <mat-icon matPrefix>
-            search
-          </mat-icon>
-        </span>
-        <input
-          #keywordMatInput
-          matInput
-          [(ngModel)]="keyword"
-          (ngModelChange)="keywordChange($event)"
-          name="filter-input"
-          [fsClear]="true"
-          [placeholder]="searchPlaceholder">
-      </mat-form-field>
-    </ng-container>
-  </div>
+  }
 </ng-template>
 <ng-template #filterActions>
   <div class="filter-actions">
-    <fs-filter-actions
-      *ngIf="actionsVisible$ | async"
-      [actions]="actions$ | async"
-      [kebabActions]="menuActions$ | async">
-    </fs-filter-actions>
+    @if (actionsVisible$ | async) {
+      <fs-filter-actions
+        [actions]="actions$ | async"
+        [kebabActions]="menuActions$ | async">
+      </fs-filter-actions>
+    }
   </div>
 </ng-template>
 <ng-template #filterToolbar>
@@ -108,4 +112,16 @@
       </div>
     }
   </div>
+</ng-template>
+<ng-template #heading>
+  @if (config.heading) {
+    <div class="heading">
+      <h2>
+        {{ config.heading }}
+      </h2>
+      <div class="subheading">
+        {{ config.subheading }}
+      </div>
+    </div>
+  }
 </ng-template>

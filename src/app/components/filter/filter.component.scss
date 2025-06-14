@@ -1,26 +1,6 @@
 :host {
   margin-bottom: 20px;
   display: block;
-
-  &.has-keyword {
-    .filter-status-container.has-status {
-      margin-top: 4px;
-    }
-  }
-
-  &:not(.has-keyword) {
-    .filter-status-container:not(.has-status) + fs-filter-chips {
-      margin-top: 0px;
-    }
-  
-    .filter-inner-container {
-      display: flex;
-    }
-  
-    .filter-toolbar {
-      justify-content: flex-end;
-    }
-  }
 }
 
 .filter-status-container {
@@ -110,6 +90,18 @@
       span {
         font-size: 80%;
       }
+    }
+  }
+}
+
+.heading {
+  margin-right: 10px;
+
+  h2 {
+    margin: 0;
+
+    + .subheading {
+      margin: 0;
     }
   }
 }

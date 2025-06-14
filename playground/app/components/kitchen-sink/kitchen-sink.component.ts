@@ -1,5 +1,6 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild,
+  ChangeDetectionStrategy,
+  Component, EventEmitter, OnInit, ViewChild,
 } from '@angular/core';
 
 import { filter, nameValue } from '@firestitch/common';
@@ -77,15 +78,13 @@ export class KitchenSinkComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-  ) { }
-
   public ngOnInit(): void {
     this.conf = {
       persist: {
         name: 'kitchen-sink',
       },
+      heading: 'Kitchen Sink',
+      subheading: 'This is a subtitle',
       inline: false,
       chips: true,
       autofocus: false,

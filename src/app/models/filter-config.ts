@@ -37,6 +37,8 @@ export class FsFilterConfig {
   public items: IFilterConfigItem[];
   public actions: FsFilterAction[];
   public namespace: string; // for persistance
+  public heading: string;
+  public subheading: string;
 
   constructor(data: FilterConfig = {}) {
     this._init(data);
@@ -64,6 +66,8 @@ export class FsFilterConfig {
       items: data.items,
       actions: data.actions,
       buttonStyle: data.buttonStyle || ButtonStyle.Raised,
+      heading: data.heading,
+      subheading: data.subheading,
     });
 
     if (this.persist) {
