@@ -33,7 +33,7 @@
 </ng-template>
 <ng-template #filterKeyword>
   <div class="filter-keyword">
-    <ng-container *ngIf="(keywordVisible$ | async) && !keywordItem?.hide ">
+    <ng-container *ngIf="(keywordVisible$ | async)">
       <mat-form-field
           class="search-form-field form-field-padless"
           [ngClass]="{

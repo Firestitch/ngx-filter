@@ -78,7 +78,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   @Input() public showSortBy: any = true;
-  @Input() public showFilterInput = true;
   @Output() public closed = new EventEmitter<any>();
   @Output() public opened = new EventEmitter<any>();
   @Output() public ready = new EventEmitter<void>();
@@ -248,6 +247,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._initAutoReload();
     this._listenInputChanges();
     this._listenInternalItemsChange();
+    this._initKeywordVisibility();
     this._initOverlay();
   }
 
@@ -724,6 +724,10 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.keyword = keywordItem.model;
       this.searchPlaceholder = keywordItem.label as string || 'Search';
     }
+  }
+
+  private _initKeywordVisibility() {
+    this._keywordVisible$.next(!this.keywordItem?.hide);
   }
 
   private _listenInternalItemsChange() {
