@@ -62,19 +62,19 @@
   }
 </ng-template>
 <ng-template #filterActions>
-  <div class="filter-actions">
-    @if (actionsVisible$ | async) {
+  @if (actionsVisible$ | async) {
+    <div class="filter-actions">
       <fs-filter-actions
         [actions]="actions$ | async"
         [kebabActions]="menuActions$ | async">
       </fs-filter-actions>
-    }
-  </div>
+    </div>
+  }
 </ng-template>
 <ng-template #filterToolbar>
-  <div class="filter-toolbar">
-    @if (filtersBtnVisible$ | async) {
-      @if (hasVisibleItemOrSorting) {
+  @if (config.reload || config.autoReload || ((filtersBtnVisible$ | async) && hasVisibleItemOrSorting)) {
+    <div class="filter-toolbar">
+      @if ((filtersBtnVisible$ | async) && hasVisibleItemOrSorting) {
         <a
             mat-icon-button
             class="button-filters"
@@ -86,32 +86,32 @@
           {{ config.button.label }}
         </a>
       }
-    }
-    @if (config.reload) {
-      <a
-          mat-icon-button
-          (click)="reload($event)"
-          class="button-reload">
-        <mat-icon #reloadEl>
-          refresh
-        </mat-icon>
-      </a>
-    }
-    @if (config.autoReload) {
-      <div class="filter-reload">
-        @if (config.autoReload) {
-          <mat-slide-toggle
-              name="autoReload"
-              class="auto-reload"
-              [(ngModel)]="autoReload">
-            <span>
-              Auto refresh
-            </span>
-          </mat-slide-toggle>
-        }
-      </div>
-    }
-  </div>
+      @if (config.reload) {
+        <a
+            mat-icon-button
+            (click)="reload($event)"
+            class="button-reload">
+          <mat-icon #reloadEl>
+            refresh
+          </mat-icon>
+        </a>
+      }
+      @if (config.autoReload) {
+        <div class="filter-reload">
+          @if (config.autoReload) {
+            <mat-slide-toggle
+                name="autoReload"
+                class="auto-reload"
+                [(ngModel)]="autoReload">
+              <span>
+                Auto refresh
+              </span>
+            </mat-slide-toggle>
+          }
+        </div>
+      }
+    </div>
+  }
 </ng-template>
 <ng-template #heading>
   @if (config.heading) {
