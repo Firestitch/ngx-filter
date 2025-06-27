@@ -57,11 +57,12 @@
 
 .filter-actions {
   display: flex;
-  align-items: center;
+  align-items: center;   
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .filter-toolbar {
-  flex: 1;
   white-space: nowrap;
   display: flex;
   align-items: center;
