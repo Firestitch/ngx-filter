@@ -57,14 +57,6 @@ export class FilterDrawerComponent {
     return this._itemsStore.visibleItems$;
   }
 
-  public get sortItem(): Item {
-    return this._itemsStore.sortByItem;
-  }
-
-  public get sortDirectionItem(): Item {
-    return this._itemsStore.sortDirectionItem;
-  }
-
   public clear() {
     this._clear();
   }
