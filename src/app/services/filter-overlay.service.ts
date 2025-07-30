@@ -1,7 +1,7 @@
-import { Inject, Injectable, Injector, OnDestroy } from '@angular/core';
+import { Inject, Injectable, Injector, OnDestroy, StaticProvider } from '@angular/core';
 
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
 
 import { HtmlClassRenderer } from '@firestitch/html';
 
@@ -117,15 +117,17 @@ export class FsFilterOverlayService implements OnDestroy {
     return containerRef.instance;
   }
 
-  private _createInjector(parentInjector, data, overlayRef) {
-    const injectionTokens = new WeakMap<any, any>([
-      [FILTER_DRAWER_DATA, data],
-      [FILTER_DRAWER_OVERLAY, overlayRef],
-    ]);
-
-    return new PortalInjector(parentInjector, injectionTokens);
+  private _createInjector(parentInjector: Injector, data: any, overlayRef: any): Injector {
+    const providers: StaticProvider[] = [
+      { provide: FILTER_DRAWER_DATA, useValue: data },
+      { provide: FILTER_DRAWER_OVERLAY, useValue: overlayRef },
+    ];
+  
+    return Injector.create({
+      providers,
+      parent: parentInjector,
+    });
   }
-
   private _removeFilterClass() {
     this._filterMeta.openedFilters--;
 
