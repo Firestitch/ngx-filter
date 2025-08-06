@@ -5,24 +5,24 @@
     [fsFilterFocusTrigger]="item"
     [(ngModel)]="item.model"
     [compareWith]="compare">
-    <ng-container *ngFor="let selectItem of item.values">
-      <ng-container *ngIf="selectItem[item.children]; else simpleOption">
+    @for (selectItem of item.values; track selectItem) {
+      @if (selectItem[item.children]) {
         <mat-optgroup [label]="selectItem.name">
-          <mat-option *ngFor="let subItem of selectItem[item.children]"
-                      [value]="subItem.value"
-                      [ngStyle]="selectItem.style">
-            {{ subItem.name }}
-          </mat-option>
+          @for (subItem of selectItem[item.children]; track subItem) {
+            <mat-option
+              [value]="subItem.value"
+              [ngStyle]="selectItem.style">
+              {{ subItem.name }}
+            </mat-option>
+          }
         </mat-optgroup>
-      </ng-container>
-
-      <ng-template #simpleOption>
+      } @else {
         <mat-option
-        [value]="selectItem.value"
-        [ngStyle]="selectItem.style">
+          [value]="selectItem.value"
+          [ngStyle]="selectItem.style">
           {{ selectItem.name }}
         </mat-option>
-      </ng-template>
-    </ng-container>
+      }
+    }
   </mat-select>
 </mat-form-field>

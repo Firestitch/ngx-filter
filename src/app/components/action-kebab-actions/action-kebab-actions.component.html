@@ -1,74 +1,78 @@
-<button 
-    type="button"
-    mat-icon-button
-    class="menu-button"
-    [fsMenuTriggerFor]="kebabActionsMenu">
+<button
+  type="button"
+  mat-icon-button
+  class="menu-button"
+  [fsMenuTriggerFor]="kebabActionsMenu">
   <mat-icon>more_vert</mat-icon>
 </button>
 <fs-menu #kebabActionsMenu>
-  <ng-container *ngFor="let action of kebabActions">
-    <ng-container [ngSwitch]="action.mode">
+  @for (action of kebabActions; track action) {
+    @switch (action.mode) {
       <!-- Case when actions was collapsed from action with mode = 'menu'-->
-      <ng-container *ngSwitchCase="'menu'">
-        <ng-container *ngFor="let childAction of action.items">
-          <ng-container *ngIf="childAction.isGroup else simpleMenuItem">
+      @case ('menu') {
+        @for (childAction of action.items; track childAction) {
+          @if (childAction.isGroup) {
             <fs-menu-group>
               <ng-template fs-group-menu-item-template>
                 {{ action.label }} <mat-icon style="margin: 0;">arrow_right</mat-icon> {{childAction.label}}
               </ng-template>
-              <ng-container *ngFor="let subAction of childAction.items">
-                <ng-template 
-                    fs-menu-item
-                    [link]="subAction.routerLink?.link"
-                    [queryParams]="subAction.routerLink?.queryParams"
-                    [hidden]="!(subAction.visible$ | async)"
-                    (click)="actionClick(subAction, $event)">
-                  <mat-icon *ngIf="subAction.icon">{{subAction.icon}}</mat-icon>
+              @for (subAction of childAction.items; track subAction) {
+                <ng-template
+                  fs-menu-item
+                  [link]="subAction.routerLink?.link"
+                  [queryParams]="subAction.routerLink?.queryParams"
+                  [hidden]="!(subAction.visible$ | async)"
+                  (click)="actionClick(subAction, $event)">
+                  @if (subAction.icon) {
+                    <mat-icon>{{subAction.icon}}</mat-icon>
+                  }
                   {{subAction.label}}
                 </ng-template>
-              </ng-container>
+              }
             </fs-menu-group>
-          </ng-container>
-          <ng-template #simpleMenuItem>
-            <ng-template 
-                fs-menu-item
-                [link]="childAction.routerLink?.link"
-                [queryParams]="childAction.routerLink?.queryParams"
-                [hidden]="!(childAction.visible$ | async)"
-                (click)="actionClick(childAction, $event)">
-              <mat-icon *ngIf="childAction.icon">{{childAction.icon}}</mat-icon>
-             {{ action.label }} <mat-icon style="margin: 0;">arrow_right</mat-icon>{{ childAction.label }}
+          } @else {
+            <ng-template
+              fs-menu-item
+              [link]="childAction.routerLink?.link"
+              [queryParams]="childAction.routerLink?.queryParams"
+              [hidden]="!(childAction.visible$ | async)"
+              (click)="actionClick(childAction, $event)">
+              @if (childAction.icon) {
+                <mat-icon>{{childAction.icon}}</mat-icon>
+              }
+              {{ action.label }} <mat-icon style="margin: 0;">arrow_right</mat-icon>{{ childAction.label }}
             </ng-template>
+          }
+        }
+      }
+      @case ('file') {
+        <ng-template
+          fs-menu-file-item
+          [fsClass]="action.classArray"
+          [multiple]="action.multiple"
+          [accept]="action.accept || '*'"
+          [minWidth]="action.minWidth"
+          [minHeight]="action.minHeight"
+          [imageWidth]="action.maxWidth"
+          [imageHeight]="action.maxHeight"
+          (error)="action.fileError($event)"
+          (select)="action.fileSelected($event)"
+          (click)="action.click($event)">
+          @if (action.icon) {
+            <mat-icon>{{action.icon}}</mat-icon>
+            } {{action.label}}
           </ng-template>
-        </ng-container>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'file'">
-        <ng-template 
-            fs-menu-file-item
-            [fsClass]="action.classArray"
-            [multiple]="action.multiple"
-            [accept]="action.accept || '*'"
-            [minWidth]="action.minWidth"
-            [minHeight]="action.minHeight"
-            [imageWidth]="action.maxWidth"
-            [imageHeight]="action.maxHeight"
-            (error)="action.fileError($event)"
-            (select)="action.fileSelected($event)"
-            (click)="action.click($event)">
-          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
-        </ng-template>
-      </ng-container>
-
-      <ng-container *ngSwitchDefault>
-        <ng-template 
+        }
+        @default {
+          <ng-template
             fs-menu-item
             (click)="action.click($event)"
             [fsClass]="action.classArray">
-          <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon> {{action.label}}
-        </ng-template>
-      </ng-container>
-
-    </ng-container>
-  </ng-container>
-</fs-menu>
+            @if (action.icon) {
+              <mat-icon>{{action.icon}}</mat-icon>
+              } {{action.label}}
+            </ng-template>
+          }
+        }
+      }
+    </fs-menu>

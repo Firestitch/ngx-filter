@@ -2,18 +2,20 @@
   <mat-label>
     {{ item.label }}
   </mat-label>
-  <span
-    matTextPrefix
-    *ngIf="item.prefix"
-    [innerHtml]="item.prefix">
-  </span>
+  @if (item.prefix) {
+    <span
+      matTextPrefix
+      [innerHtml]="item.prefix">
+    </span>
+  }
   <input
     matInput
     [formControl]="textControl"
     [fsFilterFocusTrigger]="item">
-  <span
-    matSuffix
-    *ngIf="item.suffix"
-    [innerHtml]="item.suffix">
-  </span>
+  @if (item.suffix) {
+    <span
+      matSuffix
+      [innerHtml]="item.suffix">
+    </span>
+  }
 </mat-form-field>

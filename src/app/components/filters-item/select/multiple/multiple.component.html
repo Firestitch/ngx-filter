@@ -3,22 +3,23 @@
     {{ item.label }}
   </mat-label>
   <mat-select
-      #select
-      [fsFilterFocusTrigger]="item"
-      [(ngModel)]="item.model"
-      (ngModelChange)="changed()"
-      [multiple]="item.multiple">
-    <mat-option
-        *ngFor="let item of item.values | fsFilterIsolateValues: item.isolate"
+    #select
+    [fsFilterFocusTrigger]="item"
+    [(ngModel)]="item.model"
+    (ngModelChange)="changed()"
+    [multiple]="item.multiple">
+    @for (item of item.values | fsFilterIsolateValues: item.isolate; track item) {
+      <mat-option
         [value]="item.value">
-      {{ item.name }}
-    </mat-option>
+        {{ item.name }}
+      </mat-option>
+    }
   </mat-select>
   <mat-hint>
     @if (item.isolate) {
       <mat-checkbox
-          (change)="isolateChange(item)"
-          [(ngModel)]="item.isolate.enabled">
+        (change)="isolateChange(item)"
+        [(ngModel)]="item.isolate.enabled">
         <span class="checkbox-label">
           {{ item.isolate.label }}
         </span>

@@ -3,12 +3,13 @@
     <mat-label>
       {{ item.label[0] }}
     </mat-label>
-    <span
-      matTextPrefix
-      class="text-prefix"
-      *ngIf="item.prefix"
-      [innerHtml]="item.prefix">
-    </span>
+    @if (item.prefix) {
+      <span
+        matTextPrefix
+        class="text-prefix"
+        [innerHtml]="item.prefix">
+      </span>
+    }
     <input
       matInput
       [fsFilterFocusTrigger]="item"
@@ -17,23 +18,25 @@
       inputmode="decimal"
       [(ngModel)]="item.model.min"
       #from>
-    <span
-      matSuffix
-      class="text-suffix"
-      *ngIf="item.suffix"
-      [innerHtml]="item.suffix">
-    </span>
+    @if (item.suffix) {
+      <span
+        matSuffix
+        class="text-suffix"
+        [innerHtml]="item.suffix">
+      </span>
+    }
   </mat-form-field>
   <mat-form-field class="filter-range-max">
     <mat-label>
       {{ item.label[1] }}
     </mat-label>
-    <span
-      matTextPrefix
-      class="text-prefix"
-      *ngIf="item.prefix"
-      [innerHtml]="item.prefix">
-    </span>
+    @if (item.prefix) {
+      <span
+        matTextPrefix
+        class="text-prefix"
+        [innerHtml]="item.prefix">
+      </span>
+    }
     <input
       matInput
       [fsFilterFocusTrigger]="item"
@@ -42,11 +45,12 @@
       inputmode="decimal"
       [(ngModel)]="item.model.max"
       #to>
-    <span
-      matSuffix
-      class="text-suffix"
-      *ngIf="item.suffix"
-      [innerHtml]="item.suffix">
-    </span>
+    @if (item.suffix) {
+      <span
+        matSuffix
+        class="text-suffix"
+        [innerHtml]="item.suffix">
+      </span>
+    }
   </mat-form-field>
 </div>

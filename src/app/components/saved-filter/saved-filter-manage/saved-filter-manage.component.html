@@ -3,29 +3,28 @@
 </h1>
 <div mat-dialog-content>
   <div
-      cdkDropList 
-      [cdkDropListData]="savedFilters"
-      cdkDropListOrientation="vertical"
-      (cdkDropListDropped)="drop($event)">  
-    <ng-container 
-        *ngFor="let savedFilter of savedFilters">
+    cdkDropList
+    [cdkDropListData]="savedFilters"
+    cdkDropListOrientation="vertical"
+    (cdkDropListDropped)="drop($event)">
+    @for (savedFilter of savedFilters; track savedFilter) {
       <div class="chip-container">
-        <fs-chip 
-            class="saved-filter-manage-chip"
-            cdkDrag
-            (removed)="remove(savedFilter)">
+        <fs-chip
+          class="saved-filter-manage-chip"
+          cdkDrag
+          (removed)="remove(savedFilter)">
           {{savedFilter.name}}
         </fs-chip>
       </div>
-    </ng-container>
+    }
   </div>
 </div>
 <div mat-dialog-actions>
-  <button 
-      mat-button
-      color="primary"
-      type="button"
-      [mat-dialog-close]="null">
+  <button
+    mat-button
+    color="primary"
+    type="button"
+    [mat-dialog-close]="null">
     Done
   </button>
 </div>

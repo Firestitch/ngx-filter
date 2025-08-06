@@ -9,24 +9,27 @@
     <div class="overflow-shadow filter-items">
       <div class="overflow-shadow-content">
         <ng-container *fsSkeleton="(externalParams.pending$ | async) !== true">
-          <filter-item
-            *ngFor="let filterItem of items$ | async"
-            class="filter-group"
-            [item]="filterItem">
-          </filter-item>
+          @for (filterItem of items$ | async; track filterItem) {
+            <filter-item
+              class="filter-group"
+              [item]="filterItem">
+            </filter-item>
+          }
         </ng-container>
       </div>
     </div>
-    <fs-filter-drawer-actions
-      class="filter-actions"
-      *ngIf="(externalParams.pending$ | async) !== true"
-      (clear)="clear()"
-      (done)="done()">
-    </fs-filter-drawer-actions>
+    @if ((externalParams.pending$ | async) !== true) {
+      <fs-filter-drawer-actions
+        class="filter-actions"
+        (clear)="clear()"
+        (done)="done()">
+      </fs-filter-drawer-actions>
+    }
   </div>
 </div>
-<div
-  class="backdrop"
-  *ngIf="!windowDesktop"
-  (click)="backdropClick()">
-</div>
+@if (!windowDesktop) {
+  <div
+    class="backdrop"
+    (click)="backdropClick()">
+  </div>
+}

@@ -1,58 +1,58 @@
-<ng-container *ngIf="!item.hasPendingValues || (chipDelayedRender$ | async)">
-  <ng-container *ngIf="rangeItem; else defaultChip">
-    <fs-chip
-        *ngIf="item.model?.min || item.model?.from"
+@if (!item.hasPendingValues || (chipDelayedRender$ | async)) {
+  @if (rangeItem) {
+    @if (item.model?.min || item.model?.from) {
+      <fs-chip
         [value]="item"
         [selectable]="false"
         [removable]="item.showClear"
         size="small"
         (click)="focusOnItem('from')"
         (removed)="removeItem($event, 'from')">
-      <ng-template
-        [ngTemplateOutlet]="chipContent"
-        [ngTemplateOutletContext]="{ item: item, type: 'from' }">
-      </ng-template>
-    </fs-chip>
-    <fs-chip
-        *ngIf="item.model?.max || item.model?.to"
+        <ng-template
+          [ngTemplateOutlet]="chipContent"
+          [ngTemplateOutletContext]="{ item: item, type: 'from' }">
+        </ng-template>
+      </fs-chip>
+    }
+    @if (item.model?.max || item.model?.to) {
+      <fs-chip
         [value]="item"
         [selectable]="false"
         [removable]="item.showClear"
         size="small"
         (click)="focusOnItem('to')"
         (removed)="removeItem($event, 'to')">
-      <ng-template
-        [ngTemplateOutlet]="chipContent"
-        [ngTemplateOutletContext]="{ item: item, type: 'to' }">
-      </ng-template>
-    </fs-chip>
-  </ng-container>
-  <ng-template #defaultChip>
+        <ng-template
+          [ngTemplateOutlet]="chipContent"
+          [ngTemplateOutletContext]="{ item: item, type: 'to' }">
+        </ng-template>
+      </fs-chip>
+    }
+  } @else {
     <fs-chip
-        [value]="item"
-        [selectable]="false"
-        [removable]="item.showClear"
-        size="small"
-        (click)="focusOnItem()"
-        (removed)="removeItem($event)">
+      [value]="item"
+      [selectable]="false"
+      [removable]="item.showClear"
+      size="small"
+      (click)="focusOnItem()"
+      (removed)="removeItem($event)">
       <ng-template
         [ngTemplateOutlet]="chipContent"
         [ngTemplateOutletContext]="{ item: item }">
       </ng-template>
     </fs-chip>
-  </ng-template>
+  }
   <ng-template
-      #chipContent
-      let-item="item"
-      let-type="type">
-    <ng-container *ngIf="!item.hasPendingValues && !item.loading; else lodaingValues">
+    #chipContent
+    let-item="item"
+    let-type="type">
+    @if (!item.hasPendingValues && !item.loading) {
       <fs-filter-chip-content
         [item]="item"
         [type]="type">
       </fs-filter-chip-content>
-    </ng-container>
-    <ng-template #lodaingValues>
+    } @else {
       Loading...
-    </ng-template>
+    }
   </ng-template>
-</ng-container>
+}
