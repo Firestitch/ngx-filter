@@ -45,6 +45,16 @@ export class SimpleSelectItem extends BaseSelectItem {
     return this.model !== '__all' && this.model !== undefined;
   }
 
+  public setModel(value): void {
+    if (value) {
+      if (!isNaN(value)) {
+        value = +value;
+      }
+    }
+
+    super.setModel(value);
+  }
+
   protected _init() {
     super._init();
 
@@ -53,21 +63,11 @@ export class SimpleSelectItem extends BaseSelectItem {
     }
   }
 
-  protected get isolateOptionNotSelected() {
+  protected get _isolateOptionNotSelected() {
     const modelValue = this.model;
     const isolate = this.isolate;
 
     return isolate && !isolate.enabled && modelValue?.length === 0;
-  }
-
-  protected _setModel(value): void {
-    if (value) {
-      if (!isNaN(value)) {
-        value = +value;
-      }
-    }
-
-    super._setModel(value);
   }
 
   protected _validateModel() {

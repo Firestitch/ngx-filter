@@ -10,7 +10,7 @@ import {
   tap,
 } from 'rxjs/operators';
 
-import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { KeyValue } from '../interfaces/external-params.interface';
 import {
   IFilterSavedFilter,
   IFilterSavedFiltersConfig,
@@ -87,7 +87,7 @@ export class SavedFilterController implements OnDestroy {
       );
   }
 
-  public get activeFilterData(): IFilterExternalParams {
+  public get activeFilterData(): KeyValue {
     return this._activeFilter$.getValue()?.filters;
   }
 
@@ -153,7 +153,14 @@ export class SavedFilterController implements OnDestroy {
     savedFilter = {
       ...this.activeFilter,
       ...savedFilter,
-      filters: this._itemStore.models(),
+      filters: this._itemStore.items
+        .filter((item) => item.hasValue)
+        .reduce((accum, item) => {
+          return {
+            ...accum,
+            [item.name]: item.model,
+          };
+        }, {}),
     };  
 
     return this._config.save(savedFilter)

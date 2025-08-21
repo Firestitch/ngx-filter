@@ -1,3 +1,3 @@
-export interface IFilterExternalParams {
+export interface KeyValue {
   [key: string]: any;
 }

@@ -105,6 +105,19 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     }
   }
 
+  public setModel(value) {
+    if (value) {
+      if (value.from && (!isDate(value.from) || !isValid(value.from))) {
+        value.from = parseISO(value.from);
+      }
+      if (value.to && (!isDate(value.to) || !isValid(value.to))) {
+        value.to = parseISO(value.to);
+      }
+    }
+
+    super.setModel(value);
+  }
+
   public clearDateRange(
     type: 'from' | 'to' = null, 
     defaultValue: IFilterItemDefaultDateRange = undefined,
@@ -135,19 +148,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
 
   public get hasModelValue() {
     return this.model;
-  }
-
-  protected _setModel(value) {
-    if (value) {
-      if (value.from && (!isDate(value.from) || !isValid(value.from))) {
-        value.from = parseISO(value.from);
-      }
-      if (value.to && (!isDate(value.to) || !isValid(value.to))) {
-        value.to = parseISO(value.to);
-      }
-    }
-
-    super._setModel(value);
   }
 
   protected _init() {

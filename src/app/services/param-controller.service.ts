@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 import { buildQueryParams } from '../helpers/build-query-params';
-import { IFilterExternalParams, IFilterSavedFilter } from '../interfaces';
+import { IFilterSavedFilter, KeyValue } from '../interfaces';
 import { FsFilterConfig } from '../models/filter-config';
 
 import {
@@ -26,8 +26,8 @@ export class ParamController implements OnDestroy {
   private _queryParams = inject(QueryParamController);
   private _savedFilterController = inject(SavedFilterController);
 
-  public get params(): IFilterExternalParams {
-    let result: IFilterExternalParams = {};
+  public get params(): KeyValue {
+    let result: KeyValue = {};
 
     if (this._persistanceController.queryEnabled) {
       result = {
@@ -89,7 +89,7 @@ export class ParamController implements OnDestroy {
     }
   }
 
-  public reloadFiltersWithValues(params: IFilterExternalParams) {
+  public reloadFiltersWithValues(params: KeyValue) {
     this._itemStore.updateItemsWithValues(params);
 
     this._saveQueryParams();
@@ -160,7 +160,6 @@ export class ParamController implements OnDestroy {
   }
 
   private _saveQueryParams() {
-
     const params = buildQueryParams(
       this._itemStore
         .valuesAsQuery({

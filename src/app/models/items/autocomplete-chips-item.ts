@@ -73,6 +73,10 @@ export class AutocompleteChipsItem
       .join(', ');
   }
 
+  public setModel(value) {
+    super.setModel(value || []);
+  }
+
   protected _init() {
     if (this.model === undefined) {
       this._model = [];
@@ -82,10 +86,6 @@ export class AutocompleteChipsItem
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? [];
     this.search = '';
-  }
-
-  protected _setModel(value) {
-    super._setModel(value || []);
   }
 
 }

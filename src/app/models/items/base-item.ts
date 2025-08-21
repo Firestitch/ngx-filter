@@ -131,7 +131,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public set model(value) {
-    this._setModel(value);
+    this.setModel(value);
     this.valueChanged();
   }
 
@@ -288,7 +288,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._destroy$.complete();
   }
 
-  protected _setModel(value) {
+  public setModel(value) {
     this._model = value;
   }
 
@@ -296,7 +296,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     const model = this.persistedValue ?? this.defaultValue;
 
     if (model !== undefined) {
-      this._setModel(model);
+      this.setModel(model);
     }
   }
 

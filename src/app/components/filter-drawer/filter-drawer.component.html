@@ -49,6 +49,7 @@
       </div>
       @if ((paramCointroller.pending$ | async) !== true) {
         <fs-filter-drawer-actions
+          [savedFiltersController]="savedFiltersController"
           class="filter-actions"
           (clear)="clear()"
           (done)="done()">

@@ -105,6 +105,16 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     };
   }
 
+  public setModel(value) {
+    if (value) {
+      value.from = parseDate(value.from);
+      value.to = parseDate(value.to);
+      value.period = parseInt(value.period, 10) || undefined;
+    }
+
+    super.setModel(value);
+  }
+
   public getChipsContent(type = null): string {
     return formatPeriodObject(this.value);
   }
@@ -113,17 +123,9 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     //
   }
 
-  protected _setModel(value) {
-    if (value) {
-      value.from = parseDate(value.from);
-      value.to = parseDate(value.to);
-      value.period = parseInt(value.period, 10) || undefined;
-    }
-
-    super._setModel(value);
+  protected _init() { 
+    //
   }
-
-  protected _init() { }
 
   protected _clearValue(defaultValue: unknown = undefined) {
     this.model = defaultValue ?? undefined;

@@ -44,6 +44,16 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     return params;
   }
 
+  public setModel(value) {
+    if (value) {
+      if (!isDate(value) || !isValid(value)) {
+        value = parseISO(value);
+      }
+    }
+
+    super.setModel(value);
+  }
+
   public get persistanceObject(): Record<string, string> {
     const value = this.queryObject[this.name];
 
@@ -54,16 +64,6 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
 
   protected _validateModel() {
     //
-  }
-
-  protected _setModel(value) {
-    if (value) {
-      if (!isDate(value) || !isValid(value)) {
-        value = parseISO(value);
-      }
-    }
-
-    super._setModel(value);
   }
 
   protected _init() {

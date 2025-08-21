@@ -11,6 +11,7 @@
         <th>
           Filters
         </th>
+        <th class="actions-column"></th>
       </tr>
     </thead>
     <tbody>
@@ -21,27 +22,22 @@
               {{ savedFilter.name }}
             </a>
           </td>
-          <td></td>
+          <td>
+            <fs-saved-filter-chips [savedFilter]="savedFilter"></fs-saved-filter-chips>
+          </td>
+          <td>
+            <fs-menu>
+              <ng-template
+                  fs-menu-item
+                  (click)="remove(savedFilter)">
+                Delete
+              </ng-template>
+            </fs-menu>
+          </td>
         </tr>
       }
     </tbody>
   </table>
-  <!-- <fs-chips
-      [(ngModel)]="savedFilters"
-      [name]="'chips'"
-      [orientation]="'vertical'"
-      (ngModelChange)="order($event)"
-      [sortable]="sortable">
-    @for (savedFilter of savedFilters; track savedFilter.id) {
-      <fs-chip
-          [value]="savedFilter"
-          [selectable]="false"
-          (removed)="remove(savedFilter)"
-          [width]="'100%'">
-        {{ savedFilter.name }}
-      </fs-chip>
-    }
-  </fs-chips> -->
 </div>
 <div mat-dialog-actions>
   <button

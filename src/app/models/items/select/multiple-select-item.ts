@@ -22,7 +22,7 @@ export class MultipleSelectItem extends BaseSelectItem {
   public get value() {
     let value = clone(this.model);
 
-    if (this.isolateOptionNotSelected) {
+    if (this._isolateOptionNotSelected) {
       value = this.values?.map((v) => v.value);
     } else if (!Array.isArray(value) || value.length === 0 || value.indexOf('__all') > -1) {
       value = undefined;
@@ -35,14 +35,31 @@ export class MultipleSelectItem extends BaseSelectItem {
     return Array.isArray(this.model) && this.model.length > 0;
   }
 
-  public get isolateOptionNotSelected() {
+  public get _isolateOptionNotSelected() {
     const modelValue = this.model;
     const isolate = this.isolate;
 
     return isolate && !isolate.enabled && modelValue?.length === 0;
   }
+  
+  public setModel(value) {
+    if (Array.isArray(value)) {
+      value = value.map((val) => {
+        if (isNaN(val)) {
+          return val;
+        }
 
-  public getChipsContent(type = null): string {
+        return +val;
+      });
+
+      value = value.length === 0 ? undefined : value;
+    }
+    
+
+    super.setModel(value);
+  }
+
+  public getChipsContent(): string {
     if (!this.model) {
       return '';
     }
@@ -81,29 +98,12 @@ export class MultipleSelectItem extends BaseSelectItem {
      * Code below prevents filling model with values from query params if query params contain all possible values
      */
     const isolate = !wrongDefaultValue
-      && !this.isolateOptionNotSelected
+      && !this._isolateOptionNotSelected
       && arraysAreEquals(this.model, values);
 
     if (wrongDefaultValue || isolate) {
       this.model = [];
     }
-  }
-  
-  protected _setModel(value) {
-    if (Array.isArray(value)) {
-      value = value.map((val) => {
-        if (isNaN(val)) {
-          return val;
-        }
-
-        return +val;
-      });
-
-      value = value.length === 0 ? undefined : value;
-    }
-    
-
-    super._setModel(value);
   }
 
   protected _validateModel() {

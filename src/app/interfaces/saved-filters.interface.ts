@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-import { IFilterExternalParams } from './external-params.interface';
+import { KeyValue } from './external-params.interface';
 
 export interface IFilterSavedFiltersConfig {
   load: FilterRemoteLoad;
@@ -18,7 +18,7 @@ export interface IFilterSavedFilter {
   id?: string|number;
   name?: string;
   active?: boolean;
-  filters?: IFilterExternalParams;
+  filters?: KeyValue;
 }
 
 export type FilterRemoteLoad = () => Observable<IFilterSavedFilter[]>;

@@ -5,8 +5,12 @@
 :host {
   ::ng-deep {
     .mat-mdc-dialog-content {
-      width: 400px;
+      width: 800px;
       max-width: 100%;
     }
   }
+}
+
+.actions-column {
+  width: 1%;
 }

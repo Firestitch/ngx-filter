@@ -9,10 +9,16 @@ import {
 import { MatButton } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
+import { FsMenuModule } from '@firestitch/menu';
+
+import { IFilterConfigItem } from '../../../interfaces';
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
-import { FsFilterOverlayService } from '../../../services';
+import { BaseItem } from '../../../models/items';
+import { FsFilterOverlayService, ItemStore } from '../../../services';
 import { ParamController } from '../../../services/param-controller.service';
 import { SavedFilterController } from '../../../services/saved-filter-controller.service';
+
+import { FsFilterSavedFilterChipsComponent } from './components/saved-filter-chips';
 
 
 @Component({
@@ -23,6 +29,8 @@ import { SavedFilterController } from '../../../services/saved-filter-controller
   imports: [
     MatDialogModule,
     MatButton,
+    FsFilterSavedFilterChipsComponent,
+    FsMenuModule,
   ],
 })
 export class FsFilterSavedFilterManageComponent implements OnInit {
@@ -32,13 +40,16 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   private _savedFilterController = inject(SavedFilterController);
   private _cdRef = inject(ChangeDetectorRef);
   private _paramController = inject(ParamController);
+  private _itemStore = inject(ItemStore);
   private _dialogRef = inject(MatDialogRef);
   private _filterOverlayService = inject(FsFilterOverlayService);
 
   public ngOnInit(): void {
-    this.savedFilters = [
-      ...this._savedFilterController.savedFilters || [],
-    ];
+    this.savedFilters = this._savedFilterController.savedFilters;
+  }
+
+  public get items(): BaseItem<IFilterConfigItem>[] {
+    return this._itemStore.items;
   }
 
   public get pluralLabelLower(): string {
@@ -58,7 +69,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   public remove(savedFilter: IFilterSavedFilter) {
     this._savedFilterController.delete(savedFilter)
       .subscribe(() => {
-        this.savedFilters = [...this._savedFilterController.savedFilters];
+        this.savedFilters = this._savedFilterController.savedFilters;
         this._cdRef.markForCheck();
       });
   }

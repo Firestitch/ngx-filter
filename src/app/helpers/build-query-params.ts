@@ -2,7 +2,7 @@ import { list as arrayList } from '@firestitch/common';
 
 import { isObject } from 'lodash-es';
 
-import { IFilterExternalParams } from '../interfaces';
+import { KeyValue } from '../interfaces';
 import { IFilterConfigItem } from '../interfaces/config.interface';
 import { CheckboxItem, MultipleSelectItem } from '../models/items';
 import { BaseItem } from '../models/items/base-item';
@@ -11,7 +11,7 @@ import { arraysAreEquals } from './compare';
 import { filterToQueryParam } from './query-param-transformers';
 
 
-export function buildQueryParams(flattenedParams: IFilterExternalParams, items: BaseItem<IFilterConfigItem>[]) {
+export function buildQueryParams(flattenedParams: KeyValue, items: BaseItem<IFilterConfigItem>[]) {
   items
     .forEach((filterItem) => {
       if (filterItem instanceof MultipleSelectItem && filterItem.isolate) {

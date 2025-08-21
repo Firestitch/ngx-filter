@@ -14,7 +14,7 @@ import {
   IFilterConfigItem,
   SortItem,
 } from '../interfaces/config.interface';
-import { IFilterExternalParams } from '../interfaces/external-params.interface';
+import { KeyValue } from '../interfaces/external-params.interface';
 import { ISortingChangeEvent } from '../interfaces/filter.interface';
 import { IFilterConfigSelectItem } from '../interfaces/items/select.interface';
 import { FsFilterConfig, SortByField, SortDirectionField } from '../models/filter-config';
@@ -109,7 +109,7 @@ export class ItemStore implements OnDestroy {
     }
   }
 
-  public queryParams(): IFilterExternalParams {
+  public queryParams(): KeyValue {
     return buildQueryParams(this.valuesAsQuery(), this.items);
   }
 
@@ -236,7 +236,7 @@ export class ItemStore implements OnDestroy {
       }, {});
   }
 
-  public models(): Record<string, unknown> {
+  public models(): KeyValue {
     return this.items
       .reduce((acc, item) => {
         acc[item.name] = item.model;
@@ -249,7 +249,7 @@ export class ItemStore implements OnDestroy {
     onlyPresented = true,
     items = null,
     persisted = false,
-  }: IValueAsQuery = {}): IFilterExternalParams {
+  }: IValueAsQuery = {}): KeyValue {
     const params = {};
 
     (items || this.items)
@@ -270,7 +270,7 @@ export class ItemStore implements OnDestroy {
     return params;
   }
 
-  public init(p: IFilterExternalParams) {
+  public init(p: KeyValue) {
     this.items
       .forEach((item) => {
         item.initValues(p[item.name]);
@@ -281,7 +281,7 @@ export class ItemStore implements OnDestroy {
     this._subscribeToItemsChanges();
   }
 
-  public updateItemsWithValues(values: IFilterExternalParams) {
+  public updateItemsWithValues(values: KeyValue) {
     this.items
       .forEach((item) => {
         if (values[item.name]) {
@@ -410,7 +410,7 @@ export class ItemStore implements OnDestroy {
       });
   }
 
-  private _initSortingItems(p: IFilterExternalParams): void {
+  private _initSortingItems(p: KeyValue): void {
     if (this.sortByItem && this.sortDirectionItem) {
       this.sortByItem.initValues(p[this.sortByItem.name]);
       this.sortDirectionItem.initValues(p[this.sortDirectionItem.name]);

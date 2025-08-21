@@ -34,7 +34,7 @@ import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs
 import { ActionsController } from '../../classes/actions-controller';
 import { FilterIcon } from '../../consts';
 import { objectsAreEquals } from '../../helpers/compare';
-import { IFilterExternalParams, IFilterSavedFilter, ISortingChangeEvent } from '../../interfaces';
+import { IFilterSavedFilter, ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
   FilterConfig, FilterSort, IFilterConfigItem, SortItem,
@@ -192,7 +192,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     return !!this._dialogRef || !!this._drawerRef;
   }
 
-  public get filterParamsQuery(): IFilterExternalParams {
+  public get filterParamsQuery(): KeyValue {
     return this._itemStore.valuesAsQuery();
   }
 

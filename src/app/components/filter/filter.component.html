@@ -3,9 +3,6 @@
     <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
   <div class="filter-inner-container">
-    @if (savedFiltersController.enabled) {
-      <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
-    }
     @if (keywordVisible$ | async) {
       <div class="filter-keyword">
         <mat-form-field
@@ -37,6 +34,9 @@
         }
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       </div>
+    }
+    @if (savedFiltersController.enabled) {
+      <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
     }
     <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>

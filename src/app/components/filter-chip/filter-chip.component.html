@@ -2,12 +2,13 @@
   @if (rangeItem) {
     @if (item.model?.min || item.model?.from) {
       <fs-chip
-        [value]="item"
-        [selectable]="false"
-        [removable]="item.showClear"
-        size="small"
-        (click)="focusOnItem('from')"
-        (removed)="removeItem($event, 'from')">
+          [value]="item"
+          [selectable]="false"
+          [removable]="item.showClear"
+          size="small"
+          [removable]="removable"
+          (click)="click('from')"
+          (removed)="removeItem($event, 'from')">
         <ng-template
           [ngTemplateOutlet]="chipContent"
           [ngTemplateOutletContext]="{ item: item, type: 'from' }">
@@ -16,12 +17,12 @@
     }
     @if (item.model?.max || item.model?.to) {
       <fs-chip
-        [value]="item"
-        [selectable]="false"
-        [removable]="item.showClear"
-        size="small"
-        (click)="focusOnItem('to')"
-        (removed)="removeItem($event, 'to')">
+          [value]="item"
+          [selectable]="false"
+          [removable]="item.showClear && removable"
+          size="small"
+          (click)="click('to')"
+          (removed)="removeItem($event, 'to')">
         <ng-template
           [ngTemplateOutlet]="chipContent"
           [ngTemplateOutletContext]="{ item: item, type: 'to' }">
@@ -30,12 +31,12 @@
     }
   } @else {
     <fs-chip
-      [value]="item"
-      [selectable]="false"
-      [removable]="item.showClear"
-      size="small"
-      (click)="focusOnItem()"
-      (removed)="removeItem($event)">
+        [value]="item"
+        [selectable]="false"
+        [removable]="item.showClear && removable"
+        size="small"
+        (click)="click()"
+        (removed)="removeItem($event)">
       <ng-template
         [ngTemplateOutlet]="chipContent"
         [ngTemplateOutletContext]="{ item: item }">
@@ -43,9 +44,9 @@
     </fs-chip>
   }
   <ng-template
-    #chipContent
-    let-item="item"
-    let-type="type">
+      #chipContent
+      let-item="item"
+      let-type="type">
     @if (!item.hasPendingValues && !item.loading) {
       <fs-filter-chip-content
         [item]="item"

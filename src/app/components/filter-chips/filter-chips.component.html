@@ -1,7 +1,11 @@
 @for (item of filters; track item) {
   @if ((item.value$ | async) !== undefined && item.type !== ItemType.Keyword) {
     @if (item.isChipVisible) {
-      <fs-filter-chip [item]="item"></fs-filter-chip>
+      <fs-filter-chip
+        [item]="item"
+        [clickable]="true"
+        [removable]="true">
+      </fs-filter-chip>
     }
   }
 }

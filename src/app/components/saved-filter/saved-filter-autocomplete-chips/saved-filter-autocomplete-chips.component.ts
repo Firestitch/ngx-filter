@@ -139,8 +139,7 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
 
           return this.savedFiltersController.save(data);
         }),
-        tap((savedFilter) => {
-          this.savedFiltersController.setActiveFilter(savedFilter);
+        tap(() => {
           this._message.success(`Saved ${this.savedFiltersController.singularLabel}`);
         }),
       )

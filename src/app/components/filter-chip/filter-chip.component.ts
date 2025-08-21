@@ -2,6 +2,8 @@ import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
+  HostBinding,
+  inject,
   Input, OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -36,6 +38,11 @@ import { FsFilterChipContentComponent } from '../filter-chip-content/filter-chip
 export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<IFilterConfigItem>;
+  @Input() public removable: boolean = false;
+  
+  @Input() 
+  @HostBinding('class.clickable') 
+  public clickable: boolean = false;
 
   public rangeItem: boolean;
 
@@ -47,12 +54,8 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     );
 
   private _destroy$ = new Subject();
-
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-    private _focusController: FocusControllerService,
-  ) {
-  }
+  private _cdRef = inject(ChangeDetectorRef);
+  private _focusController = inject(FocusControllerService);
 
   public ngOnInit() {
     this.rangeItem = this.item.isTypeDateRange
@@ -73,8 +76,10 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public focusOnItem(type = null) {
-    this._focusController.click(this.item, type);
+  public click(type = null) {
+    if (this.clickable) {
+      this._focusController.click(this.item, type);
+    }
   }
 
   public removeItem(event: MouseEvent, type = null) {

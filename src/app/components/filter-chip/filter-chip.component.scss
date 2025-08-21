@@ -1,9 +1,8 @@
-fs-chip {
-  cursor: pointer;
-  min-width: 0;
-}
-
 :host {
+  &.clickable fs-chip {
+    cursor: pointer;
+  }
+
   display: flex;
   flex-wrap: wrap;
   gap: 5px;

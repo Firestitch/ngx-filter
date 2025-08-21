@@ -77,11 +77,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       .join(', ');
   }
 
-  protected _validateModel() {
-    //
-  }
-
-  protected _setModel(value) {
+  public setModel(value) {
     if (Array.isArray(value)) {
       value = value.map((val) => {
         if (isNaN(val)) {
@@ -94,6 +90,10 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     }
 
     this._model = value;
+  }
+
+  protected _validateModel() {
+    //
   }
 
   protected _init() {

@@ -336,11 +336,11 @@ export class KitchenSinkComponent implements OnInit {
         },
       ],  
       savedFilters: {
-        // label: {
-        //   singular: 'Alert',
-        //   plural: 'Alerts',
-        //   icon: 'notifications',
-        // },        
+        label: {
+          singular: 'Alert',
+          plural: 'Alerts',
+          icon: 'notifications',
+        },        
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 
