@@ -21,9 +21,9 @@ import { map, Observable, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
-import { ExternalParamsController } from '../../../services/external-params-controller.service';
 import { FsFilterItemsStore } from '../../../services/items-store.service';
-import type { SavedFiltersController } from '../../../services/saved-filters-controller.service';
+import { ParamController } from '../../../services/param-controller.service';
+import type { SavedFilterController } from '../../../services/saved-filter-controller.service';
 import { FsFilterSavedFilterManageComponent } from '../saved-filter-manage';
 
 
@@ -41,12 +41,12 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter-manage';
 export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
 
   @Input()
-  public savedFiltersController: SavedFiltersController;
+  public savedFiltersController: SavedFilterController;
 
   public selectedFilter: IFilterSavedFilter;
 
   private _itemsStore = inject(FsFilterItemsStore);
-  private _externalParams = inject(ExternalParamsController);
+  private _paramCointroller = inject(ParamController);
   private _dialog = inject(MatDialog);
   private _destroyRef = inject(DestroyRef);
   private _injector = inject(Injector);
@@ -70,12 +70,16 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
     return this.savedFiltersController.pluralLabel;
   }
 
+  public get labelIcon(): string {
+    return this.savedFiltersController.labelIcon;
+  }
+
   public selectFilter(savedFilter: IFilterSavedFilter): void {
-    this._externalParams.setActiveSavedFilter(savedFilter);
+    this._paramCointroller.setActiveSavedFilter(savedFilter);
   }
 
   public selectedFilterChange(savedFilter: IFilterSavedFilter): void {
-    this._externalParams.setActiveSavedFilter(savedFilter);
+    this._paramCointroller.setActiveSavedFilter(savedFilter);
 
     if (!savedFilter) {
       this._itemsStore.filtersClear();

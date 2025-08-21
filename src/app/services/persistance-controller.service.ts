@@ -9,7 +9,7 @@ import { FsFilterConfig } from '../models/filter-config';
 
 
 @Injectable()
-export class QueryPersistanceController {
+export class PersistanceController {
 
   public queryEnabled = false;
 

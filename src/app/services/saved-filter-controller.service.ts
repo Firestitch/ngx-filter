@@ -2,7 +2,6 @@ import { inject, Injectable, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -28,7 +27,7 @@ import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()
-export class SavedFiltersController implements OnDestroy {
+export class SavedFilterController implements OnDestroy {
 
   private _config: IFilterSavedFiltersConfig;
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
@@ -38,7 +37,6 @@ export class SavedFiltersController implements OnDestroy {
   private _itemsStore = inject(FsFilterItemsStore);
   private _dialog = inject(MatDialog);
   private _prompt = inject(FsPrompt);
-  private _message = inject(FsMessage);
 
   public get singularLabel(): string {
     return this._config?.label?.singular || 'Saved filter';
@@ -254,7 +252,7 @@ export class SavedFiltersController implements OnDestroy {
           if (savedFilter) {
             Object.assign(savedFilter, updatedFilter);
           } else {
-            this.resetActiveFilter();
+            this.updateActiveFilter();
             this.savedFilters = [
               ...this.savedFilters,
               updatedFilter,
@@ -267,22 +265,12 @@ export class SavedFiltersController implements OnDestroy {
   }
 
   public updateActiveFilter(): void {
-    // Lookup active filter
     const acitveFilter = this.savedFilters
       .find((f) => f.active);
 
     if (acitveFilter) {
       this.setActiveFilter(acitveFilter);
     }
-  }
-
-  public resetActiveFilter(): void {
-    // Reset all previously activated filters
-    this.savedFilters.forEach((savedFilter) => {
-      savedFilter.active = false;
-    });
-
-    this.setActiveFilter(null);
   }
 
   private _setEnabledStatus(value: boolean): void {

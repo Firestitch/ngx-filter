@@ -8,7 +8,7 @@ import { FsMessage } from '@firestitch/message';
 
 import { tap } from 'rxjs';
 
-import type { SavedFiltersController } from '../../services/saved-filters-controller.service';
+import type { SavedFilterController } from '../../services/saved-filter-controller.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ import type { SavedFiltersController } from '../../services/saved-filters-contro
 export class FsFilterDrawerActionsComponent {
 
   @Input()
-  public savedFiltersController: SavedFiltersController;
+  public savedFiltersController: SavedFilterController;
 
   @Output('clear')
   private _clear = new EventEmitter<void>();

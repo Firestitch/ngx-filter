@@ -37,7 +37,7 @@
       }
       <div class="overflow-shadow filter-items">
         <div class="overflow-shadow-content">
-          <ng-container *fsSkeleton="(externalParams.pending$ | async) !== true">
+          <ng-container *fsSkeleton="(paramCointroller.pending$ | async) !== true">
             @for (filterItem of items$ | async; track filterItem) {
               <filter-item
                 class="filter-group"
@@ -47,7 +47,7 @@
           </ng-container>
         </div>
       </div>
-      @if ((externalParams.pending$ | async) !== true) {
+      @if ((paramCointroller.pending$ | async) !== true) {
         <fs-filter-drawer-actions
           class="filter-actions"
           (clear)="clear()"

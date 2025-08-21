@@ -25,9 +25,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
-import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
-import { SavedFiltersController } from '../../services/saved-filters-controller.service';
+import { ParamController } from '../../services/param-controller.service';
+import { SavedFilterController } from '../../services/saved-filter-controller.service';
 import { FsFilterDrawerActionsComponent } from '../filter-drawer-actions/filter-drawer-actions.component';
 import { FilterItemComponent } from '../filters-item/filter-item.component';
 
@@ -62,12 +62,12 @@ export class FilterDrawerComponent implements OnInit {
   protected _done: () => void;
   protected _destroyRef = inject(DestroyRef);
 
-  private _savedFiltersController = inject(SavedFiltersController);
+  private _savedFilterController = inject(SavedFilterController);
   private _message = inject(FsMessage);
   private _itemsStore = inject(FsFilterItemsStore);
   private _overlayRef = inject(FILTER_DRAWER_OVERLAY);
   private _data = inject(FILTER_DRAWER_DATA);
-  private _externalParams = inject(ExternalParamsController);
+  private _paramCointroller = inject(ParamController);
 
   constructor(
   ) {
@@ -87,16 +87,16 @@ export class FilterDrawerComponent implements OnInit {
     return this._itemsStore.visibleItems$;
   }
 
-  public get externalParams(): ExternalParamsController {
-    return this._externalParams;
+  public get paramCointroller(): ParamController {
+    return this._paramCointroller;
   }
 
-  public get savedFiltersController(): SavedFiltersController {
-    return this._savedFiltersController;
+  public get savedFiltersController(): SavedFilterController {
+    return this._savedFilterController;
   }
 
   public ngOnInit(): void {
-    this._savedFiltersController.activeFilter$
+    this._savedFilterController.activeFilter$
       .pipe(
         takeUntilDestroyed(this._destroyRef),
       )
@@ -119,13 +119,13 @@ export class FilterDrawerComponent implements OnInit {
   }
 
   public saveSavedFilter = () => {
-    return this._savedFiltersController
+    return this._savedFilterController
       .save({ name: this.savedFilterName })
       .pipe(
         tap((savedFilter) => {
-          this._savedFiltersController.setActiveFilter(savedFilter);
+          this._savedFilterController.setActiveFilter(savedFilter);
           this._message
-            .success(`Saved ${this._savedFiltersController.singularLabel}`, { 
+            .success(`Saved ${this._savedFilterController.singularLabel}`, { 
               positionClass: 'toast-bottom-left', 
             });
         }),

@@ -1,3 +1,4 @@
+import { JsonPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component, EventEmitter, OnInit, ViewChild,
@@ -19,25 +20,24 @@ import { shuffle } from 'lodash-es';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item';
 
+import { FilterComponent as FilterComponent_1 } from '../../../../src/app/components/filter/filter.component';
+import { FilterStatusBarDirective } from '../../../../src/app/directives/status-bar/status-bar.directive';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 import { SavedFilters } from './saved-filter';
-import { FilterComponent as FilterComponent_1 } from '../../../../src/app/components/filter/filter.component';
-import { FilterStatusBarDirective } from '../../../../src/app/directives/status-bar/status-bar.directive';
-import { JsonPipe } from '@angular/common';
 
 
 @Component({
-    selector: 'kitchen-sink',
-    templateUrl: './kitchen-sink.component.html',
-    styleUrls: ['./kitchen-sink.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FilterComponent_1,
-        FilterStatusBarDirective,
-        JsonPipe,
-    ],
+  selector: 'kitchen-sink',
+  templateUrl: './kitchen-sink.component.html',
+  styleUrls: ['./kitchen-sink.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FilterComponent_1,
+    FilterStatusBarDirective,
+    JsonPipe,
+  ],
 })
 export class KitchenSinkComponent implements OnInit {
 
@@ -336,11 +336,11 @@ export class KitchenSinkComponent implements OnInit {
         },
       ],  
       savedFilters: {
-        label: {
-          singular: 'Alert',
-          plural: 'Alerts',
-          icon: 'notifications',
-        },        
+        // label: {
+        //   singular: 'Alert',
+        //   plural: 'Alerts',
+        //   icon: 'notifications',
+        // },        
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 

@@ -43,13 +43,13 @@ import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.int
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
 import { TextItem } from '../../models/items/text-item';
-import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
-import { QueryParamsController } from '../../services/query-params-controller.service';
-import { QueryPersistanceController } from '../../services/query-persistance-controller.service';
-import { SavedFiltersController } from '../../services/saved-filters-controller.service';
+import { ParamController } from '../../services/param-controller.service';
+import { PersistanceController } from '../../services/persistance-controller.service';
+import { QueryParamController } from '../../services/query-param-controller.service';
+import { SavedFilterController } from '../../services/saved-filter-controller.service';
 import { FsFilterActionsComponent } from '../actions/actions.component';
 import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
 import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
@@ -64,12 +64,12 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   templateUrl: './filter.component.html',
   providers: [
     FsFilterOverlayService,
-    ExternalParamsController,
-    QueryPersistanceController,
-    QueryParamsController,
+    ParamController,
+    PersistanceController,
+    QueryParamController,
     FocusControllerService,
     FsFilterItemsStore,
-    SavedFiltersController,
+    SavedFilterController,
     ActionsController,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -145,11 +145,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
   private _filterOverlay = inject(FsFilterOverlayService);
   private _zone = inject(NgZone);
-  private _externalParams = inject(ExternalParamsController);
-  private _persistanceParams = inject(QueryPersistanceController);
+  private _paramCointroller = inject(ParamController);
+  private _persistanceController = inject(PersistanceController);
   private _filterItems = inject(FsFilterItemsStore);
   private _actions = inject(ActionsController);
-  private _savedFiltersController = inject(SavedFiltersController);
+  private _savedFilterController = inject(SavedFilterController);
 
   constructor(
   ) {
@@ -255,19 +255,19 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._externalParams.setActiveSavedFilter(savedFilter);
+    this._paramCointroller.setActiveSavedFilter(savedFilter);
   }
 
   public get activeSavedFilter(): IFilterSavedFilter {
-    return this._savedFiltersController.activeFilter;
+    return this._savedFilterController.activeFilter;
   }
 
   public get savedFilters(): IFilterSavedFilter[] {
-    return this._savedFiltersController.savedFilters;
+    return this._savedFilterController.savedFilters;
   }
 
-  public get savedFiltersController(): SavedFiltersController {
-    return this._savedFiltersController;
+  public get savedFiltersController(): SavedFilterController {
+    return this._savedFilterController;
   }
 
   public ngOnInit() {
@@ -563,7 +563,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public fetchQueryParams(): void {
-    this._externalParams.fetchQueryParams();
+    this._paramCointroller.fetchQueryParams();
   }
 
   /**
@@ -650,7 +650,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this.config.items = items;
     this._filterItems.setConfig(this._config);
-    this._externalParams.initItems();
+    this._paramCointroller.initItems();
 
     this._syncSearchInputWithKeyword();
   }
@@ -675,9 +675,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this._config = new FsFilterConfig(config);
     this._actions.setConfig(this._config);
-    this._persistanceParams.setConfig(this._config, this.inDialog);
+    this._persistanceController.setConfig(this._config, this.inDialog);
     this._filterItems.setConfig(this._config);
-    this._externalParams.setConfig(this._config);
+    this._paramCointroller.setConfig(this._config);
 
     this._syncSearchInputWithKeyword();
 
@@ -784,7 +784,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _listenWhenFilterReady() {
     combineLatest(
       [
-        this._externalParams.pending$,
+        this._paramCointroller.pending$,
         this.itemsReady$,
       ])
       .pipe(

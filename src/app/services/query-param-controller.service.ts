@@ -7,10 +7,10 @@ import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()
-export class QueryParamsController {
+export class QueryParamController {
 
   private _enabled = false;
-  private _fetchedParams: Record<string, any>;
+  private _params: Record<string, any>;
 
   constructor(
     private _route: ActivatedRoute,
@@ -21,8 +21,8 @@ export class QueryParamsController {
     return this._enabled;
   }
 
-  public get fetchedParams() {
-    return this._fetchedParams;
+  public get params() {
+    return this._params;
   }
 
   public init(enabled: boolean) {
@@ -50,7 +50,7 @@ export class QueryParamsController {
     ]
       .filter((item) => !!item);
 
-    this._fetchedParams = restoreItems(
+    this._params = restoreItems(
       this._route.snapshot.queryParams,
       items,
     );

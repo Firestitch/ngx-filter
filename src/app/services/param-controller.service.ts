@@ -1,42 +1,42 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 import { buildQueryParams } from '../helpers/build-query-params';
 import { IFilterExternalParams, IFilterSavedFilter } from '../interfaces';
 import { FsFilterConfig } from '../models/filter-config';
 
 import {
-  QueryParamsController, QueryPersistanceController, SavedFiltersController,
+  PersistanceController,
+  QueryParamController,
+  SavedFilterController,
 } from '.';
 import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()
-export class ExternalParamsController implements OnDestroy {
-
-  protected _init;
+export class ParamController implements OnDestroy {
 
   private _pending$ = new BehaviorSubject(false);
   private _config: FsFilterConfig;
   private _destroy$ = new Subject<void>();
   private _itemsStore = inject(FsFilterItemsStore);
-  private _persistanceStore = inject(QueryPersistanceController);
-  private _queryParams = inject(QueryParamsController);
-  private _savedFiltersController = inject(SavedFiltersController);
+  private _persistanceController = inject(PersistanceController);
+  private _queryParams = inject(QueryParamController);
+  private _savedFilterController = inject(SavedFilterController);
 
   public get params(): IFilterExternalParams {
     let result: IFilterExternalParams = {};
 
-    if (this._persistanceStore.queryEnabled) {
+    if (this._persistanceController.queryEnabled) {
       result = {
         ...result, 
-        ...this._persistanceStore.getQuery(),
+        ...this._persistanceController.getQuery(),
       };
     }
 
-    if (this._savedFiltersController.enabled && this._savedFiltersController.activeFilter) {
+    if (this._savedFilterController.enabled && this._savedFilterController.activeFilter) {
       const query = Object.keys(result)
         .filter((key) => !this._itemsStore.itemNames.includes(key))
         .reduce((acc, key) => {
@@ -48,12 +48,12 @@ export class ExternalParamsController implements OnDestroy {
 
       result = {
         ...query, 
-        ...this._savedFiltersController.activeFilterData,
+        ...this._savedFilterController.activeFilterData,
       };
     } else if (this._queryParams.enabled) {
       result = {
         ...result, 
-        ...this._queryParams.fetchedParams,
+        ...this._queryParams.params,
       };
     }
 
@@ -82,7 +82,7 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._savedFiltersController.setActiveFilter(savedFilter);
+    this._savedFilterController.setActiveFilter(savedFilter);
 
     if (savedFilter) {
       this.reloadFiltersWithValues(savedFilter.filters);
@@ -97,24 +97,24 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public initItems(): void {
-    this._pending$.next(true);
-    if (this._savedFiltersController.enabled) {
-      this._savedFiltersController
-        .load()
-        .pipe(
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this._savedFiltersController.updateActiveFilter();
-          this._initItemsValues();
-          this._pending$.next(false);
-        });
-    } else {
-      this._initItemsValues();
-      this._pending$.next(false);
-    }
-
-    this._listenItemsChange();
+    of(null)
+      .pipe(
+        tap(() => this._pending$.next(true)),
+        switchMap(() => {
+          return this._savedFilterController.enabled ? 
+            this._savedFilterController.load()
+              .pipe(
+                tap(() => this._savedFilterController.updateActiveFilter()),
+              ) : 
+            of(null);
+        }),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._initItemsValues();
+        this._pending$.next(false);
+        this._listenItemsChange();
+      });
   }
 
   public _initItemsValues() {
@@ -133,7 +133,7 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _initSavedFilters() {
-    this._savedFiltersController.init(this._config.savedFilters);
+    this._savedFilterController.init(this._config.savedFilters);
   }
 
   private _listenItemsChange() {
@@ -181,7 +181,7 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _savePersistedParams() {
-    if(this._persistanceStore.queryEnabled) {
+    if(this._persistanceController.queryEnabled) {
       const targetItems = this._itemsStore.items
         .filter((item) => !item.persistanceDisabled)
         .filter((item) => item.value !== undefined)
@@ -191,7 +191,7 @@ export class ExternalParamsController implements OnDestroy {
           return acc;
         }, {});
 
-      this._persistanceStore.setQuery(targetItems);
+      this._persistanceController.setQuery(targetItems);
     }
   }
 }

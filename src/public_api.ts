@@ -1,5 +1,4 @@
-export { ExternalParamsController } from './app/services/external-params-controller.service';
-export { SavedFiltersController } from './app/services/saved-filters-controller.service';
+export { SavedFilterController } from './app/services/saved-filter-controller.service';
 
 // Modules
 export { FsFilterModule } from './app/fs-filter.module';
