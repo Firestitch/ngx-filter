@@ -6,12 +6,10 @@ import {
   EventEmitter,
   HostBinding,
   inject,
-  Inject,
   Input,
   NgZone,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -27,8 +25,9 @@ import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, Subjec
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
+import { FilterIcon } from '../../consts';
 import { objectsAreEquals } from '../../helpers/compare';
-import { IFilterSavedFilter, ISortingChangeEvent } from '../../interfaces';
+import { IFilterExternalParams, IFilterSavedFilter, ISortingChangeEvent } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
   FilterConfig, FilterSort, IFilterConfigItem, SortItem,
@@ -38,12 +37,12 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
 import { TextItem } from '../../models/items/text-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
-import { QueryParamsController } from '../../services/external-params/query-params-controller.service';
-import { QueryPersistanceController } from '../../services/external-params/query-persistance-controller.service';
-import { SavedFiltersController } from '../../services/external-params/saved-filters-controller.service';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
+import { QueryParamsController } from '../../services/query-params-controller.service';
+import { QueryPersistanceController } from '../../services/query-persistance-controller.service';
+import { SavedFiltersController } from '../../services/saved-filters-controller.service';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
@@ -115,15 +114,16 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _dialogRef = inject(MatDialogRef, { optional: true });
   private _drawerRef = inject(DrawerRef, { optional: true });  
 
+  private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
+  private _filterOverlay = inject(FsFilterOverlayService);
+  private _zone = inject(NgZone);
+  private _externalParams = inject(ExternalParamsController);
+  private _persistanceParams = inject(QueryPersistanceController);
+  private _filterItems = inject(FsFilterItemsStore);
+  private _actions = inject(ActionsController);
+  private _savedFiltersController = inject(SavedFiltersController);
+
   constructor(
-    @Optional() @Inject(FS_FILTER_CONFIG) private _defaultConfig: FsFilterConfig,
-    private _filterOverlay: FsFilterOverlayService,
-    private _zone: NgZone,
-    private _externalParams: ExternalParamsController,
-    private _persistanceParams: QueryPersistanceController,
-    private _filterItems: FsFilterItemsStore,
-    private _actions: ActionsController,
-    private _savedFiltersController: SavedFiltersController,
   ) {
     this._filterItems.filter = this;
     this._listenWhenFilterReady();
@@ -131,9 +131,8 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
-    const filterAlt = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M440-160q-17 0-28.5-11.5T400-200v-240L161-745q-14-17-4-36t31-19h584q21 0 31 19t-4 36L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-276 240-304H240l240 304Zm0 0Z"/></svg>';
-
-    iconRegistry.addSvgIconLiteral('filterOutline', sanitizer.bypassSecurityTrustHtml(filterAlt));
+    
+    iconRegistry.addSvgIconLiteral('filterOutline', sanitizer.bypassSecurityTrustHtml(FilterIcon));
 
     this._filterOverlay.attach$
       .pipe(
@@ -166,7 +165,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     return !!this._dialogRef || !!this._drawerRef;
   }
 
-  public get filterParamsQuery(): Record<string, unknown> {
+  public get filterParamsQuery(): IFilterExternalParams {
     return this._filterItems.valuesAsQuery();
   }
 
@@ -237,6 +236,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public get savedFilters(): IFilterSavedFilter[] {
     return this._savedFiltersController.savedFilters;
+  }
+
+  public get savedFiltersController(): SavedFiltersController {
+    return this._savedFiltersController;
   }
 
   public ngOnInit() {

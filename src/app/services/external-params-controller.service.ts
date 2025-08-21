@@ -1,7 +1,7 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { filter, switchMap, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, take, takeUntil } from 'rxjs/operators';
 
 import { buildQueryParams } from '../helpers/build-query-params';
 import { IFilterExternalParams, IFilterSavedFilter } from '../interfaces';
@@ -9,7 +9,7 @@ import { FsFilterConfig } from '../models/filter-config';
 
 import {
   QueryParamsController, QueryPersistanceController, SavedFiltersController,
-} from './external-params';
+} from '.';
 import { FsFilterItemsStore } from './items-store.service';
 
 
@@ -19,16 +19,12 @@ export class ExternalParamsController implements OnDestroy {
   protected _init;
 
   private _pending$ = new BehaviorSubject(false);
-  private _shouldResetSavedFilters = true;
   private _config: FsFilterConfig;
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _itemsStore: FsFilterItemsStore,
-    private _persistanceStore: QueryPersistanceController,
-    private _queryParams: QueryParamsController,
-    private _savedFilters: SavedFiltersController,
-  ) { }
+  private _itemsStore = inject(FsFilterItemsStore);
+  private _persistanceStore = inject(QueryPersistanceController);
+  private _queryParams = inject(QueryParamsController);
+  private _savedFiltersController = inject(SavedFiltersController);
 
   public get params(): IFilterExternalParams {
     let result: IFilterExternalParams = {};
@@ -40,7 +36,7 @@ export class ExternalParamsController implements OnDestroy {
       };
     }
 
-    if (this._savedFilters.enabled && this._savedFilters.activeFilter) {
+    if (this._savedFiltersController.enabled && this._savedFiltersController.activeFilter) {
       const query = Object.keys(result)
         .filter((key) => !this._itemsStore.itemNames.includes(key))
         .reduce((acc, key) => {
@@ -52,7 +48,7 @@ export class ExternalParamsController implements OnDestroy {
 
       result = {
         ...query, 
-        ...this._savedFilters.activeFilterData,
+        ...this._savedFiltersController.activeFilterData,
       };
     } else if (this._queryParams.enabled) {
       result = {
@@ -72,14 +68,6 @@ export class ExternalParamsController implements OnDestroy {
     return this._pending$.asObservable();
   }
 
-  public get savedFiltersController(): SavedFiltersController {
-    return this._savedFilters;
-  }
-
-  public get savedFiltersEnabled(): boolean {
-    return this._savedFilters.enabled;
-  }
-
   public ngOnDestroy(): void {
     this._destroy$.next(null);
     this._destroy$.complete();
@@ -94,15 +82,14 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
-    this.savedFiltersController.setActiveFilter(savedFilter);
+    this._savedFiltersController.setActiveFilter(savedFilter);
 
     if (savedFilter) {
-      this.reloadFiltersWithValues(savedFilter.filters, false);
+      this.reloadFiltersWithValues(savedFilter.filters);
     }
   }
 
-  public reloadFiltersWithValues(params: IFilterExternalParams, shouldResetSavedFilters = true) {
-    this._shouldResetSavedFilters = shouldResetSavedFilters;
+  public reloadFiltersWithValues(params: IFilterExternalParams) {
     this._itemsStore.updateItemsWithValues(params);
 
     this._saveQueryParams();
@@ -111,16 +98,15 @@ export class ExternalParamsController implements OnDestroy {
 
   public initItems(): void {
     this._pending$.next(true);
-    if (this._savedFilters.enabled) {
-      this._savedFilters
+    if (this._savedFiltersController.enabled) {
+      this._savedFiltersController
         .load()
         .pipe(
           takeUntil(this._destroy$),
         )
         .subscribe(() => {
-          this._savedFilters.updateActiveFilter();
+          this._savedFiltersController.updateActiveFilter();
           this._initItemsValues();
-          this._listenAndResetSavedFilters();
           this._pending$.next(false);
         });
     } else {
@@ -147,7 +133,7 @@ export class ExternalParamsController implements OnDestroy {
   }
 
   private _initSavedFilters() {
-    this._savedFilters.init(this._config.savedFilters);
+    this._savedFiltersController.init(this._config.savedFilters);
   }
 
   private _listenItemsChange() {
@@ -170,26 +156,6 @@ export class ExternalParamsController implements OnDestroy {
       .subscribe(() => {
         this._saveQueryParams();
         this._savePersistedParams();
-      });
-  }
-
-  private _listenAndResetSavedFilters(): void {
-    this._itemsStore
-      .itemsChange$
-      .pipe(
-        filter(() => !!this.savedFiltersController.activeFilter),
-        switchMap(() => {
-          const shouldReset = this._shouldResetSavedFilters;
-
-          this._shouldResetSavedFilters = true;
-
-          return of(shouldReset);
-        }),
-        filter((shouldReset) => shouldReset),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.savedFiltersController.resetActiveFilter();
       });
   }
 

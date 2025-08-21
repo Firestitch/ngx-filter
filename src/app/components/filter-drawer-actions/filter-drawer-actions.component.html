@@ -1,4 +1,32 @@
-<a mat-button color="primary" (click)="done()">Done</a>
-<a mat-button (click)="clear()">Clear</a>
-
-
+<div class="filter-drawer-actions-container">
+  <button
+      mat-button
+      color="primary"
+      type="button"
+      (click)="done()">
+    Done
+  </button>
+  @if (savedFiltersController.enabled) {
+    @if (savedFiltersController.activeFilter$ | async) {
+      <button
+          mat-button
+          type="submit">
+        Save
+      </button>
+    } @else {
+      <button
+          mat-button
+          type="button"
+          (click)="createFilter()">
+        Create
+        {{ savedFiltersController.singularLabelLower }}
+      </button>
+    }
+  }
+  <button
+      mat-button
+      type="button"
+      (click)="clear()">
+    Clear
+  </button>
+</div>

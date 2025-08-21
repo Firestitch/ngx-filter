@@ -5,15 +5,20 @@ import { IFilterExternalParams } from './external-params.interface';
 export interface IFilterSavedFiltersConfig {
   load: FilterRemoteLoad;
   save: FilterRemoteSave;
-  order: FilterRemoteOrder;
+  order?: FilterRemoteOrder;
   delete: FilterRemoteDelete;
+  label?: {
+    singular: string;
+    plural: string;
+    icon?: string;
+  };
 }
 
 export interface IFilterSavedFilter {
-  id?: number;
-  name: string;
-  active: boolean;
-  filters: IFilterExternalParams;
+  id?: string|number;
+  name?: string;
+  active?: boolean;
+  filters?: IFilterExternalParams;
 }
 
 export type FilterRemoteLoad = () => Observable<IFilterSavedFilter[]>;

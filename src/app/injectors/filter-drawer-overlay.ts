@@ -1,3 +1,5 @@
 import { InjectionToken } from '@angular/core';
 
-export const FILTER_DRAWER_OVERLAY = new InjectionToken<any>('fs.filter-drawer-overlay');
+import { OverlayRef } from '@angular/cdk/overlay';
+
+export const FILTER_DRAWER_OVERLAY = new InjectionToken<OverlayRef>('fs.filter-drawer-overlay');

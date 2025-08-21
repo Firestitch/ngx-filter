@@ -1,20 +1,27 @@
 <fs-filter [config]="conf">
   <ng-template fsFilterStatusBar>
     <small>
-      Showing 4 of 4 results sorted by Name Ascending, saved filter <fs-filter-saved-filters-menu></fs-filter-saved-filters-menu>
+      Showing 4 of 4 results sorted by Name Ascending
     </small>
   </ng-template>
 </fs-filter>
 @if (query) {
   <fieldset>
-    <legend>Flattened Filter Values</legend>
-    <pre>{{ query | json }}</pre>
+    <legend>
+      Filter values
+    </legend>
+    <pre>
+      {{ query | json }}
+    </pre>
   </fieldset>
 }
-
 @if (sort) {
   <fieldset>
-    <legend>Sort</legend>
-    <pre>{{ sort | json }}</pre>
+    <legend>
+      Sort
+    </legend>
+    <pre>
+      {{ sort | json }}
+    </pre>
   </fieldset>
 }

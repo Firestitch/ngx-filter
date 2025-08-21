@@ -2,34 +2,57 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
+  inject,
+  OnInit,
 } from '@angular/core';
 
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButton } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
-import { FilterRemoteOrder, IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
-import { SavedFiltersController } from '../../../services/external-params/saved-filters-controller.service';
+import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
+import { FsFilterOverlayService } from '../../../services';
+import { ExternalParamsController } from '../../../services/external-params-controller.service';
+import { SavedFiltersController } from '../../../services/saved-filters-controller.service';
 
 
 @Component({
   templateUrl: './saved-filter-manage.component.html',
   styleUrls: ['./saved-filter-manage.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatButton,
+  ],
 })
-export class FsFilterSavedFilterManageComponent {
+export class FsFilterSavedFilterManageComponent implements OnInit {
 
   public savedFilters: IFilterSavedFilter[];
 
-  private _savedFiltersController: SavedFiltersController;
-  private _filterRemoteOrder: FilterRemoteOrder;
+  private _savedFiltersController = inject(SavedFiltersController);
+  private _cdRef = inject(ChangeDetectorRef);
+  private _externalParams = inject(ExternalParamsController);
+  private _dialogRef = inject(MatDialogRef);
+  private _filterOverlayService = inject(FsFilterOverlayService);
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data,
-    private _cdRef: ChangeDetectorRef,
-  ) {
-    this._savedFiltersController = this.data.savedFiltersController;
-    this.savedFilters = [...this._savedFiltersController.savedFilters];
+  public ngOnInit(): void {
+    this.savedFilters = [
+      ...this._savedFiltersController.savedFilters || [],
+    ];
+  }
+
+  public get pluralLabelLower(): string {
+    return this._savedFiltersController.pluralLabelLower;
+  }
+
+  public get sortable(): boolean {
+    return this._savedFiltersController.orderable;
+  }
+
+  public selectFilter(savedFilter: IFilterSavedFilter) {
+    this._externalParams.setActiveSavedFilter(savedFilter);
+    this._filterOverlayService.open();
+    this._dialogRef.close();
   }
 
   public remove(savedFilter: IFilterSavedFilter) {
@@ -40,10 +63,8 @@ export class FsFilterSavedFilterManageComponent {
       });
   }
 
-  public drop(event: CdkDragDrop<any[]>) {
-    moveItemInArray(this.savedFilters, event.previousIndex, event.currentIndex);
-
-    this._savedFiltersController.order(this.savedFilters)
+  public order(savedFilters: IFilterSavedFilter[]) {
+    this._savedFiltersController.order(savedFilters)
       .subscribe();
   }
 

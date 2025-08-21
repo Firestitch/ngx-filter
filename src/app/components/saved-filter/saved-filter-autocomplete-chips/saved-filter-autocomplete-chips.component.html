@@ -1,0 +1,41 @@
+<fs-autocomplete-chips
+    [fetch]="fetch"
+    [size]="'small'"
+    [multiple]="false"
+    [placeholder]="pluralLabel"
+    [(ngModel)]="selectedFilter"
+    [panelClass]="'fs-autocomplete-chips-panel-saved-filter'"
+    (ngModelChange)="selectedFilterChange($event)">
+  <ng-template
+      fsAutocompleteChipsTemplate
+      let-object="object">
+    {{ object.name }}
+  </ng-template>
+  <ng-template
+    fsAutocompleteChipsPrefix
+    [icon]="'notifications'">
+  </ng-template>
+  @if (selectedFilter) {
+    <ng-template
+        fsAutocompleteChipsStatic
+        (click)="save()">
+      Save alert filters
+    </ng-template>
+    <ng-template
+        fsAutocompleteChipsStatic
+        (click)="saveAs()">
+      Save as new alert
+    </ng-template>
+  } @else {
+    <ng-template
+        fsAutocompleteChipsStatic
+        (click)="create()">
+      Create alert
+    </ng-template>
+  }
+  <ng-template
+      fsAutocompleteChipsStatic
+      (click)="manageFilters()">
+    Manage {{ pluralLabelLower }}
+  </ng-template>
+</fs-autocomplete-chips>

@@ -4,7 +4,7 @@
   $palette: playground.$primary-palette
 );
 @use '@firestitch/style/styles' as fs-style;
-
+@use '@firestitch/message/styles' as fs-message;
 @import '@firestitch/datepicker/styles';
 @import "@firestitch/scrollbar/styles.scss";
 @import '@firestitch/chip/styles';
@@ -12,29 +12,10 @@
 @import '@firestitch/skeleton/styles';
 @import '@firestitch/form/styles';
 @import '@firestitch/file/styles';
+
 @import '@firestitch/selectbutton/styles';
 @import '../src/app/styles';
 
 @include fs-style.core();
 @include fs-file(playground.$primary-palette);
 
-
-// :root {
-//   @include mat.slide-toggle-overrides((
-//     track-outline-color: orange,
-//     track-height: 28px,
-//     track-shape: 99999px,
-//     track-width: 52px,
-//     with-icon-handle-size: 24px,
-//     unselected-with-icon-handle-horizontal-margin: 0 5px,
-//     selected-with-icon-handle-horizontal-margin: 0 5px,
-//     unselected-focus-track-color: red,
-//     unselected-track-color: red,
-//     selected-focus-track-color: red,
-//     selected-track-color: red,
-//     selected-hover-track-color: red,
-//     unselected-hover-track-color: red,
-//     unselected-pressed-state-layer-opacity: 1,
-//     selected-pressed-state-layer-opacity: 1,
-//   ));
-// }

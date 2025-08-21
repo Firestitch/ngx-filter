@@ -3,6 +3,9 @@
     <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
   <div class="filter-inner-container">
+    @if (savedFiltersController.enabled) {
+      <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
+    }
     @if (keywordVisible$ | async) {
       <div class="filter-keyword">
         <mat-form-field

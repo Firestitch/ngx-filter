@@ -30,7 +30,7 @@ export function objectsAreEquals(obj1, obj2) {
 }
 
 export function arraysAreEquals(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
+  if (arr1?.length !== arr2.length) {
     return false;
   }
 

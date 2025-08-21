@@ -1,21 +1,22 @@
 @if (item.values?.length) {
   <fs-label-field>
-    <fs-label>{{item.label}}</fs-label>
+    <fs-label>
+      {{ item.label }}
+    </fs-label>
     <fs-chips
-      [(ngModel)]="item.model"
-      [compare]="compareFn"
-      [multiple]="item.multiple">
+        [(ngModel)]="item.model"
+        [compare]="compareFn"
+        [multiple]="item.multiple">
       @for (value of item.values; track value) {
         <fs-chip
-          [value]="value"
-          [selectable]="true">
+            [value]="value"
+            [selectable]="true">
           {{ value.name }}
         </fs-chip>
       }
     </fs-chips>
   </fs-label-field>
 }
-
 @if (item.loading) {
   {{ item.label }} loading...
 }

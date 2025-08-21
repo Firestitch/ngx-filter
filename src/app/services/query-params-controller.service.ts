@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { restoreItems } from '../../helpers/restore-items';
-import { FsFilterItemsStore } from '../items-store.service';
+import { restoreItems } from '../helpers/restore-items';
+
+import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()

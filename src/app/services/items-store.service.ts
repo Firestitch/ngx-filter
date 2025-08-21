@@ -7,6 +7,7 @@ import { pickBy } from 'lodash-es';
 
 import type { FilterComponent } from '../components/filter/filter.component';
 import { ItemType } from '../enums/item-type.enum';
+import { buildQueryParams } from '../helpers/build-query-params';
 import { createFilterItem } from '../helpers/create-filter-item';
 import {
   FilterSort,
@@ -42,11 +43,9 @@ export class FsFilterItemsStore implements OnDestroy {
   private _ready$ = new BehaviorSubject(false);
   private _visibleItems$ = new BehaviorSubject<BaseItem<IFilterConfigItem>[]>([]);
   private _items = new Map<string, BaseItem<IFilterConfigItem>>();
-
   private _itemsValuesLoaded = false;
   private _hasKeyword = false;
   private _config: FsFilterConfig;
-
   private _itemsChange$ = new Subject();
   private _destroy$ = new Subject<void>();
 
@@ -108,6 +107,10 @@ export class FsFilterItemsStore implements OnDestroy {
     if (Array.isArray(items)) {
       this._createItems(items);
     }
+  }
+
+  public queryParams(): IFilterExternalParams {
+    return buildQueryParams(this.valuesAsQuery(), this.items);
   }
 
   public filtersClear() {
@@ -233,11 +236,20 @@ export class FsFilterItemsStore implements OnDestroy {
       }, {});
   }
 
+  public models(): Record<string, unknown> {
+    return this.items
+      .reduce((acc, item) => {
+        acc[item.name] = item.model;
+
+        return acc;
+      }, {});
+  }
+
   public valuesAsQuery({
     onlyPresented = true,
     items = null,
     persisted = false,
-  }: IValueAsQuery = {}): Record<string, unknown> {
+  }: IValueAsQuery = {}): IFilterExternalParams {
     const params = {};
 
     (items || this.items)

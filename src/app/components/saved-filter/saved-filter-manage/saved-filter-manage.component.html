@@ -1,30 +1,54 @@
 <h1 mat-dialog-title>
-  Manage saved filters
+  Manage {{ pluralLabelLower }}
 </h1>
 <div mat-dialog-content>
-  <div
-    cdkDropList
-    [cdkDropListData]="savedFilters"
-    cdkDropListOrientation="vertical"
-    (cdkDropListDropped)="drop($event)">
-    @for (savedFilter of savedFilters; track savedFilter) {
-      <div class="chip-container">
-        <fs-chip
-          class="saved-filter-manage-chip"
-          cdkDrag
-          (removed)="remove(savedFilter)">
-          {{savedFilter.name}}
-        </fs-chip>
-      </div>
+  <table class="fs-list-table">
+    <thead>
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Filters
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (savedFilter of savedFilters; track savedFilter.id) {
+        <tr>
+          <td>
+            <a (click)="selectFilter(savedFilter)">
+              {{ savedFilter.name }}
+            </a>
+          </td>
+          <td></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <!-- <fs-chips
+      [(ngModel)]="savedFilters"
+      [name]="'chips'"
+      [orientation]="'vertical'"
+      (ngModelChange)="order($event)"
+      [sortable]="sortable">
+    @for (savedFilter of savedFilters; track savedFilter.id) {
+      <fs-chip
+          [value]="savedFilter"
+          [selectable]="false"
+          (removed)="remove(savedFilter)"
+          [width]="'100%'">
+        {{ savedFilter.name }}
+      </fs-chip>
     }
-  </div>
+  </fs-chips> -->
 </div>
 <div mat-dialog-actions>
   <button
-    mat-button
-    color="primary"
-    type="button"
-    [mat-dialog-close]="null">
+      mat-button
+      color="primary"
+      type="button"
+      [mat-dialog-close]="null">
     Done
   </button>
 </div>

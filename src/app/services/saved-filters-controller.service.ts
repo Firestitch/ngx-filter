@@ -1,10 +1,14 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
+
+import { FsMessage } from '@firestitch/message';
+import { FsPrompt } from '@firestitch/prompt';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
+  switchMap,
   take,
   takeUntil,
   tap,
@@ -12,31 +16,49 @@ import {
 
 import {
   FsFilterSavedFilterEditComponent,
-} from '../../components/saved-filter/saved-filter-edit/saved-filter-edit.component';
-import { buildQueryParams } from '../../helpers/build-query-params';
-import { restoreItems } from '../../helpers/restore-items';
-import { IFilterExternalParams } from '../../interfaces/external-params.interface';
+} from '../components/saved-filter/saved-filter-edit/saved-filter-edit.component';
+import { restoreItems } from '../helpers/restore-items';
+import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import {
   IFilterSavedFilter,
   IFilterSavedFiltersConfig,
-} from '../../interfaces/saved-filters.interface';
-import { FsFilterItemsStore } from '../items-store.service';
+} from '../interfaces/saved-filters.interface';
+
+import { FsFilterItemsStore } from './items-store.service';
 
 
 @Injectable()
 export class SavedFiltersController implements OnDestroy {
 
-  protected _config: IFilterSavedFiltersConfig;
-
+  private _config: IFilterSavedFiltersConfig;
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
   private _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
   private _enabled$ = new BehaviorSubject<boolean>(false);
   private _destroy$ = new Subject<void>();
+  private _itemsStore = inject(FsFilterItemsStore);
+  private _dialog = inject(MatDialog);
+  private _prompt = inject(FsPrompt);
+  private _message = inject(FsMessage);
 
-  constructor(
-    private _itemsStore: FsFilterItemsStore,
-    private _dialog: MatDialog,
-  ) {}
+  public get singularLabel(): string {
+    return this._config?.label?.singular || 'Saved filter';
+  }
+
+  public get singularLabelLower(): string {
+    return this.singularLabel.toLowerCase();
+  }
+
+  public get labelIcon(): string {
+    return this._config?.label?.icon || 'save';
+  }
+
+  public get pluralLabel(): string {
+    return this._config?.label?.plural || 'Saved filters';
+  }
+
+  public get pluralLabelLower(): string {
+    return this.pluralLabel.toLowerCase();
+  }
 
   public get enabled(): boolean {
     return this._enabled$.getValue();
@@ -85,27 +107,19 @@ export class SavedFiltersController implements OnDestroy {
   }
 
   public init(
-    remoteParamsConfig: IFilterSavedFiltersConfig,
+    filterSavedFiltersConfig: IFilterSavedFiltersConfig,
   ): void {
-    if (!remoteParamsConfig) {
+    if (!filterSavedFiltersConfig) {
       this._setEnabledStatus(false);
 
       return;
     }
     this._setEnabledStatus(true);
 
-    this._config = remoteParamsConfig;
+    this._config = filterSavedFiltersConfig;
   }
 
   public initSavedFilters(filters: IFilterSavedFilter[]): void {
-    filters = [...filters];
-    filters.forEach((savedFilter) => {
-      savedFilter.filters = restoreItems(
-        savedFilter.filters,
-        this._itemsStore.items,
-      );
-    });
-
     this.savedFilters = filters;
   }
 
@@ -118,8 +132,56 @@ export class SavedFiltersController implements OnDestroy {
       );
   }
 
+  public create(): Observable<IFilterSavedFilter> {
+    return this._prompt.input({
+      title: `Create ${this.singularLabel}`,
+      label: 'Name',
+      required: true,
+      commitLabel: 'Create',
+      dialogConfig: {
+        restoreFocus: false,
+      },
+    })
+      .pipe(
+        switchMap((name) => {
+          const data: IFilterSavedFilter = {
+            name,
+            filters: this._itemsStore.queryParams(),
+          };
+
+          return this.save(data);
+        }),
+        tap((savedFilter) => {
+          this.setActiveFilter(savedFilter);
+        }),
+      );
+  }
+
   public save(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
-    return this._config.save(savedFilter);
+    const exists = !!savedFilter.id;
+
+    savedFilter = {
+      ...this.activeFilter,
+      ...savedFilter,
+      filters: this._itemsStore.models(),
+    };  
+
+    return this._config.save(savedFilter)
+      .pipe(
+        tap((_savedFilter) => {
+          this.savedFilters = exists ? this.savedFilters
+            .map((f) => f.id === savedFilter.id ? _savedFilter : f) : [
+            ...this.savedFilters,
+            _savedFilter,
+          ];
+          
+          this.setActiveFilter(_savedFilter);
+        }),
+      );
+  }
+
+  public get orderable(): boolean {
+    return !!this._config.order;
   }
 
   public order(savedFilters: IFilterSavedFilter[]): Observable<IFilterSavedFilter[]> {
@@ -151,7 +213,7 @@ export class SavedFiltersController implements OnDestroy {
       if (!existingFilter) {
         throw new Error(`Saved filter cannot be activated, because it does not exists. Filter ID = ${savedFilter.id}`);
       }
-
+      
       this._activeFilter$.next(existingFilter);
     } else {
       this._activeFilter$.next(null);
@@ -159,10 +221,7 @@ export class SavedFiltersController implements OnDestroy {
   }
 
   public openSavedFilterEditDialog(): void {
-    const params = buildQueryParams(
-      this._itemsStore.valuesAsQuery(),
-      this._itemsStore.items,
-    );
+    const params = this._itemsStore.queryParams();
 
     const dialogConfig = {
       data: {

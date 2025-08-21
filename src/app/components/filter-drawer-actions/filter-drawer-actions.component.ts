@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+
+import { FsMessage } from '@firestitch/message';
+
+import { tap } from 'rxjs';
+
+import type { SavedFiltersController } from '../../services/saved-filters-controller.service';
 
 
 @Component({
@@ -9,11 +15,16 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 })
 export class FsFilterDrawerActionsComponent {
 
+  @Input()
+  public savedFiltersController: SavedFiltersController;
+
   @Output('clear')
   private _clear = new EventEmitter<void>();
 
   @Output('done')
   private _done = new EventEmitter<void>();
+
+  private _message = inject(FsMessage);
 
   public done(): void {
     this._done.emit();
@@ -21,6 +32,19 @@ export class FsFilterDrawerActionsComponent {
 
   public clear(): void {
     this._clear.emit();
+  }
+
+  public createFilter(): void {
+    this.savedFiltersController.create() 
+      .pipe(
+        tap(() => {
+          this._message
+            .success(`Created ${this.savedFiltersController.singularLabel}`,
+              { positionClass: 'toast-bottom-left' },
+            );
+        }),
+      )
+      .subscribe();
   }
  
 }

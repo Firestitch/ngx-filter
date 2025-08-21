@@ -1,21 +1,26 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  DestroyRef,
   HostListener,
-  Inject,
+  inject,
   Input,
+  OnInit,
 } from '@angular/core';
 
-import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable } from 'rxjs';
+import { FsMessage } from '@firestitch/message';
+
+import { Observable, tap } from 'rxjs';
+
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
+import { SavedFiltersController } from '../../services/saved-filters-controller.service';
 
 type Item = BaseItem<any>;
 
@@ -24,24 +29,27 @@ type Item = BaseItem<any>;
   styleUrls: ['./filter-drawer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDrawerComponent {
+export class FilterDrawerComponent implements OnInit {
 
   @Input() public inline = false;
 
   public windowDesktop = false;
+  public savedFilterName = '';
 
   protected _clear: () => void;
   protected _done: () => void;
+  protected _destroyRef = inject(DestroyRef);
+
+  private _savedFiltersController = inject(SavedFiltersController);
+  private _message = inject(FsMessage);
+  private _itemsStore = inject(FsFilterItemsStore);
+  private _overlayRef = inject(FILTER_DRAWER_OVERLAY);
+  private _data = inject(FILTER_DRAWER_DATA);
+  private _externalParams = inject(ExternalParamsController);
 
   constructor(
-    @Inject(FILTER_DRAWER_OVERLAY) private _overlayRef: OverlayRef,
-    @Inject(FILTER_DRAWER_DATA) private _data,
-    public externalParams: ExternalParamsController,
-    protected _cd: ChangeDetectorRef,
-    protected _itemsStore: FsFilterItemsStore,
   ) {
     this._itemsStore.prepareItems();
-
     this._clear = this._data.clear;
     this._done = this._data.done;
 
@@ -57,6 +65,24 @@ export class FilterDrawerComponent {
     return this._itemsStore.visibleItems$;
   }
 
+  public get externalParams(): ExternalParamsController {
+    return this._externalParams;
+  }
+
+  public get savedFiltersController(): SavedFiltersController {
+    return this._savedFiltersController;
+  }
+
+  public ngOnInit(): void {
+    this._savedFiltersController.activeFilter$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((activeFilter) => {
+        this.savedFilterName = activeFilter?.name || '';
+      });
+  }
+
   public clear() {
     this._clear();
   }
@@ -69,4 +95,18 @@ export class FilterDrawerComponent {
   public backdropClick() {
     this.done();
   }
+
+  public saveSavedFilter = () => {
+    return this._savedFiltersController
+      .save({ name: this.savedFilterName })
+      .pipe(
+        tap((savedFilter) => {
+          this._savedFiltersController.setActiveFilter(savedFilter);
+          this._message
+            .success(`Saved ${this._savedFiltersController.singularLabel}`, { 
+              positionClass: 'toast-bottom-left', 
+            });
+        }),
+      );
+  };
 }

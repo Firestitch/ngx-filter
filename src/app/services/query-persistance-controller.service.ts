@@ -4,8 +4,8 @@ import { inject, Injectable } from '@angular/core';
 import { getNormalizedPath } from '@firestitch/common';
 import { FsStore } from '@firestitch/store';
 
-import { FsFilterPersistance, FsFilterPersistanceConfig } from '../../interfaces';
-import { FsFilterConfig } from '../../models/filter-config';
+import { FsFilterPersistance, FsFilterPersistanceConfig } from '../interfaces';
+import { FsFilterConfig } from '../models/filter-config';
 
 
 @Injectable()

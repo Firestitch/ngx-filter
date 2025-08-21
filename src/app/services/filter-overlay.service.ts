@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector, OnDestroy, StaticProvider } from '@angular/core';
+import { inject, Injectable, Injector, OnDestroy, StaticProvider } from '@angular/core';
 
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -11,7 +11,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
-import { FS_FILTER_META, FsFilterMeta } from '../providers/filter-meta';
+import { FS_FILTER_META } from '../providers/filter-meta';
 
 import { FocusControllerService } from './focus-controller.service';
 
@@ -26,14 +26,13 @@ export class FsFilterOverlayService implements OnDestroy {
 
   private _destroy$ = new Subject();
   private _overlayRef: OverlayRef;
+  private _injector = inject(Injector);
+  private _overlay = inject(Overlay);
+  private _focusController = inject(FocusControllerService);
+  private _htmlClassRenderer = inject(HtmlClassRenderer);
+  private _filterMeta = inject(FS_FILTER_META);
 
-  constructor(
-    @Inject(FS_FILTER_META) private _filterMeta: FsFilterMeta,
-    private _injector: Injector,
-    private _overlay: Overlay,
-    private _focusController: FocusControllerService,
-    private _htmlClassRenderer: HtmlClassRenderer,
-  ) {
+  constructor() {
     this._openWhenChipClicked();
   }
 

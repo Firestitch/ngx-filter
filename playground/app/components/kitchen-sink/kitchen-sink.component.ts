@@ -3,7 +3,7 @@ import {
   Component, EventEmitter, OnInit, ViewChild,
 } from '@angular/core';
 
-import { filter, nameValue } from '@firestitch/common';
+import { filter, guid, nameValue } from '@firestitch/common';
 import { FsFile } from '@firestitch/file';
 import {
   ActionMode,
@@ -20,6 +20,8 @@ import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item';
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
+
+import { SavedFilters } from './saved-filter';
 
 
 @Component({
@@ -80,9 +82,6 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      persist: {
-        name: 'kitchen-sink',
-      },
       heading: 'Kitchen Sink',
       subheading: 'This is a subtitle',
       inline: false,
@@ -171,9 +170,8 @@ export class KitchenSinkComponent implements OnInit {
             }, 2000);
           },
           values: () => {
-
             return of([
-              { name: 'All', value: '__all' },
+              { name: 'All', value: null },
               { name: 'Option 1', value: 1 },
               { name: 'Option 2', value: 2 },
               { name: 'Option 3', value: 3 },
@@ -201,7 +199,6 @@ export class KitchenSinkComponent implements OnInit {
           name: 'observableSelect',
           type: ItemType.Select,
           label: 'Observable Select',
-          clear: false,
           values: () => {
             this.filter.getItem('simpleSelect') as SimpleSelectItem;
 
@@ -215,7 +212,6 @@ export class KitchenSinkComponent implements OnInit {
           name: 'autocompleteUserId',
           label: 'Autocomplete User',
           type: ItemType.AutoComplete,
-          clear: false,
           change: (item) => {
             console.log('Item Change', item);
           },
@@ -236,8 +232,6 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
-          chipColor: '#fff',
-          chipBackground: 'color',
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(
@@ -279,13 +273,11 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Scroll Date',
           maxYear: (new Date()).getFullYear(),
           mode: ItemDateMode.ScrollMonthYear,
-          clear: false,
         },
         {
           name: 'dateRange',
           type: ItemType.DateRange,
           label: ['From Date', 'To Date'],
-          clear: false,
         },
         {
           name: 'week',
@@ -323,7 +315,6 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Multi Select Status',
           multiple: true,
           values: [
-            { name: 'All', value: '__all' },
             { name: 'Active', value: 'active' },
             { name: 'Pending', value: 'pending' },
             { name: 'Deleted', value: 'deleted' },
@@ -334,58 +325,55 @@ export class KitchenSinkComponent implements OnInit {
           type: ItemType.Text,
           label: 'Max Price',
         },
-      ],
-      // savedFilters: {
-      //   load: () => {
-      //     console.log('<====== Load Saved Filters =====>');
+      ],  
+      savedFilters: {
+        label: {
+          singular: 'Alert',
+          plural: 'Alerts',
+          icon: 'notifications',
+        },        
+        load: () => {
+          console.log('<====== Load Saved Filters =====>');
 
-      //     return of(SavedFilters);
-      //   },
-      //   save: (savedFilter) => {
-      //     console.log('<====== Save Filter =====>');
-      //     const filterIndex = SavedFilters.findIndex((f) => {
-      //       return f.id === savedFilter.id;
-      //     });
+          return of(SavedFilters);
+        },
+        save: (savedFilter) => {
+          console.log('====== Save Filter =====');
+          const filterIndex = SavedFilters.findIndex((f) => {
+            return f.id === savedFilter.id;
+          });
 
-      //     if (filterIndex > -1) {
-      //       // Here I'm emulating like backend returend filter which automatically activated
-      //       savedFilter.active = true;
-      //       SavedFilters[filterIndex] = savedFilter;
-      //     } else {
-      //       // Here I'm emulating like backend returend new filter with ID to me
-      //       savedFilter = {
-      //         ...savedFilter,
-      //         id: 999,
-      //       };
-      //       SavedFilters.push(savedFilter);
-      //     }
+          if (filterIndex > -1) {
+            // Here I'm emulating like backend returned filter which automatically activated
+            SavedFilters[filterIndex] = savedFilter;
+          } else {
+            // Here I'm emulating like backend returend new filter with ID to me
+            savedFilter = {
+              ...savedFilter,
+              id: guid(),
+            };
+            SavedFilters.push(savedFilter);
+          }
 
-      //     console.log('Save Filter', savedFilter);
-      //     console.log('Saved Filters: ', SavedFilters);
+          console.log('Save Filter', savedFilter);
+          console.log('Saved Filters: ', SavedFilters);
 
-      //     return of(savedFilter)
-      //       .pipe(
-      //         delay(2000),
-      //       );
-      //   },
-      //   order: (filters) => {
-      //     console.log('<====== Order Saved Filters =====>');
-      //     console.log('order filters', filters);
+          return of(savedFilter);
+        },
+        // order: (filters) => {
+        //   console.log('====== Order Saved Filters =====');
+        //   console.log('order filters', filters);
 
-      //     return of(null);
-      //   },
-      //   delete: () => {
-      //     console.log('<====== Delete Saved Filter =====>');
-      //     console.log('order filters', filter);
+        //   return of(null);
+        // },
+        delete: () => {
+          console.log('====== Delete Saved Filter =====');
+          console.log('order filters', filter);
 
+          return of(null);
+        },
+      },
 
-      //     return of(null);
-      //   },
-      // },
-      // button: {
-      //   label: '',
-      //   style: ButtonStyle.Stroked,
-      // }
     };
 
 

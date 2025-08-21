@@ -2,15 +2,16 @@ import { list as arrayList } from '@firestitch/common';
 
 import { isObject } from 'lodash-es';
 
+import { IFilterExternalParams } from '../interfaces';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { CheckboxItem, MultipleSelectItem } from '../models/items';
 import { BaseItem } from '../models/items/base-item';
-import { MultipleSelectItem } from '../models/items/select/multiple-select-item';
 
 import { arraysAreEquals } from './compare';
 import { filterToQueryParam } from './query-param-transformers';
 
 
-export function buildQueryParams(flattenedParams: Record<string, unknown>, items: BaseItem<IFilterConfigItem>[]) {
+export function buildQueryParams(flattenedParams: IFilterExternalParams, items: BaseItem<IFilterConfigItem>[]) {
   items
     .forEach((filterItem) => {
       if (filterItem instanceof MultipleSelectItem && filterItem.isolate) {
@@ -22,9 +23,11 @@ export function buildQueryParams(flattenedParams: Record<string, unknown>, items
             flattenedParams[filterItem.name] = null;
           }
         }
-      }
-
-      if (filterItem.isTypeAutocomplete) {
+      } else if  (filterItem instanceof CheckboxItem) {
+        if(filterItem.checked) {
+          flattenedParams[filterItem.name] = filterItem.model;
+        }
+      } else if (filterItem.isTypeAutocomplete) {
         if (isObject(filterItem.model)) {
           flattenedParams[filterItem.name] = filterToQueryParam(filterItem.model.value, filterItem.model.name);
         }

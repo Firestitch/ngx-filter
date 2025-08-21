@@ -6,7 +6,7 @@ import { Directive, TemplateRef } from '@angular/core';
 })
 export class FilterStatusBarDirective {
 
-  public constructor(
+  constructor(
     public templateRef: TemplateRef<any>,
   ) { }
 

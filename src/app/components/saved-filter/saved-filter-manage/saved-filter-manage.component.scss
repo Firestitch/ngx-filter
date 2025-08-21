@@ -1,36 +1,12 @@
+@use '@firestitch/list/styles' as fs-list;
 
-.chip-container {
-  padding: 5px 0;  
-}
+@include fs-list.core();
 
-::ng-deep {
-  fs-chip.saved-filter-manage-chip {
-    cursor: move; 
-    width: 100%;
-    box-sizing: border-box;
-
-    .fs-chip-content {
-      flex: 1;
+:host {
+  ::ng-deep {
+    .mat-mdc-dialog-content {
+      width: 400px;
+      max-width: 100%;
     }
   }
-}
-
-.cdk-drag-preview {
-  box-sizing: border-box;
-}
-
-.cdk-drag-placeholder {
-  opacity: 0;
-}
-
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.example-box:last-child {
-  border: none;
-}
-
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }

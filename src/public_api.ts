@@ -1,5 +1,5 @@
 export { ExternalParamsController } from './app/services/external-params-controller.service';
-export { SavedFiltersController } from './app/services/external-params/saved-filters-controller.service';
+export { SavedFiltersController } from './app/services/saved-filters-controller.service';
 
 // Modules
 export { FsFilterModule } from './app/fs-filter.module';
@@ -7,7 +7,6 @@ export { FsFilterModule } from './app/fs-filter.module';
 // Components
 export { FilterComponent } from './app/components/filter/filter.component';
 export { FilterItemComponent } from './app/components/filters-item/filter-item.component';
-export { FsSavedFiltersMenuComponent } from './app/components/saved-filter/saved-filters-menu/saved-filters-menu.component';
 
 // Directives
 export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
