@@ -25,7 +25,8 @@ import { FocusControllerService } from '../../services/focus-controller.service'
 
 
 @Directive({
-  selector: '[fsFilterFocusTrigger]',
+    selector: '[fsFilterFocusTrigger]',
+    standalone: true,
 })
 export class FocusToItemDirective implements OnInit, OnDestroy {
 

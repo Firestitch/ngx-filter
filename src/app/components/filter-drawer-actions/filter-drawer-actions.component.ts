@@ -5,13 +5,22 @@ import { FsMessage } from '@firestitch/message';
 import { tap } from 'rxjs';
 
 import type { SavedFiltersController } from '../../services/saved-filters-controller.service';
+import { MatButton } from '@angular/material/button';
+import { FsFormModule } from '@firestitch/form';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'fs-filter-drawer-actions',
-  templateUrl: './filter-drawer-actions.component.html',
-  styleUrls: ['./filter-drawer-actions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-filter-drawer-actions',
+    templateUrl: './filter-drawer-actions.component.html',
+    styleUrls: ['./filter-drawer-actions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatButton,
+        FsFormModule,
+        AsyncPipe,
+    ],
 })
 export class FsFilterDrawerActionsComponent {
 

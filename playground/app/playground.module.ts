@@ -19,50 +19,46 @@ import { AppComponent } from './app.component';
 import { ExamplesComponent, KitchenSinkComponent, NofiltersComponent } from './components';
 import { DialogComponent } from './components/dialog';
 import { DialogExampleComponent } from './components/dialog-example';
-import { AppMaterialModule } from './material.module';
+
 
 
 @NgModule({
-  bootstrap: [AppComponent],
-  imports: [
+    bootstrap: [AppComponent],
+    imports: [
     BrowserModule,
     FsFilterModule.forRoot({
-      buttonStyle: ButtonStyle.Flat,
+        buttonStyle: ButtonStyle.Flat,
     }),
     FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
-    AppMaterialModule,
     FsScrollbarModule,
     FormsModule,
     FsFormModule.forRoot(),
     FsExampleModule.forRoot({ iframeObserveBody: true }),
     FsMessageModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', component: ExamplesComponent, pathMatch: 'full' },
-      { path: 'nofilters', component: NofiltersComponent },
-      { path: 'dialog', component: DialogExampleComponent },
-    ],
-    {}),
+        { path: '', component: ExamplesComponent, pathMatch: 'full' },
+        { path: 'nofilters', component: NofiltersComponent },
+        { path: 'dialog', component: DialogExampleComponent },
+    ], {}),
     FsFileModule.forRoot({
-      allowDownload: true,
-      allowRemove: true,
-      dragoverMessage: true,
+        allowDownload: true,
+        allowRemove: true,
+        dragoverMessage: true,
     }),
-  ],
-  declarations: [
-    AppComponent,
     KitchenSinkComponent,
     NofiltersComponent,
     ExamplesComponent,
     DialogExampleComponent,
     DialogComponent,
-  ],
-  providers: [
-    { 
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, 
-      useValue: { floatLabel: 'auto', appearance: 'outline' }, 
-    },
-  ],
+],
+    declarations: [AppComponent],
+    providers: [
+        {
+            provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+            useValue: { floatLabel: 'auto', appearance: 'outline' },
+        },
+    ],
 })
 export class PlaygroundModule {
 }

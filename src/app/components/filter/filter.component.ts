@@ -16,7 +16,7 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIconRegistry, MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 
 import { DrawerRef } from '@firestitch/drawer';
@@ -46,23 +46,51 @@ import { SavedFiltersController } from '../../services/saved-filters-controller.
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
+import { NgTemplateOutlet, NgClass, AsyncPipe } from '@angular/common';
+import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
+import { MatFormField, MatPrefix } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { FsClearModule } from '@firestitch/clear';
+import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
+import { FsFilterActionsComponent } from '../actions/actions.component';
+import { MatIconAnchor } from '@angular/material/button';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 
 @Component({
-  selector: 'fs-filter',
-  styleUrls: ['./filter.component.scss'],
-  templateUrl: './filter.component.html',
-  providers: [
-    FsFilterOverlayService,
-    ExternalParamsController,
-    QueryPersistanceController,
-    QueryParamsController,
-    FocusControllerService,
-    FsFilterItemsStore,
-    SavedFiltersController,
-    ActionsController,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-filter',
+    styleUrls: ['./filter.component.scss'],
+    templateUrl: './filter.component.html',
+    providers: [
+        FsFilterOverlayService,
+        ExternalParamsController,
+        QueryPersistanceController,
+        QueryParamsController,
+        FocusControllerService,
+        FsFilterItemsStore,
+        SavedFiltersController,
+        ActionsController,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgTemplateOutlet,
+        FsSavedFilterAutocompleteChipsComponent,
+        MatFormField,
+        NgClass,
+        MatPrefix,
+        MatIcon,
+        MatInput,
+        FormsModule,
+        FsFormModule,
+        FsClearModule,
+        FsFilterChipsComponent,
+        FsFilterActionsComponent,
+        MatIconAnchor,
+        MatSlideToggle,
+        AsyncPipe,
+    ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
 

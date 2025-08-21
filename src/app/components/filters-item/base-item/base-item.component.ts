@@ -17,9 +17,10 @@ import { BaseItem } from '../../../models/items/base-item';
 
 
 @Component({
-  selector: 'base-item',
-  template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'base-item',
+    template: '',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>>
 implements DoCheck, OnChanges, OnDestroy {

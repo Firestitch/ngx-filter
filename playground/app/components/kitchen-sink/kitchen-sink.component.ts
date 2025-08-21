@@ -22,13 +22,22 @@ import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 import { SavedFilters } from './saved-filter';
+import { FilterComponent as FilterComponent_1 } from '../../../../src/app/components/filter/filter.component';
+import { FilterStatusBarDirective } from '../../../../src/app/directives/status-bar/status-bar.directive';
+import { JsonPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'kitchen-sink',
-  templateUrl: './kitchen-sink.component.html',
-  styleUrls: ['./kitchen-sink.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'kitchen-sink',
+    templateUrl: './kitchen-sink.component.html',
+    styleUrls: ['./kitchen-sink.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FilterComponent_1,
+        FilterStatusBarDirective,
+        JsonPipe,
+    ],
 })
 export class KitchenSinkComponent implements OnInit {
 

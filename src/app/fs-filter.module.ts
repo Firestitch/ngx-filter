@@ -1,36 +1,6 @@
-import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { PortalModule } from '@angular/cdk/portal';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatTooltipModule } from '@angular/material/tooltip';
-
-import { FsAutocompleteModule } from '@firestitch/autocomplete';
-import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
-import { FsChipModule } from '@firestitch/chip';
-import { FsClearModule } from '@firestitch/clear';
-import { FsCommonModule } from '@firestitch/common';
-import { FsDatePickerModule } from '@firestitch/datepicker';
-import { FsFileModule } from '@firestitch/file';
-import { FsFormModule } from '@firestitch/form';
-import { FsLabelModule } from '@firestitch/label';
-import { FsMenuModule } from '@firestitch/menu';
-import { FsPopoverModule } from '@firestitch/popover';
-import { FsScrollModule } from '@firestitch/scroll';
-import { FsSelectButtonModule } from '@firestitch/selectbutton';
-import { FsSkeletonModule } from '@firestitch/skeleton';
-import { FsStore, FsStoreModule } from '@firestitch/store';
+import { FsStore } from '@firestitch/store';
 
 import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
 import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
@@ -68,44 +38,7 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    
-    DragDropModule,
-    
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatCheckboxModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatTooltipModule,
-    MatSlideToggleModule,
-
-    FsChipModule,
-    FsCommonModule,
-    FsStoreModule,
-    FsDatePickerModule,
-    FsLabelModule,
-    FsAutocompleteModule,
-    FsAutocompleteChipsModule,
-    FsScrollModule,
-    FsMenuModule,
-    FsSkeletonModule,
-    FsFormModule,
-    FsFileModule,
-    FsSelectButtonModule,
-    FsClearModule,
-    FsPopoverModule,
-
     FsSavedFilterAutocompleteChipsComponent,
-    PortalModule,
-  ],
-  declarations: [
     BaseItemComponent,
     FilterComponent,
     FilterItemComponent,
@@ -132,10 +65,8 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsFilterActionsComponent,
     FsFilterActionButtonComponent,
     FsFilterActionKebabActionsComponent,
-
     FilterStatusBarDirective,
     FocusToItemDirective,
-
     FsFilterIsolateValues,
   ],
   providers: [

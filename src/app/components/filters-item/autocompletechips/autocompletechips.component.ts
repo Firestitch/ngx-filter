@@ -9,12 +9,23 @@ import { remove as arrayRemove } from '@firestitch/common';
 
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
 
 
 @Component({
-  selector: 'filter-item-autocompletechips',
-  templateUrl: './autocompletechips.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item-autocompletechips',
+    templateUrl: './autocompletechips.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsAutocompleteChipsModule,
+        FocusToItemDirective,
+        FormsModule,
+        FsFormModule,
+    ],
 })
 export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> {
 

@@ -9,13 +9,35 @@ import {
 import { MatSelect } from '@angular/material/select';
 
 import { MultipleSelectItem } from '../../../../models/items/select/multiple-select-item';
+import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { NgClass } from '@angular/common';
+import { FocusToItemDirective } from '../../../../directives/focus-to-item/focus-to-item.directive';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { MatOption } from '@angular/material/core';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FsFilterIsolateValues } from '../../../../pipes/remove-isolate-value.pipe';
 
 
 @Component({
-  selector: 'filter-item-select-multiple',
-  templateUrl: './multiple.component.html',
-  styleUrls: ['./multiple.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item-select-multiple',
+    templateUrl: './multiple.component.html',
+    styleUrls: ['./multiple.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        NgClass,
+        MatLabel,
+        MatSelect,
+        FocusToItemDirective,
+        FormsModule,
+        FsFormModule,
+        MatOption,
+        MatHint,
+        MatCheckbox,
+        FsFilterIsolateValues,
+    ],
 })
 export class SelectMultipleComponent {
 

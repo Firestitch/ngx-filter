@@ -1,6 +1,10 @@
 import { Component, EventEmitter } from '@angular/core';
+import { FilterComponent } from '../../../../src/app/components/filter/filter.component';
+import { JsonPipe } from '@angular/common';
 @Component({
-  templateUrl: 'nofilters.component.html'
+    templateUrl: 'nofilters.component.html',
+    standalone: true,
+    imports: [FilterComponent, JsonPipe]
 })
 export class NofiltersComponent {
 

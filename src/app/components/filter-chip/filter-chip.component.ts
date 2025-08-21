@@ -14,13 +14,23 @@ import { DateRangeItem } from '../../models/items/date-range-item';
 import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 import { RangeItem } from '../../models/items/range-item';
 import { FocusControllerService } from '../../services/focus-controller.service';
+import { FsChipModule } from '@firestitch/chip';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { FsFilterChipContentComponent } from '../filter-chip-content/filter-chip-content.component';
 
 
 @Component({
-  selector: 'fs-filter-chip',
-  templateUrl: './filter-chip.component.html',
-  styleUrls: ['./filter-chip.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-filter-chip',
+    templateUrl: './filter-chip.component.html',
+    styleUrls: ['./filter-chip.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsChipModule,
+        NgTemplateOutlet,
+        FsFilterChipContentComponent,
+        AsyncPipe,
+    ],
 })
 export class FsFilterChipComponent implements OnInit, OnDestroy {
 

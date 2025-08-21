@@ -9,13 +9,34 @@ import {
 import { MatSelect } from '@angular/material/select';
 
 import { SimpleSelectItem } from '../../../../models/items/select/simple-select-item';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { NgClass } from '@angular/common';
+import { FocusToItemDirective } from '../../../../directives/focus-to-item/focus-to-item.directive';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { MatOption } from '@angular/material/core';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { FsFilterIsolateValues } from '../../../../pipes/remove-isolate-value.pipe';
 
 
 @Component({
-  selector: 'filter-item-select-simple',
-  templateUrl: './simple.component.html',
-  styleUrls: ['./simple.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item-select-simple',
+    templateUrl: './simple.component.html',
+    styleUrls: ['./simple.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        NgClass,
+        MatLabel,
+        MatSelect,
+        FocusToItemDirective,
+        FormsModule,
+        FsFormModule,
+        MatOption,
+        MatCheckbox,
+        FsFilterIsolateValues,
+    ],
 })
 export class SelectSimpleComponent {
 

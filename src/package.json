@@ -33,5 +33,8 @@
   "dependencies": {
     "tslib": "^2.0.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "fesm2022": "fesm2022/firestitch-filter.mjs",
+  "esm2022": "esm2022/firestitch-filter.mjs",
+  "typings": "public_api.d.ts"
 }

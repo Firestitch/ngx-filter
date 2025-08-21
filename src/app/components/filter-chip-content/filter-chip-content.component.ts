@@ -15,10 +15,11 @@ import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
-  selector: 'fs-filter-chip-content',
-  templateUrl: './filter-chip-content.component.html',
-  styleUrls: ['./filter-chip-content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-filter-chip-content',
+    templateUrl: './filter-chip-content.component.html',
+    styleUrls: ['./filter-chip-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class FsFilterChipContentComponent implements OnInit, OnDestroy {
 

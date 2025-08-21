@@ -5,19 +5,33 @@ import {
   KeyValueDiffers,
   OnInit,
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { TextItem } from '../../../models/items/text-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
+import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
 
 
 @Component({
-  selector: 'filter-item-text',
-  templateUrl: './text.component.html',
-  styleUrls: ['./text.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item-text',
+    templateUrl: './text.component.html',
+    styleUrls: ['./text.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatPrefix,
+        MatInput,
+        FormsModule,
+        ReactiveFormsModule,
+        FocusToItemDirective,
+        MatSuffix,
+    ],
 })
 export class TextComponent extends BaseItemComponent<TextItem> implements OnInit {
 

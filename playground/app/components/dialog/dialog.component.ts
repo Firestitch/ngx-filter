@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { ItemType } from '@firestitch/filter';
+import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { FilterComponent } from '../../../../src/app/components/filter/filter.component';
+import { MatButton } from '@angular/material/button';
+import { FsFormModule } from '@firestitch/form';
 
 
 @Component({
-  templateUrl: 'dialog.component.html'
+    templateUrl: 'dialog.component.html',
+    standalone: true,
+    imports: [MatDialogTitle, CdkScrollable, MatDialogContent, FilterComponent, MatDialogActions, MatButton, FsFormModule, MatDialogClose]
 })
 export class DialogComponent {
 

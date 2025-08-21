@@ -24,13 +24,36 @@ import type { RangeItem } from '../../models/items/range-item';
 import type { BaseSelectItem } from '../../models/items/select/base-select-item';
 import type { TextItem } from '../../models/items/text-item';
 import type { WeekItem } from '../../models/items/week-item';
+import { TextComponent } from './text/text.component';
+import { SelectComponent } from './select/select.component';
+import { ChipsComponent } from './chips/chips.component';
+import { RangeComponent } from './range/range.component';
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
+import { AutocompletechipsComponent } from './autocompletechips/autocompletechips.component';
+import { DateComponent } from './date/date.component';
+import { DateRangeComponent } from './date-range/date-range.component';
+import { WeekComponent } from './week/week.component';
+import { CheckboxComponent } from './checkbox/checkbox.component';
 
 
 @Component({
-  selector: 'filter-item',
-  templateUrl: './filter-item.component.html',
-  styleUrls: ['./filter-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item',
+    templateUrl: './filter-item.component.html',
+    styleUrls: ['./filter-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        TextComponent,
+        SelectComponent,
+        ChipsComponent,
+        RangeComponent,
+        AutocompleteComponent,
+        AutocompletechipsComponent,
+        DateComponent,
+        DateRangeComponent,
+        WeekComponent,
+        CheckboxComponent,
+    ],
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
 

@@ -18,12 +18,26 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 
 import { SelectMultipleComponent } from './multiple/multiple.component';
 import { SelectSimpleComponent } from './simple/simple.component';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { SelectGroupsComponent } from './groups/groups.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'filter-item-select',
-  templateUrl: './select.component.html',
-  styleUrl: './select.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'filter-item-select',
+    templateUrl: './select.component.html',
+    styleUrl: './select.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        SelectMultipleComponent,
+        SelectSimpleComponent,
+        SelectGroupsComponent,
+        AsyncPipe,
+    ],
 })
 export class SelectComponent 
   extends BaseItemComponent<BaseSelectItem> 
