@@ -1,6 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
-import { MatDialog } from '@angular/material/dialog';
 
 import { FsPrompt } from '@firestitch/prompt';
 
@@ -8,22 +7,16 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
   switchMap,
-  take,
-  takeUntil,
   tap,
 } from 'rxjs/operators';
 
-import {
-  FsFilterSavedFilterEditComponent,
-} from '../components/saved-filter/saved-filter-edit/saved-filter-edit.component';
-import { restoreItems } from '../helpers/restore-items';
 import { IFilterExternalParams } from '../interfaces/external-params.interface';
 import {
   IFilterSavedFilter,
   IFilterSavedFiltersConfig,
 } from '../interfaces/saved-filters.interface';
 
-import { FsFilterItemsStore } from './items-store.service';
+import { ItemStore } from './item-store.service';
 
 
 @Injectable()
@@ -34,8 +27,7 @@ export class SavedFilterController implements OnDestroy {
   private _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
   private _enabled$ = new BehaviorSubject<boolean>(false);
   private _destroy$ = new Subject<void>();
-  private _itemsStore = inject(FsFilterItemsStore);
-  private _dialog = inject(MatDialog);
+  private _itemStore = inject(ItemStore);
   private _prompt = inject(FsPrompt);
 
   public get singularLabel(): string {
@@ -144,7 +136,7 @@ export class SavedFilterController implements OnDestroy {
         switchMap((name) => {
           const data: IFilterSavedFilter = {
             name,
-            filters: this._itemsStore.queryParams(),
+            filters: this._itemStore.queryParams(),
           };
 
           return this.save(data);
@@ -161,7 +153,7 @@ export class SavedFilterController implements OnDestroy {
     savedFilter = {
       ...this.activeFilter,
       ...savedFilter,
-      filters: this._itemsStore.models(),
+      filters: this._itemStore.models(),
     };  
 
     return this._config.save(savedFilter)
@@ -216,52 +208,6 @@ export class SavedFilterController implements OnDestroy {
     } else {
       this._activeFilter$.next(null);
     }
-  }
-
-  public openSavedFilterEditDialog(): void {
-    const params = this._itemsStore.queryParams();
-
-    const dialogConfig = {
-      data: {
-        params: params,
-        savedFilters: this.savedFilters,
-        saveCallback: this.save.bind(this),
-      },
-    };
-
-    this._dialog
-      .open(FsFilterSavedFilterEditComponent, dialogConfig)
-      .beforeClosed()
-      .pipe(
-        take(1),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((updatedFilter: IFilterSavedFilter | null) => {
-        if (updatedFilter) {
-          // get already saved related filter object
-          const savedFilter = this.savedFilters
-            .find((f) => f.id === updatedFilter.id);
-
-          // restore values from query string
-          updatedFilter.filters = restoreItems(
-            updatedFilter.filters,
-            this._itemsStore.items,
-          );
-
-
-          if (savedFilter) {
-            Object.assign(savedFilter, updatedFilter);
-          } else {
-            this.updateActiveFilter();
-            this.savedFilters = [
-              ...this.savedFilters,
-              updatedFilter,
-            ];
-          }
-
-          this.updateActiveFilter();
-        }
-      });
   }
 
   public updateActiveFilter(): void {

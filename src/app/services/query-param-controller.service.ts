@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { restoreItems } from '../helpers/restore-items';
 
-import { FsFilterItemsStore } from './items-store.service';
+import { ItemStore } from './item-store.service';
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class QueryParamController {
 
   constructor(
     private _route: ActivatedRoute,
-    private _itemsStore: FsFilterItemsStore,
+    private _itemStore: ItemStore,
   ) {}
 
   public get enabled(): boolean {
@@ -44,9 +44,9 @@ export class QueryParamController {
    */
   public fetchFromQueryParams() {
     const items = [
-      ...this._itemsStore.items,
-      this._itemsStore.sortByItem,
-      this._itemsStore.sortDirectionItem,
+      ...this._itemStore.items,
+      this._itemStore.sortByItem,
+      this._itemStore.sortDirectionItem,
     ]
       .filter((item) => !!item);
 

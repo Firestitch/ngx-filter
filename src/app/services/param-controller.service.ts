@@ -12,7 +12,7 @@ import {
   QueryParamController,
   SavedFilterController,
 } from '.';
-import { FsFilterItemsStore } from './items-store.service';
+import { ItemStore } from './item-store.service';
 
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ParamController implements OnDestroy {
   private _pending$ = new BehaviorSubject(false);
   private _config: FsFilterConfig;
   private _destroy$ = new Subject<void>();
-  private _itemsStore = inject(FsFilterItemsStore);
+  private _itemStore = inject(ItemStore);
   private _persistanceController = inject(PersistanceController);
   private _queryParams = inject(QueryParamController);
   private _savedFilterController = inject(SavedFilterController);
@@ -38,7 +38,7 @@ export class ParamController implements OnDestroy {
 
     if (this._savedFilterController.enabled && this._savedFilterController.activeFilter) {
       const query = Object.keys(result)
-        .filter((key) => !this._itemsStore.itemNames.includes(key))
+        .filter((key) => !this._itemStore.itemNames.includes(key))
         .reduce((acc, key) => {
           return {
             ...acc,
@@ -90,7 +90,7 @@ export class ParamController implements OnDestroy {
   }
 
   public reloadFiltersWithValues(params: IFilterExternalParams) {
-    this._itemsStore.updateItemsWithValues(params);
+    this._itemStore.updateItemsWithValues(params);
 
     this._saveQueryParams();
     this._savePersistedParams();
@@ -118,14 +118,14 @@ export class ParamController implements OnDestroy {
   }
 
   public _initItemsValues() {
-    this._itemsStore.init(this.params);
+    this._itemStore.init(this.params);
     this._saveQueryParams();
     this._savePersistedParams();
   }
 
   public fetchQueryParams(): void {
     this._initQueryParams();
-    this._itemsStore.updateItemsWithValues(this.params);
+    this._itemStore.updateItemsWithValues(this.params);
   }
 
   private _initQueryParams() {
@@ -137,7 +137,7 @@ export class ParamController implements OnDestroy {
   }
 
   private _listenItemsChange() {
-    this._itemsStore.ready$
+    this._itemStore.ready$
       .pipe(
         filter((v) => v),
         take(1),
@@ -148,7 +148,7 @@ export class ParamController implements OnDestroy {
         this._savePersistedParams();
       });
 
-    this._itemsStore
+    this._itemStore
       .itemsChange$
       .pipe(
         takeUntil(this._destroy$),
@@ -162,16 +162,16 @@ export class ParamController implements OnDestroy {
   private _saveQueryParams() {
 
     const params = buildQueryParams(
-      this._itemsStore
+      this._itemStore
         .valuesAsQuery({
           onlyPresented: false,
-          items: this._itemsStore.items,
+          items: this._itemStore.items,
           persisted: true,
         }),
-      this._itemsStore.items,
+      this._itemStore.items,
     );
    
-    this._itemsStore.items
+    this._itemStore.items
       .filter((item) => item.queryParamsDisabled || !item.isQueryParamVisible)
       .forEach((item) => {
         params[item.name] = undefined;
@@ -182,7 +182,7 @@ export class ParamController implements OnDestroy {
 
   private _savePersistedParams() {
     if(this._persistanceController.queryEnabled) {
-      const targetItems = this._itemsStore.items
+      const targetItems = this._itemStore.items
         .filter((item) => !item.persistanceDisabled)
         .filter((item) => item.value !== undefined)
         .reduce((acc, item) => {

@@ -21,7 +21,7 @@ import { map, Observable, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
-import { FsFilterItemsStore } from '../../../services/items-store.service';
+import { ItemStore } from '../../../services/item-store.service';
 import { ParamController } from '../../../services/param-controller.service';
 import type { SavedFilterController } from '../../../services/saved-filter-controller.service';
 import { FsFilterSavedFilterManageComponent } from '../saved-filter-manage';
@@ -45,8 +45,8 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
 
   public selectedFilter: IFilterSavedFilter;
 
-  private _itemsStore = inject(FsFilterItemsStore);
-  private _paramCointroller = inject(ParamController);
+  private _itemStore = inject(ItemStore);
+  private _paramController = inject(ParamController);
   private _dialog = inject(MatDialog);
   private _destroyRef = inject(DestroyRef);
   private _injector = inject(Injector);
@@ -75,14 +75,14 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
   }
 
   public selectFilter(savedFilter: IFilterSavedFilter): void {
-    this._paramCointroller.setActiveSavedFilter(savedFilter);
+    this._paramController.setActiveSavedFilter(savedFilter);
   }
 
   public selectedFilterChange(savedFilter: IFilterSavedFilter): void {
-    this._paramCointroller.setActiveSavedFilter(savedFilter);
+    this._paramController.setActiveSavedFilter(savedFilter);
 
     if (!savedFilter) {
-      this._itemsStore.filtersClear();
+      this._itemStore.filtersClear();
     }
   }
 
@@ -156,11 +156,6 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
             .name.toLowerCase().includes(query.toLowerCase()))),
       );
   };
-
-  public saveFilters() {
-    this.savedFiltersController
-      .openSavedFilterEditDialog();
-  }
 
   public manageFilters(): void {
     this._dialog

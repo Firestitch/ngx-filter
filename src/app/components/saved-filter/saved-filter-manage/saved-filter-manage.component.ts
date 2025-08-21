@@ -31,7 +31,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
 
   private _savedFilterController = inject(SavedFilterController);
   private _cdRef = inject(ChangeDetectorRef);
-  private _paramCointroller = inject(ParamController);
+  private _paramController = inject(ParamController);
   private _dialogRef = inject(MatDialogRef);
   private _filterOverlayService = inject(FsFilterOverlayService);
 
@@ -50,7 +50,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   }
 
   public selectFilter(savedFilter: IFilterSavedFilter) {
-    this._paramCointroller.setActiveSavedFilter(savedFilter);
+    this._paramController.setActiveSavedFilter(savedFilter);
     this._filterOverlayService.open();
     this._dialogRef.close();
   }

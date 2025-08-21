@@ -28,7 +28,6 @@ import { SelectSimpleComponent } from './components/filters-item/select/simple/s
 import { TextComponent } from './components/filters-item/text/text.component';
 import { WeekComponent } from './components/filters-item/week/week.component';
 import { FsSavedFilterAutocompleteChipsComponent } from './components/saved-filter';
-import { FsFilterSavedFilterEditComponent } from './components/saved-filter/saved-filter-edit/saved-filter-edit.component';
 import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './injectors/filter-config';
@@ -61,7 +60,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsFilterChipComponent,
     FsFilterChipContentComponent,
     FsFilterDrawerActionsComponent,
-    FsFilterSavedFilterEditComponent,
     FsFilterActionsComponent,
     FsFilterActionButtonComponent,
     FsFilterActionKebabActionsComponent,

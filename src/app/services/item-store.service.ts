@@ -33,7 +33,7 @@ interface IValueAsQuery {
 }
 
 @Injectable()
-export class FsFilterItemsStore implements OnDestroy {
+export class ItemStore implements OnDestroy {
 
   public sortByItem: BaseItem<IFilterConfigItem> = null;
   public sortDirectionItem: BaseItem<IFilterConfigItem> = null;

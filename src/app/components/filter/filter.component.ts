@@ -45,7 +45,7 @@ import { BaseItem } from '../../models/items/base-item';
 import { TextItem } from '../../models/items/text-item';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
-import { FsFilterItemsStore } from '../../services/items-store.service';
+import { ItemStore } from '../../services/item-store.service';
 import { ParamController } from '../../services/param-controller.service';
 import { PersistanceController } from '../../services/persistance-controller.service';
 import { QueryParamController } from '../../services/query-param-controller.service';
@@ -68,7 +68,7 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
     PersistanceController,
     QueryParamController,
     FocusControllerService,
-    FsFilterItemsStore,
+    ItemStore,
     SavedFilterController,
     ActionsController,
   ],
@@ -141,19 +141,18 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject<void>();
   private _dialogRef = inject(MatDialogRef, { optional: true });
   private _drawerRef = inject(DrawerRef, { optional: true });  
-
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
   private _filterOverlay = inject(FsFilterOverlayService);
   private _zone = inject(NgZone);
-  private _paramCointroller = inject(ParamController);
+  private _paramController = inject(ParamController);
   private _persistanceController = inject(PersistanceController);
-  private _filterItems = inject(FsFilterItemsStore);
+  private _itemStore = inject(ItemStore);
   private _actions = inject(ActionsController);
   private _savedFilterController = inject(SavedFilterController);
 
   constructor(
   ) {
-    this._filterItems.filter = this;
+    this._itemStore.filter = this;
     this._listenWhenFilterReady();
     this._updateWindowWidth();
 
@@ -186,7 +185,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get filterParams() {
-    return this._filterItems.values();
+    return this._itemStore.values();
   }
 
   public get inDialog() {
@@ -194,23 +193,23 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get filterParamsQuery(): IFilterExternalParams {
-    return this._filterItems.valuesAsQuery();
+    return this._itemStore.valuesAsQuery();
   }
 
   public get items() {
-    return this._filterItems.items;
+    return this._itemStore.items;
   }
 
   public get visibleItems() {
-    return this._filterItems.visibleItems;
+    return this._itemStore.visibleItems;
   }
 
   public get keywordItem(): TextItem | null {
-    return this._filterItems.keywordItem;
+    return this._itemStore.keywordItem;
   }
 
   public get itemsReady$(): Observable<boolean> {
-    return this._filterItems.ready$;
+    return this._itemStore.ready$;
   }
 
   public get hasFilterChips$(): Observable<boolean> {
@@ -218,7 +217,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get hasVisibleItemOrSorting(): boolean {
-    return this.visibleItems.length > 0 || !!this._filterItems.sortByItem;
+    return this.visibleItems.length > 0 || !!this._itemStore.sortByItem;
   }
 
   public get filtersBtnVisible$(): Observable<boolean> {
@@ -229,7 +228,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordVisible$.asObservable()
       .pipe(
         map((visible) => {
-          return visible && this._filterItems.hasKeyword;
+          return visible && this._itemStore.hasKeyword;
         }),
       );
   }
@@ -255,7 +254,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._paramCointroller.setActiveSavedFilter(savedFilter);
+    this._paramController.setActiveSavedFilter(savedFilter);
   }
 
   public get activeSavedFilter(): IFilterSavedFilter {
@@ -297,7 +296,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public updateSort(sort: ISortingChangeEvent) {
-    this._filterItems.updateSort(sort);
+    this._itemStore.updateSort(sort);
   }
 
   /**
@@ -379,7 +378,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public changeVisibilityClick(value, event = null) {
-
     if (event) {
       event.stopPropagation();
     }
@@ -416,7 +414,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     if (item) {
       item.hide = false;
 
-      this._filterItems.updateItemsVisiblity();
+      this._itemStore.updateItemsVisiblity();
     }
   }
 
@@ -429,7 +427,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     item.hide = true;
 
-    this._filterItems.updateItemsVisiblity();
+    this._itemStore.updateItemsVisiblity();
   }
 
   public clearItem(name: string) {
@@ -455,7 +453,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     item.label = params.label ?? item.label;
     item.chipLabel = params.chipLabel ?? item.chipLabel;
 
-    this._filterItems.updateItemsVisiblity();
+    this._itemStore.updateItemsVisiblity();
   }
 
   public getItemValueChange$(name: string): Observable<any> | null {
@@ -497,8 +495,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public init() {
-    const data = this._filterItems.valuesAsQuery();
-    this._sort = this._filterItems.getSort();
+    const data = this._itemStore.valuesAsQuery();
+    this._sort = this._itemStore.getSort();
 
     if (this.config.init) {
       this.config.init(data, this._sort, this);
@@ -517,7 +515,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       event.stopPropagation();
     }
 
-    this._filterItems.filtersClear();
+    this._itemStore.filtersClear();
 
     if (this.config.clear) {
       this.config.clear();
@@ -526,20 +524,13 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.keyword = '';
   }
 
-  /**
-   * Close filter window and do change callback
-   */
-  public search(event) {
-    this.changeVisibilityClick(false, event);
-  }
-
   public reload(event = null) {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
     }
 
-    const data = this._filterItems.valuesAsQuery();
+    const data = this._itemStore.valuesAsQuery();
     const el = this.reloadEl?.nativeElement;
 
     if(el) {
@@ -553,7 +544,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.config.reload) {
-      this.config.reload(data, this._filterItems.getSort());
+      this.config.reload(data, this._itemStore.getSort());
     }
   }
 
@@ -563,15 +554,15 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public fetchQueryParams(): void {
-    this._paramCointroller.fetchQueryParams();
+    this._paramController.fetchQueryParams();
   }
 
   /**
    * Call change callback and apply new filter values
    */
   public change() {
-    const data = this._filterItems.valuesAsQuery();
-    const sort = this._filterItems.getSort();
+    const valuesAsQuery = this._itemStore.valuesAsQuery();
+    const sort = this._itemStore.getSort();
 
     const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
       || (sort && this._sort && !objectsAreEquals(this._sort, sort));
@@ -580,12 +571,12 @@ export class FilterComponent implements OnInit, OnDestroy {
       this._sort = sort;
 
       if (this.config.sortChange) {
-        this.config.sortChange(data, sort);
+        this.config.sortChange(valuesAsQuery, sort);
       }
     }
 
     if (this.config.change) {
-      this.config.change(data, sort);
+      this.config.change(valuesAsQuery, sort);
     }
 
     this._updateChipsVisibility();
@@ -646,13 +637,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public setItems(items: IFilterConfigItem[]) {
-    this._filterItems.destroyItems();
-
+    this._itemStore.destroyItems();
     this.config.items = items;
-    this._filterItems.setConfig(this._config);
-    this._paramCointroller.initItems();
-
-    this._syncSearchInputWithKeyword();
+    this._itemStore.setConfig(this._config);
+    this._paramController.initItems();
+    this._updateKeyword();
   }
 
   public keywordChange(keyword) {
@@ -660,12 +649,12 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public updateSortings(items: SortItem[]): void {
-    this._filterItems.updateSortingItemsValues(items);
+    this._itemStore.updateSortingItemsValues(items);
   }
 
   private _initFilterWithConfig(config: FilterConfig) {
     if (this.config) {
-      this._filterItems.destroyItems();
+      this._itemStore.destroyItems();
     }
 
     config = {
@@ -676,10 +665,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._config = new FsFilterConfig(config);
     this._actions.setConfig(this._config);
     this._persistanceController.setConfig(this._config, this.inDialog);
-    this._filterItems.setConfig(this._config);
-    this._paramCointroller.setConfig(this._config);
+    this._itemStore.setConfig(this._config);
+    this._paramController.setConfig(this._config);
 
-    this._syncSearchInputWithKeyword();
+    this._updateKeyword();
 
     if (this.config.reloadWhenConfigChanged) {
       this.change();
@@ -746,18 +735,10 @@ export class FilterComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe((value) => {
-        const keywordItem = this._filterItems.keywordItem;
+        const keywordItem = this._itemStore.keywordItem;
         keywordItem.model = value;
         this.change();
       });
-  }
-
-  private _syncSearchInputWithKeyword(): void {
-    const keywordItem = this._filterItems.keywordItem;
-    if (keywordItem) {
-      this.keyword = keywordItem.model;
-      this.searchPlaceholder = keywordItem.label as string || 'Search';
-    }
   }
 
   private _initKeywordVisibility() {
@@ -765,12 +746,13 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private _listenInternalItemsChange() {
-    this._filterItems
+    this._itemStore
       .itemsChange$
       .pipe(
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        this.keyword = this._itemStore.keywordItem?.model;
         this.change();
       });
   }
@@ -784,7 +766,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _listenWhenFilterReady() {
     combineLatest(
       [
-        this._paramCointroller.pending$,
+        this._paramController.pending$,
         this.itemsReady$,
       ])
       .pipe(
@@ -793,14 +775,18 @@ export class FilterComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.init();
-        this._syncSearchInputWithKeyword();
+        this._updateKeyword();
 
         this.ready.emit();
       });
   }
 
+  private _updateKeyword() {
+    this.keyword = this._itemStore.keywordItem?.model;
+  }
+
   private _updateChipsVisibility() {
-    const hasFilterChips = this._filterItems.items
+    const hasFilterChips = this._itemStore.items
       .some((item: BaseItem<any>) => {
         return item.isChipVisible;
       });
