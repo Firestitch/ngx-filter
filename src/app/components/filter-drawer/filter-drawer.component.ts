@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,9 +8,15 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 
+import { FsFormModule } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
+import { FsSkeletonModule } from '@firestitch/skeleton';
 
 import { Observable, tap } from 'rxjs';
 
@@ -21,35 +28,28 @@ import { BaseItem } from '../../models/items/base-item';
 import { ExternalParamsController } from '../../services/external-params-controller.service';
 import { FsFilterItemsStore } from '../../services/items-store.service';
 import { SavedFiltersController } from '../../services/saved-filters-controller.service';
-import { FormsModule } from '@angular/forms';
-import { FsFormModule } from '@firestitch/form';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
-import { FsSkeletonModule } from '@firestitch/skeleton';
-import { FilterItemComponent } from '../filters-item/filter-item.component';
 import { FsFilterDrawerActionsComponent } from '../filter-drawer-actions/filter-drawer-actions.component';
-import { AsyncPipe } from '@angular/common';
+import { FilterItemComponent } from '../filters-item/filter-item.component';
 
 type Item = BaseItem<any>;
 
 @Component({
-    templateUrl: './filter-drawer.component.html',
-    styleUrls: ['./filter-drawer.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FormsModule,
-        FsFormModule,
-        MatIcon,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        FsSkeletonModule,
-        FilterItemComponent,
-        FsFilterDrawerActionsComponent,
-        AsyncPipe,
-    ],
+  templateUrl: './filter-drawer.component.html',
+  styleUrls: ['./filter-drawer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FormsModule,
+    FsFormModule,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    FsSkeletonModule,
+    FilterItemComponent,
+    FsFilterDrawerActionsComponent,
+    AsyncPipe,
+  ],
 })
 export class FilterDrawerComponent implements OnInit {
 

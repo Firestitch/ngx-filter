@@ -1,3 +1,4 @@
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,13 +14,19 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { MatIconAnchor } from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatIconRegistry, MatIcon } from '@angular/material/icon';
+import { MatFormField, MatPrefix } from '@angular/material/form-field';
+import { MatIcon, MatIconRegistry } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
+import { FsClearModule } from '@firestitch/clear';
 import { DrawerRef } from '@firestitch/drawer';
+import { FsFormModule } from '@firestitch/form';
 
 import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
@@ -43,54 +50,47 @@ import { FsFilterItemsStore } from '../../services/items-store.service';
 import { QueryParamsController } from '../../services/query-params-controller.service';
 import { QueryPersistanceController } from '../../services/query-persistance-controller.service';
 import { SavedFiltersController } from '../../services/saved-filters-controller.service';
+import { FsFilterActionsComponent } from '../actions/actions.component';
+import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
+import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
-import { NgTemplateOutlet, NgClass, AsyncPipe } from '@angular/common';
-import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
-import { MatFormField, MatPrefix } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { FsFormModule } from '@firestitch/form';
-import { FsClearModule } from '@firestitch/clear';
-import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
-import { FsFilterActionsComponent } from '../actions/actions.component';
-import { MatIconAnchor } from '@angular/material/button';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 
 @Component({
-    selector: 'fs-filter',
-    styleUrls: ['./filter.component.scss'],
-    templateUrl: './filter.component.html',
-    providers: [
-        FsFilterOverlayService,
-        ExternalParamsController,
-        QueryPersistanceController,
-        QueryParamsController,
-        FocusControllerService,
-        FsFilterItemsStore,
-        SavedFiltersController,
-        ActionsController,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgTemplateOutlet,
-        FsSavedFilterAutocompleteChipsComponent,
-        MatFormField,
-        NgClass,
-        MatPrefix,
-        MatIcon,
-        MatInput,
-        FormsModule,
-        FsFormModule,
-        FsClearModule,
-        FsFilterChipsComponent,
-        FsFilterActionsComponent,
-        MatIconAnchor,
-        MatSlideToggle,
-        AsyncPipe,
-    ],
+  selector: 'fs-filter',
+  styleUrls: ['./filter.component.scss'],
+  templateUrl: './filter.component.html',
+  providers: [
+    FsFilterOverlayService,
+    ExternalParamsController,
+    QueryPersistanceController,
+    QueryParamsController,
+    FocusControllerService,
+    FsFilterItemsStore,
+    SavedFiltersController,
+    ActionsController,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    NgTemplateOutlet,
+    FsSavedFilterAutocompleteChipsComponent,
+    MatFormField,
+    NgClass,
+    MatPrefix,
+    MatIcon,
+    MatInput,
+    FormsModule,
+    FsFormModule,
+    FsClearModule,
+    FsFilterChipsComponent,
+    FsFilterActionsComponent,
+    MatIconAnchor,
+    MatSlideToggle,
+    AsyncPipe,
+  ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
