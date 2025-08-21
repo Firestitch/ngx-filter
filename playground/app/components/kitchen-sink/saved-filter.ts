@@ -1,4 +1,6 @@
-export const SavedFilters: any =
+import { IFilterSavedFilter } from '../../../../src/public_api';
+
+export const SavedFilters: IFilterSavedFilter[] =
   [
     {
       id: 1,

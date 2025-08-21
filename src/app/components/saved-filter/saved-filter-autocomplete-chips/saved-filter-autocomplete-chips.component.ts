@@ -74,6 +74,10 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
     return this.savedFiltersController.labelIcon;
   }
 
+  public compareWith = (o1: IFilterSavedFilter, o2: IFilterSavedFilter): boolean => {
+    return o1?.id === o2?.id;
+  };
+
   public selectFilter(savedFilter: IFilterSavedFilter): void {
     this._paramController.setActiveSavedFilter(savedFilter);
   }
