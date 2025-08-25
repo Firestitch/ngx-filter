@@ -106,6 +106,7 @@ export class ItemStore implements OnDestroy {
     this._itemsValuesLoaded = false;
     if (Array.isArray(items)) {
       this._createItems(items);
+      this._setKeywordItem();
     }
   }
 
@@ -406,7 +407,6 @@ export class ItemStore implements OnDestroy {
       )
       .subscribe(() => {
         this.updateItemsVisiblity();
-        this._setKeywordItem();
       });
   }
 

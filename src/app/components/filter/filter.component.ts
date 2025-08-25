@@ -131,11 +131,10 @@ export class FilterComponent implements OnInit, OnDestroy {
   public keyword = '';
   public autoReload = true;
 
-  protected _config: FsFilterConfig = null;
-
+  private _config: FsFilterConfig = null;
   private _sort: FilterSort;
   private _filtersBtnVisible$ = new BehaviorSubject(true);
-  private _keywordVisible$ = new BehaviorSubject(true);
+  private _keywordVisible$ = new BehaviorSubject(false);
   private _hasFilterChips$ = new BehaviorSubject(false);
   private _keyword$ = new Subject();
   private _destroy$ = new Subject<void>();
@@ -231,7 +230,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     })
       .pipe(
         map(({ keywordVisible, activeFilter }) => {
-          return !(keywordVisible && this._itemStore.hasKeyword) && !activeFilter;
+          return !keywordVisible && !activeFilter;
         }),
       );
   }
@@ -244,12 +243,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get keywordVisible$(): Observable<boolean> {
-    return this._keywordVisible$.asObservable()
-      .pipe(
-        map((visible) => {
-          return visible && this._itemStore.hasKeyword;
-        }),
-      );
+    return this._keywordVisible$.asObservable();
   }
 
   public get actionsVisible$() {
@@ -281,13 +275,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    // Avoid ngChanges error
-    setTimeout(() => {
-      if (this.config.autofocus) {
-        this.focus();
-      }
-    });
-
+    this._initAutoFocus();
     this._initAutoReload();
     this._listenInputChanges();
     this._listenInternalItemsChange();
@@ -480,7 +468,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     return null;
-
   }
 
   public changeVisibility(state: boolean) {
@@ -754,6 +741,15 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private _initKeywordVisibility() {
     this._keywordVisible$.next(!!this.keywordItem && !this.keywordItem?.hide);
+  }
+
+  private _initAutoFocus() {
+    // Avoid ngChanges error
+    setTimeout(() => {
+      if (this.config.autofocus) {
+        this.focus();
+      }
+    });
   }
 
   private _listenInternalItemsChange() {

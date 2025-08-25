@@ -14,7 +14,7 @@ import {
 } from '@firestitch/filter';
 
 import { BehaviorSubject, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 
 import { shuffle } from 'lodash-es';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
@@ -344,7 +344,10 @@ export class KitchenSinkComponent implements OnInit {
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 
-          return of(SavedFilters);
+          return of(SavedFilters)
+            .pipe(
+              delay(1000),
+            );
         },
         save: (savedFilter) => {
           console.log('====== Save Filter =====');
