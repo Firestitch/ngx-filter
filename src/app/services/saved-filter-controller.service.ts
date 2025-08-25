@@ -146,7 +146,6 @@ export class SavedFilterController implements OnDestroy {
         switchMap((name) => {
           const data: IFilterSavedFilter = {
             name,
-            filters: this._itemStore.queryParams(),
           };
 
           return this.save(data);
