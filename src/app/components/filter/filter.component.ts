@@ -259,7 +259,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._paramController.setActiveSavedFilter(savedFilter);
+    this._savedFilterController.setActiveFilter(savedFilter);
   }
 
   public get activeSavedFilter(): IFilterSavedFilter {

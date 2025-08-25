@@ -61,7 +61,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   }
 
   public selectFilter(savedFilter: IFilterSavedFilter) {
-    this._paramController.setActiveSavedFilter(savedFilter);
+    this._savedFilterController.setActiveFilter(savedFilter);
     this._filterOverlayService.open();
     this._dialogRef.close();
   }

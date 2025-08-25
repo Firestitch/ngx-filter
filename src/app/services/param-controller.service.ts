@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 import { buildQueryParams } from '../helpers/build-query-params';
-import { IFilterSavedFilter, KeyValue } from '../interfaces';
+import { KeyValue } from '../interfaces';
 import { FsFilterConfig } from '../models/filter-config';
 
 import {
@@ -81,14 +81,6 @@ export class ParamController implements OnDestroy {
     this.initItems();
   }
 
-  public setActiveSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._savedFilterController.setActiveFilter(savedFilter);
-
-    if (savedFilter) {
-      this.reloadFiltersWithValues(savedFilter.filters);
-    }
-  }
-
   public reloadFiltersWithValues(params: KeyValue) {
     this._itemStore.updateItemsWithValues(params);
 
@@ -100,20 +92,14 @@ export class ParamController implements OnDestroy {
     of(null)
       .pipe(
         tap(() => this._pending$.next(true)),
-        switchMap(() => {
-          return this._savedFilterController.enabled ? 
-            this._savedFilterController.load()
-              .pipe(
-                tap(() => this._savedFilterController.updateActiveFilter()),
-              ) : 
-            of(null);
-        }),
+        switchMap(() => this._savedFilterController.load() ),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._initItemsValues();
         this._pending$.next(false);
         this._listenItemsChange();
+        this._listenSavedFilterChange();
       });
   }
 
@@ -134,6 +120,20 @@ export class ParamController implements OnDestroy {
 
   private _initSavedFilters() {
     this._savedFilterController.init(this._config.savedFilters);
+  }
+
+  private _listenSavedFilterChange() {
+    this._savedFilterController.activeFilter$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((savedFilter) => {
+        if (savedFilter) {
+          this.reloadFiltersWithValues(savedFilter.filters);
+        } else {
+          this._itemStore.filtersClear();
+        }
+      });
   }
 
   private _listenItemsChange() {

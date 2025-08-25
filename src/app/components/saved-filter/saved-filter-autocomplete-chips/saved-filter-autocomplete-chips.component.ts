@@ -79,11 +79,11 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
   };
 
   public selectFilter(savedFilter: IFilterSavedFilter): void {
-    this._paramController.setActiveSavedFilter(savedFilter);
+    this.savedFiltersController.setActiveFilter(savedFilter);
   }
 
   public selectedFilterChange(savedFilter: IFilterSavedFilter): void {
-    this._paramController.setActiveSavedFilter(savedFilter);
+    this.savedFiltersController.setActiveFilter(savedFilter);
 
     if (!savedFilter) {
       this._itemStore.filtersClear();

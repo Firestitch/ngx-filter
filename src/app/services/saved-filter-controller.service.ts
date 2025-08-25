@@ -3,7 +3,7 @@ import { inject, Injectable, OnDestroy } from '@angular/core';
 
 import { FsPrompt } from '@firestitch/prompt';
 
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import {
   distinctUntilChanged,
   switchMap,
@@ -109,15 +109,25 @@ export class SavedFilterController implements OnDestroy {
     this._config = filterSavedFiltersConfig;
   }
 
-  public initSavedFilters(filters: IFilterSavedFilter[]): void {
-    this.savedFilters = filters;
+  public initSavedFilters(savedFilters: IFilterSavedFilter[]): void {
+    this.savedFilters = savedFilters;
+    const acitveFilter = this.savedFilters
+      .find((f) => f.active);
+
+    if (acitveFilter) {
+      this._activeFilter$.next(acitveFilter);
+    }
   }
 
   public load(): Observable<IFilterSavedFilter[]> {
+    if (!this.enabled) {
+      return of([]);
+    }
+
     return this._config.load()
       .pipe(
-        tap((response) => {
-          this.initSavedFilters(response);
+        tap((savedFilters) => {
+          this.initSavedFilters(savedFilters);
         }),
       );
   }
@@ -218,15 +228,6 @@ export class SavedFilterController implements OnDestroy {
       this._activeFilter$.next(existingFilter);
     } else {
       this._activeFilter$.next(null);
-    }
-  }
-
-  public updateActiveFilter(): void {
-    const acitveFilter = this.savedFilters
-      .find((f) => f.active);
-
-    if (acitveFilter) {
-      this.setActiveFilter(acitveFilter);
     }
   }
 
