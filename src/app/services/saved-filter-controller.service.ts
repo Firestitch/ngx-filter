@@ -158,10 +158,8 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public save(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
-    const exists = !!this.activeFilter.id;
-
     savedFilter = {
-      ...this.activeFilter,
+      ...(this.activeFilter || {}),
       ...savedFilter,
       filters: this._itemStore.items
         .filter((item) => item.hasValue)
@@ -176,7 +174,7 @@ export class SavedFilterController implements OnDestroy {
     return this._config.save(savedFilter)
       .pipe(
         tap((_savedFilter) => {
-          this.savedFilters = exists ? this.savedFilters
+          this.savedFilters = this.activeFilter?.id ? this.savedFilters
             .map((f) => f.id === savedFilter.id ? _savedFilter : f) : [
             ...this.savedFilters,
             _savedFilter,
