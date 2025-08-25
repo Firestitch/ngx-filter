@@ -148,7 +148,7 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public save(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
-    const exists = !!savedFilter.id;
+    const exists = !!this.activeFilter.id;
 
     savedFilter = {
       ...this.activeFilter,
@@ -198,6 +198,10 @@ export class SavedFilterController implements OnDestroy {
         tap(() => {
           this.savedFilters = this.savedFilters
             .filter((f) => f.id !== savedFilter.id);
+          
+          if (this.activeFilter?.id === savedFilter.id) {
+            this.setActiveFilter(null);
+          }
         }),
       );
   }
