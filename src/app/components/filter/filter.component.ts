@@ -28,7 +28,7 @@ import { FsClearModule } from '@firestitch/clear';
 import { DrawerRef } from '@firestitch/drawer';
 import { FsFormModule } from '@firestitch/form';
 
-import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
@@ -224,6 +224,25 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._filtersBtnVisible$.asObservable();
   }
 
+  public get inlineToolbar$(): Observable<boolean> {
+    return combineLatest({
+      keywordVisible: this._keywordVisible$.asObservable(),
+      activeFilter: of(this.savedFiltersController.enabled),
+    })
+      .pipe(
+        map(({ keywordVisible, activeFilter }) => {
+          return !(keywordVisible && this._itemStore.hasKeyword) && !activeFilter;
+        }),
+      );
+  }
+
+  public get notInlineToolbar$(): Observable<boolean> {
+    return this.inlineToolbar$
+      .pipe(
+        map((inline) => !inline),
+      );
+  }
+
   public get keywordVisible$(): Observable<boolean> {
     return this._keywordVisible$.asObservable()
       .pipe(
@@ -233,14 +252,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       );
   }
 
-  public get keywordNotVisible$(): Observable<boolean> {
-    return this._keywordVisible$.asObservable()
-      .pipe(
-        map((visible) => {
-          return !visible;
-        }),
-      );
-  }
   public get actionsVisible$() {
     return this._actions.visible$;
   }

@@ -14,7 +14,6 @@ export const SavedFilters: IFilterSavedFilter[] =
         dayChips: [{ value: 1, name: 'Monday' }],
         date: '2020-09-22T00:00:00+03:00',
       },
-      active: true,
     },
     {
       id: 2,

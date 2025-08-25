@@ -28,13 +28,13 @@
   position: relative;
   align-items: center;
 
-  .filter-keyword {
+  .filter-inner-inputs {
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     min-width: 0;
-    margin-right: 3px;
+    gap: 5px;
 
     mat-form-field.search-form-field {
       max-width: 100%;

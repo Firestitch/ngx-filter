@@ -1,47 +1,47 @@
 <div class="filter-container">
-  @if (keywordVisible$ | async) {
+  @if (notInlineToolbar$ | async) {
     <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
   <div class="filter-inner-container">
-    @if (keywordVisible$ | async) {
-      <div class="filter-keyword">
-        <mat-form-field
-            class="search-form-field form-field-padless"
-            [ngClass]="{
+    @if (notInlineToolbar$ | async) {
+      <div class="filter-inner-inputs">
+        @if (keywordVisible$ | async) {
+          <mat-form-field
+              class="search-form-field form-field-padless"
+              [ngClass]="{
                 'has-keyword': !!keyword
               }">
-          <span
-              matPrefix
-              class="icon">
-            <mat-icon matPrefix>
-              search
-            </mat-icon>
-          </span>
-          <input
-            #keywordMatInput
-            matInput
-            [(ngModel)]="keyword"
-            (ngModelChange)="keywordChange($event)"
-            name="filter-input"
-            [fsClear]="true"
-            [placeholder]="searchPlaceholder">
-        </mat-form-field>
+            <span
+                matPrefix
+                class="icon">
+              <mat-icon matPrefix>
+                search
+              </mat-icon>
+            </span>
+            <input
+              #keywordMatInput
+              matInput
+              [(ngModel)]="keyword"
+              (ngModelChange)="keywordChange($event)"
+              name="filter-input"
+              [fsClear]="true"
+              [placeholder]="searchPlaceholder">
+          </mat-form-field>
+        }
+        @if (savedFiltersController.enabled) {
+          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
+        }
       </div>
     } @else {
       <div>
-        @if (keywordNotVisible$ | async) {
-          <ng-container *ngTemplateOutlet="heading"></ng-container>
-        }
+        <ng-container *ngTemplateOutlet="heading"></ng-container>
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       </div>
-    }
-    @if (savedFiltersController.enabled) {
-      <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
     }
     <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
-  @if (keywordVisible$ | async) {
+  @if (notInlineToolbar$ | async) {
     <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
   }
 </div>
