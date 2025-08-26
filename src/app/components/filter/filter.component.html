@@ -81,7 +81,7 @@
         <a
             mat-icon-button
             class="button-filters"
-            (click)="changeVisibilityClick(!showFilterMenu, $event)"
+            (click)="filterButtonClick($event)"
             [color]="config.button.color">
           @if (config.button.icon) {
             <mat-icon svgIcon="filterOutline"></mat-icon>

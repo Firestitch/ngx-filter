@@ -161,6 +161,11 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Payment Method',
           type: ItemType.AutoComplete,
           hide: true,
+          init: (item) => {
+            setTimeout(() => {
+              item.show();
+            }, 5000);
+          },
           values: () => {
             return of([]);
           },
@@ -246,6 +251,8 @@ export class KitchenSinkComponent implements OnInit {
               label: 'Manage',
               click: (filterComponent: FilterComponent) => {
                 console.log('Manage', filterComponent);
+                const item = filterComponent.getItem('autocompletechipsUserId');
+                item.model = [...item.model, { value: 888, name: 'John Doe 888' }];
               },
             },
           ],

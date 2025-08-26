@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -54,6 +55,7 @@ import { WeekComponent } from './week/week.component';
     DateRangeComponent,
     WeekComponent,
     CheckboxComponent,
+    AsyncPipe,
   ],
 })
 export class FilterItemComponent implements OnInit, OnDestroy {

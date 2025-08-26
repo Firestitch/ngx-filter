@@ -18,7 +18,7 @@ import { FsFormModule } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -84,7 +84,7 @@ export class FilterDrawerComponent implements OnInit {
   }
 
   public get items$(): Observable<Item[]> {
-    return this._itemStore.visibleItems$;
+    return of(this._itemStore.items);
   }
 
   public get paramCointroller(): ParamController {

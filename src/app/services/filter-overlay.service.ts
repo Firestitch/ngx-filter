@@ -63,6 +63,10 @@ export class FsFilterOverlayService implements OnDestroy {
     } 
   }
 
+  public opened(): boolean {
+    return !!this._overlayRef;
+  }
+
   public open() {
     if (this._overlayRef) {
       return;

@@ -1,5 +1,6 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { Injectable, OnDestroy } from '@angular/core';
+
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { skip, takeUntil } from 'rxjs/operators';
@@ -108,7 +109,7 @@ export class ActionsController implements OnDestroy {
   }
 
   public updateDisabledState() {
-    this.actions.forEach((action) => action.updateDisabledState())
+    this.actions.forEach((action) => action.updateDisabledState());
   }
 
   private _setKebabActions(actions: Action[]) {
@@ -156,6 +157,6 @@ export class ActionsController implements OnDestroy {
       )
       .subscribe(() => {
         this._classifyActions();
-      })
+      });
   }
 }

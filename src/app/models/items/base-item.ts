@@ -2,6 +2,7 @@
 import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
 import {
   finalize,
+  map,
   take,
   takeUntil,
   tap,
@@ -20,7 +21,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public name: string;
   public label: any;
   public chipLabel: string | string[];
-  public hide: boolean;
   public defaultValue: any;
   public defaultValueFn: IFilterDefaultFn;
   public persistedValue: unknown;
@@ -38,6 +38,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _initializedValues = false;
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
+  private _hidden$ = new BehaviorSubject(false);
   private _loading$ = new BehaviorSubject(false);
   private _value$ = new BehaviorSubject(null);
   private _valueChange$ = new Subject<void>();
@@ -56,6 +57,21 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public get filter(): FilterComponent {
     return this._filter;
+  }
+
+  public get hidden$(): Observable<boolean> {
+    return this._hidden$.asObservable();
+  }
+
+  public get visible$(): Observable<boolean> {
+    return this._hidden$
+      .pipe(
+        map((hidden) => !hidden),
+      );
+  }
+
+  public get hidden(): boolean {
+    return this._hidden$.getValue();
   }
 
   public get isTypeAutocomplete() {
@@ -177,6 +193,14 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public get isQueryParamVisible(): boolean {
     return true;
+  }
+
+  public hide() {
+    this._hidden$.next(true);
+  }
+
+  public show() {
+    this._hidden$.next(false);
   }
 
   public get queryObject(): Record<string, unknown> {
@@ -312,6 +336,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.name = item.name;
     this.label = item.label;
     this.chipLabel = item.chipLabel;
+    this.change = item.change;
+    this._hidden$.next(item.hide ?? false);
+    this.showClear = item.clear ?? true;
+    this.persistanceDisabled = item.disablePersist ?? false;
+    this.queryParamsDisabled = item.disableQueryParams ?? false;
 
     if (typeof item.default === 'function') {
       this.defaultValueFn = item.default as IFilterDefaultFn;
@@ -322,11 +351,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.init = item.init || (() => {
       //
     });
-    this.change = item.change;
-    this.hide = item.hide;
-    this.showClear = item.clear ?? true;
-    this.persistanceDisabled = item.disablePersist ?? false;
-    this.queryParamsDisabled = item.disableQueryParams ?? false;
 
     if (isFunction(item.values)) {
       this._valuesFn = item.values;
@@ -334,7 +358,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       this.values = item.values;
     }
   }
-
   
   public abstract get value();
   public abstract getChipsContent(type): any;

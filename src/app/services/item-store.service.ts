@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, forkJoin, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, finalize, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
+import { debounceTime, finalize, takeUntil } from 'rxjs/operators';
 
 import { pickBy } from 'lodash-es';
 
@@ -49,29 +49,12 @@ export class ItemStore implements OnDestroy {
   private _itemsChange$ = new Subject();
   private _destroy$ = new Subject<void>();
 
-  constructor(
-  ) {
-    this._lazyInit();
-  }
-
   public get items(): BaseItem<IFilterConfigItem>[] {
     return Array.from(this._items.values());
   }
 
   public get itemNames(): string[] {
     return this.items.map((item) => item.name);
-  }
-
-  public get visibleItems(): BaseItem<IFilterConfigItem>[] {
-    return this._visibleItems$.getValue();
-  }
-
-  public set visibleItems(items: BaseItem<IFilterConfigItem>[]) {
-    this._visibleItems$.next(items);
-  }
-
-  public get visibleItems$(): Observable<BaseItem<IFilterConfigItem>[]> {
-    return this._visibleItems$.asObservable();
   }
 
   public get hasKeyword(): boolean {
@@ -336,11 +319,6 @@ export class ItemStore implements OnDestroy {
     }
   }
 
-  public updateItemsVisiblity(): void {
-    this.visibleItems = this.items
-      .filter((item) => !item.isTypeKeyword && !item.hide);
-  }
-
   private _createItems(items: IFilterConfigItem[]) {
     this._items = new Map(
       items
@@ -397,17 +375,6 @@ export class ItemStore implements OnDestroy {
           this._itemsChange$.next(this.sortDirectionItem);
         });
     }
-  }
-
-  private _lazyInit(): void {
-    this.ready$
-      .pipe(
-        filter((state) => state),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.updateItemsVisiblity();
-      });
   }
 
   private _initSortingItems(p: KeyValue): void {

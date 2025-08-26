@@ -200,7 +200,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get visibleItems() {
-    return this._itemStore.visibleItems;
+    return this._itemStore.items
+      .filter((item) => !item.hidden);
   }
 
   public get keywordItem(): TextItem | null {
@@ -368,20 +369,31 @@ export class FilterComponent implements OnInit, OnDestroy {
     });
   }
 
-  public hide() {
-    this.changeVisibility(false);
+  public hideDrawer() {
+    this.closed.emit();
+    this._destroyFilterDrawer();
   }
 
-  public show() {
-    this.changeVisibility(true);
-  }
-
-  public changeVisibilityClick(value, event = null) {
-    if (event) {
-      event.stopPropagation();
+  public showDrawer() {
+    if (!this.hasVisibleItemOrSorting) {
+      return;
     }
 
-    this.changeVisibility(value);
+    this._listenEscButton();
+
+    this.opened.emit();
+
+    this._filterOverlay.open();
+  }
+
+  public filterButtonClick(event = null) {
+    event.stopPropagation();
+
+    if (this._filterOverlay.opened()) {
+      this.hideDrawer();
+    } else {
+      this.showDrawer();
+    }
   }
 
   public get itemValues(): any[] {
@@ -408,25 +420,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public showItem(name: string) {
-    const item = this.getItem(name);
-
-    if (item) {
-      item.hide = false;
-
-      this._itemStore.updateItemsVisiblity();
-    }
+    this.getItem(name)?.show();
   }
 
   public hideItem(name: string) {
-    const item = this.getItem(name);
-
-    if (!item) {
-      return;
-    }
-
-    item.hide = true;
-
-    this._itemStore.updateItemsVisiblity();
+    this.getItem(name)?.hide();
   }
 
   public clearItem(name: string) {
@@ -451,8 +449,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     item.label = params.label ?? item.label;
     item.chipLabel = params.chipLabel ?? item.chipLabel;
-
-    this._itemStore.updateItemsVisiblity();
   }
 
   public getItemValueChange$(name: string): Observable<any> | null {
@@ -468,28 +464,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     return null;
-  }
-
-  public changeVisibility(state: boolean) {
-    if (state === this.showFilterMenu) {
-      return;
-    }
-
-    if (!state) {
-      this.closed.emit();
-
-      return this._destroyFilterDrawer();
-    }
-
-    if (!this.hasVisibleItemOrSorting) {
-      return;
-    }
-
-    this._listenEscButton();
-
-    this.opened.emit();
-
-    this._filterOverlay.open();
   }
 
   public init() {
@@ -691,7 +665,7 @@ export class FilterComponent implements OnInit, OnDestroy {
         )
         .subscribe(() => {
           this._zone.run(() => {
-            this.changeVisibility(false);
+            this.hideDrawer();
           });
         });
     });
@@ -740,7 +714,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private _initKeywordVisibility() {
-    this._keywordVisible$.next(!!this.keywordItem && !this.keywordItem?.hide);
+    this._keywordVisible$.next(!!this.keywordItem && !this.keywordItem?.hidden);
   }
 
   private _initAutoFocus() {
@@ -766,7 +740,7 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private _initOverlay() {
     this._filterOverlay.setClearFn(this.clear.bind(this));
-    this._filterOverlay.setDoneFn(this.hide.bind(this));
+    this._filterOverlay.setDoneFn(this.hideDrawer.bind(this));
   }
 
   // We may need some time to recieve external params and after that ready can be emitted
