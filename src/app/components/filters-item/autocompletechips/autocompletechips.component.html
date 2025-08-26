@@ -27,7 +27,7 @@
   @for (action of item.panelActions; track action.label) {
     <ng-template
         fsAutocompleteChipsStatic
-        (click)="action.click()">
+        (click)="actionClick(action)">
       {{ action.label }}
     </ng-template>
   }

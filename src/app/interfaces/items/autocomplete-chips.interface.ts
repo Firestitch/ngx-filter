@@ -18,6 +18,6 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   values?: (keyword?: string, filter?: FilterComponent) => Observable<any[]>;
   panelActions?: {
     label: string;
-    click: () => void;
+    click: (filter: FilterComponent) => void;
   }[];
 }

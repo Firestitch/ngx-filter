@@ -17,7 +17,7 @@ export class AutocompleteChipsItem
   public declare chipClass: string;
   public declare panelActions: {
     label: string;
-    click: () => void;
+    click: (filter: FilterComponent) => void;
   }[];
 
   constructor(

@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
+  Injector,
   KeyValueDiffers,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +14,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
+import { FilterComponent } from '../../filter/filter.component';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 
@@ -28,6 +31,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> {
+  
+  private _injector = inject(Injector);
 
   constructor(
     protected _kvDiffers: KeyValueDiffers,
@@ -59,5 +64,10 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
 
   public compareItems(item1, item2): boolean {
     return item1?.value === item2?.value;
+  }
+
+  public actionClick(action: any) {
+    const filterComponent = this._injector.get(FilterComponent);
+    action.click(filterComponent);
   }
 }

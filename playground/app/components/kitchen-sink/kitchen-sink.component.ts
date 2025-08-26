@@ -244,8 +244,8 @@ export class KitchenSinkComponent implements OnInit {
           panelActions: [
             {
               label: 'Manage',
-              click: () => {
-                console.log('Manage');
+              click: (filterComponent: FilterComponent) => {
+                console.log('Manage', filterComponent);
               },
             },
           ],
