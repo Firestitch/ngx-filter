@@ -241,6 +241,14 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Autocomplete Chips User',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
+          panelActions: [
+            {
+              label: 'Manage',
+              click: () => {
+                console.log('Manage');
+              },
+            },
+          ],
           values: (keyword) => {
             return new BehaviorSubject(this.users)
               .pipe(

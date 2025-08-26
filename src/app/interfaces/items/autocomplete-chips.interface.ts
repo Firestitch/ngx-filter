@@ -16,4 +16,8 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   chipClass?: string;
   default?: IFilterDefaultFn<FilterNameValue[]> | FilterNameValue[];
   values?: (keyword?: string, filter?: FilterComponent) => Observable<any[]>;
+  panelActions?: {
+    label: string;
+    click: () => void;
+  }[];
 }

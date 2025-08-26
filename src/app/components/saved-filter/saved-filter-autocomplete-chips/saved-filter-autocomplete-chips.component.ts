@@ -137,8 +137,8 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
       .pipe(
         switchMap((name) => {
           const data: IFilterSavedFilter = {
+            id: null,
             name,
-            filters: { ...this.savedFiltersController.activeFilter.filters },
           };
 
           return this.savedFiltersController.save(data);

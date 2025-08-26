@@ -15,6 +15,10 @@ export class AutocompleteChipsItem
   public declare chipIconColor: string;
   public declare chipBackground: string;
   public declare chipClass: string;
+  public declare panelActions: {
+    label: string;
+    click: () => void;
+  }[];
 
   constructor(
     itemConfig: IFilterConfigAutocompleteChipsItem,
@@ -28,6 +32,7 @@ export class AutocompleteChipsItem
     this.chipColor = itemConfig.chipColor;
     this.chipBackground = itemConfig.chipBackground;
     this.chipClass = itemConfig.chipClass;
+    this.panelActions = itemConfig.panelActions || [];
   }
 
   public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {

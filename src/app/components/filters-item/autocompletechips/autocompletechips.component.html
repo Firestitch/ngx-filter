@@ -1,25 +1,34 @@
 <fs-autocomplete-chips
-  [fsFilterFocusTrigger]="item"
-  [fetch]="fetch"
-  [ngModel]="item.model"
-  (selected)="addAutocompleteChipItem($event)"
-  (removed)="removeAutocompleteChipItem($event)"
-  (clear)="clearAutocompleteChipItem()"
-  [allowText]="false"
-  [label]="label"
-  [size]="'small'"
-  [chipImage]="item.chipImage"
-  [chipColor]="item.chipColor"
-  [chipIconColor]="item.chipIcon"
-  [chipBackground]="item.chipBackground"
-  [chipIcon]="item.chipIcon"
-  [chipClass]="item.chipClass"
-  [allowClear]="item.showClear"
-  [removable]="item.showClear"
-  [compareWith]="compareItems"
-  [panelWidth]="300"
-  name="model">
-  <ng-template fsAutocompleteObject let-object="object">
+    [fsFilterFocusTrigger]="item"
+    [fetch]="fetch"
+    [ngModel]="item.model"
+    (selected)="addAutocompleteChipItem($event)"
+    (removed)="removeAutocompleteChipItem($event)"
+    (clear)="clearAutocompleteChipItem()"
+    [allowText]="false"
+    [label]="label"
+    [size]="'small'"
+    [chipImage]="item.chipImage"
+    [chipColor]="item.chipColor"
+    [chipIconColor]="item.chipIcon"
+    [chipBackground]="item.chipBackground"
+    [chipIcon]="item.chipIcon"
+    [chipClass]="item.chipClass"
+    [allowClear]="item.showClear"
+    [removable]="item.showClear"
+    [compareWith]="compareItems"
+    [panelWidth]="300"
+    name="model">
+  <ng-template
+      fsAutocompleteObject
+      let-object="object">
     {{ object.name }}
   </ng-template>
+  @for (action of item.panelActions; track action.label) {
+    <ng-template
+        fsAutocompleteChipsStatic
+        (click)="action.click()">
+      {{ action.label }}
+    </ng-template>
+  }
 </fs-autocomplete-chips>
