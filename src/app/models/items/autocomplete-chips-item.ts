@@ -66,7 +66,7 @@ export class AutocompleteChipsItem
   public getChipsContent() {
     return this.model
       .reduce((acc, i) => {
-        acc.push(i.name);
+        acc.push((`${i.name}`).trim());
 
         return acc;
       }, [])
