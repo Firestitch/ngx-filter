@@ -14,8 +14,8 @@ import { FsMenuModule } from '@firestitch/menu';
 import { IFilterConfigItem } from '../../../interfaces';
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../../models/items';
-import { FsFilterOverlayService, ItemStore } from '../../../services';
-import { ParamController } from '../../../services/param-controller.service';
+import { FilterController } from '../../../services/filter-controller.service';
+import { FsFilterOverlayService } from '../../../services/filter-overlay.service';
 import { SavedFilterController } from '../../../services/saved-filter-controller.service';
 
 import { FsFilterSavedFilterChipsComponent } from './components/saved-filter-chips';
@@ -39,8 +39,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
 
   private _savedFilterController = inject(SavedFilterController);
   private _cdRef = inject(ChangeDetectorRef);
-  private _paramController = inject(ParamController);
-  private _itemStore = inject(ItemStore);
+  private filterController = inject(FilterController);
   private _dialogRef = inject(MatDialogRef);
   private _filterOverlayService = inject(FsFilterOverlayService);
 
@@ -49,7 +48,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
-    return this._itemStore.items;
+    return this.filterController.items;
   }
 
   public get pluralLabelLower(): string {

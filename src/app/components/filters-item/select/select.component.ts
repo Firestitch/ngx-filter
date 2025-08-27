@@ -1,90 +1,95 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  DoCheck,
-  KeyValueDiffers,
-  OnChanges,
-  SimpleChanges,
+  DestroyRef,
+  inject,
+  Input,
+  OnInit,
   ViewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatOptgroup, MatOption } from '@angular/material/core';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 
-import { Observable } from 'rxjs';
+import { FsFormModule } from '@firestitch/form';
 
-import { BaseSelectItem } from '../../../models/items/select/base-select-item';
-import { MultipleSelectItem } from '../../../models/items/select/multiple-select-item';
-import { SimpleSelectItem } from '../../../models/items/select/simple-select-item';
-import { BaseItemComponent } from '../base-item/base-item.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { SelectGroupsComponent } from './groups/groups.component';
-import { SelectMultipleComponent } from './multiple/multiple.component';
-import { SelectSimpleComponent } from './simple/simple.component';
+import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { SelectItem } from '../../../models/items/select-item';
+import { FsFilterIsolateValues } from '../../../pipes/remove-isolate-value.pipe';
 
 
 @Component({
   selector: 'filter-item-select',
   templateUrl: './select.component.html',
-  styleUrl: './select.component.scss',
+  styleUrls: ['./select.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatFormField,
+    NgClass,
     MatLabel,
     MatSelect,
-    SelectMultipleComponent,
-    SelectSimpleComponent,
-    SelectGroupsComponent,
-    AsyncPipe,
+    FocusToItemDirective,
+    FormsModule,
+    FsFormModule,
+    MatOption,
+    MatOptgroup,
+    MatHint,
+    MatCheckbox,
+    FsFilterIsolateValues,
+    AsyncPipe,  
   ],
 })
-export class SelectComponent 
-  extends BaseItemComponent<BaseSelectItem> 
-  implements DoCheck, OnChanges {
+export class SelectComponent implements OnInit {
 
-  @ViewChild('selectItem')
-  public selectedItem: SelectSimpleComponent | SelectMultipleComponent;
-  // For case when we have multiple selection with __all option
-  // If _all has been selected than we must disable all other items
-  public allItemsOptionSelected = false;
+  @Input()
+  public item: SelectItem;
 
-  public get multipleSelectItem(): MultipleSelectItem {
-    return this.item as MultipleSelectItem;
+  @ViewChild(MatSelect, { static: true })
+  public select: MatSelect;
+
+  public value: any;
+  public isolated: boolean;
+
+  private _cdRef = inject(ChangeDetectorRef);
+  private _destroyRef = inject(DestroyRef);
+
+  public changed() {
+    this.item.value = this.value;
+    this.isolated = false;
   }
 
-  public get simpleSelectItem(): SimpleSelectItem {
-    return this.item as SimpleSelectItem;
+  public ngOnInit(): void {
+    this.item.value$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((value) => {
+        this.value = value;
+        this._cdRef.detectChanges();
+      });
   }
 
-  public values$: Observable<unknown[]>;
-
-  constructor(
-    protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef,
-  ) {
-    super(_kvDiffers, _cd);
-  }
-  
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.item) {
-      this.values$ = this.item.values$ as Observable<unknown[]>;
-    }
+  public close() {
+    this.select.close();
   }
 
-  public ngDoCheck() {
-    if (this._kvDiffer) {
-      const changes = this._kvDiffer.diff(this.item);
+  public markForCheck() {
+    this._cdRef.markForCheck();
+  }
 
-      if (changes) {
-        this._cd.markForCheck();
-
-        if (this.selectedItem) {
-          this.selectedItem.markForCheck();
-        }
-      }
+  public isolateChange(event: MatCheckboxChange) {
+    if(event.checked) {
+      this.item.value = this.item.multiple ? this.item.isolateValues : this.item.isolateValues[0];
+    } else {
+      this.item.value = this.item.multiple ? [] : null;
     }
   }
 }

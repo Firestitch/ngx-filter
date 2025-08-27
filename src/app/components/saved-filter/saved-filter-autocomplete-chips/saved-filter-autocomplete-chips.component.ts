@@ -21,9 +21,8 @@ import { map, Observable, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
-import { ItemStore } from '../../../services/item-store.service';
-import { ParamController } from '../../../services/param-controller.service';
-import type { SavedFilterController } from '../../../services/saved-filter-controller.service';
+import type { SavedFilterController } from '../../../services';
+import { FilterController } from '../../../services/filter-controller.service';
 import { FsFilterSavedFilterManageComponent } from '../saved-filter-manage';
 
 
@@ -45,8 +44,7 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
 
   public selectedFilter: IFilterSavedFilter;
 
-  private _itemStore = inject(ItemStore);
-  private _paramController = inject(ParamController);
+  private _filterController = inject(FilterController);
   private _dialog = inject(MatDialog);
   private _destroyRef = inject(DestroyRef);
   private _injector = inject(Injector);
@@ -86,7 +84,7 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
     this.savedFiltersController.setActiveFilter(savedFilter);
 
     if (!savedFilter) {
-      this._itemStore.filtersClear();
+      this._filterController.filtersClear();
     }
   }
 

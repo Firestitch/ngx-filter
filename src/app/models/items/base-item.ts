@@ -1,10 +1,8 @@
 
-import { BehaviorSubject, isObservable, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import {
-  finalize,
   map,
-  take,
-  takeUntil,
+  switchMap,
   tap,
 } from 'rxjs/operators';
 
@@ -21,30 +19,22 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public name: string;
   public label: any;
   public chipLabel: string | string[];
-  public defaultValue: any;
   public defaultValueFn: IFilterDefaultFn;
-  public persistedValue: unknown;
+  public defaultValue: any;
   public showClear: boolean;
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
-  public change: (item: BaseItem<T>, filter: FilterComponent) => void;
-  public init: (item: BaseItem<T>, filter?) => void;
+  public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
+  public initCallback: (item: BaseItem<T>, filter?) => void;
 
   protected readonly _type: T['type'];
 
-  protected _model: any = undefined;
-  protected _pendingValues = false;
-  protected _pendingDefaultValue = false;
-  protected _initializedValues = false;
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
   private _hidden$ = new BehaviorSubject(false);
-  private _loading$ = new BehaviorSubject(false);
-  private _value$ = new BehaviorSubject(null);
-  private _valueChange$ = new Subject<void>();
-  private _values$ = new BehaviorSubject(null);
+  private _value$ = new BehaviorSubject(undefined);
+  private _values$ = new BehaviorSubject<any[]>(null);
   private _destroy$ = new Subject<void>();
-  private _clear$ = new Subject<unknown>();
 
   constructor(
     itemConfig: T,
@@ -119,7 +109,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get isChipVisible(): boolean {
-    return !!this.model && !this.isTypeKeyword;
+    return this.hasValue;
   }
 
   public get destroy$() {
@@ -130,25 +120,22 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this._type;
   }
 
-  public get hasPendingValues(): boolean {
-    return this._pendingValues;
-  }
-
-  public get hasPendingDefaultValue(): boolean {
-    return this._pendingDefaultValue;
-  }
-
   public get hasValue() {
-    return this.value !== undefined;
+    return this.value !== null && this.value !== undefined;
   }
 
-  public get model() {
-    return this._model;
+  public get hasValue$() {
+    return this._value$.asObservable()
+      .pipe(
+        map(() => this.hasValue),
+      );
   }
 
-  public set model(value) {
-    this.setModel(value);
-    this.valueChanged();
+  public get chips$() {
+    return this._value$.asObservable()
+      .pipe(
+        map(() => this.chips),
+      );
   }
 
   public set values(values) {
@@ -159,40 +146,16 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this._values$.getValue();
   }
 
-  public get values$(): Observable<unknown> {
+  public get values$(): Observable<any> {
     return this._values$.asObservable();
-  }
-
-  public get valueChange$() {
-    return this._valueChange$.asObservable();
   }
 
   public get value$() {
     return this._value$.asObservable();
   }
 
-  public get clear$() {
-    return this._clear$.asObservable();
-  }
-
-  public get initialized() {
-    return this._initialized;
-  }
-
-  public get loading$(): Observable<boolean> {
-    return this._loading$.asObservable();
-  }
-
-  public get loading(): boolean {
-    return this._loading$.getValue();
-  }
-
-  public set loading(value: boolean) {
-    this._loading$.next(value);
-  }
-
-  public get isQueryParamVisible(): boolean {
-    return true;
+  public get queryParam(): Record<string, unknown> {
+    return this.query;
   }
 
   public hide() {
@@ -203,108 +166,65 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._hidden$.next(false);
   }
 
-  public get queryObject(): Record<string, unknown> {
-    const value = this.value;
-    const name = this.name;
-    const params = {};
-
-    if (Array.isArray(value)) {
-      params[this.name] = value.join(',');
-    } else {
-      params[name] = value;
+  
+  public get query(): Record<string, any> {
+    if(!this.hasValue) {
+      return {};
     }
 
-    return params;
+    return {
+      [this.name]: this.value,
+    };
   }
 
-  public get persistanceObject(): Record<string, unknown> {
-    return this.queryObject;
-  }
-
-  public loadDefaultValue(): Observable<any> {
-    this._pendingDefaultValue = true;
-
-    return this.defaultValueFn()
+  public init(value: unknown): Observable<any> {
+    return forkJoin([
+      this.loadDefault(),
+      this.loadValues(),
+    ])
       .pipe(
-        tap((value) => {
-          this.defaultValue = value;
-
-          this._initDefaultModel();
-        }),
-        finalize(() => {
-          this._pendingDefaultValue = false;
+        tap(() => {
+          this.initValue(value);
         }),
       );
   }
 
-  public valueChanged() {
-    this._value$.next(this.value);
-
-    if (this.change) {
-      this.change(this, this._filter);
-    }
-
-    if (this.initialized) {
-      this._valueChange$.next(null);
-    }
+  public loadDefault(): Observable<any> {
+    return this.defaultValueFn()
+      .pipe(
+        tap((value) => {
+          this.defaultValue = value;
+        }),
+      );
   }
 
-  public initValues(persistedValue: unknown) {
-    this._initializedValues = false;
-    this.persistedValue = persistedValue;
-    this._initDefaultModel();
+  public loadValues() {
+    return of(null)
+      .pipe(
+        switchMap(() => {
+          if((this.type === ItemType.AutoComplete || this.type === ItemType.AutoCompleteChips)) {
+            return of([]);
+          } 
 
-    const isAutocomplete = this.type === ItemType.AutoComplete || 
-      this.type === ItemType.AutoCompleteChips;
+          if (typeof this._valuesFn === 'function') {
+            const values = this._valuesFn();
 
-    if (this._valuesFn && !isAutocomplete) {
-      const valuesResult = this._valuesFn(null, this._filter);
-
-      if (isObservable(valuesResult)) {
-        this._pendingValues = true;
-      } else {
-        this.values = valuesResult;
-        this._init();
-        this._initializedValues = true;
-      }
-
-    } else {
-      this._init();
-      this._initializedValues = true;
-    }
+            return values instanceof Observable ? values : of(values);
+          }
+ 
+          return of(this.values);
+        }),
+        tap((values) => this.values = values || []),
+      );
   }
 
-  public loadAsyncValues(reload = true) {
-    if (reload || (!this.loading && this.hasPendingValues)) {
-      this.loading = true;
-
-      (this._valuesFn(null, this._filter) as Observable<unknown>)
-        .pipe(
-          take(1),
-          takeUntil(this._destroy$),
-        )
-        .subscribe((values) => {
-          this.values = values;
-          this._pendingValues = false;
-          this.loading = false;
-          this._init();
-          this._validateModel();
-          this._initializedValues = true;
-        });
-
-    }
+  public initValue(value: unknown) {
+    this.value = value === undefined ? this.defaultValue : value;
   }
 
-  public clear(defaultValue: unknown = undefined) {
-    if (this.isTypeRange || this.isTypeDateRange || this.isTypeDateTimeRange) {
-      console.warn(`
-        Filter ${this.name} can not be cleared with .clear() method!
-        Use special .clearRange() or clearDateRange() instead.
-      `);
-    }
-
-    this._clear$.next(defaultValue);
-    this._clearValue(defaultValue);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public clear(name: string = null) {
+    this.value = this.defaultValue ?? undefined;
   }
 
   public destroy() {
@@ -312,43 +232,31 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._destroy$.complete();
   }
 
-  public setModel(value) {
-    this._model = value;
+  public get value() {
+    return this._value$.getValue();
   }
-
-  protected _initDefaultModel() {
-    const model = this.persistedValue ?? this.defaultValue;
-
-    if (model !== undefined) {
-      this.setModel(model);
-    }
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? undefined;
-  }
-
-  protected get _initialized(): boolean {
-    return !this._pendingDefaultValue && !this._pendingValues && this._initializedValues;
+  
+  public set value(value) {
+    this._value$.next(value);
   }
 
   private _initConfig(item: T) {
     this.name = item.name;
     this.label = item.label;
     this.chipLabel = item.chipLabel;
-    this.change = item.change;
     this._hidden$.next(item.hide ?? false);
     this.showClear = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
 
-    if (typeof item.default === 'function') {
-      this.defaultValueFn = item.default as IFilterDefaultFn;
-    } else {
-      this.defaultValue = item.default;
-    }
+    this.defaultValueFn = typeof item.default === 'function' ?
+      item.default as IFilterDefaultFn : () => of(item.default);
 
-    this.init = item.init || (() => {
+    this.initCallback = item.init || (() => {
+      //
+    });
+
+    this.changeCallback = item.change || (() => {
       //
     });
 
@@ -359,10 +267,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
   }
   
-  public abstract get value();
-  public abstract getChipsContent(type): any;
+  public abstract get chips(): { name?: string, value: string, label: string }[];
 
-  protected abstract _init();
-  protected abstract _validateModel();
-  
 }

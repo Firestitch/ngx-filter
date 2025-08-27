@@ -4,11 +4,11 @@ import { BaseItem } from '../models/items/base-item';
 
 
 @Pipe({
-    name: 'fsFilterIsolateValues',
-    standalone: true,
+  name: 'fsFilterIsolateValues',
+  standalone: true,
 })
 export class FsFilterIsolateValues implements PipeTransform {
-  transform(values: BaseItem<any>[], isolate) {
+  public transform(values: BaseItem<any>[], isolate) {
     if (!isolate) {
       return values;
     }

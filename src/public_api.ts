@@ -73,7 +73,6 @@ export { FS_FILTER_CONFIG } from './app/injectors/filter-config';
 
 
 // Helpers
-export { buildQueryParams } from './app/helpers/build-query-params';
 export { filterFromQueryParam, filterToQueryParam } from './app/helpers/query-param-transformers';
 
 // Const

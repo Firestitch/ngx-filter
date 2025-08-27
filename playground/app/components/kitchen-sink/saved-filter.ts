@@ -6,11 +6,9 @@ export const SavedFilters: IFilterSavedFilter[] =
       id: 1,
       name: 'Saved filter 1',
       filters: {
-        simpleSelect: 2,
-        observableSelect: 3,
+        singleSelect: 2,
         keyword: 'Test',
-        autocompleteUserId: { value: 2, name: 'Jane Doe' },
-        autocompletechipsUserId: [{ value: 1, name: 'John Doe' }, { value: 2, name: 'Jane Doe' }],
+        autocompletechips: [{ value: 1, name: 'John Doe' }, { value: 2, name: 'Jane Doe' }],
         dayChips: [{ value: 1, name: 'Monday' }],
         date: '2020-09-22T00:00:00+03:00',
       },

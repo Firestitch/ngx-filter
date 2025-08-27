@@ -1,12 +1,12 @@
-import { isEmpty } from '@firestitch/common';
 
-import { clone, isObject } from 'lodash-es';
+import { Observable, tap } from 'rxjs';
+
+import { isObject } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { getRangeName } from '../../helpers/get-range-name';
 import {
   IFilterConfigRangeItem,
-  IFilterItemDefaultRange,
 } from '../../interfaces/items/range.interface';
 
 import { BaseItem } from './base-item';
@@ -33,18 +33,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return new RangeItem(config, additionalConfig, filter);
   }
 
-  public get value() {
-    let value = clone(this.model);
-
-    if (!isObject(this.model) ||
-      (isEmpty(this.model.max, { zero: true }) && isEmpty(this.model.min, { zero: true }))) {
-      value = undefined;
-    }
-
-    return value;
-  }
-
-  public get queryObject() {
+  public get query(): Record<string, unknown> {
     const value = this.value;
     const name = this.name;
     const params = {};
@@ -62,54 +51,69 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return params;
   }
 
-  public get isChipVisible(): boolean {
-    return this.model && (this.model.min !== undefined || this.model.max !== undefined);
-  }
+  public get chips(): { name?: string, value: string, label: string }[] {
+    const chips = [];
 
-  public getChipsContent(type): string {
-    if (type === 'from') {
-      const min = this.model.min;
-
-      return `${min}`;
-    } else if (type === 'to') {
-      const max = this.model.max;
-
-      return `${max}`;
+    if (this.value.min) {
+      chips.push({
+        name: 'min',
+        label: this.label[0],
+        value: this.value.min,
+      });
     }
+
+    if (this.value.max) {
+      chips.push({
+        name: 'max',
+        label: this.label[1],
+        value: this.value.max,
+      });
+    }
+
+    return chips;
   }
 
-  public clearRange(type: 'from' | 'to' = null, defaultValue: IFilterItemDefaultRange = undefined) {
-    if (type === 'from') {
-      delete this.model.min;
+  public clear(name: string = null) {
+    let value = this.value;
 
-      if (defaultValue?.min) {
-        this.model.min = defaultValue.min;
-      }
-
-      this.model = { ...this.model };
-    } else if (type === 'to') {
-      delete this.model.max;
-
-      if (defaultValue?.max) {
-        this.model.max = defaultValue.max;
-      }
-
-      this.model = { ...this.model };
+    if (name === 'min') {
+      value.min = this.defaultValue?.min;
+    } else if (name === 'max') {
+      value.max = this.defaultValue?.max;
     } else {
-      this.model = defaultValue ? { ...defaultValue } : {};
+      value = this.defaultValue ? { ...this.defaultValue } : {};
     }
+
+    this.value = { ...value };
   }
 
-  protected _validateModel() {
+  public get value() {
+    return {
+      min: super.value?.min,
+      max: super.value?.max,
+    };
   }
 
-  protected _init() {
-    if (!this.label) {
-      this.label = ['Min', 'Max'];
-    }
+  public set value(value) {
+    super.value = value;
+  }
 
-    if (!this.model) {
-      this.model = this.defaultValue || {};
-    }
+  public get hasValue() {
+    return this.value?.min !== undefined || super.value?.max !== undefined;
+  }
+
+  public init(value: unknown): Observable<unknown> {
+    return super.init(value)
+      .pipe(
+        tap(() => {
+          if (!this.label) {
+            this.label = ['Min', 'Max'];
+          }
+
+          if (!this.value) {
+            this.value = this.defaultValue || {};
+          }
+        }),
+      );
   }
 }

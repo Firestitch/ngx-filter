@@ -26,11 +26,15 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return new TextItem(config, null, filter);
   }
 
-  public get value() {
-    return this.model ? this.model : undefined;
+  public get hasValue() {
+    return typeof this.value === 'string' && this.value.length > 0;
   }
 
-  public get queryObject() {
+  public get query() {
+    if(!this.hasValue) {
+      return {};
+    }
+
     const value = this.value;
     const name = this.name;
     const params = {};
@@ -40,19 +44,16 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
     return params;
   }
 
-  public getChipsContent() {
-    return this.model;
-  }
+  public get chips(): { name?: string, value: string, label: string }[] {
+    if(!this.hasValue || this.isTypeKeyword) {
+      return [];
+    }
 
-  protected _validateModel() {
-    //
-  }
-
-  protected _init() {
-    //
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? '';
+    return [
+      {
+        value: this.value,
+        label: this.label,
+      },
+    ];
   }
 }

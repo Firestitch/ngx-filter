@@ -1,7 +1,8 @@
 import { JsonPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component, EventEmitter, OnInit, ViewChild,
+  ChangeDetectorRef,
+  Component, EventEmitter, inject, OnInit, ViewChild,
 } from '@angular/core';
 
 import { filter, guid, nameValue } from '@firestitch/common';
@@ -10,15 +11,15 @@ import {
   ActionMode,
   FilterComponent,
   FilterConfig,
+  FilterSort,
   ItemType,
+  SortItem,
 } from '@firestitch/filter';
+import { FsMenuModule } from '@firestitch/menu';
 
-import { BehaviorSubject, of } from 'rxjs';
-import { delay, map, tap } from 'rxjs/operators';
+import { map, of, tap } from 'rxjs';
 
-import { shuffle } from 'lodash-es';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
-import { SimpleSelectItem } from 'src/app/models/items/select/simple-select-item';
 
 import { FilterComponent as FilterComponent_1 } from '../../../../src/app/components/filter/filter.component';
 import { FilterStatusBarDirective } from '../../../../src/app/directives/status-bar/status-bar.directive';
@@ -37,6 +38,7 @@ import { SavedFilters } from './saved-filter';
     FilterComponent_1,
     FilterStatusBarDirective,
     JsonPipe,
+    FsMenuModule,
   ],
 })
 export class KitchenSinkComponent implements OnInit {
@@ -49,7 +51,13 @@ export class KitchenSinkComponent implements OnInit {
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
   public query = null;
-  public sort = null;
+
+  public sort: FilterSort;
+
+  public sorts: SortItem[] = [
+    { name: 'Name', value: 'name' },
+    { name: 'Date', value: 'date' },
+  ];
 
   public users = [
     { id: 1, name: 'John Doe', color: 'red' },
@@ -69,25 +77,27 @@ export class KitchenSinkComponent implements OnInit {
 
   public subject = [
     {
-      value: undefined,
+      value: null,
       name: 'Any',
     },
     {
-      value: 3,
-      name: 'Question',
-    },
-    {
-      name: 'Doc',
+      name: 'Fruit',
       types: [
-        { value: 5, name: 'Prayer Letter 1' },
-        { value: 6, name: 'Prayer Letter 2' },
-        { value: 7, name: 'Prayer Letter 3' },
-        { value: 8, name: 'Prayer Letter 4' },
-        { value: 9, name: 'Prayer Letter 5' },
-        { value: 10, name: 'Prayer Letter 6' },
+        { value: 5, name: 'Apples Letter 1' },
+        { value: 6, name: 'Banana' },
       ],
     },
+    {
+      name: 'Vegetable',
+      types: [
+        { value: 7, name: 'Carrot' },
+        { value: 8, name: 'Pea' },
+      ],
+    },
+
   ];
+  
+  private _cdRef = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.conf = {
@@ -97,6 +107,7 @@ export class KitchenSinkComponent implements OnInit {
       chips: true,
       autofocus: false,
       queryParam: true,
+      //persist: true,
       sorts: [
         { name: 'Name', value: 'name' },
         { name: 'Date', value: 'date' },
@@ -117,7 +128,7 @@ export class KitchenSinkComponent implements OnInit {
               ...accum,
               [item.name]: {
                 value: item.value,
-                model: item.model,
+                model: item.value,
               },
             };
           }, {});
@@ -126,21 +137,25 @@ export class KitchenSinkComponent implements OnInit {
         console.log('Has Values', hasValues);
         this.query = query;
         this.sort = sort;
+        this._cdRef.detectChanges();
       },
       init: (query, sort) => {
         console.log('Init', query, sort);
         this.query = query;
         this.sort = sort;
+        this._cdRef.detectChanges();
       },
       reload: (query, sort) => {
         console.log('Reload', query, sort);
         this.query = query;
         this.sort = sort;
+        this._cdRef.detectChanges();
       },
       sortChange: (query, sort) => {
         console.log('sortChange', query, sort);
         this.query = query;
         this.sort = sort;
+        this._cdRef.detectChanges();
       },
       items: [
         {
@@ -149,57 +164,56 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Search',
         },
         {
-          name: 'notUsed',
-          type: ItemType.Select,
-          label: 'Not Used',
-          //default: '1',
-          values: () => [],
-          disable: true,
-        },
-        {
-          name: 'paymentMethodId',
-          label: 'Payment Method',
-          type: ItemType.AutoComplete,
-          hide: true,
-          init: (item) => {
-            setTimeout(() => {
-              item.show();
-            }, 5000);
-          },
-          values: () => {
-            return of([]);
-          },
-        },
-        {
           name: 'simpleSelect',
           type: ItemType.Select,
-          label: 'Simple Select',
+          label: 'Single select',
           disableQueryParams: true,
           chipLabel: 'Special Label',
           change: (item, filterComponent: FilterComponent) => {
-            const filterItem = filterComponent.getItem('multiselect');
-            filterItem.values.pop();
-            setTimeout(() => {
-              filterItem.clear();
-            }, 2000);
+            const filterItem = filterComponent.getItem('multiSelect');
+            filterItem.clear();
           },
           values: () => {
-            return of([
-              { name: 'All', value: null },
-              { name: 'Option 1', value: 1 },
-              { name: 'Option 2', value: 2 },
-              { name: 'Option 3', value: 3 },
-            ]);
+            return of(this.users)
+              .pipe(
+                map((users) => nameValue(users, 'name', 'id')),
+              );
           },
         },
         {
           name: 'groupSelect',
           type: ItemType.Select,
-          label: 'Group Select',
+          label: 'Grouped select',
           disablePersist: true,
           children: 'types',
           values: () => {
             return this.subject;
+          },
+        },      
+        {
+          name: 'multiSelect',
+          type: ItemType.Select,
+          label: 'Multi select',
+          multiple: true,
+          values: [
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' },
+          ],
+        },    
+        {
+          name: 'isolateSelect',
+          type: ItemType.Select,
+          label: 'Isolate select',
+          multiple: true,
+          values: [
+            { name: 'Active', value: 'active' },
+            { name: 'Pending', value: 'pending' },
+            { name: 'Deleted', value: 'deleted' },
+          ],
+          isolate: {
+            label: 'Show deleted',
+            value: 'deleted',
           },
         },
         {
@@ -209,55 +223,43 @@ export class KitchenSinkComponent implements OnInit {
           label: ['Min Price', 'Max Price'],
           chipLabel: ['Custom Min Price', 'Custom Max Price'],
         },
+        // {
+        //   name: 'autocompleteUserId',
+        //   label: 'Autocomplete User',
+        //   type: ItemType.AutoComplete,
+        //   change: (item) => {
+        //     console.log('Item Change', item);
+        //   },
+        //   init: (item) => {
+        //     console.log('Item Init', item);
+        //   },
+        //   values: (keyword) => {
+        //     return of(this.users)
+        //       .pipe(
+        //         tap(() => console.log('load autocomplete_user_id')),
+        //         map((users) => this._filterUsersByKeyword(users, keyword)),
+        //         map((users) => nameValue(users, 'name', 'id')),
+        //       );
+        //   },
+        // },
         {
-          name: 'observableSelect',
-          type: ItemType.Select,
-          label: 'Observable Select',
-          values: () => {
-            this.filter.getItem('simpleSelect') as SimpleSelectItem;
-
-            return new BehaviorSubject(this.users)
-              .pipe(
-                map((users) => shuffle(nameValue(users, 'name', 'id'))),
-              );
-          },
-        },
-        {
-          name: 'autocompleteUserId',
-          label: 'Autocomplete User',
-          type: ItemType.AutoComplete,
-          change: (item) => {
-            console.log('Item Change', item);
-          },
-          init: (item) => {
-            console.log('Item Init', item);
-          },
-          values: (keyword) => {
-            return new BehaviorSubject(this.users)
-              .pipe(
-                tap(() => console.log('load autocomplete_user_id')),
-                map((users) => this._filterUsersByKeyword(users, keyword)),
-                map((users) => nameValue(users, 'name', 'id')),
-              );
-          },
-        },
-        {
-          name: 'autocompletechipsUserId',
-          label: 'Autocomplete Chips User',
+          name: 'autocompletechips',
+          label: 'Autocomplete Chips',
           type: ItemType.AutoCompleteChips,
           chipImage: 'data.image',
           panelActions: [
             {
-              label: 'Manage',
+              label: 'Add User',
               click: (filterComponent: FilterComponent) => {
-                console.log('Manage', filterComponent);
-                const item = filterComponent.getItem('autocompletechipsUserId');
-                item.model = [...item.model, { value: 888, name: 'John Doe 888' }];
+                console.log('Added User', filterComponent);
+                const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
+                const item = filterComponent.getItem('autocompletechips');
+                item.value = [...item.value, { value: randomUser.id, name: randomUser.name }];
               },
             },
           ],
           values: (keyword) => {
-            return new BehaviorSubject(this.users)
+            return of(this.users)
               .pipe(
                 tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
@@ -286,10 +288,22 @@ export class KitchenSinkComponent implements OnInit {
           },
         },
         {
+          name: 'showDeleted',
+          type: ItemType.Checkbox,
+          label: 'Show Deleted',
+          unchecked: 'active',
+          checked: 'deleted',
+        },
+        {
           name: 'date',
           type: ItemType.Date,
           label: 'Date',
           clear: false,
+        },
+        {
+          name: 'dateRange',
+          type: ItemType.DateRange,
+          label: ['From Date', 'To Date'],
         },
         {
           name: 'scrollDate',
@@ -299,50 +313,9 @@ export class KitchenSinkComponent implements OnInit {
           mode: ItemDateMode.ScrollMonthYear,
         },
         {
-          name: 'dateRange',
-          type: ItemType.DateRange,
-          label: ['From Date', 'To Date'],
-        },
-        {
           name: 'week',
           type: ItemType.Week,
           label: 'Week',
-        },
-        
-        {
-          name: 'showDeleted',
-          type: ItemType.Checkbox,
-          label: 'Show Deleted',
-          unchecked: 'active',
-          checked: 'deleted',
-        },
-        {
-          name: 'checkbox',
-          type: ItemType.Checkbox,
-          label: 'Checkbox',
-        },
-        {
-          name: 'state',
-          type: ItemType.Select,
-          label: 'Status',
-          multiple: true,
-          values: [
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' },
-          ],
-          isolate: { label: 'Show deleted', value: 'deleted' },
-        },
-        {
-          name: 'multiselect',
-          type: ItemType.Select,
-          label: 'Multi Select Status',
-          multiple: true,
-          values: [
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' },
-          ],
         },
         {
           name: 'maxPrice',
@@ -359,10 +332,7 @@ export class KitchenSinkComponent implements OnInit {
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 
-          return of(SavedFilters)
-            .pipe(
-              delay(1000),
-            );
+          return of(SavedFilters);
         },
         save: (savedFilter) => {
           console.log('====== Save Filter =====');

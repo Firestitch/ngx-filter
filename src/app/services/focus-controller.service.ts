@@ -6,10 +6,10 @@ import { filter, tap } from 'rxjs/operators';
 import { BaseItem } from '../models/items/base-item';
 
 
-@Injectable()
+@Injectable() 
 export class FocusControllerService {
 
-  private _focusOn = new BehaviorSubject<{ item: BaseItem<any>, type: 'from' | 'to'}>(null);
+  private _focusOn = new BehaviorSubject<{ item: BaseItem<any>, type: string}>(null);
 
   constructor() {}
 
@@ -17,11 +17,11 @@ export class FocusControllerService {
     return this._focusOn.asObservable();
   }
 
-  public click(item: BaseItem<any>, type: 'from' | 'to' = null) {
+  public click(item: BaseItem<any>, type: string) {
     this._focusOn.next({ item, type });
   }
 
-  public listenFocusFor$(targetItem: BaseItem<any>, targetType: 'from' | 'to' = null) {
+  public listenFocusFor$(targetItem: BaseItem<any>, targetType: string) {
     return this._focusOn
       .pipe(
         filter((event) => !!event),

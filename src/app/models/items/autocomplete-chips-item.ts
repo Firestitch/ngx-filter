@@ -1,9 +1,8 @@
-import { clone } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigAutocompleteChipsItem } from '../../interfaces/items/autocomplete-chips.interface';
 
-import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
+import { BaseAutocompleteItem } from './base-autocomplete-item';
 
 
 export class AutocompleteChipsItem
@@ -39,15 +38,23 @@ export class AutocompleteChipsItem
     return new AutocompleteChipsItem(config, null, filter);
   }
 
-  public get value() {
-    if (Array.isArray(this.model) && this.model.length === 0) {
-      return undefined;
+  public get queryParam(): Record<string, unknown> {
+    if(!this.hasValue) {
+      return {};
     }
-
-    return clone(this.model);
+  
+    return {
+      [this.name]: this.value
+        .map((item) => `${item.value}:${item.name}`)
+        .join(','),
+    };
   }
 
-  public get queryObject(): Record<string, unknown> {
+  public get query(): Record<string, unknown> {
+    if(!this.hasValue) {
+      return {};
+    }
+
     const value = this.value;
     const name = this.name;
     const params = {};
@@ -64,33 +71,31 @@ export class AutocompleteChipsItem
     return params;
   }
 
-  public get isChipVisible(): boolean {
-    return Array.isArray(this.model) && this.model.length > 0;
+  public get chips(): { name?: string, value: string, label: string }[] {
+    return this.hasValue ? [
+      {
+        value: super.value
+          .reduce((acc, i) => {
+            acc.push((`${i.name}`).trim());
+
+            return acc;
+          }, [])
+          .join(', '),
+        label: this.label,
+      },
+    ] : [];
   }
 
-  public getChipsContent() {
-    return this.model
-      .reduce((acc, i) => {
-        acc.push((`${i.name}`).trim());
-
-        return acc;
-      }, [])
-      .join(', ');
+  public get hasValue() {
+    return Array.isArray(super.value) && super.value.length > 0;
   }
 
-  public setModel(value) {
-    super.setModel(value || []);
+  public get value(): any[] {
+    return super.value || [];
   }
 
-  protected _init() {
-    if (this.model === undefined) {
-      this._model = [];
-    }
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? [];
-    this.search = '';
+  public set value(value: any[]) {
+    super.value = value || [];
   }
 
 }

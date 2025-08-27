@@ -1,4 +1,5 @@
 import { ItemType } from '../enums/item-type.enum';
+import { SelectItem } from '../models/items';
 
 import { getRangeName } from './get-range-name';
 import { filterFromQueryParam } from './query-param-transformers';
@@ -30,30 +31,11 @@ export function parseItemValueFromStored(item, params) {
     }
 
     case ItemType.Select: {
-      if (item.multiple && !!param) {
-        const values = param.split(',');
-
-        if (item.isolate) {
-          const isolatedValue = Array.isArray(item.isolate.value)
-            ? item.isolate.value
-            : [item.isolate.value];
-
-          item.isolate.enabled = arraysHaveSameElements(isolatedValue, values);
-
-          return item.isolate.enabled
-            ? isolatedValue
-            : values;
-        }
-
-        return values;
-      }
- 
-      return param;
-      
+      return itemTypeSelect(item, param);      
     }
 
     case ItemType.Checkbox: {
-      return param === item.checked;
+      return param === 'true' || param === true;
     }
 
     case ItemType.AutoComplete: {
@@ -87,6 +69,27 @@ export function parseItemValueFromStored(item, params) {
     }
   }
 }
+
+function itemTypeSelect(item: SelectItem, param) {
+  if (!param) {
+    return [];
+  }
+
+  const values = param.split(',');
+
+  if (item.isolate) {
+    const isolatedValue =  item.isolateValues;
+
+    item.isolate = arraysHaveSameElements(isolatedValue, values);
+
+    return item.isolate
+      ? isolatedValue
+      : values;
+  }
+
+  return values;
+}
+
 
 function arraysHaveSameElements(arr1: unknown[], arr2: unknown[]): boolean {
 

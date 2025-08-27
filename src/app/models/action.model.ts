@@ -147,7 +147,7 @@ export class Action {
     if (!this.style) {
       this.style = config.icon && !config.label ?
         ButtonStyle.Icon :
-        (config.style || filterConfig.buttonStyle || ButtonStyle.Raised);
+        (config.style || filterConfig.buttonStyle || ButtonStyle.Flat);
 
       if(!this.primary && this.style === ButtonStyle.Flat) {
         this.style = ButtonStyle.Stroked;

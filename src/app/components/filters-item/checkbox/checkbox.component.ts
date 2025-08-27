@@ -2,38 +2,54 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  KeyValueDiffers,
+  inject,
+  OnInit,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
+import { MatCheckbox } from '@angular/material/checkbox';
+
+import { FsFormModule } from '@firestitch/form';
+import { FsLabelModule } from '@firestitch/label';
+
+import { takeUntil } from 'rxjs/operators';
 
 import { CheckboxItem } from '../../../models/items/checkbox-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
-import { FsLabelModule } from '@firestitch/label';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { FormsModule } from '@angular/forms';
-import { FsFormModule } from '@firestitch/form';
 
 
 @Component({
-    selector: 'filter-item-checkbox',
-    templateUrl: './checkbox.component.html',
-    styleUrl: './checkbox.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsLabelModule,
-        MatCheckbox,
-        FormsModule,
-        FsFormModule,
-    ],
+  selector: 'filter-item-checkbox',
+  templateUrl: './checkbox.component.html',
+  styleUrl: './checkbox.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsLabelModule,
+    MatCheckbox,
+    FormsModule,
+    FsFormModule,
+  ],
 })
-export class CheckboxComponent extends BaseItemComponent<CheckboxItem> {
+export class CheckboxComponent extends BaseItemComponent<CheckboxItem> implements OnInit {
 
-  constructor(
-    protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef,
-  ) {
-    super(_kvDiffers, _cd);
+  public value: boolean;
+
+  private _cdRef = inject(ChangeDetectorRef);
+
+  public ngOnInit() {
+    this.item.value$
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe((value) => {
+        this.value = value;
+        this._cdRef.detectChanges();
+      });
+  }
+
+  public change() {
+    this.item.value = this.value;
   }
   
 }

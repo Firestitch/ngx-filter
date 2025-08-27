@@ -1,11 +1,19 @@
-@for (item of filters; track item) {
-  @if ((item.value$ | async) !== undefined && item.type !== ItemType.Keyword) {
-    @if (item.isChipVisible) {
-      <fs-filter-chip
-        [item]="item"
-        [clickable]="true"
-        [removable]="true">
-      </fs-filter-chip>
+@for (item of items; track item.name) {
+  @let chips = item.chips$ | async;
+  @if (chips.length > 0) {
+    @for (chip of chips; track chip.label) {
+      <fs-chip
+          [removable]="item.showClear"
+          size="small"
+          (click)="click(item, chip)"
+          (removed)="remove(item, chip)">
+        {{ chip.label }}: {{ chip.value }}
+      </fs-chip>
     }
+    <!-- <fs-filter-chip
+      [chips]="chips"
+      [clickable]="true"
+      [removable]="true">
+    </fs-filter-chip> -->
   }
 }

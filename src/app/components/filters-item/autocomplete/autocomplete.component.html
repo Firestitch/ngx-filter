@@ -2,12 +2,14 @@
     [fsFilterFocusTrigger]="item"
     [fetch]="fetch"
     [displayWith]="displayWith"
-    [(ngModel)]="item.model"
+    [(ngModel)]="item.value"
     [placeholder]="label"
     [fetchOnFocus]="item.fetchOnFocus"
     [showClear]="item.showClear"
     name="item.name">
-  <ng-template fsAutocompleteTemplate let-data="data">
-    {{data.name}}
+  <ng-template
+      fsAutocompleteTemplate
+      let-data="data">
+    {{ data.name }}
   </ng-template>
 </fs-autocomplete>

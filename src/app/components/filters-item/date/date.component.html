@@ -8,7 +8,8 @@
       fsDateScrollPicker
       [placeholder]="item.label"
       [fsFilterFocusTrigger]="item"
-      [(ngModel)]="item.model"
+      [(ngModel)]="value"
+      (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"
       [showMonth]="showMonth"
       [showDay]="showDay"
@@ -25,7 +26,8 @@
       matInput
       fsDatePicker
       [fsFilterFocusTrigger]="item"
-      [(ngModel)]="item.model"
+      [(ngModel)]="value"
+      (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"
       [view]="viewType"
       [placeholder]="item.label"

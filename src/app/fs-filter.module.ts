@@ -20,11 +20,7 @@ import { DateRangeComponent } from './components/filters-item/date-range/date-ra
 import { DateComponent } from './components/filters-item/date/date.component';
 import { FilterItemComponent } from './components/filters-item/filter-item.component';
 import { RangeComponent } from './components/filters-item/range/range.component';
-import { SelectBackdropComponent } from './components/filters-item/select/backdrop/backdrop.component';
-import { SelectGroupsComponent } from './components/filters-item/select/groups/groups.component';
-import { SelectMultipleComponent } from './components/filters-item/select/multiple/multiple.component';
 import { SelectComponent } from './components/filters-item/select/select.component';
-import { SelectSimpleComponent } from './components/filters-item/select/simple/simple.component';
 import { TextComponent } from './components/filters-item/text/text.component';
 import { WeekComponent } from './components/filters-item/week/week.component';
 import { FsSavedFilterAutocompleteChipsComponent } from './components/saved-filter';
@@ -43,9 +39,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FilterItemComponent,
     FsFilterChipsComponent,
     SelectComponent,
-    SelectGroupsComponent,
-    SelectSimpleComponent,
-    SelectMultipleComponent,
     ChipsComponent,
     TextComponent,
     WeekComponent,
@@ -56,7 +49,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     DateRangeComponent,
     CheckboxComponent,
     FilterDrawerComponent,
-    SelectBackdropComponent,
     FsFilterChipComponent,
     FsFilterChipContentComponent,
     FsFilterDrawerActionsComponent,

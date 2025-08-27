@@ -1,3 +1,5 @@
+import { tap } from 'rxjs/operators';
+
 import { toString } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
@@ -22,16 +24,13 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     this.defaultValue = itemConfig.default;
   }
 
-  public get isTypeCheckbox(): boolean {
-    return true;
-  }
-
-  public get isChipVisible() {
-    return this.model;
-  }
-
-  public get value() {
-    return this.model;
+  public init(value) {
+    return super.init(value)
+      .pipe(
+        tap(() => {
+          this.value = value === 'true' || value === true;
+        }),
+      );
   }
 
   public get checked(): boolean {
@@ -41,34 +40,46 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
   public get unchecked(): boolean {
     return this._unchecked;
   }
-
-  public get queryObject(): Record<string, unknown> {
-    const params = {};
-    params[this.name] = this.model ? this.checked : this.unchecked;
-
-    return params;
+  
+  public get hasValue(): boolean {
+    return !!this.value;
   }
 
-  public getChipsContent(): string {
-    return this.label as string;
-  }
-
-  protected _validateModel() {
-    //
-  }
-
-  public get isQueryParamVisible(): boolean {
-    return this.model === true;
-  }
-
-  protected _init() {
-    if (this.model === undefined) {
-      this._model = this.defaultValue;
+  public get query(): Record<string, unknown> {
+    if(!this.hasValue && this._unchecked === undefined) {
+      return {};
     }
+
+    return {
+      [this.name]: this.value ? this.checked : this.unchecked,
+    };
   }
 
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = undefined;
+  public get chips(): { name?: string, value: string, label: string }[] {
+    if(!this.value) {
+      return [];
+    }
+
+    return [
+      {
+        value: '',
+        label: this.label,
+      },
+    ];
+  }
+
+  public get queryParam(): Record<string, unknown> {
+    if(!this.hasValue) {
+      return {};
+    }
+
+    return {
+      [this.name]: this.checked,
+    };
+  }
+
+  public clear() {
+    this.value = false;
   }
 
 }

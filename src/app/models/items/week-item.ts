@@ -31,10 +31,10 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   }
 
   public get value() {
-    let value = clone(this.model);
+    let value = clone(super.value);
 
-    if (!isObject(this.model) ||
-      (isEmpty(this.model.from, { zero: true }) && isEmpty(this.model.to, { zero: true }))) {
+    if (!isObject(value) ||
+      (isEmpty(value.from, { zero: true }) && isEmpty(value.to, { zero: true }))) {
       value = undefined;
     }
 
@@ -75,7 +75,17 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     return value;
   }
 
-  public get queryObject() {
+  public set value(value) {
+    if (value) {
+      value.from = parseDate(value.from);
+      value.to = parseDate(value.to);
+      value.period = parseInt(value.period, 10) || undefined;
+    }
+
+    super.value = value;
+  }
+
+  public get query() {
     const value = this.value;
     const name = this.name;
     const paramFromName = getRangeName(name, 'from');
@@ -90,7 +100,7 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   }
 
   public get persistanceObject(): Record<string, string> {
-    const query = this.queryObject;
+    const query = this.query;
     const name = this.name;
     const paramFromName = getRangeName(name, 'from');
     const paramFromValue = query[paramFromName] && simpleFormat(query[paramFromName]) || query[paramFromName];
@@ -105,29 +115,16 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     };
   }
 
-  public setModel(value) {
-    if (value) {
-      value.from = parseDate(value.from);
-      value.to = parseDate(value.to);
-      value.period = parseInt(value.period, 10) || undefined;
+  public get chips(): { name?: string, value: string, label: string }[] {
+    if(!this.hasValue) {
+      return [];
     }
 
-    super.setModel(value);
-  }
-
-  public getChipsContent(type = null): string {
-    return formatPeriodObject(this.value);
-  }
-
-  protected _validateModel() {
-    //
-  }
-
-  protected _init() { 
-    //
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? undefined;
+    return [
+      {
+        value: formatPeriodObject(this.value),
+        label: this.label,
+      },
+    ];
   }
 }

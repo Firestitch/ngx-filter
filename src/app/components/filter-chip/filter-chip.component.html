@@ -1,6 +1,17 @@
-@if (!item.hasPendingValues || (chipDelayedRender$ | async)) {
+@for (chip of chips; track chip) {
+  <fs-chip
+      [selectable]="false"
+      [removable]="item.showClear && removable"
+      size="small"
+      (click)="click(chip)"
+      (removed)="remove(chip)">
+    {{ chip.label }}: {{ chip.value }}
+  </fs-chip>
+}
+<!-- {{ item.name }}
+@if ((chipDelayedRender$ | async)) {
   @if (rangeItem) {
-    @if (item.model?.min || item.model?.from) {
+    @if (item.value?.min || item.value?.from) {
       <fs-chip
           [value]="item"
           [selectable]="false"
@@ -15,7 +26,7 @@
         </ng-template>
       </fs-chip>
     }
-    @if (item.model?.max || item.model?.to) {
+    @if (item.value?.max || item.value?.to) {
       <fs-chip
           [value]="item"
           [selectable]="false"
@@ -56,4 +67,4 @@
       Loading...
     }
   </ng-template>
-}
+} -->

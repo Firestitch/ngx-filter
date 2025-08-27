@@ -22,7 +22,7 @@ import type { DateRangeItem } from '../../models/items/date-range-item';
 import type { DateTimeItem } from '../../models/items/date-time-item';
 import type { DateTimeRangeItem } from '../../models/items/date-time-range-item';
 import type { RangeItem } from '../../models/items/range-item';
-import type { BaseSelectItem } from '../../models/items/select/base-select-item';
+import { SelectItem } from '../../models/items/select-item';
 import type { TextItem } from '../../models/items/text-item';
 import type { WeekItem } from '../../models/items/week-item';
 
@@ -68,12 +68,12 @@ export class FilterItemComponent implements OnInit, OnDestroy {
     return this.item as TextItem;
   }
 
-  public get chipsItem(): ChipsItem {
-    return this.item as ChipsItem;
+  public get selectItem(): SelectItem {
+    return this.item as SelectItem;
   }
 
-  public get baseSelectItem(): BaseSelectItem {
-    return this.item as BaseSelectItem;
+  public get chipsItem(): ChipsItem {
+    return this.item as ChipsItem;
   }
 
   public get rangeItem(): RangeItem {

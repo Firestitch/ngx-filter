@@ -1,7 +1,7 @@
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigDateRangeItem } from '../../interfaces/items/date-range.interface';
 
-import { BaseDateRangeItem } from './date-range/base-date-range-item';
+import { BaseDateRangeItem } from './base-date-range-item';
 
 
 export class DateTimeRangeItem extends BaseDateRangeItem {

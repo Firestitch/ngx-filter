@@ -12,6 +12,6 @@ export const FS_FILTER_META =
         return {
           openedFilters: 0,
         };
-      }
-    }
+      },
+    },
   );

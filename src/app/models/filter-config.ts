@@ -1,3 +1,4 @@
+import type { FilterComponent } from '../components/filter/filter.component';
 import { ButtonStyle } from '../enums';
 import { FsFilterAction } from '../interfaces/action.interface';
 import { ChangeFn, FilterSort, FsFilterAutoReload, Sort } from '../interfaces/config.interface';
@@ -26,13 +27,12 @@ export class FsFilterConfig {
   public sortValues: any[] = null;
   public sort: Sort = null;
   public queryParam = false;
-  public init: (query?: any, sort?: FilterSort | null, filter?) => void;
+  public init: (query?: any, sort?: FilterSort | null, filter?: FilterComponent) => void;
   public change: ChangeFn;
   public reload: ChangeFn;
   public autoReload: FsFilterAutoReload;
   public clear: ChangeFn;
   public sortChange: ChangeFn;
-  public reloadWhenConfigChanged: boolean;
   public button: FilterButton;
   public items: IFilterConfigItem[];
   public actions: FsFilterAction[];
@@ -65,7 +65,7 @@ export class FsFilterConfig {
       reloadWhenConfigChanged: data.reloadWhenConfigChanged,
       items: data.items,
       actions: data.actions,
-      buttonStyle: data.buttonStyle || ButtonStyle.Raised,
+      buttonStyle: data.buttonStyle || ButtonStyle.Flat,
       heading: data.heading,
       subheading: data.subheading,
     });

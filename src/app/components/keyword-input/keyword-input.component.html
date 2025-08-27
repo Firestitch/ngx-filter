@@ -1,0 +1,21 @@
+@if (keywordVisible$ | async) {
+  <mat-form-field
+      class="search-form-field form-field-padless"
+      [ngClass]="{ 'has-keyword': !!keyword }">
+    <span
+        matPrefix
+        class="icon">
+      <mat-icon matPrefix>
+        search
+      </mat-icon>
+    </span>
+    <input
+      #keywordMatInput
+      matInput
+      [(ngModel)]="keyword"
+      (ngModelChange)="keywordChange($event)"
+      name="filter-input"
+      [fsClear]="true"
+      [placeholder]="searchPlaceholder">
+  </mat-form-field>
+}

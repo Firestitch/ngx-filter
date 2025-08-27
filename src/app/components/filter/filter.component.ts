@@ -18,40 +18,37 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { MatIconAnchor } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatFormField, MatPrefix } from '@angular/material/form-field';
 import { MatIcon, MatIconRegistry } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { FsClearModule } from '@firestitch/clear';
-import { DrawerRef } from '@firestitch/drawer';
 import { FsFormModule } from '@firestitch/form';
 
 import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
 import { FilterIcon } from '../../consts';
-import { objectsAreEquals } from '../../helpers/compare';
 import { IFilterSavedFilter, ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
-  FilterConfig, FilterSort, IFilterConfigItem, SortItem,
+  FilterConfig,
+  IFilterConfigItem,
 } from '../../interfaces/config.interface';
 import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
-import { TextItem } from '../../models/items/text-item';
+import { SortController } from '../../services';
+import { FilterController } from '../../services/filter-controller.service';
 import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
-import { ItemStore } from '../../services/item-store.service';
-import { ParamController } from '../../services/param-controller.service';
+import { KeywordController } from '../../services/keyword-controller.service';
 import { PersistanceController } from '../../services/persistance-controller.service';
 import { QueryParamController } from '../../services/query-param-controller.service';
 import { SavedFilterController } from '../../services/saved-filter-controller.service';
 import { FsFilterActionsComponent } from '../actions/actions.component';
 import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
+import { KeywordInputComponent } from '../keyword-input/keyword-input.component';
 import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
@@ -64,24 +61,22 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   templateUrl: './filter.component.html',
   providers: [
     FsFilterOverlayService,
-    ParamController,
     PersistanceController,
     QueryParamController,
     FocusControllerService,
-    ItemStore,
+    FilterController,
     SavedFilterController,
     ActionsController,
+    KeywordController,
+    SortController,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     NgTemplateOutlet,
     FsSavedFilterAutocompleteChipsComponent,
-    MatFormField,
     NgClass,
-    MatPrefix,
     MatIcon,
-    MatInput,
     FormsModule,
     FsFormModule,
     FsClearModule,
@@ -90,30 +85,28 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
     MatIconAnchor,
     MatSlideToggle,
     AsyncPipe,
+    KeywordInputComponent,
   ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
-  @Input('config')
-  public set setConfig(config) {
-    this._initFilterWithConfig(config);
+  @ViewChild(KeywordInputComponent)
+  public keywordInput: KeywordInputComponent;
+  
+  @Input('config') public set config(value: FilterConfig) {
+    this._config = new FsFilterConfig(value);
+  }
+  
+  public get config(): FsFilterConfig {
+    return this._config;
   }
 
-  @Input('filter')
-  public set setFilter(config) {
-    this._initFilterWithConfig(config);
-  }
-
-  @Input() public showSortBy: any = true;
   @Output() public closed = new EventEmitter<any>();
   @Output() public opened = new EventEmitter<any>();
   @Output() public ready = new EventEmitter<void>();
 
   @ContentChild(FilterStatusBarDirective)
   public statusBar: FilterStatusBarDirective;
-
-  @ViewChild('keywordMatInput', { read: MatInput })
-  public keywordMatInput: MatInput;
 
   @ViewChild('reloadEl', { read: ElementRef })
   public reloadEl: ElementRef;
@@ -127,176 +120,37 @@ export class FilterComponent implements OnInit, OnDestroy {
   @HostBinding('class.fs-filter')
   public fsFilterClass = true;
 
-  public searchPlaceholder = 'Search';
-  public keyword = '';
-  public autoReload = true;
-
-  private _config: FsFilterConfig = null;
-  private _sort: FilterSort;
+  private _config: FsFilterConfig;
   private _filtersBtnVisible$ = new BehaviorSubject(true);
-  private _keywordVisible$ = new BehaviorSubject(false);
   private _hasFilterChips$ = new BehaviorSubject(false);
-  private _keyword$ = new Subject();
   private _destroy$ = new Subject<void>();
-  private _dialogRef = inject(MatDialogRef, { optional: true });
-  private _drawerRef = inject(DrawerRef, { optional: true });  
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
   private _filterOverlay = inject(FsFilterOverlayService);
   private _zone = inject(NgZone);
-  private _paramController = inject(ParamController);
-  private _persistanceController = inject(PersistanceController);
-  private _itemStore = inject(ItemStore);
-  private _actions = inject(ActionsController);
+  private _actionsController = inject(ActionsController);
+  private _filterController = inject(FilterController);
+  private _sortController = inject(SortController);
   private _savedFilterController = inject(SavedFilterController);
+  private _keywordController = inject(KeywordController);
 
   constructor(
   ) {
-    this._itemStore.filter = this;
-    this._listenWhenFilterReady();
+    this._filterController.filter = this;
     this._updateWindowWidth();
-
-    const iconRegistry = inject(MatIconRegistry);
-    const sanitizer = inject(DomSanitizer);
-    
-    iconRegistry.addSvgIconLiteral('filterOutline', sanitizer.bypassSecurityTrustHtml(FilterIcon));
-
-    this._filterOverlay.attach$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.showFilterMenu = true;
-      });
-
-    this._filterOverlay.detach$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.showFilterMenu = false;
-      });
-
     this._listenWindowResize();
+    this._initIcon();
   }
 
-  public get config(): FsFilterConfig {
-    return this._config;
+  public get queryParams(): KeyValue {
+    return this._filterController.queryParam;
   }
 
-  public get filterParams() {
-    return this._itemStore.values();
+  public get query(): KeyValue {
+    return this._filterController.query;
   }
 
-  public get inDialog() {
-    return !!this._dialogRef || !!this._drawerRef;
-  }
-
-  public get filterParamsQuery(): KeyValue {
-    return this._itemStore.valuesAsQuery();
-  }
-
-  public get items() {
-    return this._itemStore.items;
-  }
-
-  public get visibleItems() {
-    return this._itemStore.items
-      .filter((item) => !item.hidden);
-  }
-
-  public get keywordItem(): TextItem | null {
-    return this._itemStore.keywordItem;
-  }
-
-  public get itemsReady$(): Observable<boolean> {
-    return this._itemStore.ready$;
-  }
-
-  public get hasFilterChips$(): Observable<boolean> {
-    return this._hasFilterChips$.asObservable();
-  }
-
-  public get hasVisibleItemOrSorting(): boolean {
-    return this.visibleItems.length > 0 || !!this._itemStore.sortByItem;
-  }
-
-  public get filtersBtnVisible$(): Observable<boolean> {
-    return this._filtersBtnVisible$.asObservable();
-  }
-
-  public get inlineToolbar$(): Observable<boolean> {
-    return combineLatest({
-      keywordVisible: this._keywordVisible$.asObservable(),
-      activeFilter: of(this.savedFiltersController.enabled),
-    })
-      .pipe(
-        map(({ keywordVisible, activeFilter }) => {
-          return !keywordVisible && !activeFilter;
-        }),
-      );
-  }
-
-  public get notInlineToolbar$(): Observable<boolean> {
-    return this.inlineToolbar$
-      .pipe(
-        map((inline) => !inline),
-      );
-  }
-
-  public get keywordVisible$(): Observable<boolean> {
-    return this._keywordVisible$.asObservable();
-  }
-
-  public get actionsVisible$() {
-    return this._actions.visible$;
-  }
-
-  public get actions$() {
-    return this._actions.actions$;
-  }
-
-  public get menuActions$() {
-    return this._actions.menuActions$;
-  }
-
-  public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._savedFilterController.setActiveFilter(savedFilter);
-  }
-
-  public get activeSavedFilter(): IFilterSavedFilter {
-    return this._savedFilterController.activeFilter;
-  }
-
-  public get savedFilters(): IFilterSavedFilter[] {
-    return this._savedFilterController.savedFilters;
-  }
-
-  public get savedFiltersController(): SavedFilterController {
-    return this._savedFilterController;
-  }
-
-  public ngOnInit() {
-    this._initAutoFocus();
-    this._initAutoReload();
-    this._listenInputChanges();
-    this._listenInternalItemsChange();
-    this._initKeywordVisibility();
-    this._initOverlay();
-  }
-
-  public ngOnDestroy() {
-    this._destroyFilterDrawer();
-
-    this._destroy$.next(null);
-    this._destroy$.complete();
-  }
-
-  public focus() {
-    this.keywordMatInput?.focus();
-  }
-
-  public updateSort(sort: ISortingChangeEvent) {
-    this._itemStore.updateSort(sort);
+  public get values(): KeyValue {
+    return this._filterController.values;
   }
 
   /**
@@ -356,17 +210,113 @@ export class FilterComponent implements OnInit, OnDestroy {
    * }
    *
    */
-  public updateValues(values) {
-    Object.keys(values).forEach((key) => {
-      const filterItem = this.items
-        .find((item) => item.name === key);
+  public set values(values) {
+    this._filterController.values = values;
+  }
 
-      if (!filterItem) {
-        return;
-      }
+  public get items(): BaseItem<IFilterConfigItem>[] {
+    return this._filterController.items;
+  }
 
-      filterItem.model = values[key];
-    });
+  public get visibleItems() {
+    return this._filterController.items
+      .filter((item) => !item.hidden);
+  }
+
+  public get autoReload(): boolean {
+    return !!this.config.autoReload;
+  }
+
+  public get hasFilterChips$(): Observable<boolean> {
+    return this._hasFilterChips$.asObservable();
+  }
+
+  public get hasVisibleItemOrSorting(): boolean {
+    return this.visibleItems.length > 0;
+  }
+
+  public get filtersBtnVisible$(): Observable<boolean> {
+    return this._filtersBtnVisible$.asObservable();
+  }
+
+  public get keywordVisible$(): Observable<boolean> {
+    return this._keywordController.keywordVisible$;
+  }
+
+  public get inlineToolbar$(): Observable<boolean> {
+    return combineLatest({
+      keywordVisible: this.keywordVisible$,
+      activeFilter: of(this.savedFiltersController.enabled),
+    })
+      .pipe(
+        map(({ keywordVisible, activeFilter }) => {
+          return !keywordVisible && !activeFilter;
+        }),
+      );
+  }
+
+  public get notInlineToolbar$(): Observable<boolean> {
+    return this.inlineToolbar$
+      .pipe(
+        map((inline) => !inline),
+      );
+  }
+
+  public get actionsVisible$() {
+    return this._actionsController.visible$;
+  }
+
+  public get actions$() {
+    return this._actionsController.actions$;
+  }
+
+  public get menuActions$() {
+    return this._actionsController.menuActions$;
+  }
+
+  public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
+    this._savedFilterController.setActiveFilter(savedFilter);
+  }
+
+  public get activeSavedFilter(): IFilterSavedFilter {
+    return this._savedFilterController.activeFilter;
+  }
+
+  public get savedFilters(): IFilterSavedFilter[] {
+    return this._savedFilterController.savedFilters;
+  }
+
+  public get savedFiltersController(): SavedFilterController {
+    return this._savedFilterController;
+  }
+
+  public ngOnInit() {
+    const config = {
+      ...(this._defaultConfig || {}),
+      ...this.config,
+    };
+
+    this._config = new FsFilterConfig(config);
+    this._actionsController.setConfig(this._config);
+
+    this._initItems();
+    this._initAutoReload();
+    this._initOverlay();
+  }
+
+  public ngOnDestroy() {
+    this._destroyFilterDrawer();
+
+    this._destroy$.next(null);
+    this._destroy$.complete();
+  }
+
+  public focus() {
+    this.keywordInput?.focus();
+  }
+
+  public updateSort(sort: ISortingChangeEvent) {
+    this._sortController.updateSort(sort);
   }
 
   public hideDrawer() {
@@ -451,49 +401,18 @@ export class FilterComponent implements OnInit, OnDestroy {
     item.chipLabel = params.chipLabel ?? item.chipLabel;
   }
 
-  public getItemValueChange$(name: string): Observable<any> | null {
-    const item = this.items.find((i) => i.name === name);
-
-    if (item) {
-      return item.value$
-        .pipe(
-          map(() => {
-            return item.model;
-          }),
-        );
-    }
-
-    return null;
-  }
-
-  public init() {
-    const data = this._itemStore.valuesAsQuery();
-    this._sort = this._itemStore.getSort();
-
-    if (this.config.init) {
-      this.config.init(data, this._sort, this);
-    }
-
-    this._updateChipsVisibility();
-
-    this.items
-      .forEach((item) => {
-        item.init(item, this);
-      });
-  }
-
   public clear(event = null) {
     if (event) {
       event.stopPropagation();
     }
 
-    this._itemStore.filtersClear();
+    this._filterController.filtersClear();
 
     if (this.config.clear) {
       this.config.clear();
     }
 
-    this.keyword = '';
+    this.keywordInput.clear();
   }
 
   public reload(event = null) {
@@ -502,7 +421,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       event.stopPropagation();
     }
 
-    const data = this._itemStore.valuesAsQuery();
     const el = this.reloadEl?.nativeElement;
 
     if(el) {
@@ -516,7 +434,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.config.reload) {
-      this.config.reload(data, this._itemStore.getSort());
+      this.config.reload(this._filterController.query, this._sortController.getSort());
     }
   }
 
@@ -525,45 +443,13 @@ export class FilterComponent implements OnInit, OnDestroy {
       .find((item) => item.name === name);
   }
 
-  public fetchQueryParams(): void {
-    this._paramController.fetchQueryParams();
-  }
-
-  /**
-   * Call change callback and apply new filter values
-   */
-  public change() {
-    const valuesAsQuery = this._itemStore.valuesAsQuery();
-    const sort = this._itemStore.getSort();
-
-    const sortingChanged = ((!sort || !this._sort) && sort !== this._sort)
-      || (sort && this._sort && !objectsAreEquals(this._sort, sort));
-
-    if (sortingChanged) {
-      this._sort = sort;
-
-      if (this.config.sortChange) {
-        this.config.sortChange(valuesAsQuery, sort);
-      }
-    }
-
-    if (this.config.change) {
-      this.config.change(valuesAsQuery, sort);
-    }
-
-    this._updateChipsVisibility();
-
-    // visibility for actions can depend on filters state
-    this._actions.updateActionsVisibility();
-  }
-
   /**
    * Update filter actions config
    *
    * @param actions
    */
   public updateActions(actions: FsFilterAction[]): void {
-    this._actions.initActions(actions);
+    this._actionsController.initActions(actions);
   }
 
   /**
@@ -584,67 +470,28 @@ export class FilterComponent implements OnInit, OnDestroy {
    * Show "Keyword" field if it present
    */
   public showKeywordField(): void {
-    this._keywordVisible$.next(true);
+    this.keywordInput.show();
   }
 
   /**
    * Hide "Keyword" field if it present
    */
   public hideKeywordField(): void {
-    this._keywordVisible$.next(false);
+    this.keywordInput.hide();
   }
 
   /**
    * Go through actions and check show() callback and update visible actions
    */
   public updateActionsVisibility(): void {
-    this._actions.updateActionsVisibility();
+    this._actionsController.updateActionsVisibility();
   }
 
   /**
    * Go through actions and check disabled() callback and update disabled state
    */
   public updateDisabledState(): void {
-    this._actions.updateDisabledState();
-  }
-
-  public setItems(items: IFilterConfigItem[]) {
-    this._itemStore.destroyItems();
-    this.config.items = items;
-    this._itemStore.setConfig(this._config);
-    this._paramController.initItems();
-    this._updateKeyword();
-  }
-
-  public keywordChange(keyword) {
-    this._keyword$.next(keyword);
-  }
-
-  public updateSortings(items: SortItem[]): void {
-    this._itemStore.updateSortingItemsValues(items);
-  }
-
-  private _initFilterWithConfig(config: FilterConfig) {
-    if (this.config) {
-      this._itemStore.destroyItems();
-    }
-
-    config = {
-      ...(this._defaultConfig || {}),
-      ...config,
-    };
-
-    this._config = new FsFilterConfig(config);
-    this._actions.setConfig(this._config);
-    this._persistanceController.setConfig(this._config, this.inDialog);
-    this._itemStore.setConfig(this._config);
-    this._paramController.setConfig(this._config);
-
-    this._updateKeyword();
-
-    if (this.config.reloadWhenConfigChanged) {
-      this.change();
-    }
+    this._actionsController.updateDisabledState();
   }
 
   private _destroyFilterDrawer() {
@@ -671,6 +518,13 @@ export class FilterComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _initIcon() {
+    const iconRegistry = inject(MatIconRegistry);
+    const sanitizer = inject(DomSanitizer);
+
+    iconRegistry.addSvgIconLiteral('filterOutline', sanitizer.bypassSecurityTrustHtml(FilterIcon));
+  }
+
   private _listenWindowResize() {
     this._zone.runOutsideAngular(() => {
       fromEvent(window, 'resize')
@@ -686,6 +540,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _initItems() {
+    this._filterController.init(this._config);
+  }
+
   private _initAutoReload() {
     if(this.config.autoReload) {
       interval(this.config.autoReload.seconds * 1000)
@@ -699,79 +557,24 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _listenInputChanges() {
-    this._keyword$
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((value) => {
-        const keywordItem = this._itemStore.keywordItem;
-        keywordItem.model = value;
-        this.change();
-      });
-  }
-
-  private _initKeywordVisibility() {
-    this._keywordVisible$.next(!!this.keywordItem && !this.keywordItem?.hidden);
-  }
-
-  private _initAutoFocus() {
-    // Avoid ngChanges error
-    setTimeout(() => {
-      if (this.config.autofocus) {
-        this.focus();
-      }
-    });
-  }
-
-  private _listenInternalItemsChange() {
-    this._itemStore
-      .itemsChange$
+  private _initOverlay() {
+    this._filterOverlay.attach$
       .pipe(
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this.keyword = this._itemStore.keywordItem?.model;
-        this.change();
+        this.showFilterMenu = true;
       });
-  }
 
-  private _initOverlay() {
+    this._filterOverlay.detach$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.showFilterMenu = false;
+      });
+
     this._filterOverlay.setClearFn(this.clear.bind(this));
     this._filterOverlay.setDoneFn(this.hideDrawer.bind(this));
-  }
-
-  // We may need some time to recieve external params and after that ready can be emitted
-  private _listenWhenFilterReady() {
-    combineLatest(
-      [
-        this._paramController.pending$,
-        this.itemsReady$,
-      ])
-      .pipe(
-        filter(([pendingParams, itemsReady]) => !pendingParams && itemsReady),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.init();
-        this._updateKeyword();
-
-        this.ready.emit();
-      });
-  }
-
-  private _updateKeyword() {
-    this.keyword = this._itemStore.keywordItem?.model;
-  }
-
-  private _updateChipsVisibility() {
-    const hasFilterChips = this._itemStore.items
-      .some((item: BaseItem<any>) => {
-        return item.isChipVisible;
-      });
-
-    this._hasFilterChips$.next(hasFilterChips);
   }
 }

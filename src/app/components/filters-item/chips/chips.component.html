@@ -1,11 +1,12 @@
-@if (item.values?.length) {
+@if ((item.values$ | async)?.length) {
   <fs-label-field>
     <fs-label>
       {{ item.label }}
     </fs-label>
     <fs-chips
-        [(ngModel)]="item.model"
+        [(ngModel)]="value"
         [compare]="compareFn"
+        (ngModelChange)="item.value = value"
         [multiple]="item.multiple">
       @for (value of item.values; track value) {
         <fs-chip
@@ -16,7 +17,4 @@
       }
     </fs-chips>
   </fs-label-field>
-}
-@if (item.loading) {
-  {{ item.label }} loading...
 }

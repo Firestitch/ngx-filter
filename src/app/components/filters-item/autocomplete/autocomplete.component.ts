@@ -4,28 +4,29 @@ import {
   Component,
   KeyValueDiffers,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { FsAutocompleteModule } from '@firestitch/autocomplete';
+import { FsFormModule } from '@firestitch/form';
 
 import { Observable } from 'rxjs';
 
+import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
 import { AutocompleteItem } from '../../../models/items/autocomplete-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
-import { FsAutocompleteModule } from '@firestitch/autocomplete';
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
-import { FormsModule } from '@angular/forms';
-import { FsFormModule } from '@firestitch/form';
 
 
 @Component({
-    selector: 'filter-item-autocomplete',
-    templateUrl: './autocomplete.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsAutocompleteModule,
-        FocusToItemDirective,
-        FormsModule,
-        FsFormModule,
-    ],
+  selector: 'filter-item-autocomplete',
+  templateUrl: './autocomplete.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsAutocompleteModule,
+    FocusToItemDirective,
+    FormsModule,
+    FsFormModule,
+  ],
 })
 export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
 

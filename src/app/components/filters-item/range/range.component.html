@@ -14,9 +14,9 @@
       matInput
       [fsFilterFocusTrigger]="item"
       [focusTargetType]="'from'"
-      type="text"
-      inputmode="decimal"
-      [(ngModel)]="item.model.min"
+      type="number"
+      [(ngModel)]="min"
+      (ngModelChange)="change()"
       #from>
     @if (item.suffix) {
       <span
@@ -41,9 +41,9 @@
       matInput
       [fsFilterFocusTrigger]="item"
       [focusTargetType]="'to'"
-      type="text"
-      inputmode="decimal"
-      [(ngModel)]="item.model.max"
+      type="number"
+      [(ngModel)]="max"
+      (ngModelChange)="change()"
       #to>
     @if (item.suffix) {
       <span

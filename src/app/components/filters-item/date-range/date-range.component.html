@@ -1,26 +1,29 @@
 <mat-form-field>
-  <mat-label>{{item.label[0]}}</mat-label>
+  <mat-label>
+    {{ item.label[0] }}
+  </mat-label>
   <input
     matInput
     [fsFilterFocusTrigger]="item"
     [focusTargetType]="'from'"
     [fsDateRangeFrom]="item.name"
-    [(ngModel)]="item.model.from"
-    (ngModelChange)="itemChange()"
+    [(ngModel)]="from"
     [clear]="item.showClear"
     [view]="viewType"
+    (ngModelChange)="change()"
     name="date_from">
 </mat-form-field>
-
 <mat-form-field>
-  <mat-label>{{item.label[1]}}</mat-label>
+  <mat-label>
+    {{ item.label[1] }}
+  </mat-label>
   <input
     matInput
     [fsFilterFocusTrigger]="item"
     [focusTargetType]="'to'"
     [fsDateRangeTo]="item.name"
-    [(ngModel)]="item.model.to"
-    (ngModelChange)="itemChange()"
+    [(ngModel)]="to"
+    (ngModelChange)="change()"
     [clear]="item.showClear"
     [view]="viewType"
     name="date_to">

@@ -1,6 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
-
 import { FsPrompt } from '@firestitch/prompt';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -13,25 +12,23 @@ import {
 import { KeyValue } from '../interfaces/external-params.interface';
 import {
   IFilterSavedFilter,
-  IFilterSavedFiltersConfig,
 } from '../interfaces/saved-filters.interface';
 
-import { ItemStore } from './item-store.service';
+import type { FilterController } from './filter-controller.service';
 
 
 @Injectable()
 export class SavedFilterController implements OnDestroy {
 
-  private _config: IFilterSavedFiltersConfig;
+  private _filterController: FilterController;
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
   private _activeFilter$ = new BehaviorSubject<IFilterSavedFilter>(null);
   private _enabled$ = new BehaviorSubject<boolean>(false);
   private _destroy$ = new Subject<void>();
-  private _itemStore = inject(ItemStore);
   private _prompt = inject(FsPrompt);
 
   public get singularLabel(): string {
-    return this._config?.label?.singular || 'Saved filter';
+    return this._filterController.config.savedFilters?.label?.singular || 'Saved filter';
   }
 
   public get singularLabelLower(): string {
@@ -39,11 +36,11 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public get labelIcon(): string {
-    return this._config?.label?.icon || 'save';
+    return this._filterController.config.savedFilters?.label?.icon || 'save';
   }
 
   public get pluralLabel(): string {
-    return this._config?.label?.plural || 'Saved filters';
+    return this._filterController.config.savedFilters?.label?.plural || 'Saved filters';
   }
 
   public get pluralLabelLower(): string {
@@ -97,16 +94,19 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public init(
-    filterSavedFiltersConfig: IFilterSavedFiltersConfig,
-  ): void {
-    if (!filterSavedFiltersConfig) {
+    filterController: FilterController,
+  ): Observable<any> {
+    this._filterController = filterController;
+    
+    if (!filterController.config.savedFilters) {
       this._setEnabledStatus(false);
 
-      return;
+      return of(null);
     }
+
     this._setEnabledStatus(true);
 
-    this._config = filterSavedFiltersConfig;
+    return this.load();
   }
 
   public initSavedFilters(savedFilters: IFilterSavedFilter[]): void {
@@ -124,7 +124,7 @@ export class SavedFilterController implements OnDestroy {
       return of([]);
     }
 
-    return this._config.load()
+    return this._filterController.config.savedFilters.load()
       .pipe(
         tap((savedFilters) => {
           this.initSavedFilters(savedFilters);
@@ -160,17 +160,17 @@ export class SavedFilterController implements OnDestroy {
     savedFilter = {
       ...(this.activeFilter || {}),
       ...savedFilter,
-      filters: this._itemStore.items
+      filters: this._filterController.items
         .filter((item) => item.hasValue)
         .reduce((accum, item) => {
           return {
             ...accum,
-            [item.name]: item.model,
+            [item.name]: item.value,
           };
         }, {}),
     };  
 
-    return this._config.save(savedFilter)
+    return this._filterController.config.savedFilters.save(savedFilter)
       .pipe(
         tap((_savedFilter) => {
           this.savedFilters = this.activeFilter?.id ? this.savedFilters
@@ -185,11 +185,11 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public get orderable(): boolean {
-    return !!this._config.order;
+    return !!this._filterController.config.savedFilters.order;
   }
 
   public order(savedFilters: IFilterSavedFilter[]): Observable<IFilterSavedFilter[]> {
-    return this._config.order(savedFilters)
+    return this._filterController.config.savedFilters.order(savedFilters)
       .pipe(
         tap(() => {
           this.savedFilters = [
@@ -200,7 +200,7 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public delete(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
-    return this._config.delete(savedFilter)
+    return this._filterController.config.savedFilters.delete(savedFilter)
       .pipe(
         tap(() => {
           this.savedFilters = this.savedFilters
@@ -221,6 +221,10 @@ export class SavedFilterController implements OnDestroy {
       if (!existingFilter) {
         throw new Error(`Saved filter cannot be activated, because it does not exists. Filter ID = ${savedFilter.id}`);
       }
+
+      this._filterController.changeTransaction(() => {
+        this._filterController.values = existingFilter.filters;
+      });
       
       this._activeFilter$.next(existingFilter);
     } else {

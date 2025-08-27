@@ -11,9 +11,9 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { FilterDrawerComponent } from '../components/filter-drawer/filter-drawer.component';
 import { FILTER_DRAWER_DATA } from '../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../injectors/filter-drawer-overlay';
-import { FS_FILTER_META } from '../providers/filter-meta';
 
 import { FocusControllerService } from './focus-controller.service';
+import { FsRootFilterOverlayService } from './root-filter-overlay.service';
 
 
 @Injectable()
@@ -30,7 +30,7 @@ export class FsFilterOverlayService implements OnDestroy {
   private _overlay = inject(Overlay);
   private _focusController = inject(FocusControllerService);
   private _htmlClassRenderer = inject(HtmlClassRenderer);
-  private _filterMeta = inject(FS_FILTER_META);
+  private _filterMeta = inject(FsRootFilterOverlayService);
 
   constructor() {
     this._openWhenChipClicked();

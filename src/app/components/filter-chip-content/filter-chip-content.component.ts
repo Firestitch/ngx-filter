@@ -15,11 +15,11 @@ import { BaseItem } from '../../models/items/base-item';
 
 
 @Component({
-    selector: 'fs-filter-chip-content',
-    templateUrl: './filter-chip-content.component.html',
-    styleUrls: ['./filter-chip-content.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
+  selector: 'fs-filter-chip-content',
+  templateUrl: './filter-chip-content.component.html',
+  styleUrls: ['./filter-chip-content.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class FsFilterChipContentComponent implements OnInit, OnDestroy {
 
@@ -54,7 +54,7 @@ export class FsFilterChipContentComponent implements OnInit, OnDestroy {
   }
 
   private _getContent() {
-    const result = this.item.getChipsContent(this.type);
+    const result = this.item.chips;
 
     if (this.item.chipLabel !== undefined) {
       if (this.item.chipLabel === '') {

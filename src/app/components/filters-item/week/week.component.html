@@ -1,11 +1,14 @@
 <mat-form-field>
-  <mat-label>{{item.label}}</mat-label>
-  <input 
+  <mat-label>
+    {{ item.label }}
+  </mat-label>
+  <input
     matInput
     fsDateWeekPicker
     [placeholder]="item.label"
     [fsFilterFocusTrigger]="item"
-    [(ngModel)]="item.model"
+    [(ngModel)]="value"
+    (ngModelChange)="change()"
     [seedDate]="item.seedDate"
     [clear]="item.showClear"
     [name]="item.name">

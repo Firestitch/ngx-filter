@@ -37,24 +37,20 @@
       }
       <div class="overflow-shadow filter-items">
         <div class="overflow-shadow-content">
-          <ng-container *fsSkeleton="(paramCointroller.pending$ | async) !== true">
-            @for (filterItem of items$ | async; track filterItem) {
-              <filter-item
-                class="filter-group"
-                [item]="filterItem">
-              </filter-item>
-            }
-          </ng-container>
+          @for (filterItem of items$ | async; track filterItem) {
+            <filter-item
+              class="filter-group"
+              [item]="filterItem">
+            </filter-item>
+          }
         </div>
       </div>
-      @if ((paramCointroller.pending$ | async) !== true) {
-        <fs-filter-drawer-actions
-          [savedFiltersController]="savedFiltersController"
-          class="filter-actions"
-          (clear)="clear()"
-          (done)="done()">
-        </fs-filter-drawer-actions>
-      }
+      <fs-filter-drawer-actions
+        [savedFiltersController]="savedFiltersController"
+        class="filter-actions"
+        (clear)="clear()"
+        (done)="done()">
+      </fs-filter-drawer-actions>
     </div>
   </div>
   @if (!windowDesktop) {

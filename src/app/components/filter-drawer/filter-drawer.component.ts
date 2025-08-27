@@ -25,9 +25,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FILTER_DRAWER_DATA } from '../../injectors/filter-drawer-data';
 import { FILTER_DRAWER_OVERLAY } from '../../injectors/filter-drawer-overlay';
 import { BaseItem } from '../../models/items/base-item';
-import { ItemStore } from '../../services/item-store.service';
-import { ParamController } from '../../services/param-controller.service';
-import { SavedFilterController } from '../../services/saved-filter-controller.service';
+import { SavedFilterController } from '../../services';
+import { FilterController } from '../../services/filter-controller.service';
 import { FsFilterDrawerActionsComponent } from '../filter-drawer-actions/filter-drawer-actions.component';
 import { FilterItemComponent } from '../filters-item/filter-item.component';
 
@@ -64,14 +63,12 @@ export class FilterDrawerComponent implements OnInit {
 
   private _savedFilterController = inject(SavedFilterController);
   private _message = inject(FsMessage);
-  private _itemStore = inject(ItemStore);
+  private _filterController = inject(FilterController);
   private _overlayRef = inject(FILTER_DRAWER_OVERLAY);
   private _data = inject(FILTER_DRAWER_DATA);
-  private _paramController = inject(ParamController);
 
   constructor(
   ) {
-    this._itemStore.prepareItems();
     this._clear = this._data.clear;
     this._done = this._data.done;
 
@@ -84,11 +81,7 @@ export class FilterDrawerComponent implements OnInit {
   }
 
   public get items$(): Observable<Item[]> {
-    return of(this._itemStore.items);
-  }
-
-  public get paramCointroller(): ParamController {
-    return this._paramController;
+    return of(this._filterController.items);
   }
 
   public get savedFiltersController(): SavedFilterController {

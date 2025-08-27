@@ -1,3 +1,5 @@
+import { Observable, tap } from 'rxjs';
+
 import { clone } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
@@ -27,33 +29,27 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return true;
   }
 
-  public get value() {
-    const value = clone(this.model);
-
-    if (Array.isArray(value) && value.length === 0) {
-      return undefined;
+  public get queryParam(): Record<string, unknown> {
+    if(!this.hasValue) {
+      return {};
     }
-
-    return value;
+  
+    return {
+      [this.name]: this.value
+        .map((item) => `${item.value}:${item.name}`)
+        .join(','),
+    };
   }
 
-  public get isChipVisible(): boolean {
-    return !!this.value;
-  }
-
-  public get queryObject(): Record<string, unknown> {
+  public get query(): Record<string, unknown> {
     if(!this.value) {
       return {};
     }
 
-    const value = this.value
-      .map((item) => item.value)
-      .join(',');
-
-    const name = this.name;
-
     return {
-      [name]: value,
+      [this.name]: this.value
+        .map((item) => item.value)
+        .join(','),
     };
   }
 
@@ -66,18 +62,23 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
     return params;
   }
+  
+  public get chips(): { name?: string, value: string, label: string }[] {
+    return this.hasValue ? [
+      {
+        value: this.value
+          .reduce((acc, i) => {
+            acc.push((`${i.name}`).trim());
 
-  public getChipsContent() {
-    return this.model
-      .reduce((acc, i) => {
-        acc.push(i.name);
-
-        return acc;
-      }, [])
-      .join(', ');
+            return acc;
+          }, [])
+          .join(', '),
+        label: this.label,
+      },
+    ] : [];
   }
 
-  public setModel(value) {
+  public set value(value) {
     if (Array.isArray(value)) {
       value = value.map((val) => {
         if (isNaN(val)) {
@@ -89,33 +90,40 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
       });
     }
 
-    this._model = value;
+    super.value = value;
   }
 
-  protected _validateModel() {
-    //
+  public get value() {
+    const value = clone(super.value);
+
+    if (Array.isArray(value) && value.length === 0) {
+      return undefined;
+    }
+
+    return value;
   }
 
-  protected _init() {
-    if (!Array.isArray(this.values)) {
-      this.values = [];
-    }
+  public init(value: unknown): Observable<unknown> {
+    return super.init(value)
+      .pipe(
+        tap(() => {
+          if (!Array.isArray(this.values)) {
+            this.values = [];
+          }
 
-    if (this.model && Array.isArray(this.model) && this.values.length) {
-      if (Number.isInteger(this.model[0])) {
-        this._model = this.model.map((id) => {
-          return this.values.find((value) => value.value === id);
-        });
-      }
-    }
+          if (super.value && Array.isArray(super.value) && this.values.length) {
+            if (Number.isInteger(super.value[0])) {
+              super.value = super.value.map((id) => {
+                return this.values.find((item) => item.value === id);
+              });
+            }
+          }
 
-    if (this.model === undefined) {
-      this._model = [];
-    }
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? [];
+          if (super.value === undefined) {
+            super.value = [];
+          }
+        }),
+      );
   }
 
 }

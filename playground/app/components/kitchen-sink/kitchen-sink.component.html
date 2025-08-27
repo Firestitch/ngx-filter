@@ -1,7 +1,29 @@
 <fs-filter [config]="conf">
   <ng-template fsFilterStatusBar>
     <small>
-      Showing 4 of 4 results sorted by Name Ascending
+      Showing 4 of 4 results 
+        sorted by
+      <a
+          class="order-toggle"
+          [fsMenuTriggerFor]="sortMenu">
+        {{ sort?.value || 'unsorted' }}
+      </a>
+      @if (sort?.value) {
+        <a
+            class="order-toggle"
+            (click)="filter.updateSort({ sortBy: sort.value, sortDirection: sort.direction === 'asc' ? 'desc' : 'asc' })">
+          {{ sort.direction || 'asc' }}
+        </a>
+      }
+      <fs-menu #sortMenu>
+        @for (item of sorts; track item.value) {
+          <ng-template
+              fs-menu-item
+              (click)="filter.updateSort({ sortBy: item.value, sortDirection: sort.direction })">
+            {{ item.name }}
+          </ng-template>
+        }
+      </fs-menu>
     </small>
   </ng-template>
 </fs-filter>

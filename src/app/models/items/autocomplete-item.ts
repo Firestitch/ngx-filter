@@ -4,7 +4,7 @@ import { clone } from 'lodash-es';
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigAutocompleteItem } from '../../interfaces/items/autocomplete.interface';
 
-import { BaseAutocompleteItem } from './autocomplete/base-autocomplete-item';
+import { BaseAutocompleteItem } from './base-autocomplete-item';
 
 
 export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocompleteItem> {
@@ -14,18 +14,18 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
   }
 
   public get value() {
-    let value = clone(this.model);
+    let value = clone(super.value);
 
-    if (!this.model || this.model.value === undefined) {
+    if (!super.value || super.value.value === undefined) {
       return undefined;
     }
 
-    value = this.model.value;
+    value = super.value.value;
 
     return value;
   }
 
-  public get queryObject() {
+  public get query() {
     const value = this.value;
     const name = this.name;
     const params = {};
@@ -35,16 +35,12 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
     return params;
   }
 
-  public getChipsContent() {
-    return this.model ? this.model.name : '';
-  }
-
-  protected _init() {
-    //
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? undefined;
-    this.search = '';
+  public get chips(): { name?: string, value: string, label: string }[] {
+    return [
+      {
+        value: this.value ? this.value.name : '', 
+        label: this.value.label,
+      },
+    ];
   }
 }

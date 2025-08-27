@@ -10,7 +10,8 @@
   }
   <input
     matInput
-    [formControl]="textControl"
+    [(ngModel)]="value"
+    (ngModelChange)="change()"
     [fsFilterFocusTrigger]="item">
   @if (item.suffix) {
     <span

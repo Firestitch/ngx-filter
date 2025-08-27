@@ -3,7 +3,7 @@ import {
   IFilterConfigDateItem,
 } from '../../interfaces/items/date.interface';
 
-import { BaseDateItem } from './date/base-date-item';
+import { BaseDateItem } from './base-date-item';
 
 
 export class DateTimeItem extends BaseDateItem {
@@ -12,11 +12,7 @@ export class DateTimeItem extends BaseDateItem {
     return new DateTimeItem(config, null, filter);
   }
 
-  public getChipsContent() { 
-    return null;
-  }
-
-  protected _clearValue(defaultValue: unknown = undefined) {
-    this.model = defaultValue ?? undefined;
+  public get chips(): { name?: string, value: string, label: string }[] {
+    return [];
   }
 }

@@ -1,28 +1,39 @@
-@if ((item.loading$ | async)) {
-  <mat-form-field>
-    <mat-label>{{item.label}}</mat-label>
-    <mat-select disabled></mat-select>
-  </mat-form-field>
-} @else {
-  @if ((values$ | async)?.length) {
-    @if (item.multiple && !item.children) {
-      <filter-item-select-multiple
-        [item]="multipleSelectItem"
-        #selectItem>
-      </filter-item-select-multiple>
-    }
-    @if (!item.multiple && !item.children) {
-      <filter-item-select-simple
-        [item]="simpleSelectItem"
-        #selectItem>
-      </filter-item-select-simple>
-    }
+<mat-form-field [ngClass]="{ isolate: item.isolate }">
+  <mat-label>
+    {{ item.label }}
+  </mat-label>
+  <mat-select
+      [fsFilterFocusTrigger]="item"
+      [(ngModel)]="value"
+      (ngModelChange)="changed()"
+      [multiple]="item.multiple">
     @if (item.children) {
-      <filter-item-select-groups
-        [item]="item"
-        #selectItem>
-      </filter-item-select-groups>
+      @for (option of item.values$ | async; track option) {
+        <mat-optgroup [label]="option.name">
+          @for (childOption of option[item.children] | fsFilterIsolateValues: item.isolate; track childOption.value) {
+            <mat-option [value]="childOption.value">
+              {{ childOption.name }}
+            </mat-option>
+          }
+        </mat-optgroup>
+      }
+    } @else {
+      @for (option of item.values$ | async | fsFilterIsolateValues: item.isolate; track option) {
+        <mat-option [value]="option.value">
+          {{ option.name }}
+        </mat-option>
+      }
     }
-  }
-}
-
+  </mat-select>
+  <mat-hint>
+    @if (item.isolate) {
+      <mat-checkbox
+          (change)="isolateChange($event)"
+          [(ngModel)]="isolated">
+        <span class="checkbox-label">
+          {{ item.isolateLabel }}
+        </span>
+      </mat-checkbox>
+    }
+  </mat-hint>
+</mat-form-field>

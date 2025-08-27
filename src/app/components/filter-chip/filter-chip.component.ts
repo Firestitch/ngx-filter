@@ -11,13 +11,10 @@ import {
 import { FsChipModule } from '@firestitch/chip';
 
 import { combineLatest, Observable, Subject, timer } from 'rxjs';
-import { map, mapTo, startWith, takeUntil } from 'rxjs/operators';
+import { map, mapTo, startWith } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { BaseItem } from '../../models/items/base-item';
-import { DateRangeItem } from '../../models/items/date-range-item';
-import { DateTimeRangeItem } from '../../models/items/date-time-range-item';
-import { RangeItem } from '../../models/items/range-item';
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { FsFilterChipContentComponent } from '../filter-chip-content/filter-chip-content.component';
 
@@ -38,8 +35,11 @@ import { FsFilterChipContentComponent } from '../filter-chip-content/filter-chip
 export class FsFilterChipComponent implements OnInit, OnDestroy {
 
   @Input() public item: BaseItem<IFilterConfigItem>;
+
   @Input() public removable: boolean = false;
-  
+
+  @Input() public chips: { name?: string, value: string, label: string }[];
+
   @Input() 
   @HostBinding('class.clickable') 
   public clickable: boolean = false;
@@ -58,17 +58,13 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
   private _focusController = inject(FocusControllerService);
 
   public ngOnInit() {
-    this.rangeItem = this.item.isTypeDateRange
-      || this.item.isTypeRange
-      || this.item.isTypeDateTimeRange;
+    // this.rangeItem = this.item.isTypeDateRange
+    //   || this.item.isTypeRange
+    //   || this.item.isTypeDateTimeRange;
 
-    this.listenValueChangesForRanges();
-
-    if (this.item.hasPendingValues) {
-      this.item.loadAsyncValues(false);
-
-      this._initDelayRender();
-    }
+    // this.listenValueChangesForRanges();
+    //   this._initDelayRender();
+    // }
   }
 
   public ngOnDestroy(): void {
@@ -76,30 +72,24 @@ export class FsFilterChipComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public click(type = null) {
+  public click(chip: { name?: string, value: string, label: string }) {
     if (this.clickable) {
-      this._focusController.click(this.item, type);
+      this._focusController.click(this.item, chip.name);
     }
   }
 
-  public removeItem(event: MouseEvent, type = null) {
-    if (this.item instanceof RangeItem) {
-      this.item.clearRange(type);
-    } else if (this.item instanceof DateRangeItem || this.item instanceof DateTimeRangeItem) {
-      this.item.clearDateRange(type);
-    } else {
-      this.item.clear();
-    }
+  public remove(chip: { name?: string, value: string, label: string }) {
+    this.item.clear(chip.name);
   }
 
   public listenValueChangesForRanges() {
-    this.item.valueChange$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this._cdRef.markForCheck();
-      });
+    // this.item.valueChange$
+    //   .pipe(
+    //     takeUntil(this._destroy$),
+    //   )
+    //   .subscribe(() => {
+    //     this._cdRef.markForCheck();
+    //   });
   }
 
   private _initDelayRender() {
