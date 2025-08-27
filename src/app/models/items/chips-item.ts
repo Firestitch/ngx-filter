@@ -1,6 +1,5 @@
 import { Observable, tap } from 'rxjs';
 
-import { clone } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
@@ -25,8 +24,8 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     return new ChipsItem(config, null, filter);
   }
 
-  public get isTypeChips(): boolean {
-    return true;
+  public get hasValue() {
+    return this.value.length > 0;
   }
 
   public get queryParam(): Record<string, unknown> {
@@ -52,16 +51,6 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
         .join(','),
     };
   }
-
-  public get persistanceObject(): Record<string, string> {
-    const value = this.value;
-    const name = this.name;
-    const params = {};
-
-    params[name] = Array.isArray(value) ? value.join(',') : undefined;
-
-    return params;
-  }
   
   public get chips(): { name?: string, value: string, label: string }[] {
     return this.hasValue ? [
@@ -79,28 +68,15 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
 
   public set value(value) {
-    if (Array.isArray(value)) {
-      value = value.map((val) => {
-        if (isNaN(val)) {
-          return val;
-        }
-
-        return +val;
-
-      });
-    }
-
-    super.value = value;
+    super.value = Array.isArray(value) ? value : [];
   }
 
   public get value() {
-    const value = clone(super.value);
+    return super.value;
+  }
 
-    if (Array.isArray(value) && value.length === 0) {
-      return undefined;
-    }
-
-    return value;
+  public clear() {
+    this.value = [];
   }
 
   public init(value: unknown): Observable<unknown> {

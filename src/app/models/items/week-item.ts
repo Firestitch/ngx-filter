@@ -1,5 +1,4 @@
 import { isEmpty } from '@firestitch/common';
-import { simpleFormat } from '@firestitch/date';
 import { formatPeriodObject } from '@firestitch/datepicker';
 
 import { isDate, isValid, parseISO } from 'date-fns';
@@ -96,22 +95,6 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
       [paramFromName]: value?.from || undefined,
       [paramToName]: value?.to || undefined,
       [paramPeriodName]: value?.period || undefined,
-    };
-  }
-
-  public get persistanceObject(): Record<string, string> {
-    const query = this.query;
-    const name = this.name;
-    const paramFromName = getRangeName(name, 'from');
-    const paramFromValue = query[paramFromName] && simpleFormat(query[paramFromName]) || query[paramFromName];
-    const paramToName = getRangeName(name, 'to');
-    const paramToValue = query[paramToName] && simpleFormat(query[paramToName]) || query[paramToName];
-    const paramPeriodName = `${name}Period`;
-
-    return {
-      [paramFromName]: paramFromValue,
-      [paramToName]: paramToValue,
-      [paramPeriodName]: query[paramPeriodName],
     };
   }
 

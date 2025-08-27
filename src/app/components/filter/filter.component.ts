@@ -92,6 +92,13 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChild(KeywordInputComponent)
   public keywordInput: KeywordInputComponent;
+
+  /**
+   * @deprecated Use set config instead
+   */
+  @Input('filterConfig') public set filterConfig(value: FilterConfig) {
+    this.config = value;
+  }
   
   @Input('config') public set config(value: FilterConfig) {
     this._config = new FsFilterConfig(value);
