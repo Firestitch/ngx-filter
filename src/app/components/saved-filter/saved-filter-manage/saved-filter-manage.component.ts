@@ -39,7 +39,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
 
   private _savedFilterController = inject(SavedFilterController);
   private _cdRef = inject(ChangeDetectorRef);
-  private filterController = inject(FilterController);
+  private _filterController = inject(FilterController);
   private _dialogRef = inject(MatDialogRef);
   private _filterOverlayService = inject(FsFilterOverlayService);
 
@@ -48,7 +48,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
-    return this.filterController.items;
+    return this._filterController.items;
   }
 
   public get pluralLabelLower(): string {

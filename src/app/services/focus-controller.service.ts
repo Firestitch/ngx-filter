@@ -11,8 +11,6 @@ export class FocusControllerService {
 
   private _focusOn = new BehaviorSubject<{ item: BaseItem<any>, type: string}>(null);
 
-  constructor() {}
-
   public get focusOn$() {
     return this._focusOn.asObservable();
   }

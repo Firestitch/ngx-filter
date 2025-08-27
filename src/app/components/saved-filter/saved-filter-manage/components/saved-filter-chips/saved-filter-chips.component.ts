@@ -6,11 +6,12 @@ import {
   OnInit,
 } from '@angular/core';
 
+import { FsChipModule } from '@firestitch/chip';
+
 import { IFilterConfigItem } from '../../../../../interfaces';
 import { IFilterSavedFilter } from '../../../../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../../../../models/items';
 import { FilterController } from '../../../../../services';
-import { FsFilterChipComponent } from '../../../../filter-chip/filter-chip.component';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { FsFilterChipComponent } from '../../../../filter-chip/filter-chip.compo
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    FsFilterChipComponent,
+    FsChipModule,
   ],
 })
 export class FsFilterSavedFilterChipsComponent implements OnInit {
@@ -35,9 +36,10 @@ export class FsFilterSavedFilterChipsComponent implements OnInit {
     this.items = [...this._filterController.items]
       .filter((item) => !!this.savedFilter.filters[item.name])
       .map((item: BaseItem<IFilterConfigItem>): BaseItem<IFilterConfigItem> => {
-        item.value = this.savedFilter.filters[item.name];
+        const object = item.clone();
+        object.setValue(this.savedFilter.filters[item.name], false);
 
-        return item;
+        return object;  
       });
   }
 }

@@ -1,6 +1,7 @@
 
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import {
+  filter,
   map,
   switchMap,
   tap,
@@ -32,9 +33,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
   private _hidden$ = new BehaviorSubject(false);
-  private _value$ = new BehaviorSubject(undefined);
+  private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
   private _values$ = new BehaviorSubject<any[]>(null);
   private _destroy$ = new Subject<void>();
+  private _emitChange = true;
 
   constructor(
     itemConfig: T,
@@ -125,14 +127,14 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get hasValue$() {
-    return this._value$.asObservable()
+    return this.value$
       .pipe(
         map(() => this.hasValue),
       );
   }
 
   public get chips$() {
-    return this._value$.asObservable()
+    return this.value$
       .pipe(
         map(() => this.chips),
       );
@@ -147,11 +149,30 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get values$(): Observable<any> {
-    return this._values$.asObservable();
+    return this._values$.asObservable()
+      .pipe(
+        filter(() => this._emitChange),
+      );
   }
 
   public get value$() {
-    return this._value$.asObservable();
+    return this._value$.asObservable()
+      .pipe(
+        filter((event) => event.emitChange),
+        map((event) => event.value),
+      );
+  }
+
+  public get value() {
+    return this._value$.getValue().value;
+  }
+  
+  public set value(value) {
+    this.setValue(value);
+  }
+
+  public setValue(value: unknown, emitChange: boolean = true) {
+    this._value$.next({ value, emitChange });
   }
 
   public get queryParam(): Record<string, unknown> {
@@ -166,7 +187,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._hidden$.next(false);
   }
 
-  
   public get query(): Record<string, any> {
     if(!this.hasValue) {
       return {};
@@ -232,12 +252,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this._destroy$.complete();
   }
 
-  public get value() {
-    return this._value$.getValue();
-  }
-  
-  public set value(value) {
-    this._value$.next(value);
+  public clone(): BaseItem<T> {
+    return Object.assign(
+      Object.create(Object.getPrototypeOf(this)), 
+      this,
+    );
   }
 
   private _initConfig(item: T) {

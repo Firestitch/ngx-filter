@@ -29,7 +29,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
 import { FilterIcon } from '../../consts';
-import { IFilterSavedFilter, ISortingChangeEvent, KeyValue } from '../../interfaces';
+import { ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
   FilterConfig,
@@ -253,7 +253,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public get inlineToolbar$(): Observable<boolean> {
     return combineLatest({
       keywordVisible: this.keywordVisible$,
-      activeFilter: of(this.savedFiltersController.enabled),
+      activeFilter: of(this.savedFilterController.enabled),
     })
       .pipe(
         map(({ keywordVisible, activeFilter }) => {
@@ -281,19 +281,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._actionsController.menuActions$;
   }
 
-  public set activeSavedFilter(savedFilter: IFilterSavedFilter) {
-    this._savedFilterController.setActiveFilter(savedFilter);
-  }
-
-  public get activeSavedFilter(): IFilterSavedFilter {
-    return this._savedFilterController.activeFilter;
-  }
-
-  public get savedFilters(): IFilterSavedFilter[] {
-    return this._savedFilterController.savedFilters;
-  }
-
-  public get savedFiltersController(): SavedFilterController {
+  public get savedFilterController(): SavedFilterController {
     return this._savedFilterController;
   }
 

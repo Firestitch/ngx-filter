@@ -7,13 +7,8 @@
           size="small"
           (click)="click(item, chip)"
           (removed)="remove(item, chip)">
-        {{ chip.label }}: {{ chip.value }}
+        {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
       </fs-chip>
     }
-    <!-- <fs-filter-chip
-      [chips]="chips"
-      [clickable]="true"
-      [removable]="true">
-    </fs-filter-chip> -->
   }
 }

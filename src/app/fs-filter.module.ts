@@ -5,8 +5,6 @@ import { FsStore } from '@firestitch/store';
 import { FsFilterActionButtonComponent } from './components/action-button/action-button.component';
 import { FsFilterActionKebabActionsComponent } from './components/action-kebab-actions/action-kebab-actions.component';
 import { FsFilterActionsComponent } from './components/actions/actions.component';
-import { FsFilterChipContentComponent } from './components/filter-chip-content/filter-chip-content.component';
-import { FsFilterChipComponent } from './components/filter-chip/filter-chip.component';
 import { FsFilterChipsComponent } from './components/filter-chips/filter-chips.component';
 import { FsFilterDrawerActionsComponent } from './components/filter-drawer-actions/filter-drawer-actions.component';
 import { FilterDrawerComponent } from './components/filter-drawer/filter-drawer.component';
@@ -49,8 +47,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     DateRangeComponent,
     CheckboxComponent,
     FilterDrawerComponent,
-    FsFilterChipComponent,
-    FsFilterChipContentComponent,
     FsFilterDrawerActionsComponent,
     FsFilterActionsComponent,
     FsFilterActionButtonComponent,

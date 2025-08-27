@@ -1,5 +1,9 @@
 <div class="filter-chips">
   @for (item of items; track item.name) {
-    <fs-filter-chip [item]="item"></fs-filter-chip>
+    @for (chip of item.chips; track chip.label) {
+      <fs-chip size="small">
+        {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
+      </fs-chip>
+    }
   }
 </div>

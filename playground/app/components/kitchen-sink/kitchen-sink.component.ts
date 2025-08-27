@@ -83,7 +83,7 @@ export class KitchenSinkComponent implements OnInit {
     {
       name: 'Fruit',
       types: [
-        { value: 5, name: 'Apples Letter 1' },
+        { value: 5, name: 'Apple' },
         { value: 6, name: 'Banana' },
       ],
     },

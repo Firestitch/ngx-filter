@@ -251,7 +251,7 @@ export class FilterController implements OnDestroy {
       ...this.items
         .map((item) => item.value$
           .pipe(
-            map((_item) => item),
+            map(() => item),
           )),
     )
       .pipe(

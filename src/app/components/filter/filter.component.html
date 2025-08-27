@@ -8,8 +8,8 @@
         @if (keywordVisible$ | async) {
           <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
         }
-        @if (savedFiltersController.enabled) {
-          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFiltersController"></fs-saved-filter-autocomplete-chips>
+        @if (savedFilterController.enabled) {
+          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
         }
       </div>
     } @else {
