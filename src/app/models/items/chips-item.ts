@@ -1,4 +1,3 @@
-import { Observable, tap } from 'rxjs';
 
 
 import type { FilterComponent } from '../../components/filter/filter.component';
@@ -77,29 +76,6 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
   public clear() {
     this.value = [];
-  }
-
-  public init(value: unknown): Observable<unknown> {
-    return super.init(value)
-      .pipe(
-        tap(() => {
-          if (!Array.isArray(this.values)) {
-            this.values = [];
-          }
-
-          if (super.value && Array.isArray(super.value) && this.values.length) {
-            if (Number.isInteger(super.value[0])) {
-              super.value = super.value.map((id) => {
-                return this.values.find((item) => item.value === id);
-              });
-            }
-          }
-
-          if (super.value === undefined) {
-            super.value = [];
-          }
-        }),
-      );
   }
 
 }
