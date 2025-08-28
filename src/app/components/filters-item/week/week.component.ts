@@ -51,8 +51,4 @@ export class WeekComponent extends BaseItemComponent<WeekItem> implements OnInit
         this._cdRef.detectChanges();
       });
   }
-
-  public change() {
-    this.item.value = this.value;
-  }
 }

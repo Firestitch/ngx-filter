@@ -118,6 +118,7 @@ export class KitchenSinkComponent implements OnInit {
         value: 'name',
       },
       autoReload: {
+        enabled: false,
         seconds: 5,
       },
       change: (query, sort) => {
@@ -254,7 +255,10 @@ export class KitchenSinkComponent implements OnInit {
                 console.log('Added User', filterComponent);
                 const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
                 const item = filterComponent.getItem('autocompletechips');
-                item.value = [...item.value, { value: randomUser.id, name: randomUser.name }];
+                item.value = [
+                  ...item.value, 
+                  { value: randomUser.id, name: randomUser.name },
+                ];
               },
             },
           ],
@@ -276,7 +280,7 @@ export class KitchenSinkComponent implements OnInit {
           },
         },
         {
-          name: 'daysChips',
+          name: 'dayChips',
           label: 'Weekdays',
           type: ItemType.Chips,
           multiple: true,

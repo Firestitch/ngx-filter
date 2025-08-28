@@ -77,16 +77,15 @@
       }
       @if (config.autoReload) {
         <div class="filter-reload">
-          @if (config.autoReload) {
-            <mat-slide-toggle
-                name="autoReload"
-                class="auto-reload"
-                [(ngModel)]="autoReload">
-              <span>
-                Auto refresh
-              </span>
-            </mat-slide-toggle>
-          }
+          <mat-slide-toggle
+              name="autoReload"
+              class="auto-reload"
+              [ngModel]="config.autoReload.enabled"
+              (ngModelChange)="config.autoReload.enabled = $event">
+            <span>
+              Auto refresh
+            </span>
+          </mat-slide-toggle>
         </div>
       }
     </div>

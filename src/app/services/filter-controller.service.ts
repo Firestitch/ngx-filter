@@ -38,7 +38,6 @@ export class FilterController implements OnDestroy {
   private _queryParamController = inject(QueryParamController);
   private _keywordController = inject(KeywordController);
   private _sortController = inject(SortController);
-  private _emitChange = true;
 
   public get items(): BaseItem<IFilterConfigItem>[] {
     return Array.from(this._items.values());
@@ -110,22 +109,13 @@ export class FilterController implements OnDestroy {
     return this._items.get(name);
   }
 
-  public changeTransaction(fn: () => void) {
-    this._emitChange = false;
-    fn();
-    this._emitChange = true;
-    this._change$.next(null);
-  }
-
   public filtersClear() {
-    this.changeTransaction(() => {
-      this.items.forEach((item) => {
-        item.clear();
-      });
-
-      this._keywordController.clear();
-      this._sortController.clear();
+    this.items.forEach((item) => {
+      item.clear();
     });
+
+    this._keywordController.clear();
+    this._sortController.clear();
   }
 
   public get queryParam(): Record<string, unknown> {
@@ -152,11 +142,11 @@ export class FilterController implements OnDestroy {
   }
 
   public set values(values: Record<string, unknown>) {
-    this.changeTransaction(() => {
-      this.items.forEach((item) => {
-        item.value = values[item.name];
-      });
+    this.items.forEach((item) => {
+      item.setValue(values[item.name], false);
     });
+
+    this.change();
   }
 
   public get values(): Record<string, unknown> {
@@ -249,8 +239,9 @@ export class FilterController implements OnDestroy {
   private _initChanges() {
     merge(
       ...this.items
-        .map((item) => item.value$
+        .map((item) => item.valueEvent$
           .pipe(
+            filter((event) => event.emitChange),
             map(() => item),
           )),
     )
@@ -262,7 +253,6 @@ export class FilterController implements OnDestroy {
 
     this._change$
       .pipe(
-        filter(() => this._emitChange),
         tap((items: BaseItem<IFilterConfigItem>[]) => {
           if (this._config.change) {
             this._config.change(this.query, this._sortController.getSort());

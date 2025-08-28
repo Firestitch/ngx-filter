@@ -26,11 +26,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     return this.value?.from instanceof Date || this.value?.to instanceof Date;
   }
 
-  public get value() {
-    return super.value;
-  }
-
-  public set value(value) {
+  public setValue(value, emitChange = true) {
     let from = value?.from;
     let to = value?.to;
 
@@ -43,7 +39,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       }
     }
 
-    super.value = { from, to };
+    super.setValue({ from, to }, emitChange);
   }
 
   public get queryParam(): Record<string, unknown> {

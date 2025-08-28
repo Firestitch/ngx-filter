@@ -1,14 +1,11 @@
 @for (item of items; track item.name) {
-  @let chips = item.chips$ | async;
-  @if (chips.length > 0) {
-    @for (chip of chips; track chip.label) {
-      <fs-chip
-          [removable]="item.showClear"
-          size="small"
-          (click)="click(item, chip)"
-          (removed)="remove(item, chip)">
-        {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
-      </fs-chip>
-    }
+  @for (chip of item.chips$ | async; track chip.label) {
+    <fs-chip
+        [removable]="item.showClear"
+        size="small"
+        (click)="click(item, chip)"
+        (removed)="remove(item, chip)">
+      {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
+    </fs-chip>
   }
 }

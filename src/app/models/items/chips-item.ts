@@ -66,12 +66,8 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     ] : [];
   }
 
-  public set value(value) {
-    super.value = Array.isArray(value) ? value : [];
-  }
-
-  public get value() {
-    return super.value;
+  public setValue(value, emitChange = true) {
+    super.setValue(Array.isArray(value) ? value : [], emitChange);
   }
 
   public clear() {

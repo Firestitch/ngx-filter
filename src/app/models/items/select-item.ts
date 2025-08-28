@@ -55,16 +55,14 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
       );
   }
 
-  public get value() {
+  public setValue(value, emitChange = true) {
     if(this.multiple) {
-      return Array.isArray(super.value) ? super.value : [];
+      value = Array.isArray(value) ? value : [];
+    } else {
+      value = Array.isArray(value) ? undefined : value;
     }
 
-    return super.value;
-  }
-  
-  public set value(value) {
-    super.value = value;
+    super.setValue(value, emitChange);
   }
 
   public get queryParam(): Record<string, unknown> {

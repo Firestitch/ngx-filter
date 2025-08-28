@@ -1,8 +1,5 @@
-import { isEmpty } from '@firestitch/common';
 import { formatPeriodObject } from '@firestitch/datepicker';
 
-import { isDate, isValid, parseISO } from 'date-fns';
-import { clone, isObject, isString } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { getRangeName } from '../../helpers/get-range-name';
@@ -29,59 +26,14 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
     return new WeekItem(config, null, filter);
   }
 
-  public get value() {
-    let value = clone(super.value);
-
-    if (!isObject(value) ||
-      (isEmpty(value.from, { zero: true }) && isEmpty(value.to, { zero: true }))) {
-      value = undefined;
-    }
-
-    if (isEmpty(value, { zero: true })) {
-      return undefined;
-    }
-
-    let from = value.from;
-    let to = value.to;
-    const period = value.period;
-
-    value = {};
-
-    if (from) {
-      if (isString(from)) {
-        from = parseISO(from);
-      }
-
-      if (isValid(from) && isDate(from)) {
-        value.from = from;
-      }
-    }
-
-    if (to) {
-      if (isString(to)) {
-        to = parseISO(to);
-      }
-
-      if (isValid(to) && isDate(to)) {
-        value.to = to;
-      }
-    }
-
-    if (period) {
-      value.period = isString(period) ? parseInt(period, 10) : period;
-    }
-
-    return value;
-  }
-
-  public set value(value) {
+  public setValue(value, emitChange = true) {
     if (value) {
       value.from = parseDate(value.from);
       value.to = parseDate(value.to);
       value.period = parseInt(value.period, 10) || undefined;
     }
 
-    super.value = value;
+    super.setValue(value, emitChange);
   }
 
   public get query() {

@@ -230,10 +230,6 @@ export class FilterComponent implements OnInit, OnDestroy {
       .filter((item) => !item.hidden);
   }
 
-  public get autoReload(): boolean {
-    return !!this.config.autoReload;
-  }
-
   public get hasFilterChips$(): Observable<boolean> {
     return this._hasFilterChips$.asObservable();
   }
@@ -543,7 +539,7 @@ export class FilterComponent implements OnInit, OnDestroy {
     if(this.config.autoReload) {
       interval(this.config.autoReload.seconds * 1000)
         .pipe(
-          filter(() => this.autoReload),
+          filter(() => this.config.autoReload.enabled),
           takeUntil(this._destroy$),
         )
         .subscribe(() => {

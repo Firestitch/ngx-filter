@@ -58,7 +58,10 @@ export class FsFilterConfig {
       init: data.init,
       change: data.change,
       reload: data.reload,
-      autoReload: data.autoReload,
+      autoReload: {
+        ...data.autoReload,
+        enabled: data.autoReload ? data.autoReload.enabled ?? true : false,
+      },
       clear: data.clear,
       sortChange: data.sortChange,
       case: data.case ?? 'camel',

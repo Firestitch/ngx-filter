@@ -49,7 +49,7 @@ export class CheckboxComponent extends BaseItemComponent<CheckboxItem> implement
   }
 
   public change() {
-    this.item.value = this.value;
+    this.item.setValue(this.value);
   }
   
 }

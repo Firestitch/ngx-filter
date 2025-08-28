@@ -23,18 +23,14 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     this.mode = itemConfig.mode || ItemDateMode.Calendar;
   }
 
-  public set value(value) {
+  public setValue(value, emitChange = true) {
     if (value) {
       if (!isDate(value) || !isValid(value)) {
         value = parseISO(value);
       }
     }
 
-    super.value = value;
-  }
-
-  public get value() {
-    return super.value;
+    super.setValue(value, emitChange);
   }
 
 }

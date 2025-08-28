@@ -87,19 +87,15 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     this.value = { ...value };
   }
 
-  public get value() {
-    return {
-      min: super.value?.min,
-      max: super.value?.max,
-    };
-  }
-
-  public set value(value) {
-    super.value = value;
-  }
-
   public get hasValue() {
     return this.value?.min !== undefined || super.value?.max !== undefined;
+  }
+
+  public setValue(value: { min?: string, max?: string }, emitChange: boolean = true) {
+    super.setValue({
+      min: value?.min,
+      max: value?.max,
+    }, emitChange);
   }
 
   public init(value: unknown): Observable<unknown> {

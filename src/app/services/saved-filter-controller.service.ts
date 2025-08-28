@@ -170,7 +170,8 @@ export class SavedFilterController implements OnDestroy {
         }, {}),
     };  
 
-    return this._filterController.config.savedFilters.save(savedFilter)
+    return this._filterController.config.savedFilters
+      .save(savedFilter)
       .pipe(
         tap((_savedFilter) => {
           this.savedFilters = this.activeFilter?.id ? this.savedFilters
@@ -189,7 +190,8 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public order(savedFilters: IFilterSavedFilter[]): Observable<IFilterSavedFilter[]> {
-    return this._filterController.config.savedFilters.order(savedFilters)
+    return this._filterController.config.savedFilters
+      .order(savedFilters)
       .pipe(
         tap(() => {
           this.savedFilters = [
@@ -200,7 +202,8 @@ export class SavedFilterController implements OnDestroy {
   }
 
   public delete(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
-    return this._filterController.config.savedFilters.delete(savedFilter)
+    return this._filterController.config.savedFilters
+      .delete(savedFilter)
       .pipe(
         tap(() => {
           this.savedFilters = this.savedFilters
@@ -222,10 +225,7 @@ export class SavedFilterController implements OnDestroy {
         throw new Error(`Saved filter cannot be activated, because it does not exists. Filter ID = ${savedFilter.id}`);
       }
 
-      this._filterController.changeTransaction(() => {
-        this._filterController.values = existingFilter.filters;
-      });
-      
+      this._filterController.values = existingFilter.filters;    
       this._activeFilter$.next(existingFilter);
     } else {
       this._activeFilter$.next(null);

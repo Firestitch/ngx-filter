@@ -8,7 +8,7 @@
     [placeholder]="item.label"
     [fsFilterFocusTrigger]="item"
     [(ngModel)]="value"
-    (ngModelChange)="change()"
+    (ngModelChange)="item.value = value"
     [seedDate]="item.seedDate"
     [clear]="item.showClear"
     [name]="item.name">

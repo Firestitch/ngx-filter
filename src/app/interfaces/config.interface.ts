@@ -41,7 +41,8 @@ export interface FilterConfig {
 }
 
 export interface FsFilterAutoReload {
-  seconds: number;
+  enabled?: boolean;
+  seconds?: number;
 }
 
 export type IFilterConfigItem =

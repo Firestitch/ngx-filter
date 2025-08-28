@@ -90,12 +90,8 @@ export class AutocompleteChipsItem
     return Array.isArray(super.value) && super.value.length > 0;
   }
 
-  public get value(): any[] {
-    return super.value || [];
-  }
-
-  public set value(value: any[]) {
-    super.value = value || [];
+  public setValue(value, emitChange = true) {
+    super.setValue(Array.isArray(value) ? value : [], emitChange);
   }
 
 }

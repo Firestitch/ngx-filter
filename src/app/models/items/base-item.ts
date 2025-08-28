@@ -1,7 +1,6 @@
 
 import { BehaviorSubject, forkJoin, Observable, of, Subject } from 'rxjs';
 import {
-  filter,
   map,
   switchMap,
   tap,
@@ -36,7 +35,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
   private _values$ = new BehaviorSubject<any[]>(null);
   private _destroy$ = new Subject<void>();
-  private _emitChange = true;
 
   constructor(
     itemConfig: T,
@@ -136,7 +134,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public get chips$() {
     return this.value$
       .pipe(
-        map(() => this.chips),
+        map(() => this.chips || []),
       );
   }
 
@@ -149,16 +147,16 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get values$(): Observable<any> {
-    return this._values$.asObservable()
-      .pipe(
-        filter(() => this._emitChange),
-      );
+    return this._values$.asObservable();
+  }
+
+  public get valueEvent$() {
+    return this._value$.asObservable();
   }
 
   public get value$() {
     return this._value$.asObservable()
       .pipe(
-        filter((event) => event.emitChange),
         map((event) => event.value),
       );
   }
@@ -166,7 +164,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public get value() {
     return this._value$.getValue().value;
   }
-  
+
   public set value(value) {
     this.setValue(value);
   }
@@ -239,12 +237,12 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public initValue(value: unknown) {
-    this.value = value === undefined ? this.defaultValue : value;
+    this.setValue(value === undefined ? this.defaultValue : value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public clear(name: string = null) {
-    this.value = this.defaultValue ?? undefined;
+    this.setValue(this.defaultValue ?? undefined);
   }
 
   public destroy() {
