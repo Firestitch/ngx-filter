@@ -13,7 +13,7 @@ import { FilterController } from './filter-controller.service';
 export class KeywordController {
 
   private _keywordItem$ = new BehaviorSubject<TextItem>(null);
-  private _keywordVisible$ = new BehaviorSubject(false);
+  private _keywordVisible$ = new BehaviorSubject(null);
   private _destroyRef = inject(DestroyRef);
   private _filterController: FilterController;
 
