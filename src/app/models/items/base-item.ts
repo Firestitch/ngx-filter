@@ -208,9 +208,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       this.loadValues(),
     ])
       .pipe(
-        tap(() => {
-          this.initValue(value);
-        }),
+        tap(() => this.initValue(value)), 
       );
   }
 

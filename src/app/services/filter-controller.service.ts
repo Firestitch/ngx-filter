@@ -91,7 +91,7 @@ export class FilterController implements OnDestroy {
           persistance: this._persistanceController.init(this),
           queryParams: this._queryParamController.init(this),
         })),
-        switchMap(() => this._initItems()),
+        switchMap(() => this._initItems()),        
         tap(() => this._initChanges()),
         tap(() => {
           this._init$.next();
@@ -207,7 +207,12 @@ export class FilterController implements OnDestroy {
         .map((item) => {
           return item.init(values[item.name]);
         }),
-    );
+    )
+      .pipe(
+        tap(() => this.items.forEach((item) => {
+          item.initCallback(item, this.filter);
+        })),
+      );
   }
 
   private _addItems(items: IFilterConfigItem[]) {

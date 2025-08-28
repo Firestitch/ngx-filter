@@ -164,9 +164,11 @@ export class KitchenSinkComponent implements OnInit {
           label: 'Single select',
           disableQueryParams: true,
           chipLabel: 'Special Label',
+          init: (item, initFilter: FilterComponent) => {
+            console.log('Item init', item, initFilter);
+          },
           change: (item, filterComponent: FilterComponent) => {
-            const filterItem = filterComponent.getItem('multiSelect');
-            filterItem.clear();
+            filterComponent.getItem('multiSelect').clear();
           },
           values: () => {
             return of(this.users)
