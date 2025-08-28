@@ -200,6 +200,10 @@ export class FilterController implements OnDestroy {
   }
 
   private _initItems(): Observable<any> {
+    if(!this.items.length) {
+      return of(null);
+    }
+    
     const values = this._getInitValues();
 
     return forkJoin(
