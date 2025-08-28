@@ -1,5 +1,5 @@
 
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 import type { FilterComponent } from '../../components/filter/filter.component';
@@ -42,24 +42,14 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
   
   public init(value: unknown): Observable<unknown> {
-    return super.init(value)
-      .pipe(
-        tap(() => {
-          if (this.isolate) {
-            // this.values = this.values
-            //   .filter((item) => {
-            //     return !this.isolateValues.includes(item.value as never);
-            //   });
-          }
-        }),
-      );
+    return super.init(value);
   }
 
   public setValue(value, emitChange = true) {
     if(this.multiple) {
       value = Array.isArray(value) ? value : [];
     } else {
-      value = Array.isArray(value) ? undefined : value;
+      value = Array.isArray(value) ? value[0] : value;
     }
 
     super.setValue(value, emitChange);
@@ -76,15 +66,6 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
 
   public get query(): Record<string, unknown> {
-    if(!this.hasValue && this.isolate) {
-      return {
-        [this.name]: this.values
-          .map((item) => {
-            return item.value;
-          })
-          .join(','),
-      };
-    }
     
     if(!this.hasValue) {
       return {};
@@ -125,7 +106,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
         }
 
         return this.multiple ? this.value
-          .includes(item.value) : +this.value === +item.value;
+          .includes(item.value) : `${this.value}` === `${item.value}`;
       })
       .map((item) => {
         return item.name;

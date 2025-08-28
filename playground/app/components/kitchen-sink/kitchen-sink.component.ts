@@ -61,8 +61,7 @@ export class KitchenSinkComponent implements OnInit {
 
   public users = [
     { id: 1, name: 'John Doe', color: 'red' },
-    { id: 2, name: 'Jane Doe' },
-    { id: 3, name: 'Bob Tom' },
+    { id: 2, name: 'Sam Smith' },
   ];
 
   public weekdays = [
@@ -103,15 +102,10 @@ export class KitchenSinkComponent implements OnInit {
     this.conf = {
       heading: 'Kitchen Sink',
       subheading: 'This is a subtitle',
-      inline: false,
       chips: true,
       autofocus: false,
       queryParam: true,
-      //persist: true,
-      sorts: [
-        { name: 'Name', value: 'name' },
-        { name: 'Date', value: 'date' },
-      ],
+      persist: false,
       actions: this._filterActions(),
       sort: {
         direction: 'desc',

@@ -71,12 +71,13 @@ export class QueryParamController {
 
   public updateQueryParams() {
     const queryParams = {
-      ...this._filterController.items.reduce((acc, item) => {
-        return {
-          ...acc,
-          [item.name]: undefined,
-        };
-      }, {}),
+      ...this._filterController.items
+        .reduce((acc, item) => {
+          return {
+            ...acc,
+            [item.name]: undefined,
+          };
+        }, {}),
       ...this.queryParams(),
     };
 
@@ -95,6 +96,6 @@ export class QueryParamController {
         }
       });
 
-    history.replaceState({}, null, url.pathname + url.search);
+    history.replaceState({}, null, url.pathname + decodeURIComponent(url.search));
   }
 }

@@ -19,14 +19,9 @@ import { FilterComponent } from '../../../../src/app/components/filter/filter.co
 export class DialogComponent {
 
   public conf: FilterConfig = {
-    inline: false,
     chips: true,
     autofocus: true,
     queryParam: true,
-    sorts: [
-      { name: 'Name', value: 'name' },
-      { name: 'Date', value: 'date' },
-    ],
     sort: {
       direction: 'desc',
       value: 'name',

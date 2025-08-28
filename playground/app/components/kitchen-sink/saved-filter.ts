@@ -8,7 +8,7 @@ export const SavedFilters: IFilterSavedFilter[] =
       filters: {
         singleSelect: 2,
         keyword: 'Test',
-        autocompletechips: [{ value: 1, name: 'John Doe' }, { value: 2, name: 'Jane Doe' }],
+        autocompletechips: [{ value: 1, name: 'John Doe' }, { value: 2, name: 'Sam Smith' }],
         dayChips: [{ value: 1, name: 'Monday' }],
         date: '2020-09-22T00:00:00+03:00',
       },

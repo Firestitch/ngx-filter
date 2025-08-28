@@ -33,7 +33,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   private _hidden$ = new BehaviorSubject(false);
   private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
-  private _values$ = new BehaviorSubject<any[]>(null);
+  private _values$ = new BehaviorSubject<{ name: string, value: string|null }[]>(null);
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -239,7 +239,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
  
           return of(this.values);
         }),
-        tap((values) => this.values = values || []),
+        tap((values) => {
+          this.values = (values || [])
+            .map((item) => ({
+              ...item,
+              value: (item.value ?? null) === null ? null : `${item.value}`,
+            }));
+        }),
       );
   }
 

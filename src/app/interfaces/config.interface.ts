@@ -14,7 +14,6 @@ import { IFilterConfigTextItem } from './items/text.interface';
 import { IFilterSavedFiltersConfig } from './saved-filters.interface';
 
 export interface FilterConfig {
-  inline?: boolean;
   load?: boolean;
   chips?: boolean;
   autofocus?: boolean;
@@ -26,7 +25,6 @@ export interface FilterConfig {
   items?: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;
-  sorts?: SortItem[];
   sort?: Sort;
   sortChange?: ChangeFn;
   reloadWhenConfigChanged?: boolean;
@@ -88,7 +86,6 @@ export interface FilterSort {
 export interface FsFilterPersistanceConfig {
   name?: string;
   timeout?: number;
-  persistQuery?: boolean;
 }
 
 export type FsFilterPersistance = boolean | FsFilterPersistanceConfig;

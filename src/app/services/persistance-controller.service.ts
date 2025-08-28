@@ -38,21 +38,21 @@ export class PersistanceController {
   public init(filterController: FilterController): Observable<any> {
     this._filterController = filterController;
     
-    const config = this._initConfig(filterController.config.persist, this.inDialog);
+    const persistanceConfig = this._initConfig(filterController.config.persist);
 
-    if(config) {
-      this.enabled = config.persistQuery;
-      this._name = config.name;
+    if(persistanceConfig) {
+      this.enabled = !this.inDialog;
+      this._name = persistanceConfig.name;
       this._data = this._get() || {};
+    
+      this._filterController.change$
+        .pipe(
+          takeUntilDestroyed(this._destroyRef),
+        )
+        .subscribe(() => {
+          this._set('query', this._filterController.values);
+        });
     }
-
-    this._filterController.change$
-      .pipe(
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe(() => {
-        this._set('query', this._filterController.values);
-      });
 
     return of(null);
   }
@@ -83,13 +83,12 @@ export class PersistanceController {
     return {};
   }
 
-  private _initConfig(config: FsFilterPersistance, inDialog: boolean): FsFilterPersistanceConfig {
+  private _initConfig(config: FsFilterPersistance): FsFilterPersistanceConfig {
     let persistanceConfig = this._getConfig(config);
 
     if(persistanceConfig) {
       persistanceConfig = {
         name: persistanceConfig.name || getNormalizedPath(this._location),
-        persistQuery: !inDialog || !!persistanceConfig.name,
         ...persistanceConfig,
       };
     }
