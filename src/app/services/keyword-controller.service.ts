@@ -1,6 +1,6 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 
-import { BehaviorSubject, distinctUntilChanged, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, Observable, switchMap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -21,6 +21,7 @@ export class KeywordController {
     this._filterController = filterController;
     this._keywordItem$
       .pipe(
+        filter((item) => !!item),
         // when item changes, unsubscribe from the previous visible$
         switchMap((item) => item.visible$),
         // avoid redundant writes
