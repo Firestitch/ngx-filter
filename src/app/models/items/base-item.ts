@@ -169,6 +169,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.setValue(value);
   }
 
+  /**
+   * @deprecated Use value instead
+   */
+  public set model(value) {
+    this.value = value;
+  }
+
   public setValue(value: unknown, emitChange: boolean = true) {
     this._value$.next({ value, emitChange });
   }

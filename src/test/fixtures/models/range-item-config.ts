@@ -1,5 +1,5 @@
+import { ItemType } from '../../../app/enums/item-type.enum';
 import { IFilterConfigRangeItem } from '../../../app/interfaces/items/range.interface';
-import { ItemType } from '../../../app/enums/item-type.enum'
 
 
 export const RangeItemFullConfig: Readonly<IFilterConfigRangeItem> = {

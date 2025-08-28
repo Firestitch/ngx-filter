@@ -225,6 +225,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._filterController.items;
   }
 
+  public change() {
+    this._filterController.change();
+  }
+
   public get visibleItems() {
     return this._filterController.items
       .filter((item) => !item.hidden);
@@ -432,6 +436,13 @@ export class FilterComponent implements OnInit, OnDestroy {
   public getItem(name): BaseItem<any> {
     return this.items
       .find((item) => item.name === name);
+  }
+
+  /**
+   * @deprecated Use item(name).value$ instead
+   */
+  public getItemValueChange$(name: string) {
+    return this.getItem(name).value$;
   }
 
   /**
