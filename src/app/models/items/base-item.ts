@@ -269,10 +269,12 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   private _initConfig(item: T) {
+    const hidden = item.hide ?? !(item.show ?? true);
+    
     this.name = item.name;
     this.label = item.label;
     this.chipLabel = item.chipLabel;
-    this._hidden$.next(item.hide ?? false);
+    this._hidden$.next(hidden);
     this.showClear = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
