@@ -488,7 +488,7 @@ export class KitchenSinkComponent implements OnInit {
         click: () => {
           this.filter.updateActions(this._doneAction());
           this.filter.hideKeywordField();
-          this.filter.hideFiltersBtn();
+          this.filter.hideFilters();
         },
       },
       {
@@ -508,7 +508,7 @@ export class KitchenSinkComponent implements OnInit {
         click: () => {
           this.filter.updateActions(this._filterActions());
           this.filter.showKeywordField();
-          this.filter.showFiltersBtn();
+          this.filter.showFilters();
         },
       },
     ];

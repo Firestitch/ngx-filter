@@ -128,7 +128,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public fsFilterClass = true;
 
   private _config: FsFilterConfig;
-  private _filtersBtnVisible$ = new BehaviorSubject(true);
+  private _filtersVisible$ = new BehaviorSubject(true);
   private _hasFilterChips$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
@@ -229,21 +229,24 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._filterController.change();
   }
 
-  public get visibleItems() {
-    return this._filterController.items
-      .filter((item) => !item.hidden);
-  }
-
   public get hasFilterChips$(): Observable<boolean> {
     return this._hasFilterChips$.asObservable();
   }
 
-  public get hasVisibleItemOrSorting(): boolean {
-    return this.visibleItems.length > 0;
-  }
-
-  public get filtersBtnVisible$(): Observable<boolean> {
-    return this._filtersBtnVisible$.asObservable();
+  public get filtersVisible$(): Observable<boolean> {
+    return combineLatest({
+      filtersVisible: this._filtersVisible$.asObservable(),
+      hasVisibleItems: of(
+        this.items
+          .filter((item) => !item.hidden && !item.isTypeKeyword)
+          .length > 0,
+      ),
+    })
+      .pipe(
+        map(({ filtersVisible, hasVisibleItems }) => {
+          return filtersVisible && hasVisibleItems;
+        }),
+      );
   }
 
   public get keywordVisible$(): Observable<boolean> {
@@ -320,10 +323,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public showDrawer() {
-    if (!this.hasVisibleItemOrSorting) {
-      return;
-    }
-
     this._listenEscButton();
 
     this.opened.emit();
@@ -457,29 +456,29 @@ export class FilterComponent implements OnInit, OnDestroy {
   /**
    * Show "Filters" button
    */
-  public showFiltersBtn(): void {
-    this._filtersBtnVisible$.next(true);
+  public showFilters(): void {
+    this._filtersVisible$.next(true);
   }
 
   /**
    * Hide "Filters" button
    */
-  public hideFiltersBtn(): void {
-    this._filtersBtnVisible$.next(false);
+  public hideFilters(): void {
+    this._filtersVisible$.next(false);
   }
 
   /**
    * Show "Keyword" field if it present
    */
   public showKeywordField(): void {
-    this.keywordInput.show();
+    this._keywordController.show();
   }
 
   /**
    * Hide "Keyword" field if it present
    */
   public hideKeywordField(): void {
-    this.keywordInput.hide();
+    this._keywordController.hide();
   }
 
   /**

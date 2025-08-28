@@ -40,7 +40,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
 
   public get query(): Record<string, unknown> {
-    if(!this.value) {
+    if(!this.hasValue) {
       return {};
     }
 
@@ -52,19 +52,24 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   }
   
   public get chips(): { name?: string, value: string, label: string }[] {
-    return this.hasValue ? [
-      {
-        value: this.value
-          .reduce((acc, i) => {
-            acc.push((`${i.name}`).trim());
+    if(!this.hasValue) {
+      return [];
+    }
 
-            return acc;
-          }, [])
-          .join(', '),
-        label: this.label,
-      },
-    ] : [];
+    const chips = this.value
+      .reduce((acc, i) => {
+        acc.push((`${i.name}`).trim());
+
+        return acc;
+      }, [])
+      .join(', ');
+
+    return [{
+      value: chips,
+      label: this.label,
+    }];
   }
+
 
   public setValue(value, emitChange = true) {
     super.setValue(Array.isArray(value) ? value : [], emitChange);

@@ -52,9 +52,9 @@
   }
 </ng-template>
 <ng-template #filterToolbar>
-  @if (config.reload || config.autoReload || ((filtersBtnVisible$ | async) && hasVisibleItemOrSorting)) {
+  @if (config.reload || config.autoReload || (filtersVisible$ | async)) {
     <div class="filter-toolbar">
-      @if ((filtersBtnVisible$ | async) && hasVisibleItemOrSorting) {
+      @if ((filtersVisible$ | async)) {
         <a
             mat-icon-button
             class="button-filters"
