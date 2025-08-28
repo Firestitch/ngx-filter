@@ -1,4 +1,3 @@
-import { tap } from 'rxjs/operators';
 
 import { toString } from 'lodash-es';
 
@@ -22,15 +21,6 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     this._checked = itemConfig.checked ? toString(itemConfig.checked) : 'true';
     this._unchecked = itemConfig.unchecked ? toString(itemConfig.unchecked) : undefined;
     this.defaultValue = itemConfig.default;
-  }
-
-  public init(value) {
-    return super.init(value)
-      .pipe(
-        tap(() => {
-          this.value = value === 'true' || value === true;
-        }),
-      );
   }
 
   public get checked(): boolean {
@@ -74,7 +64,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     }
 
     return {
-      [this.name]: this.checked,
+      [this.name]: 'true',
     };
   }
 
