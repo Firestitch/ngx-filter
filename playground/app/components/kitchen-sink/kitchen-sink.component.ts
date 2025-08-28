@@ -62,6 +62,8 @@ export class KitchenSinkComponent implements OnInit {
   public users = [
     { id: 1, name: 'John Doe', color: 'red' },
     { id: 2, name: 'Sam Smith' },
+    { id: 3, name: 'Billy Bob' },
+    { id: 4, name: 'James Bond' },
   ];
 
   public weekdays = [
@@ -261,7 +263,6 @@ export class KitchenSinkComponent implements OnInit {
           values: (keyword) => {
             return of(this.users)
               .pipe(
-                tap(() => console.log('load autocomplete_user_id')),
                 map((users) => this._filterUsersByKeyword(users, keyword || '')),
                 map((users) => nameValue(users, 'name', 'id')),
                 map((users) => users.map((user, index) => {

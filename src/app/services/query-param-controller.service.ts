@@ -89,10 +89,11 @@ export class QueryParamController {
 
     Object.keys(data)
       .forEach((name) => {
-        if(data[name] === undefined || data[name] === null) {
+        const value = data[name];
+        if(value === undefined || value === null) {
           url.searchParams.delete(name);
         } else {
-          url.searchParams.set(name,data[name]);
+          url.searchParams.set(name, value);
         }
       });
 

@@ -49,14 +49,15 @@ export function parseItemValueFromStored(item, params) {
 
     case ItemType.AutoCompleteChips: 
     case ItemType.Chips: {
-      const filterParts = param.split(',');
+      const filterParts = param.split(/(?<!\\),/);
 
       return filterParts.reduce((arry, value) => {
-
         const chipParts = filterFromQueryParam(value);
 
         arry.push({
-          name: chipParts[1],
+          name: chipParts[1]
+            .replace(/\\,/g, ',')
+            .replace(/\\:/g, ':'),
           value: chipParts[0],
         });
 

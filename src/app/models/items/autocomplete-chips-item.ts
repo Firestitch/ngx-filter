@@ -1,5 +1,6 @@
 
 import type { FilterComponent } from '../../components/filter/filter.component';
+import { encodeQueryParam } from '../../helpers';
 import { IFilterConfigAutocompleteChipsItem } from '../../interfaces/items/autocomplete-chips.interface';
 
 import { BaseAutocompleteItem } from './base-autocomplete-item';
@@ -42,10 +43,13 @@ export class AutocompleteChipsItem
     if(!this.hasValue) {
       return {};
     }
-  
+
     return {
       [this.name]: this.value
-        .map((item) => `${item.value}:${item.name}`)
+        .filter((item) => !!item.value)
+        .map((item) =>{
+          return `${item.value}:${encodeQueryParam(item.name)}`;
+        })
         .join(','),
     };
   }
