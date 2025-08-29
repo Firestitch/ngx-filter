@@ -253,7 +253,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public clear(name: string = null) {
-    this.setValue(this.defaultValue ?? undefined);
+    this.value = undefined;
   }
 
   public destroy() {

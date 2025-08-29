@@ -38,7 +38,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
 
   public clear() {
-    this.value = this.multiple ? [] : null;
+    this.value = this.multiple ? [] : undefined;
   }
   
   public init(value: unknown): Observable<unknown> {
