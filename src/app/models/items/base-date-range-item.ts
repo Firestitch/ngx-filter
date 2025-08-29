@@ -109,23 +109,17 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     name: string = null,
   ) {
     if (name === 'from') {
-      delete this.value.from;
-
-      if (this.defaultValue?.from) {
-        this.value.from = this.defaultValue.from;
-      }
-
-      this.value = { ...this.value };
+      this.value = { 
+        ...this.value,
+        from: null,
+      };
     } else if (name === 'to') {
-      delete this.value.to;
-
-      if (this.defaultValue?.to) {
-        this.value.to = this.defaultValue.to;
-      }
-
-      this.value = { ...this.value };
+      this.value = { 
+        ...this.value,
+        to: null,
+      };
     } else {
-      this.value = this.defaultValue ? { ...this.defaultValue } : {};
+      this.value = {};
     }
   }
 
