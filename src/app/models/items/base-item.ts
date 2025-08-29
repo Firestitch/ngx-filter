@@ -21,7 +21,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public chipLabel: string | string[];
   public defaultValueFn: IFilterDefaultFn;
   public defaultValue: any;
-  public showClear: boolean;
+  public clearable: boolean;
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
@@ -275,7 +275,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.label = item.label;
     this.chipLabel = item.chipLabel;
     this._hidden$.next(hidden);
-    this.showClear = item.clear ?? true;
+    this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
 

@@ -110,9 +110,11 @@ export class FilterController implements OnDestroy {
   }
 
   public filtersClear() {
-    this.items.forEach((item) => {
-      item.clear();
-    });
+    this.items
+      .filter((item) => item.clearable)
+      .forEach((item) => {
+        item.clear();
+      });
 
     this._keywordController.clear();
     this._sortController.clear();

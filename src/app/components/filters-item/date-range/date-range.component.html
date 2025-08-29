@@ -8,7 +8,7 @@
     [focusTargetType]="'from'"
     [fsDateRangeFrom]="item.name"
     [(ngModel)]="from"
-    [clear]="item.showClear"
+    [clear]="item.clearable"
     [view]="viewType"
     (ngModelChange)="change()"
     name="date_from">
@@ -24,7 +24,7 @@
     [fsDateRangeTo]="item.name"
     [(ngModel)]="to"
     (ngModelChange)="change()"
-    [clear]="item.showClear"
+    [clear]="item.clearable"
     [view]="viewType"
     name="date_to">
 </mat-form-field>

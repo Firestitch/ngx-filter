@@ -14,7 +14,7 @@
       [showMonth]="showMonth"
       [showDay]="showDay"
       [showYear]="showYear"
-      [clear]="item.showClear"
+      [clear]="item.clearable"
       [name]="item.name">
   </mat-form-field>
 } @else if (item.mode === itemDateMode.Calendar) {
@@ -31,7 +31,7 @@
       [maxYear]="item.maxYear"
       [view]="viewType"
       [placeholder]="item.label"
-      [clear]="item.showClear"
+      [clear]="item.clearable"
       [name]="item.name">
   </mat-form-field>
 }

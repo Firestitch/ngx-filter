@@ -292,7 +292,7 @@ export class KitchenSinkComponent implements OnInit {
           name: 'showDeleted',
           type: ItemType.Checkbox,
           label: 'Show Deleted',
-          //  default: true,
+          default: true,
           unchecked: 'active',
           checked: 'deleted',
         },
