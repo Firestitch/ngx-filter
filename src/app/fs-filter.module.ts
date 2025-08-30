@@ -26,7 +26,6 @@ import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.d
 import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
 import { FS_FILTER_CONFIG } from './injectors/filter-config';
 import { FilterConfig } from './interfaces/config.interface';
-import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
 
 
 @NgModule({
@@ -53,7 +52,6 @@ import { FsFilterIsolateValues } from './pipes/remove-isolate-value.pipe';
     FsFilterActionKebabActionsComponent,
     FilterStatusBarDirective,
     FocusToItemDirective,
-    FsFilterIsolateValues,
   ],
   providers: [
     FsStore,

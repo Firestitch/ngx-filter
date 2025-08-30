@@ -12,6 +12,7 @@ import {
   FilterComponent,
   FilterConfig,
   FilterSort,
+  IFilterConfigItem,
   ItemType,
   SortItem,
 } from '@firestitch/filter';
@@ -113,10 +114,10 @@ export class KitchenSinkComponent implements OnInit {
         direction: 'desc',
         value: 'name',
       },
-      autoReload: {
-        enabled: false,
-        seconds: 5,
-      },
+      // autoReload: {
+      //   enabled: false,
+      //   seconds: 5,
+      // },
       change: (query, sort) => {
         const hasValues = this.filter.items
           .filter((item) => item.hasValue)
@@ -154,183 +155,13 @@ export class KitchenSinkComponent implements OnInit {
         this.sort = sort;
         this._cdRef.detectChanges();
       },
-      items: [
-        {
-          name: 'keyword',
-          type: ItemType.Keyword,
-          label: 'Search',
-        },
-        {
-          name: 'simpleSelect',
-          type: ItemType.Select,
-          label: 'Single select',
-          disableQueryParams: true,
-          chipLabel: 'Special Label',
-          init: (item, initFilter: FilterComponent) => {
-            console.log('Item init', item, initFilter);
-          },
-          change: (item, filterComponent: FilterComponent) => {
-            filterComponent.getItem('multiSelect').clear();
-          },
-          values: () => {
-            return of(this.users)
-              .pipe(
-                map((users) => nameValue(users, 'name', 'id')),
-              );
-          },
-        },
-        {
-          name: 'groupSelect',
-          type: ItemType.Select,
-          label: 'Grouped select',
-          disablePersist: true,
-          children: 'types',
-          values: () => {
-            return this.subject;
-          },
-        },      
-        {
-          name: 'multiSelect',
-          type: ItemType.Select,
-          label: 'Multi select',
-          multiple: true,
-          values: [
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' },
-          ],
-        },    
-        {
-          name: 'isolateSelect',
-          type: ItemType.Select,
-          label: 'Isolate select',
-          multiple: true,
-          values: [
-            { name: 'Active', value: 'active' },
-            { name: 'Pending', value: 'pending' },
-            { name: 'Deleted', value: 'deleted' },
-          ],
-          isolate: {
-            label: 'Show deleted',
-            value: 'deleted',
-          },
-        },
-        {
-          name: 'range',
-          type: ItemType.Range,
-          prefix: '$&nbsp;',
-          label: ['Min Price', 'Max Price'],
-          chipLabel: ['Custom Min Price', 'Custom Max Price'],
-        },
-        // {
-        //   name: 'autocompleteUserId',
-        //   label: 'Autocomplete User',
-        //   type: ItemType.AutoComplete,
-        //   change: (item) => {
-        //     console.log('Item Change', item);
-        //   },
-        //   init: (item) => {
-        //     console.log('Item Init', item);
-        //   },
-        //   values: (keyword) => {
-        //     return of(this.users)
-        //       .pipe(
-        //         tap(() => console.log('load autocomplete_user_id')),
-        //         map((users) => this._filterUsersByKeyword(users, keyword)),
-        //         map((users) => nameValue(users, 'name', 'id')),
-        //       );
-        //   },
-        // },
-        {
-          name: 'autocompletechips',
-          label: 'Autocomplete Chips',
-          type: ItemType.AutoCompleteChips,
-          chipImage: 'data.image',
-          panelActions: [
-            {
-              label: 'Add User',
-              click: (filterComponent: FilterComponent) => {
-                console.log('Added User', filterComponent);
-                const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
-                const item = filterComponent.getItem('autocompletechips');
-                item.value = [
-                  ...item.value, 
-                  { value: randomUser.id, name: randomUser.name },
-                ];
-              },
-            },
-          ],
-          values: (keyword) => {
-            return of(this.users)
-              .pipe(
-                map((users) => this._filterUsersByKeyword(users, keyword || '')),
-                map((users) => nameValue(users, 'name', 'id')),
-                map((users) => users.map((user, index) => {
-                  user.data = {
-                    image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
-                  };
-
-                  return user;
-                })),
-                tap(console.log),
-              );
-          },
-        },
-        {
-          name: 'dayChips',
-          label: 'Weekdays',
-          type: ItemType.Chips,
-          multiple: true,
-          values: () => {
-            return of(this.weekdays)
-              .pipe(
-                map((weekdays) => nameValue(weekdays, 'name', 'id')),
-              );
-          },
-        },
-        {
-          name: 'showDeleted',
-          type: ItemType.Checkbox,
-          label: 'Show Deleted',
-          default: true,
-          unchecked: 'active',
-          checked: 'deleted',
-        },
-        {
-          name: 'date',
-          type: ItemType.Date,
-          label: 'Date',
-          clear: false,
-        },
-        {
-          name: 'dateRange',
-          type: ItemType.DateRange,
-          label: ['From Date', 'To Date'],
-        },
-        {
-          name: 'scrollDate',
-          type: ItemType.Date,
-          label: 'Scroll Date',
-          maxYear: (new Date()).getFullYear(),
-          mode: ItemDateMode.ScrollMonthYear,
-        },
-        {
-          name: 'week',
-          type: ItemType.Week,
-          label: 'Week',
-        },
-        {
-          name: 'maxPrice',
-          type: ItemType.Text,
-          label: 'Max Price',
-        },
-      ],  
+      items: this._filterItems(),  
       savedFilters: {
-        label: {
-          singular: 'Alert',
-          plural: 'Alerts',
-          icon: 'notifications',
-        },        
+        // label: {
+        //   singular: 'Alert',
+        //   plural: 'Alerts',
+        //   icon: 'notifications',
+        // },        
         load: () => {
           console.log('<====== Load Saved Filters =====>');
 
@@ -389,6 +220,180 @@ export class KitchenSinkComponent implements OnInit {
 
     //   this.conf.items.pop();
     // },3000)
+  }
+
+  private _filterItems(): IFilterConfigItem[] {
+    return [
+      {
+        name: 'keyword',
+        type: ItemType.Keyword,
+        label: 'Search',
+      },
+      {
+        name: 'simpleSelect',
+        type: ItemType.Select,
+        label: 'Single select',
+        disableQueryParams: true,
+        chipLabel: 'Special Label',
+        init: (item, initFilter: FilterComponent) => {
+          console.log('Item init', item, initFilter);
+        },
+        change: (item, filterComponent: FilterComponent) => {
+          filterComponent.getItem('multiSelect').clear();
+        },
+        values: () => {
+          return of(this.users)
+            .pipe(
+              map((users) => nameValue(users, 'name', 'id')),
+            );
+        },
+      },
+      {
+        name: 'groupSelect',
+        type: ItemType.Select,
+        label: 'Grouped select',
+        disablePersist: true,
+        children: 'types',
+        values: () => {
+          return this.subject;
+        },
+      },      
+      {
+        name: 'multiSelect',
+        type: ItemType.Select,
+        label: 'Multi select',
+        multiple: true,
+        values: [
+          { name: 'Active', value: 'active' },
+          { name: 'Pending', value: 'pending' },
+          { name: 'Deleted', value: 'deleted' },
+        ],
+      },    
+      {
+        name: 'isolateSelect',
+        type: ItemType.Select,
+        label: 'Isolate select',
+        multiple: true,
+        values: [
+          { name: 'Active', value: 'active' },
+          { name: 'Pending', value: 'pending' },
+          { name: 'Deleted', value: 'deleted' },
+        ],
+        isolate: {
+          label: 'Show deleted',
+          value: 'deleted',
+        },
+      },
+      {
+        name: 'range',
+        type: ItemType.Range,
+        prefix: '$&nbsp;',
+        label: ['Min Price', 'Max Price'],
+        chipLabel: ['Custom Min Price', 'Custom Max Price'],
+      },
+      // {
+      //   name: 'autocompleteUserId',
+      //   label: 'Autocomplete User',
+      //   type: ItemType.AutoComplete,
+      //   change: (item) => {
+      //     console.log('Item Change', item);
+      //   },
+      //   init: (item) => {
+      //     console.log('Item Init', item);
+      //   },
+      //   values: (keyword) => {
+      //     return of(this.users)
+      //       .pipe(
+      //         tap(() => console.log('load autocomplete_user_id')),
+      //         map((users) => this._filterUsersByKeyword(users, keyword)),
+      //         map((users) => nameValue(users, 'name', 'id')),
+      //       );
+      //   },
+      // },
+      {
+        name: 'autocompletechips',
+        label: 'Autocomplete Chips',
+        type: ItemType.AutoCompleteChips,
+        chipImage: 'data.image',
+        panelActions: [
+          {
+            label: 'Add User',
+            click: (filterComponent: FilterComponent) => {
+              console.log('Added User', filterComponent);
+              const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
+              const item = filterComponent.getItem('autocompletechips');
+              item.value = [
+                ...item.value, 
+                { value: randomUser.id, name: randomUser.name },
+              ];
+            },
+          },
+        ],
+        values: (keyword) => {
+          return of(this.users)
+            .pipe(
+              map((users) => this._filterUsersByKeyword(users, keyword || '')),
+              map((users) => nameValue(users, 'name', 'id')),
+              map((users) => users.map((user, index) => {
+                user.data = {
+                  image: `https://randomuser.me/api/portraits/men/${index}.jpg`,
+                };
+
+                return user;
+              })),
+              tap(console.log),
+            );
+        },
+      },
+      {
+        name: 'dayChips',
+        label: 'Weekdays',
+        type: ItemType.Chips,
+        multiple: true,
+        values: () => {
+          return of(this.weekdays)
+            .pipe(
+              map((weekdays) => nameValue(weekdays, 'name', 'id')),
+            );
+        },
+      },
+      {
+        name: 'showDeleted',
+        type: ItemType.Checkbox,
+        label: 'Show Deleted',
+        // default: true,
+        unchecked: 'active',
+        checked: 'deleted',
+      },
+      {
+        name: 'date',
+        type: ItemType.Date,
+        label: 'Date',
+        clear: false,
+      },
+      {
+        name: 'dateRange',
+        type: ItemType.DateRange,
+        label: ['From Date', 'To Date'],
+      },
+      {
+        name: 'scrollDate',
+        type: ItemType.Date,
+        label: 'Scroll Date',
+        maxYear: (new Date()).getFullYear(),
+        mode: ItemDateMode.ScrollMonthYear,
+      },
+      {
+        name: 'week',
+        type: ItemType.Week,
+        label: 'Week',
+      },
+      {
+        name: 'maxPrice',
+        type: ItemType.Text,
+        label: 'Max Price',
+      },
+    ];
   }
 
   private _filterActions(): FsFilterAction[] {

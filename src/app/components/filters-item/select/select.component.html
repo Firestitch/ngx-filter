@@ -10,7 +10,7 @@
     @if (item.children) {
       @for (option of item.values$ | async; track option) {
         <mat-optgroup [label]="option.name">
-          @for (childOption of option[item.children] | fsFilterIsolateValues: item.isolate; track childOption.value) {
+          @for (childOption of option[item.children]; track childOption.value) {
             <mat-option [value]="childOption.value">
               {{ childOption.name }}
             </mat-option>
@@ -18,7 +18,7 @@
         </mat-optgroup>
       }
     } @else {
-      @for (option of item.values$ | async | fsFilterIsolateValues: item.isolate; track option) {
+      @for (option of item.values$ | async; track option) {
         <mat-option [value]="option.value">
           {{ option.name }}
         </mat-option>
@@ -29,7 +29,7 @@
     @if (item.isolate) {
       <mat-checkbox
           (change)="isolateChange($event)"
-          [(ngModel)]="isolated">
+          [(ngModel)]="item.isolated">
         <span class="checkbox-label">
           {{ item.isolateLabel }}
         </span>

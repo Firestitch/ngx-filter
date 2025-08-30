@@ -54,10 +54,9 @@
   .button-filters,
   .button-reload {
     display: flex;
-    width: 40px;
+
+    --mdc-icon-button-state-layer-size: 40px;
     padding: 8px;
-    height: 40px;
-    overflow: hidden;
 
     ::ng-deep svg {
       display: flex;

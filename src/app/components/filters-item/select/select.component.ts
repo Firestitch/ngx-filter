@@ -22,7 +22,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
 import { SelectItem } from '../../../models/items/select-item';
-import { FsFilterIsolateValues } from '../../../pipes/remove-isolate-value.pipe';
 
 
 @Component({
@@ -43,7 +42,6 @@ import { FsFilterIsolateValues } from '../../../pipes/remove-isolate-value.pipe'
     MatOptgroup,
     MatHint,
     MatCheckbox,
-    FsFilterIsolateValues,
     AsyncPipe,  
   ],
 })
@@ -56,14 +54,23 @@ export class SelectComponent implements OnInit {
   public select: MatSelect;
 
   public value: any;
-  public isolated: boolean;
 
   private _cdRef = inject(ChangeDetectorRef);
   private _destroyRef = inject(DestroyRef);
 
   public changed() {
-    this.item.value = this.value;
-    this.isolated = false;
+    let value = this.value;
+    if(this.item.isolate) {
+      if(this.item.multiple) {
+        value = value.filter((v) => {
+          return !this.item.isolateValues.includes(v.value as never);
+        });
+      }
+
+      this.item.isolated = false;
+    }
+
+    this.item.value = value;
   }
 
   public ngOnInit(): void {

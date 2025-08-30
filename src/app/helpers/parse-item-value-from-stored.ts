@@ -78,26 +78,5 @@ function itemTypeSelect(item: SelectItem, param) {
 
   const values = param.split(',');
 
-  if (item.isolate) {
-    const isolatedValue =  item.isolateValues;
-
-    item.isolate = arraysHaveSameElements(isolatedValue, values);
-
-    return item.isolate
-      ? isolatedValue
-      : values;
-  }
-
   return values;
-}
-
-
-function arraysHaveSameElements(arr1: unknown[], arr2: unknown[]): boolean {
-
-  arr1 = [...arr1].sort();
-  arr2 = [...arr2].sort();
-
-  return arr1.some((item) => {
-    return arr2.includes(item);
-  });
 }

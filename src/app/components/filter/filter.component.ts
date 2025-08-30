@@ -238,8 +238,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       filtersVisible: this._filtersVisible$.asObservable(),
       hasVisibleItems: of(
         this.items
-          .filter((item) => !item.hidden && !item.isTypeKeyword)
-          .length > 0,
+          .some((item) => !item.hidden && !item.isTypeKeyword),
       ),
     })
       .pipe(

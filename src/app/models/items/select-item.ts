@@ -1,5 +1,5 @@
 
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 
 import type { FilterComponent } from '../../components/filter/filter.component';
@@ -13,6 +13,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   public declare children: string;
   public declare multiple: boolean;
   public declare isolate: boolean;
+  public declare isolated: boolean;
   public declare isolateLabel: string;
   public declare isolateValues: number[] | string[] | boolean[];
 
@@ -42,7 +43,33 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
   
   public init(value: unknown): Observable<unknown> {
-    return super.init(value);
+    return super.init(value)
+      .pipe(
+        tap(() => {
+          if(this.isolate) {
+            const v = Array.isArray(value) ? value : [value];
+            this.isolated = v.some((_v) => {
+              return this.isolateValues.includes(_v as never);
+            });
+          }
+        }),
+      );
+  }
+
+  public get values$(): Observable<any> {
+    return super.values$
+      .pipe(
+        map((values) => { 
+          if(!this.isolate) {
+            return values;
+          }
+
+          return values
+            .filter((value) => {
+              return !this.isolateValues.includes(value.value as never);
+            });
+        }),
+      );
   }
 
   public setValue(value, emitChange = true) {
@@ -66,7 +93,6 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
 
   public get query(): Record<string, unknown> {
-    
     if(!this.hasValue) {
       return {};
     }
@@ -101,10 +127,6 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
 
     const options = this.flattenedValues
       .filter((item) => {
-        if(this.isolate && this.isolateValues.includes(item.value as never)) {
-          return true;
-        }
-
         return this.multiple ? this.value
           .includes(item.value) : `${this.value}` === `${item.value}`;
       })
