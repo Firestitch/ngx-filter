@@ -80,6 +80,11 @@ export class SelectComponent implements OnInit {
       )
       .subscribe((value) => {
         this.value = value;
+
+        if(this.item.isolate && !this.item.hasValue) {
+          this.item.isolated = false;
+        }
+
         this._cdRef.detectChanges();
       });
   }

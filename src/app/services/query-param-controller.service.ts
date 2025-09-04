@@ -14,6 +14,7 @@ import { SortController } from './sort-controller.service';
 
 @Injectable()
 export class QueryParamController {
+  
   private _destroyRef = inject(DestroyRef);
   private _enabled = false;
   private _sortController = inject(SortController);
