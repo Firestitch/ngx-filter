@@ -252,22 +252,15 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordVisible$;
   }
 
-  public get inlineToolbar$(): Observable<boolean> {
+  public get filterInputVisible$(): Observable<boolean> {
     return combineLatest({
       keywordVisible: this.keywordVisible$,
-      activeFilter: of(this.savedFilterController.enabled),
+      savedFilterVisible: of(this.savedFilterController.enabled),
     })
       .pipe(
-        map(({ keywordVisible, activeFilter }) => {
-          return !keywordVisible && !activeFilter;
+        map(({ keywordVisible, savedFilterVisible }) => {
+          return keywordVisible || savedFilterVisible;
         }),
-      );
-  }
-
-  public get notInlineToolbar$(): Observable<boolean> {
-    return this.inlineToolbar$
-      .pipe(
-        map((inline) => !inline),
       );
   }
 

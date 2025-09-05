@@ -1,27 +1,29 @@
 <div class="filter-container">
-  @if (notInlineToolbar$ | async) {
+  @if (filterInputVisible$ | async) {
     <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
   <div class="filter-inner-container">
-    @if (notInlineToolbar$ | async) {
-      <div class="filter-inner-inputs">
-        @if (keywordVisible$ | async) {
-          <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
-        }
-        @if (savedFilterController.enabled) {
-          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
-        }
-      </div>
-    } @else {
-      <div>
+    <div class="filter-left-container">
+      @if (filterInputVisible$ | async) {
+        <div class="filter-inner-inputs">
+          @if (keywordVisible$ | async) {
+            <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
+          }
+          @if (savedFilterController.enabled) {
+            <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
+          }
+        </div>
+      } @else {
         <ng-container *ngTemplateOutlet="heading"></ng-container>
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
-      </div>
+      }
+    </div>
+    @if (filterInputVisible$ | async) {
+      <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     }
-    <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
-  @if (notInlineToolbar$ | async) {
+  @if ((filterInputVisible$ | async)) {
     <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
   }
 </div>
@@ -42,8 +44,11 @@
   }
 </ng-template>
 <ng-template #filterActions>
-  @if (actionsVisible$ | async) {
+  @if ((actionsVisible$ | async) || (filterInputVisible$ | async) === false) {
     <div class="filter-actions">
+      @if ((filterInputVisible$ | async) === false) {
+        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+      }
       <fs-filter-actions
         [actions]="actions$ | async"
         [kebabActions]="menuActions$ | async">

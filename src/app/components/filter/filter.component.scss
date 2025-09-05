@@ -29,6 +29,10 @@
   position: relative;
   align-items: center;
 
+  .filter-left-container {
+    min-width: 0;
+  }
+
   .filter-inner-inputs {
     flex-direction: row;
     box-sizing: border-box;

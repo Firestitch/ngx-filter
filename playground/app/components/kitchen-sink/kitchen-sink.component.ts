@@ -13,6 +13,7 @@ import {
   FilterConfig,
   FilterSort,
   IFilterConfigItem,
+  IFilterSavedFiltersConfig,
   ItemType,
   SortItem,
 } from '@firestitch/filter';
@@ -156,56 +157,8 @@ export class KitchenSinkComponent implements OnInit {
         this._cdRef.detectChanges();
       },
       items: this._filterItems(),  
-      savedFilters: {
-        // label: {
-        //   singular: 'Alert',
-        //   plural: 'Alerts',
-        //   icon: 'notifications',
-        // },        
-        load: () => {
-          console.log('<====== Load Saved Filters =====>');
-
-          return of(SavedFilters);
-        },
-        save: (savedFilter) => {
-          console.log('====== Save Filter =====');
-          const filterIndex = SavedFilters.findIndex((f) => {
-            return f.id === savedFilter.id;
-          });
-
-          if (filterIndex > -1) {
-            // Here I'm emulating like backend returned filter which automatically activated
-            SavedFilters[filterIndex] = savedFilter;
-          } else {
-            // Here I'm emulating like backend returend new filter with ID to me
-            savedFilter = {
-              ...savedFilter,
-              id: guid(),
-            };
-            SavedFilters.push(savedFilter);
-          }
-
-          console.log('Save Filter', savedFilter);
-          console.log('Saved Filters: ', SavedFilters);
-
-          return of(savedFilter);
-        },
-        // order: (filters) => {
-        //   console.log('====== Order Saved Filters =====');
-        //   console.log('order filters', filters);
-
-        //   return of(null);
-        // },
-        delete: () => {
-          console.log('====== Delete Saved Filter =====');
-          console.log('order filters', filter);
-
-          return of(null);
-        },
-      },
-
+      savedFilters: this._savedFilters(),
     };
-
 
     this.sortUpdated.emit({
       sortBy: 't',
@@ -222,12 +175,63 @@ export class KitchenSinkComponent implements OnInit {
     // },3000)
   }
 
+  private _savedFilters(): IFilterSavedFiltersConfig {
+    return {
+      // label: {
+      //   singular: 'Alert',
+      //   plural: 'Alerts',
+      //   icon: 'notifications',
+      // },        
+      load: () => {
+        console.log('<====== Load Saved Filters =====>');
+
+        return of(SavedFilters);
+      },
+      save: (savedFilter) => {
+        console.log('====== Save Filter =====');
+        const filterIndex = SavedFilters.findIndex((f) => {
+          return f.id === savedFilter.id;
+        });
+
+        if (filterIndex > -1) {
+          // Here I'm emulating like backend returned filter which automatically activated
+          SavedFilters[filterIndex] = savedFilter;
+        } else {
+          // Here I'm emulating like backend returend new filter with ID to me
+          savedFilter = {
+            ...savedFilter,
+            id: guid(),
+          };
+          SavedFilters.push(savedFilter);
+        }
+
+        console.log('Save Filter', savedFilter);
+        console.log('Saved Filters: ', SavedFilters);
+
+        return of(savedFilter);
+      },
+      // order: (filters) => {
+      //   console.log('====== Order Saved Filters =====');
+      //   console.log('order filters', filters);
+
+      //   return of(null);
+      // },
+      delete: () => {
+        console.log('====== Delete Saved Filter =====');
+        console.log('order filters', filter);
+
+        return of(null);
+      },
+    };
+  }
+
   private _filterItems(): IFilterConfigItem[] {
     return [
       {
         name: 'keyword',
         type: ItemType.Keyword,
         label: 'Search',
+        show: true,
       },
       {
         name: 'simpleSelect',
