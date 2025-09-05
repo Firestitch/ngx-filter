@@ -15,7 +15,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { takeUntil } from 'rxjs/operators';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { WeekItem } from '../../../models/items/week-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 

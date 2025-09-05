@@ -2,8 +2,8 @@ import { Directive, TemplateRef } from '@angular/core';
 
 
 @Directive({
-    selector: '[fsFilterStatusBar]',
-    standalone: true,
+  selector: '[fsFilterStatusBar]',
+  standalone: true,
 })
 export class FilterStatusBarDirective {
 

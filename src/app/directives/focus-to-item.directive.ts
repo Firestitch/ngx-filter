@@ -19,14 +19,14 @@ import {
 import { Subject } from 'rxjs';
 import { delay, takeUntil } from 'rxjs/operators';
 
-import { ItemDateMode } from '../../enums/item-date-mode.enum';
-import { ItemType } from '../../enums/item-type.enum';
-import { FocusControllerService } from '../../services/focus-controller.service';
+import { ItemDateMode } from '../enums/item-date-mode.enum';
+import { ItemType } from '../enums/item-type.enum';
+import { FocusControllerService } from '../services/focus-controller.service';
 
 
 @Directive({
-    selector: '[fsFilterFocusTrigger]',
-    standalone: true,
+  selector: '[fsFilterFocusTrigger]',
+  standalone: true,
 })
 export class FocusToItemDirective implements OnInit, OnDestroy {
 

@@ -13,7 +13,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { takeUntil } from 'rxjs';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
 import { FilterComponent } from '../../filter/filter.component';
 import { BaseItemComponent } from '../base-item/base-item.component';

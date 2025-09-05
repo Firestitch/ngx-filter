@@ -11,7 +11,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { Observable } from 'rxjs';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { AutocompleteItem } from '../../../models/items/autocomplete-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 

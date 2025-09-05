@@ -8,7 +8,8 @@ export { FilterComponent } from './app/components/filter/filter.component';
 export { FilterItemComponent } from './app/components/filters-item/filter-item.component';
 
 // Directives
-export { FilterStatusBarDirective } from './app/directives/status-bar/status-bar.directive';
+export { FilterHeadingDirective } from './app/directives/heading.directive';
+export { FilterStatusBarDirective } from './app/directives/status-bar.directive';
 
 // Interfaces
 export {

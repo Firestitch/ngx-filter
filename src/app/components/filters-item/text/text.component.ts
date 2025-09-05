@@ -13,7 +13,7 @@ import { MatInput } from '@angular/material/input';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { TextItem } from '../../../models/items/text-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 

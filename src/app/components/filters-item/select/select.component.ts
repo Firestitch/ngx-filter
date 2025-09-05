@@ -20,7 +20,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { SelectItem } from '../../../models/items/select-item';
 
 

@@ -22,8 +22,7 @@ import { SelectComponent } from './components/filters-item/select/select.compone
 import { TextComponent } from './components/filters-item/text/text.component';
 import { WeekComponent } from './components/filters-item/week/week.component';
 import { FsSavedFilterAutocompleteChipsComponent } from './components/saved-filter';
-import { FocusToItemDirective } from './directives/focus-to-item/focus-to-item.directive';
-import { FilterStatusBarDirective } from './directives/status-bar/status-bar.directive';
+import { FilterHeadingDirective, FilterStatusBarDirective, FocusToItemDirective } from './directives';
 import { FS_FILTER_CONFIG } from './injectors/filter-config';
 import { FilterConfig } from './interfaces/config.interface';
 
@@ -51,6 +50,7 @@ import { FilterConfig } from './interfaces/config.interface';
     FsFilterActionButtonComponent,
     FsFilterActionKebabActionsComponent,
     FilterStatusBarDirective,
+    FilterHeadingDirective,
     FocusToItemDirective,
   ],
   providers: [
@@ -59,6 +59,7 @@ import { FilterConfig } from './interfaces/config.interface';
   exports: [
     FilterComponent,
     FilterStatusBarDirective,
+    FilterHeadingDirective, 
   ],
 })
 export class FsFilterModule {

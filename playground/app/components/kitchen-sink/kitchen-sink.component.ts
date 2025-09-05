@@ -11,7 +11,9 @@ import {
   ActionMode,
   FilterComponent,
   FilterConfig,
+  FilterHeadingDirective,
   FilterSort,
+  FilterStatusBarDirective,
   IFilterConfigItem,
   IFilterSavedFiltersConfig,
   ItemType,
@@ -23,8 +25,6 @@ import { map, of, tap } from 'rxjs';
 
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 
-import { FilterComponent as FilterComponent_1 } from '../../../../src/app/components/filter/filter.component';
-import { FilterStatusBarDirective } from '../../../../src/app/directives/status-bar/status-bar.directive';
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
 
 import { SavedFilters } from './saved-filter';
@@ -37,8 +37,9 @@ import { SavedFilters } from './saved-filter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    FilterComponent_1,
+    FilterComponent,
     FilterStatusBarDirective,
+    FilterHeadingDirective,
     JsonPipe,
     FsMenuModule,
   ],

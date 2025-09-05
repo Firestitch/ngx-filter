@@ -29,6 +29,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
 import { FilterIcon } from '../../consts';
+import { FilterHeadingDirective } from '../../directives';
 import { ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
@@ -51,7 +52,7 @@ import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
 import { KeywordInputComponent } from '../keyword-input/keyword-input.component';
 import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
 
-import { FilterStatusBarDirective } from './../../directives/status-bar/status-bar.directive';
+import { FilterStatusBarDirective } from './../../directives/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
 
 
@@ -114,6 +115,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ContentChild(FilterStatusBarDirective)
   public statusBar: FilterStatusBarDirective;
+
+  @ContentChild(FilterHeadingDirective)
+  public heading: FilterHeadingDirective;
 
   @ViewChild('reloadEl', { read: ElementRef })
   public reloadEl: ElementRef;

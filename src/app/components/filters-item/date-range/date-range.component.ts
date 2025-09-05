@@ -1,9 +1,9 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -15,7 +15,7 @@ import { FsFormModule } from '@firestitch/form';
 
 import { takeUntil } from 'rxjs/operators';
 
-import { FocusToItemDirective } from '../../../directives/focus-to-item/focus-to-item.directive';
+import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { ItemType } from '../../../enums/item-type.enum';
 import { PickerViewType } from '../../../enums/picker-view-type.enum';
 import { DateRangeItem } from '../../../models/items/date-range-item';

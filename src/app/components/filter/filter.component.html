@@ -1,6 +1,6 @@
 <div class="filter-container">
   @if (filterInputVisible$ | async) {
-    <ng-container *ngTemplateOutlet="heading"></ng-container>
+    <ng-container *ngTemplateOutlet="header"></ng-container>
   }
   <div class="filter-inner-container">
     <div class="filter-left-container">
@@ -14,13 +14,11 @@
           }
         </div>
       } @else {
-        <ng-container *ngTemplateOutlet="heading"></ng-container>
+        <ng-container *ngTemplateOutlet="header"></ng-container>
         <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       }
     </div>
-    @if (filterInputVisible$ | async) {
-      <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
-    }
+    <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
   @if ((filterInputVisible$ | async)) {
@@ -44,11 +42,8 @@
   }
 </ng-template>
 <ng-template #filterActions>
-  @if ((actionsVisible$ | async) || (filterInputVisible$ | async) === false) {
+  @if ((actionsVisible$ | async)) {
     <div class="filter-actions">
-      @if ((filterInputVisible$ | async) === false) {
-        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
-      }
       <fs-filter-actions
         [actions]="actions$ | async"
         [kebabActions]="menuActions$ | async">
@@ -96,8 +91,10 @@
     </div>
   }
 </ng-template>
-<ng-template #heading>
-  @if (config.heading) {
+<ng-template #header>
+  @if (heading) {
+    <ng-container *ngTemplateOutlet="heading.templateRef"></ng-container>
+  } @else if (config.heading) {
     <div class="heading">
       <h2>
         {{ config.heading }}
