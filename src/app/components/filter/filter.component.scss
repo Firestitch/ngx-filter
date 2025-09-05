@@ -9,7 +9,7 @@
   justify-content: center;
   flex-direction: column;
   align-self: flex-end;
-  margin: 3px 0;
+  margin-top: 4px;
 
   .filter-status {
     overflow: hidden;
@@ -99,13 +99,6 @@
   position: relative;
   overflow-x: auto;
   overflow-y: hidden;
-}
-
-fs-filter-chips {
-  margin: 4px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
 }
 
 @media screen and (min-width: 1200px) {
