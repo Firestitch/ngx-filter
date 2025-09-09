@@ -30,7 +30,7 @@ export class KeywordController {
       
     this._keywordItem$
       .pipe(
-        map((item) => !!item.fullWidth),
+        map((item) => !!item?.fullWidth),
         // avoid redundant writes
         distinctUntilChanged(),
         tap((fullWidth) => this._keywordFullWidth$.next(fullWidth)),
