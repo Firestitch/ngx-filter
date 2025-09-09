@@ -1,29 +1,31 @@
-<div class="filter-container">
+<div
+    class="filter-container"
+    [ngClass]="{ 'has-input': filterInputVisible$ | async }">
   @if (filterInputVisible$ | async) {
-    <ng-container *ngTemplateOutlet="header"></ng-container>
+    <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
-  <div class="filter-inner-container">
-    <div class="filter-left-container">
-      @if (filterInputVisible$ | async) {
-        <div class="filter-inner-inputs">
-          @if (keywordVisible$ | async) {
-            <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
-          }
-          @if (savedFilterController.enabled) {
-            <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
-          }
+  <div class="filter-bar-container">
+    @if (filterInputVisible$ | async) {
+      <div class="filter-input-container">
+        @if (keywordVisible$ | async) {
+          <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
+        }
+        @if (savedFilterController.enabled) {
+          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
+        }
+        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+      </div>
+    } @else {
+      @if (hasHeading) {
+        <div class="filter-heading-container">
+          <ng-container *ngTemplateOutlet="heading"></ng-container>
+          <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
         </div>
-      } @else {
-        <ng-container *ngTemplateOutlet="header"></ng-container>
-        <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
       }
-    </div>
-    <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+    }
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>
-  @if ((filterInputVisible$ | async)) {
-    <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
-  }
+  <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
 </div>
 <ng-template #filterStatusBarChips>
   @if (statusBar) {
@@ -91,9 +93,9 @@
     </div>
   }
 </ng-template>
-<ng-template #header>
-  @if (heading) {
-    <ng-container *ngTemplateOutlet="heading.templateRef"></ng-container>
+<ng-template #heading>
+  @if (headingTemplate) {
+    <ng-container *ngTemplateOutlet="headingTemplate"></ng-container>
   } @else if (config.heading) {
     <div class="heading">
       <h2>

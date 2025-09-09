@@ -12,6 +12,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -116,8 +117,8 @@ export class FilterComponent implements OnInit, OnDestroy {
   @ContentChild(FilterStatusBarDirective)
   public statusBar: FilterStatusBarDirective;
 
-  @ContentChild(FilterHeadingDirective)
-  public heading: FilterHeadingDirective;
+  @ContentChild(FilterHeadingDirective, { read: TemplateRef })
+  public headingTemplate: TemplateRef<any>;
 
   @ViewChild('reloadEl', { read: ElementRef })
   public reloadEl: ElementRef;
@@ -231,6 +232,10 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public change() {
     this._filterController.change();
+  }
+
+  public get hasHeading(): boolean {
+    return !!this.headingTemplate || !!this.config.heading;
   }
 
   public get hasFilterChips$(): Observable<boolean> {

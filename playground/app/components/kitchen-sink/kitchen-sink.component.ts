@@ -157,7 +157,7 @@ export class KitchenSinkComponent implements OnInit {
         this.sort = sort;
         this._cdRef.detectChanges();
       },
-      items: this._filterItems(),  
+      items: this._filterItems(true),  
       savedFilters: this._savedFilters(),
     };
 
@@ -226,13 +226,13 @@ export class KitchenSinkComponent implements OnInit {
     };
   }
 
-  private _filterItems(): IFilterConfigItem[] {
+  private _filterItems(showKeyword: boolean = true): IFilterConfigItem[] {
     return [
       {
         name: 'keyword',
         type: ItemType.Keyword,
         label: 'Search',
-        show: true,
+        show: showKeyword,
       },
       {
         name: 'simpleSelect',
