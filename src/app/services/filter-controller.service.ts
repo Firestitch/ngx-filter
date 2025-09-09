@@ -5,13 +5,13 @@ import { debounceTime, filter, finalize, map, switchMap, takeUntil, tap } from '
 
 
 import type { FilterComponent } from '../components/filter/filter.component';
-import { ItemType } from '../enums/item-type.enum';
 import { createFilterItem } from '../helpers/create-filter-item';
 import {
   IFilterConfigItem,
 } from '../interfaces/config.interface';
 import { KeyValue } from '../interfaces/external-params.interface';
 import { FsFilterConfig } from '../models/filter-config';
+import { KeywordItem } from '../models/items';
 import { BaseItem } from '../models/items/base-item';
 
 import { KeywordController } from './keyword-controller.service';
@@ -84,7 +84,7 @@ export class FilterController implements OnDestroy {
     of(null)
       .pipe(
         tap(() => this._addItems(this._config.items || [])),
-        tap(() => this._keywordController.init(this)),
+        tap(() => this._keywordController.init()),
         tap(() => this._sortController.init(this)),
         switchMap(() => forkJoin({
           savedFilters: this._savedFilterController.init(this),
@@ -236,7 +236,7 @@ export class FilterController implements OnDestroy {
         .map((item) => {
           const filterItem = createFilterItem(item, { }, this.filter);
 
-          if (filterItem.type === ItemType.Keyword) {
+          if (filterItem instanceof KeywordItem) {
             this._keywordController.keywordItem = filterItem;
           }
 

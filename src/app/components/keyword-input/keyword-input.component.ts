@@ -24,7 +24,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { FilterController } from '../../services/filter-controller.service';
 import { KeywordController } from '../../services/keyword-controller.service';
 
 
@@ -60,7 +59,6 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
   private _destroyRef = inject(DestroyRef);
   private _destroy$ = new Subject<void>();
   private _keywordController = inject(KeywordController);
-  private _filterController = inject(FilterController);
   private _cdRef = inject(ChangeDetectorRef);
 
   public get keywordVisible$(): Observable<boolean> {

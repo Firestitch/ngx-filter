@@ -1,9 +1,9 @@
 import type { FilterComponent } from '../components/filter/filter.component';
 import { ItemType } from '../enums/item-type.enum';
 import { IFilterConfigItem } from '../interfaces/config.interface';
+import { IFilterConfigKeywordItem } from '../interfaces/items';
 import { IFilterConfigDateRangeItem } from '../interfaces/items/date-range.interface';
 import { IFilterConfigDateItem } from '../interfaces/items/date.interface';
-import { IFilterConfigTextItem } from '../interfaces/items/text.interface';
 import { IFilterConfigWeekItem } from '../interfaces/items/week.interface';
 import { AutocompleteChipsItem } from '../models/items/autocomplete-chips-item';
 import { AutocompleteItem } from '../models/items/autocomplete-item';
@@ -13,6 +13,7 @@ import { DateItem } from '../models/items/date-item';
 import { DateRangeItem } from '../models/items/date-range-item';
 import { DateTimeItem } from '../models/items/date-time-item';
 import { DateTimeRangeItem } from '../models/items/date-time-range-item';
+import { KeywordItem } from '../models/items/keyword-item';
 import { RangeItem } from '../models/items/range-item';
 import { SelectItem } from '../models/items/select-item';
 import { TextItem } from '../models/items/text-item';
@@ -65,8 +66,12 @@ export function createFilterItem(item: IFilterConfigItem, config: any, filter: F
       return new CheckboxItem(item, null, filter);
     }
 
-    case ItemType.Keyword: case ItemType.Text: {
-      return TextItem.create(item as IFilterConfigTextItem, filter);
+    case ItemType.Keyword: {
+      return KeywordItem.create(item as IFilterConfigKeywordItem, filter);
+    }
+    
+    case ItemType.Text: {
+      return TextItem.create(item, filter);
     }
   }
 }

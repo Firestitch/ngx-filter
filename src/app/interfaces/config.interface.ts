@@ -1,6 +1,7 @@
 import { ButtonStyle } from '../enums';
 
 import { FsFilterAction } from './action.interface';
+import { IFilterConfigKeywordItem } from './items';
 import { IFilterConfigAutocompleteChipsItem } from './items/autocomplete-chips.interface';
 import { IFilterConfigAutocompleteItem } from './items/autocomplete.interface';
 import { IFilterConfigBaseItem } from './items/base.interface';
@@ -50,6 +51,7 @@ export type IFilterConfigItem =
     | IFilterConfigSelectItem
     | IFilterConfigChipsItem
     | IFilterConfigTextItem
+    | IFilterConfigKeywordItem
     | IFilterConfigDateItem
     | IFilterConfigAutocompleteItem
     | IFilterConfigAutocompleteChipsItem

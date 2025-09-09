@@ -261,6 +261,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordVisible$;
   }
 
+  public get keywordFullWidth$(): Observable<boolean> {
+    return this._keywordController.keywordFullWidth$;
+  }
+
   public get filterInputVisible$(): Observable<boolean> {
     return combineLatest({
       keywordVisible: this.keywordVisible$,

@@ -29,6 +29,20 @@
     }
   }
 
+  &.keyword-full-width {
+    .filter-input-container {
+      flex: 1;
+
+      fs-keyword-input {
+        flex: 1;
+
+        ::ng-deep mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .filter-bar-container {
     flex-direction: row;
     box-sizing: border-box;

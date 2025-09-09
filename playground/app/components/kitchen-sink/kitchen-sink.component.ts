@@ -111,7 +111,7 @@ export class KitchenSinkComponent implements OnInit {
       autofocus: false,
       queryParam: true,
       persist: false,
-      actions: this._filterActions(),
+      // actions: this._filterActions(),
       sort: {
         direction: 'desc',
         value: 'name',
@@ -233,6 +233,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Keyword,
         label: 'Search',
         show: showKeyword,
+        fullWidth: false,
       },
       {
         name: 'simpleSelect',

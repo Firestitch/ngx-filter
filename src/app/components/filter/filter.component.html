@@ -1,6 +1,7 @@
 <div
     class="filter-container"
-    [ngClass]="{ 'has-input': filterInputVisible$ | async }">
+    [ngClass]="{ 'has-input': filterInputVisible$ | async }"
+    [ngClass]="{ 'keyword-full-width': keywordFullWidth$ | async }">
   @if (filterInputVisible$ | async) {
     <ng-container *ngTemplateOutlet="heading"></ng-container>
   }
