@@ -76,8 +76,8 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     super.setValue(Array.isArray(value) ? value : [], emitChange);
   }
 
-  public clear() {
-    this.value = [];
+  public clear(emitChange: boolean = true) {
+    this.setValue([], emitChange);
   }
 
 }

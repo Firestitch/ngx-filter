@@ -68,8 +68,8 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     };
   }
 
-  public clear() {
-    this.value = false;
+  public clear(emitChange: boolean = true) {
+    this.setValue(false, emitChange);
   }
 
 }

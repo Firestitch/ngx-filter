@@ -37,7 +37,11 @@ export class FsFilterChipsComponent {
   }
 
   public remove(item: BaseItem<IFilterConfigItem>, chip: { name?: string, value: string, label: string }) {
-    item.clear(chip.name);
+    if(chip.name) {
+      item.clearByName(chip.name);
+    } else {
+      item.clear();
+    }
   }
 
 }

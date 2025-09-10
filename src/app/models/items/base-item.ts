@@ -251,9 +251,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.setValue(value === undefined ? this.defaultValue : value);
   }
 
+  public clear(emitChange: boolean = true) {
+    this.setValue(undefined, emitChange);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public clear(name: string = null) {
-    this.value = undefined;
+  public clearByName(name: string, emitChange: boolean = true) {
+    //
   }
 
   public destroy() {

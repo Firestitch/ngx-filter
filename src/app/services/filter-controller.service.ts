@@ -113,11 +113,13 @@ export class FilterController implements OnDestroy {
     this.items
       .filter((item) => item.clearable)
       .forEach((item) => {
-        item.clear();
+        item.clear(false);
       });
 
-    this._keywordController.clear();
+    this._keywordController.clear(false);
     this._sortController.clear();
+
+    this.change();
   }
 
   public get queryParam(): Record<string, unknown> {

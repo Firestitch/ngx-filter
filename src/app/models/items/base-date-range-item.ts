@@ -105,21 +105,22 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     return chips;
   }
 
-  public clear(
-    name: string = null,
-  ) {
+  public clear(emitChange: boolean = true) {
+    this.setValue({}, emitChange);
+  }
+  
+
+  public clearByName(name: string, emitChange: boolean = true) {
     if (name === 'from') {
-      this.value = { 
+      this.setValue({ 
         ...this.value,
         from: null,
-      };
+      }, emitChange);
     } else if (name === 'to') {
-      this.value = { 
+      this.setValue({ 
         ...this.value,
         to: null,
-      };
-    } else {
-      this.value = {};
+      }, emitChange);
     }
   }
 

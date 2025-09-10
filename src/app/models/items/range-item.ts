@@ -73,18 +73,16 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return chips;
   }
 
-  public clear(name: string = null) {
-    let value = this.value;
+  public clear(emitChange: boolean = true) {
+    this.setValue({}, emitChange);
+  }
 
+  public clearByName(name: string, emitChange: boolean = true) {
     if (name === 'min') {
-      value.min = this.defaultValue?.min;
+      this.setValue({ ...this.value, min: undefined }, emitChange);
     } else if (name === 'max') {
-      value.max = this.defaultValue?.max;
-    } else {
-      value = this.defaultValue ? { ...this.defaultValue } : {};
+      this.setValue({ ...this.value, max: undefined }, emitChange);
     }
-
-    this.value = { ...value };
   }
 
   public get hasValue() {

@@ -52,8 +52,8 @@ export class KeywordController {
     this._keywordItem$.next(item);
   }
 
-  public clear() {
-    this.keywordItem.value = '';
+  public clear(emitChange: boolean = true) {
+    this.keywordItem.setValue('', emitChange);
   }
 
   public show() {
