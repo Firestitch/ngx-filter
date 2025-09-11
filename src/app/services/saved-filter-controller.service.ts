@@ -174,11 +174,12 @@ export class SavedFilterController implements OnDestroy {
       .save(savedFilter)
       .pipe(
         tap((_savedFilter) => {
-          this.savedFilters = this.activeFilter?.id ? this.savedFilters
-            .map((f) => f.id === savedFilter.id ? _savedFilter : f) : [
-            ...this.savedFilters,
-            _savedFilter,
-          ];
+          const exists = this.savedFilters.find((f) => f.id === _savedFilter.id);
+
+          this.savedFilters = exists ? 
+            this.savedFilters
+              .map((item) => item.id === _savedFilter.id ? _savedFilter : item) : 
+            [...this.savedFilters, _savedFilter];
           
           this.setActiveFilter(_savedFilter);
         }),
