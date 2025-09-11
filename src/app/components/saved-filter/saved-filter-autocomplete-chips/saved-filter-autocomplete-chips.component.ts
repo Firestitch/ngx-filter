@@ -124,7 +124,7 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
 
   public saveAs(): void {
     this._prompt.input({
-      title: 'Save as new alert',
+      title: 'Save as new',
       label: 'Name',
       required: true,
       commitLabel: 'Save',
@@ -147,7 +147,6 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
       )
       .subscribe();
   } 
-
 
   public fetch = (query: string) => {
     return this.savedFiltersController.savedFilters$

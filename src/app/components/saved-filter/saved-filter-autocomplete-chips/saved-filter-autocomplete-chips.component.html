@@ -20,18 +20,18 @@
     <ng-template
         fsAutocompleteChipsStatic
         (click)="save()">
-      Save alert filters
+      Save filters
     </ng-template>
     <ng-template
         fsAutocompleteChipsStatic
         (click)="saveAs()">
-      Save as new alert
+      Save as new
     </ng-template>
   } @else {
     <ng-template
         fsAutocompleteChipsStatic
         (click)="create()">
-      Create alert
+      Create {{ savedFiltersController.singularLabelLower }}
     </ng-template>
   }
   <ng-template

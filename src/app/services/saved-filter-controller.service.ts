@@ -134,7 +134,7 @@ export class SavedFilterController implements OnDestroy {
 
   public create(): Observable<IFilterSavedFilter> {
     return this._prompt.input({
-      title: `Create ${this.singularLabel}`,
+      title: `Create ${this.singularLabelLower}`,
       label: 'Name',
       required: true,
       commitLabel: 'Create',
