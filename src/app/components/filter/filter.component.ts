@@ -94,20 +94,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChild(KeywordInputComponent)
   public keywordInput: KeywordInputComponent;
-
-  /**
-   * @deprecated Use set config instead
-   */
-  @Input('filterConfig') public set filterConfig(value: FilterConfig) {
-    this.config = value;
-  }
   
-  @Input('config') public set config(value: FilterConfig) {
-    this._config = new FsFilterConfig(value);
-  }
-  
-  public get config(): FsFilterConfig {
-    return this._config;
+  @Input('config') public set setFilterConfig(value: FilterConfig) {
+    this._filterConfig = value;
   }
 
   @Output() public closed = new EventEmitter<any>();
@@ -133,6 +122,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   public fsFilterClass = true;
 
   private _config: FsFilterConfig;
+  private _filterConfig: FilterConfig;
   private _filtersVisible$ = new BehaviorSubject(true);
   private _hasFilterChips$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
@@ -226,6 +216,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._filterController.values = values;
   }
 
+  public get config(): FsFilterConfig {
+    return this._config;
+  }
+
   public get items(): BaseItem<IFilterConfigItem>[] {
     return this._filterController.items;
   }
@@ -296,11 +290,11 @@ export class FilterComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     const config = {
       ...(this._defaultConfig || {}),
-      ...this.config,
+      ...this._filterConfig,
     };
 
     this._config = new FsFilterConfig(config);
-    this._actionsController.setConfig(this._config);
+    this._actionsController.setConfig(this.config);
 
     this._initItems();
     this._initAutoReload();
@@ -547,7 +541,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   private _initItems() {
-    this._filterController.init(this._config);
+    this._filterController.init(this.config);
   }
 
   private _initAutoReload() {

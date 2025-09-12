@@ -110,7 +110,7 @@ export class KitchenSinkComponent implements OnInit {
       chips: true,
       autofocus: false,
       queryParam: true,
-      persist: false,
+      //persist: false,
       // actions: this._filterActions(),
       sort: {
         direction: 'desc',

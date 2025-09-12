@@ -27,6 +27,7 @@ import { DialogExampleComponent } from './components/dialog-example';
     BrowserModule,
     FsFilterModule.forRoot({
       buttonStyle: ButtonStyle.Flat,
+      persist: true,
     }),
     FsDatePickerModule.forRoot(),
     BrowserAnimationsModule,
