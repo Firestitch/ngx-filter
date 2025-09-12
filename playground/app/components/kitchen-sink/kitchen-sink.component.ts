@@ -395,9 +395,10 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Week',
       },
       {
-        name: 'maxPrice',
+        name: 'price',
         type: ItemType.Text,
-        label: 'Max Price',
+        label: 'Price ($)',
+        placeholder: 'Enter price',
       },
     ];
   }

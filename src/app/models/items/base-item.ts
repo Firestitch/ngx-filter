@@ -22,6 +22,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public defaultValueFn: IFilterDefaultFn;
   public defaultValue: any;
   public clearable: boolean;
+  public placeholder: string;
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
@@ -282,9 +283,12 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
-
     this.defaultValueFn = typeof item.default === 'function' ?
       item.default as IFilterDefaultFn : () => of(item.default);
+
+    if ('placeholder' in item) {
+      this.placeholder = item.placeholder;
+    }
 
     this.initCallback = item.init || (() => {
       //

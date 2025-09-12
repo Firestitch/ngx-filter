@@ -6,6 +6,7 @@ import { IFilterConfigBaseItem } from './base.interface';
 export interface IFilterConfigTextItem
   extends IFilterConfigBaseItem<ItemType.Text | ItemType.Keyword>, IFilterItemWithPrefixSuffix {
   default?: string;
+  placeholder?: string;
 }
 
 
