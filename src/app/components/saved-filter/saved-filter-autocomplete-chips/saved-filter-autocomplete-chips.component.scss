@@ -1,5 +1,5 @@
 fs-autocomplete-chips {
-  width: 200px;
+  width: 250px;
   display: flex;
   margin-right: 5px;
   
@@ -16,8 +16,4 @@ fs-autocomplete-chips {
       display: none;
     }
   }
-}
-
-::ng-deep .fs-autocomplete-chips-panel-saved-filter {
-  max-height: 400px !important;
 }

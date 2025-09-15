@@ -5,6 +5,7 @@
     [placeholder]="pluralLabel"
     [(ngModel)]="selectedFilter"
     [compareWith]="compareWith"
+    [maxPanelHeight]="'500px'"
     [panelClass]="'fs-autocomplete-chips-panel-saved-filter'"
     (ngModelChange)="selectedFilterChange($event)">
   <ng-template
