@@ -405,7 +405,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       this.config.clear();
     }
 
-    this.keywordInput.clear();
+    this.keywordInput?.clear();
   }
 
   public reload(event = null) {
