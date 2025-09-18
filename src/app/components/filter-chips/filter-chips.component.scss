@@ -3,8 +3,10 @@
   flex-wrap: wrap;
   column-gap: 4px;
   max-width: 100%;
-}
 
-fs-chip {
-  margin-top: 4px;
+  &.top-margin {
+    fs-chip {
+      margin-top: 4px;
+    }
+  }
 }
