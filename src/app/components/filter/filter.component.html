@@ -3,7 +3,7 @@
     [ngClass]="{ 'has-input': filterInputVisible$ | async }"
     [ngClass]="{ 'keyword-full-width': keywordFullWidth$ | async }">
   @if (filterInputVisible$ | async) {
-    <ng-container *ngTemplateOutlet="heading"></ng-container>
+    <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
   }
   <div class="filter-bar-container">
     @if (filterInputVisible$ | async) {
@@ -14,21 +14,30 @@
         @if (savedFilterController.enabled) {
           <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
         }
-        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+        <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       </div>
     } @else if (hasHeading) {
       <div class="filter-heading-container">
-        <ng-container *ngTemplateOutlet="heading"></ng-container>
-        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+        <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
+        <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       </div>
     } @else {
-      <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+      <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
+      <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
     }
-    <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
+    <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
-  <ng-container *ngTemplateOutlet="filterStatusBarChips"></ng-container>
+  <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
+  @if ((filterInputVisible$ | async) === true || hasHeading) {
+    <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+  }
 </div>
-<ng-template #filterStatusBarChips>
+<ng-template #chipsTmpl>
+  @if (config.chips) {
+    <fs-filter-chips class="filter-chips"></fs-filter-chips>
+  }
+</ng-template>
+<ng-template #statusBarTmpl>
   @if (statusBar) {
     <div
         class="filter-status-container"
@@ -40,11 +49,8 @@
       </div>
     </div>
   }
-  @if (config.chips) {
-    <fs-filter-chips class="filter-chips"></fs-filter-chips>
-  }
 </ng-template>
-<ng-template #filterActions>
+<ng-template #filterActionsTmpl>
   @if ((actionsVisible$ | async)) {
     <div class="filter-actions">
       <fs-filter-actions
@@ -54,7 +60,7 @@
     </div>
   }
 </ng-template>
-<ng-template #filterToolbar>
+<ng-template #filterToolbarTmpl>
   @if (config.reload || config.autoReload || (filtersVisible$ | async)) {
     <div class="filter-toolbar">
       @if ((filtersVisible$ | async)) {
@@ -94,7 +100,7 @@
     </div>
   }
 </ng-template>
-<ng-template #heading>
+<ng-template #headingTmpl>
   @if (headingTemplate) {
     <ng-container *ngTemplateOutlet="headingTemplate"></ng-container>
   } @else if (config.heading) {
