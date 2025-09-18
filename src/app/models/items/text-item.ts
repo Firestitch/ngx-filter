@@ -48,9 +48,19 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
       return [];
     }
 
+    let value = this.value;
+
+    if(this.prefix) {
+      value = `${this.prefix.length > 1 ? `${this.prefix} ` : this.prefix}${value}`;
+    }
+
+    if(this.suffix) {
+      value = `${value}${this.suffix.length > 1 ? ` ${this.suffix}` : this.suffix}`;
+    }
+
     return [
       {
-        value: this.value,
+        value,
         label: this.label,
       },
     ];

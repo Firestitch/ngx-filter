@@ -405,7 +405,9 @@ export class KitchenSinkComponent implements OnInit {
       {
         name: 'price',
         type: ItemType.Text,
-        label: 'Price ($)',
+        label: 'Price',
+        prefix: '$',
+        suffix: 'USD',
         placeholder: 'Enter price',
       },
     ];
