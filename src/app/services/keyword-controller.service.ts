@@ -53,7 +53,7 @@ export class KeywordController {
   }
 
   public clear(emitChange: boolean = true) {
-    this.keywordItem.setValue('', emitChange);
+    this.keywordItem?.setValue('', emitChange);
   }
 
   public show() {
