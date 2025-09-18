@@ -135,6 +135,7 @@ export class FilterController implements OnDestroy {
   public get query(): KeyValue {
     return {
       ...this.items
+        .filter((item) => item.visible)
         .reduce((accum, item) => {
           return {
             ...accum,

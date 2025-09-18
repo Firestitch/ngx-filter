@@ -60,6 +60,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       );
   }
 
+  public get visible(): boolean {
+    return !this._hidden$.getValue();
+  }
+
   public get hidden(): boolean {
     return this._hidden$.getValue();
   }
