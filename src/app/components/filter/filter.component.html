@@ -16,13 +16,13 @@
         }
         <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
       </div>
+    } @else if (hasHeading) {
+      <div class="filter-heading-container">
+        <ng-container *ngTemplateOutlet="heading"></ng-container>
+        <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
+      </div>
     } @else {
-      @if (hasHeading) {
-        <div class="filter-heading-container">
-          <ng-container *ngTemplateOutlet="heading"></ng-container>
-          <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
-        </div>
-      }
+      <ng-container [ngTemplateOutlet]="filterToolbar"></ng-container>
     }
     <ng-container [ngTemplateOutlet]="filterActions"></ng-container>
   </div>

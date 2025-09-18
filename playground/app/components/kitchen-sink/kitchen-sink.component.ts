@@ -105,8 +105,8 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      heading: 'Kitchen Sink',
-      subheading: 'This is a subtitle',
+      // heading: 'Kitchen Sink',
+      // subheading: 'This is a subtitle',
       chips: true,
       autofocus: false,
       queryParam: true,
@@ -157,8 +157,8 @@ export class KitchenSinkComponent implements OnInit {
         this.sort = sort;
         this._cdRef.detectChanges();
       },
-      items: this._filterItems(true),  
-      savedFilters: this._savedFilters(),
+      items: this._filterItems(false),  
+      //savedFilters: this._savedFilters(),
     };
 
     this.sortUpdated.emit({
