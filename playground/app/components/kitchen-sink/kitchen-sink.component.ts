@@ -243,6 +243,14 @@ export class KitchenSinkComponent implements OnInit {
         chipLabel: 'Special Label',
         init: (item, initFilter: FilterComponent) => {
           console.log('Item init', item, initFilter);
+          
+          setTimeout(() => {
+            item.hide();
+          }, 5000);
+
+          setTimeout(() => {
+            item.show();
+          }, 10000);
         },
         change: (item, filterComponent: FilterComponent) => {
           filterComponent.getItem('multiSelect').clear();
