@@ -20,17 +20,16 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   
   constructor(
     itemConfig: IFilterConfigRangeItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.options = itemConfig.options;
     this.prefix = itemConfig.prefix;
     this.suffix = itemConfig.suffix;
   }
 
-  public static create(config: IFilterConfigRangeItem, additionalConfig: unknown, filter: FilterComponent) {
-    return new RangeItem(config, additionalConfig, filter);
+  public static create(config: IFilterConfigRangeItem, filter: FilterComponent) {
+    return new RangeItem(config, filter);
   }
 
   public get query(): Record<string, unknown> {

@@ -7,7 +7,7 @@ import { BaseDateRangeItem } from './base-date-range-item';
 export class DateTimeRangeItem extends BaseDateRangeItem {
 
   public static create(config: IFilterConfigDateRangeItem, filter: FilterComponent) {
-    return new DateTimeRangeItem(config, null, filter);
+    return new DateTimeRangeItem(config, filter);
   }
 
 }

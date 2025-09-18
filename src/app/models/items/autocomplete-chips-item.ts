@@ -22,10 +22,9 @@ export class AutocompleteChipsItem
 
   constructor(
     itemConfig: IFilterConfigAutocompleteChipsItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.chipImage = itemConfig.chipImage ?? 'image';
     this.chipIcon = itemConfig.chipIcon;
     this.chipIconColor = itemConfig.chipIconColor;
@@ -36,7 +35,7 @@ export class AutocompleteChipsItem
   }
 
   public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {
-    return new AutocompleteChipsItem(config, null, filter);
+    return new AutocompleteChipsItem(config, filter);
   }
 
   public get queryParam(): Record<string, unknown> {

@@ -11,7 +11,7 @@ import { BaseAutocompleteItem } from './base-autocomplete-item';
 export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocompleteItem> {
 
   public static create(config: IFilterConfigAutocompleteItem, filter: FilterComponent) {
-    return new AutocompleteItem(config, null, filter);
+    return new AutocompleteItem(config, filter);
   }
 
   public get value() {

@@ -19,10 +19,9 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
 
   constructor(
     itemConfig: IFilterConfigSelectItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.multiple = itemConfig.multiple || false;
     this.children = itemConfig.children || null;
 
@@ -35,7 +34,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   }
 
   public static create(itemConfig: IFilterConfigSelectItem, filter: FilterComponent) {
-    return new SelectItem(itemConfig, {}, filter);
+    return new SelectItem(itemConfig, filter);
   }
 
   public clear(emitChange: boolean = true) {

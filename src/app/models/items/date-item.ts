@@ -11,7 +11,7 @@ import { BaseDateItem } from './base-date-item';
 export class DateItem extends BaseDateItem {
 
   public static create(config: IFilterConfigDateItem, filter: FilterComponent) {
-    return new DateItem(config, null, filter);
+    return new DateItem(config, filter);
   }
 
   public get queryParam(): Record<string, unknown> {

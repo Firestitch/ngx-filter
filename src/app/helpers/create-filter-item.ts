@@ -20,7 +20,7 @@ import { TextItem } from '../models/items/text-item';
 import { WeekItem } from '../models/items/week-item';
 
 
-export function createFilterItem(item: IFilterConfigItem, config: any, filter: FilterComponent) {
+export function createFilterItem(item: IFilterConfigItem, filter: FilterComponent) {
   switch (item.type) {
     case ItemType.Select: {
       return SelectItem.create(item, filter);
@@ -31,7 +31,7 @@ export function createFilterItem(item: IFilterConfigItem, config: any, filter: F
     }
 
     case ItemType.Range: {
-      return RangeItem.create(item, config, filter);
+      return RangeItem.create(item, filter);
     }
 
     case ItemType.DateRange: {
@@ -63,7 +63,7 @@ export function createFilterItem(item: IFilterConfigItem, config: any, filter: F
     }
 
     case ItemType.Checkbox: {
-      return new CheckboxItem(item, null, filter);
+      return new CheckboxItem(item, filter);
     }
 
     case ItemType.Keyword: {

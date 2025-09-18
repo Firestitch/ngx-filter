@@ -15,10 +15,9 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
   
   constructor(
     itemConfig: any,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.maxYear = itemConfig.maxYear;
     this.mode = itemConfig.mode || ItemDateMode.Calendar;
   }

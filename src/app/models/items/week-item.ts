@@ -15,15 +15,14 @@ export class WeekItem extends BaseItem<IFilterConfigWeekItem> {
   
   constructor(
     itemConfig: IFilterConfigWeekItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.seedDate = itemConfig.seedDate;
   }
 
   public static create(config: IFilterConfigWeekItem, filter: FilterComponent) {
-    return new WeekItem(config, null, filter);
+    return new WeekItem(config, filter);
   }
 
   public setValue(value, emitChange = true) {

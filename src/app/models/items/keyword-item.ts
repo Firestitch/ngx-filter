@@ -11,15 +11,14 @@ export class KeywordItem extends TextItem {
 
   constructor(
     itemConfig: IFilterConfigKeywordItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.fullWidth = itemConfig.fullWidth;
   }
 
   public static create(config: IFilterConfigKeywordItem, filter: FilterComponent) {
-    return new KeywordItem(config, null, filter);
+    return new KeywordItem(config, filter);
   }
 
   public get hasValue() {

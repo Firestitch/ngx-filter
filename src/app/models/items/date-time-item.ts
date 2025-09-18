@@ -9,7 +9,7 @@ import { BaseDateItem } from './base-date-item';
 export class DateTimeItem extends BaseDateItem {
 
   public static create(config: IFilterConfigDateItem, filter: FilterComponent) {
-    return new DateTimeItem(config, null, filter);
+    return new DateTimeItem(config, filter);
   }
 
   public get chips(): { name?: string, value: string, label: string }[] {

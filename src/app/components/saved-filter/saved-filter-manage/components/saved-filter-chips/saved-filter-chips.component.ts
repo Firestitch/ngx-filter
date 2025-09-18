@@ -8,6 +8,7 @@ import {
 
 import { FsChipModule } from '@firestitch/chip';
 
+import { createFilterItem } from '../../../../../helpers';
 import { IFilterConfigItem } from '../../../../../interfaces';
 import { IFilterSavedFilter } from '../../../../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../../../../models/items';
@@ -36,10 +37,17 @@ export class FsFilterSavedFilterChipsComponent implements OnInit {
     this.items = [...this._filterController.items]
       .filter((item) => !!this.savedFilter.filters[item.name])
       .map((item: BaseItem<IFilterConfigItem>): BaseItem<IFilterConfigItem> => {
-        const object = item.clone();
-        object.setValue(this.savedFilter.filters[item.name], false);
 
-        return object;  
+        const config = {
+          ...this._filterController.config.items
+            .find((configItem) => item.name === configItem.name),
+        };
+
+        const filterItem = createFilterItem(config, this._filterController.filter);
+        filterItem.values = item.values;
+        filterItem.initValue(this.savedFilter.filters[item.name]);
+        
+        return filterItem;
       });
   }
 }

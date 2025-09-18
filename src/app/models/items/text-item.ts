@@ -14,16 +14,15 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
 
   constructor(
     itemConfig: IFilterConfigTextItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.prefix = itemConfig.prefix;
     this.suffix = itemConfig.suffix;
   }
 
   public static create(config: IFilterConfigTextItem, filter: FilterComponent) {
-    return new TextItem(config, null, filter);
+    return new TextItem(config, filter);
   }
 
   public get hasValue() {

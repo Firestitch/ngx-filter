@@ -236,7 +236,7 @@ export class FilterController implements OnDestroy {
           return true;
         })
         .map((item) => {
-          const filterItem = createFilterItem(item, { }, this.filter);
+          const filterItem = createFilterItem(item, this.filter);
 
           if (filterItem instanceof KeywordItem) {
             this._keywordController.keywordItem = filterItem;

@@ -14,10 +14,9 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
   constructor(
     itemConfig: IFilterConfigCheckboxItem,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this._checked = itemConfig.checked ? toString(itemConfig.checked) : 'true';
     this._unchecked = itemConfig.unchecked ? toString(itemConfig.unchecked) : undefined;
     this.defaultValue = itemConfig.default;

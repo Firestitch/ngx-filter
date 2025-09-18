@@ -18,10 +18,9 @@ export abstract class BaseAutocompleteItem<T extends AutoCompleteItem> extends B
   
   constructor(
     itemConfig: T,
-    protected _additionalConfig: unknown,
     protected _filter: FilterComponent,
   ) {
-    super(itemConfig, _additionalConfig, _filter);
+    super(itemConfig, _filter);
     this.fetchOnFocus = itemConfig.fetchOnFocus ?? true;
   }
 
