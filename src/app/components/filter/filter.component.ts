@@ -287,6 +287,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._savedFilterController;
   }
 
+  public get sortController(): SortController {
+    return this._sortController;
+  }
+
   public ngOnInit() {
     const config = {
       ...(this._defaultConfig || {}),
@@ -312,8 +316,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     this.keywordInput?.focus();
   }
 
-  public updateSort(sort: ISortingChangeEvent) {
-    this._sortController.updateSort(sort);
+  public updateSort(sort: ISortingChangeEvent, emitChange: boolean = true) {
+    this._sortController.updateSort(sort, emitChange);
   }
 
   public hideDrawer() {

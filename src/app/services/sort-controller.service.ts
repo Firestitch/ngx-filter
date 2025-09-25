@@ -80,11 +80,11 @@ export class SortController {
     this._direction = sort.sortDirection;
     this._change$.next({ name: this._name, direction: this._direction });
     
-    if(this._filterController.config.sortChange) {
-      this._filterController.config.sortChange(this._filterController.query, this.getSort());
-    }
-
     if(emitChange) {
+      if(this._filterController.config.sortChange) {
+        this._filterController.config.sortChange(this._filterController.query, this.getSort());
+      }
+      
       this._filterController.change();
     }
   }
