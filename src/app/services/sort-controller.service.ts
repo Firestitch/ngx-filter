@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Observable, Subject } from 'rxjs';
+
 import { ISortingChangeEvent } from '../interfaces';
 import {
   FilterSort,
@@ -15,7 +17,7 @@ export class SortController {
 
   private _name = null;
   private _direction = null;
-
+  private _change$ = new Subject<{ name: string, direction: string }>();
   private _filterController: FilterController;
   private _route = inject(ActivatedRoute);
 
@@ -33,7 +35,7 @@ export class SortController {
     this._direction = null;
   }
 
-  public queryParam(): KeyValue {
+  public get queryParam(): KeyValue {
     if(!this.name) {
       return {};
     }
@@ -42,7 +44,6 @@ export class SortController {
       sortName: this.name,
       sortDirection: this.direction,
     };
-
   }
 
   public query(): KeyValue {
@@ -70,10 +71,18 @@ export class SortController {
     return this._name;
   }
 
-  public updateSort(sort: ISortingChangeEvent) {
+  public get change$(): Observable<{ name: string, direction: string }> {
+    return this._change$.asObservable();
+  }
+
+  public updateSort(sort: ISortingChangeEvent, emitChange: boolean = true) {
     this._name = sort.sortBy;
     this._direction = sort.sortDirection;
-    this._filterController.change();
+    this._change$.next({ name: this._name, direction: this._direction });
+    
+    if(emitChange) {
+      this._filterController.change();
+    }
   }
 
 }

@@ -43,21 +43,12 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   }
 
   public get queryParam(): Record<string, unknown> {
-    if(!this.hasValue) {
-      return {};
-    }
-    
     const value: { from?: Date, to?: Date } = {};
     const paramFromName = getRangeName(this.name, 'from');
     const paramToName = getRangeName(this.name, 'to');
 
-    if(this.value.from) {
-      value[paramFromName] = iso8601(this.value.from);
-    }
-
-    if(this.value.to) {
-      value[paramToName] = iso8601(this.value.to);
-    }
+    value[paramFromName] = this.value.from ? iso8601(this.value.from) : undefined;
+    value[paramToName] = this.value.to ? iso8601(this.value.to) : undefined;
 
     return value;
   }

@@ -5,6 +5,8 @@ import {
   Component, EventEmitter, inject, OnInit, ViewChild,
 } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { filter, guid, nameValue } from '@firestitch/common';
 import { FsFile } from '@firestitch/file';
 import {
@@ -42,6 +44,7 @@ import { SavedFilters } from './saved-filter';
     FilterHeadingDirective,
     JsonPipe,
     FsMenuModule,
+    MatButtonModule,
   ],
 })
 export class KitchenSinkComponent implements OnInit {
@@ -160,11 +163,6 @@ export class KitchenSinkComponent implements OnInit {
       items: this._filterItems(true),  
       savedFilters: this._savedFilters(),
     };
-
-    this.sortUpdated.emit({
-      sortBy: 't',
-      sortDirection: 'desc',
-    });
 
     // setTimeout(() => {
     //   this.conf = Object.assign({},this.conf);

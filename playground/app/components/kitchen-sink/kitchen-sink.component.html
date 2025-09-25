@@ -38,3 +38,11 @@
     {{ query | json }}
   </fieldset>
 }
+<br>
+<div>
+  <button
+      mat-stroked-button
+      (click)="filter.updateSort({ sortBy: 'name', sortDirection: 'desc' })">
+    Update Sort
+  </button>
+</div>
