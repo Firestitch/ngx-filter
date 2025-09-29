@@ -26,7 +26,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   }
 
   public get hasValue() {
-    return typeof this.value === 'string' && this.value.length > 0;
+    return this.value !== undefined && this.value !== null && this.value !== '';
   }
 
   public get query() {
