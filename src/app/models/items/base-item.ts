@@ -276,6 +276,12 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     );
   }
 
+  public emitChange() {
+    if (this.changeCallback) {
+      this.changeCallback(this, this.filter);
+    }
+  }
+
   private _initConfig(item: T) {
     const hidden = item.hide ?? !(item.show ?? true);
     

@@ -149,6 +149,7 @@ export class FilterController implements OnDestroy {
   public set values(values: Record<string, unknown>) {
     this.items.forEach((item) => {
       item.setValue(values[item.name], false);
+      item.emitChange();
     });
 
     this.change();
