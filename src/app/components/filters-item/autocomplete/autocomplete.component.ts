@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  KeyValueDiffers,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { FsAutocompleteModule } from '@firestitch/autocomplete';
@@ -29,13 +24,6 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
-
-  constructor(
-    protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef,
-  ) {
-    super(_kvDiffers, _cd);
-  }
 
   public displayWith = (data) => {
     return data ? data.name : data;

@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 
 import { BreakpointObserver } from '@angular/cdk/layout';
 
@@ -12,6 +12,8 @@ import { FsFilterConfig } from '../models/filter-config';
 
 @Injectable()
 export class ActionsController implements OnDestroy {
+  private _breakpointObserver = inject(BreakpointObserver);
+
 
   private _visible$ = new BehaviorSubject(false);
   private _actions$ = new BehaviorSubject<Action[]>([]);
@@ -23,9 +25,7 @@ export class ActionsController implements OnDestroy {
   private _allActions: Action[] = [];
   private _reorderAction: Action;
 
-  constructor(
-    private _breakpointObserver: BreakpointObserver,
-  ) {
+  constructor() {
     this._listenMobileMedia();
   }
 

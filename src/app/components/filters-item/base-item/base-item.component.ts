@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  KeyValueDiffer,
-  KeyValueDiffers, OnChanges, OnDestroy,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
 
@@ -31,14 +23,10 @@ implements OnChanges, OnDestroy {
   public label!: string;
 
   protected _kvDiffer: KeyValueDiffer<string, any>;
+  protected _kvDiffers = inject(KeyValueDiffers);
+  protected _cd = inject(ChangeDetectorRef);
 
   private _destroy$ = new Subject();
-
-  constructor(
-    protected _kvDiffers: KeyValueDiffers,
-    protected _cd: ChangeDetectorRef,
-  ) {
-  }
 
   public get destroy$(): Observable<any> {
     return this._destroy$.asObservable();

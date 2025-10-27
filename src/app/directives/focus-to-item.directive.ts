@@ -1,10 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit, Optional, Self,
-} from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { MatSelect } from '@angular/material/select';
 
@@ -29,6 +23,16 @@ import { FocusControllerService } from '../services/focus-controller.service';
   standalone: true,
 })
 export class FocusToItemDirective implements OnInit, OnDestroy {
+  private _el = inject(ElementRef);
+  private _focusController = inject(FocusControllerService);
+  private _targetSelect = inject(MatSelect, { optional: true, self: true });
+  private _targetDate = inject(FsDatePickerComponent, { optional: true, self: true });
+  private _targetDateScroll = inject(FsDateScrollPickerComponent, { optional: true, self: true });
+  private _targetDateRangeFrom = inject(DateRangePickerFromComponent, { optional: true, self: true });
+  private _targetDateRangeTo = inject(DateRangePickerToComponent, { optional: true, self: true });
+  private _targetAutocomplete = inject(FsAutocompleteComponent, { optional: true, self: true });
+  private _targetAutocompleteChips = inject(FsAutocompleteChipsComponent, { optional: true, self: true });
+
 
   @Input('fsFilterFocusTrigger')
   private _item;
@@ -37,18 +41,6 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
   private _focusTargetType;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _el: ElementRef,
-    private _focusController: FocusControllerService,
-    @Optional() @Self() private _targetSelect: MatSelect,
-    @Optional() @Self() private _targetDate: FsDatePickerComponent,
-    @Optional() @Self() private _targetDateScroll: FsDateScrollPickerComponent,
-    @Optional() @Self() private _targetDateRangeFrom: DateRangePickerFromComponent,
-    @Optional() @Self() private _targetDateRangeTo: DateRangePickerToComponent,
-    @Optional() @Self() private _targetAutocomplete: FsAutocompleteComponent,
-    @Optional() @Self() private _targetAutocompleteChips: FsAutocompleteChipsComponent,
-  ) {}
 
   public ngOnInit(): void {
     this._focusController

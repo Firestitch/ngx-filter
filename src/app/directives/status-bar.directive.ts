@@ -1,4 +1,4 @@
-import { Directive, TemplateRef } from '@angular/core';
+import { Directive, TemplateRef, inject } from '@angular/core';
 
 
 @Directive({
@@ -6,9 +6,6 @@ import { Directive, TemplateRef } from '@angular/core';
   standalone: true,
 })
 export class FilterStatusBarDirective {
-
-  constructor(
-    public templateRef: TemplateRef<any>,
-  ) { }
+  templateRef = inject<TemplateRef<any>>(TemplateRef);
 
 }

@@ -1,12 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -59,6 +52,8 @@ import { WeekComponent } from './week/week.component';
   ],
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
+  private _cdRef = inject(ChangeDetectorRef);
+
 
   @Input() public item: BaseItem<any>;
 
@@ -113,8 +108,6 @@ export class FilterItemComponent implements OnInit, OnDestroy {
   }
 
   private _destroy$ = new Subject<void>();
-
-  constructor(private _cdRef: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
     this.item.value$
