@@ -29,7 +29,7 @@ export class FsFilterConfig {
   public queryParam = false;
   public init: (query?: any, sort?: FilterSort | null, filter?: FilterComponent) => void;
   public change: ChangeFn;
-  public reload: ChangeFn;
+  public reload: boolean = true;
   public autoReload: FsFilterAutoReload;
   public clear: ChangeFn;
   public sortChange: ChangeFn;

@@ -148,12 +148,6 @@ export class KitchenSinkComponent implements OnInit {
         this.sort = sort;
         this._cdRef.detectChanges();
       },
-      reload: (query, sort) => {
-        console.log('Reload', query, sort);
-        this.query = query;
-        this.sort = sort;
-        this._cdRef.detectChanges();
-      },
       sortChange: (query, sort) => {
         console.log('sortChange', query, sort);
         this.query = query;

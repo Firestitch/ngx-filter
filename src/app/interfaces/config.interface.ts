@@ -21,7 +21,7 @@ export interface FilterConfig {
   queryParam?: boolean;
   namespace?: string;
   persist?: FsFilterPersistance;
-  reload?: ChangeFn;
+  reload?: boolean;
   clear?: ChangeFn;
   items?: IFilterConfigItem[];
   init?: ChangeFn;

@@ -39,10 +39,15 @@
   </fieldset>
 }
 <br>
-<div>
+<div class="fs-row.gap-xs">
   <button
       mat-stroked-button
       (click)="filter.updateSort({ sortBy: 'name', sortDirection: 'desc' })">
     Update Sort
+  </button>
+  <button
+      mat-stroked-button
+      (click)="filter.reload()">
+    Reload
   </button>
 </div>
