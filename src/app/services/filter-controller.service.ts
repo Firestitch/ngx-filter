@@ -187,12 +187,10 @@ export class FilterController implements OnDestroy {
       };
 
     } else {
-      if (this._persistanceController.enabled) {
-        result = {
-          ...result, 
-          ...this._persistanceController.getQuery(),
-        };
-      }
+      result = {
+        ...result, 
+        ...this._persistanceController.getQuery(),
+      };
       
       if (this._config.queryParam) {
         result = {

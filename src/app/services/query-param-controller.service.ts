@@ -1,6 +1,10 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { MatDialogRef } from '@angular/material/dialog';
+
+import { DrawerRef } from '@firestitch/drawer';
+
 import { filter, merge, Observable, of, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -15,14 +19,17 @@ import { SortController } from './sort-controller.service';
 @Injectable()
 export class QueryParamController {
   
-  private _destroyRef = inject(DestroyRef);
-  private _enabled = false;
-  private _sortController = inject(SortController);
-  private _route = inject(ActivatedRoute);
   private _filterController: FilterController;
+  private readonly _destroyRef = inject(DestroyRef);
+  private readonly _sortController = inject(SortController);
+  private readonly _route = inject(ActivatedRoute);
+  private readonly _dialogRef = inject(MatDialogRef, { optional: true });
+  private readonly _drawerRef = inject(DrawerRef, { optional: true });  
 
-  public get enabled(): boolean {
-    return this._enabled;
+  public get enabled() {
+    return !this._dialogRef && 
+      !this._drawerRef && 
+      this._filterController.config.queryParam;
   }
 
   public get params(): Record<string, any> {
@@ -43,18 +50,19 @@ export class QueryParamController {
 
   public init(filterController: FilterController): Observable<any> {
     this._filterController = filterController;
-    this._enabled = this._filterController.config.queryParam;
 
-    merge(
-      this._filterController.change$, 
-      this._filterController.init$,
-    )
-      .pipe(
-        filter(() => this.enabled),
-        tap(() => this.updateQueryParams()),
-        takeUntilDestroyed(this._destroyRef),
+    if (this.enabled) {
+      merge(
+        this._filterController.change$, 
+        this._filterController.init$,
       )
-      .subscribe();
+        .pipe(
+          filter(() => this.enabled),
+          tap(() => this.updateQueryParams()),
+          takeUntilDestroyed(this._destroyRef),
+        )
+        .subscribe();
+    }
 
     return of(null);
   }

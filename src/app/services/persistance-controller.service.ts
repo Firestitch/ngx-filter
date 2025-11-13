@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { DestroyRef, inject, Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -18,8 +19,6 @@ import { FilterController } from './filter-controller.service';
 
 @Injectable()
 export class PersistanceController {
-  
-  public enabled = false;
 
   private _store = inject(FsStore);
   private _filterController: FilterController;
@@ -30,19 +29,26 @@ export class PersistanceController {
   private readonly _dialogRef = inject(MatDialogRef, { optional: true });
   private readonly _drawerRef = inject(DrawerRef, { optional: true });  
   private readonly _destroyRef = inject(DestroyRef);
+  private readonly _route = inject(ActivatedRoute);
   
-  public get inDialog() {
-    return !!this._dialogRef || !!this._drawerRef;
+  public get enabled() {
+    return !this._dialogRef && 
+      !this._drawerRef && 
+      this._route.snapshot.queryParams.persist !== 'disable' &&
+      this._filterController.config.persist;
   }
 
   public init(filterController: FilterController): Observable<any> {
     this._filterController = filterController;
-    
-    const persistanceConfig = this._initConfig(filterController.config.persist);
 
-    if(persistanceConfig) {
-      this.enabled = !this.inDialog;
+    if (this.enabled) {    
+      const persistanceConfig = this._initConfig(filterController.config.persist);
       this._name = persistanceConfig.name;
+
+      if(this._route.snapshot.queryParams.persist === 'clear') {
+        this._set({});
+      }
+
       this._data = this._get() || {};
     
       this._filterController.change$
@@ -50,23 +56,19 @@ export class PersistanceController {
           takeUntilDestroyed(this._destroyRef),
         )
         .subscribe(() => {
-          this._set('query', this._filterController.values);
+          this._set(this._filterController.values);
         });
     }
 
     return of(null);
   }
 
-  public setQuery(value: any) {
-    this._set('query', value);
-  }
-
   public getQuery() {
     return this._data.query || {};
   }
 
-  private _set(key: string, value: any) {
-    this._data[key] = value;
+  private _set(value: any) {
+    this._data['query'] = value;
     const storeData = this._store.get(this._storeKey) || {};
     storeData[this._name] = this._data;
 
