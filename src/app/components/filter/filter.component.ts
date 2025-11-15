@@ -16,10 +16,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { MatIconAnchor } from '@angular/material/button';
-import { MatIcon, MatIconRegistry } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { FsClearModule } from '@firestitch/clear';
@@ -29,7 +28,6 @@ import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, of, Su
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
-import { FilterIcon } from '../../consts';
 import { FilterHeadingDirective } from '../../directives';
 import { ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
@@ -42,7 +40,6 @@ import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
 import { SortController } from '../../services';
 import { FilterController } from '../../services/filter-controller.service';
-import { FsFilterOverlayService } from '../../services/filter-overlay.service';
 import { FocusControllerService } from '../../services/focus-controller.service';
 import { KeywordController } from '../../services/keyword-controller.service';
 import { PersistanceController } from '../../services/persistance-controller.service';
@@ -62,7 +59,6 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   styleUrls: ['./filter.component.scss'],
   templateUrl: './filter.component.html',
   providers: [
-    FsFilterOverlayService,
     PersistanceController,
     QueryParamController,
     FocusControllerService,
@@ -127,7 +123,6 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _hasFilterChips$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
-  private _filterOverlay = inject(FsFilterOverlayService);
   private _zone = inject(NgZone);
   private _actionsController = inject(ActionsController);
   private _filterController = inject(FilterController);
@@ -140,7 +135,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._filterController.filter = this;
     this._updateWindowWidth();
     this._listenWindowResize();
-    this._initIcon();
   }
 
   public get queryParams(): KeyValue {
@@ -302,12 +296,9 @@ export class FilterComponent implements OnInit, OnDestroy {
 
     this._initItems();
     this._initAutoReload();
-    this._initOverlay();
   }
 
   public ngOnDestroy() {
-    this._destroyFilterDrawer();
-
     this._destroy$.next(null);
     this._destroy$.complete();
   }
@@ -318,29 +309,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public updateSort(sort: ISortingChangeEvent, emitChange: boolean = true) {
     this._sortController.updateSort(sort, emitChange);
-  }
-
-  public hideDrawer() {
-    this.closed.emit();
-    this._destroyFilterDrawer();
-  }
-
-  public showDrawer() {
-    this._listenEscButton();
-
-    this.opened.emit();
-
-    this._filterOverlay.open();
-  }
-
-  public filterButtonClick(event = null) {
-    event.stopPropagation();
-
-    if (this._filterOverlay.opened()) {
-      this.hideDrawer();
-    } else {
-      this.showDrawer();
-    }
   }
 
   public get itemValues(): any[] {
@@ -496,35 +464,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._actionsController.updateDisabledState();
   }
 
-  private _destroyFilterDrawer() {
-    this._filterOverlay.close();
-  }
-
   private _updateWindowWidth() {
     this.windowDesktop = window.innerWidth > 1200;
-  }
-
-  private _listenEscButton() {
-    this._zone.runOutsideAngular(() => {
-      fromEvent(window, 'keyup')
-        .pipe(
-          filter((event: KeyboardEvent) => event.code === 'Escape'),
-          takeUntil(this.closed),
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this._zone.run(() => {
-            this.hideDrawer();
-          });
-        });
-    });
-  }
-
-  private _initIcon() {
-    const iconRegistry = inject(MatIconRegistry);
-    const sanitizer = inject(DomSanitizer);
-
-    iconRegistry.addSvgIconLiteral('filterOutline', sanitizer.bypassSecurityTrustHtml(FilterIcon));
   }
 
   private _listenWindowResize() {
@@ -557,26 +498,5 @@ export class FilterComponent implements OnInit, OnDestroy {
           this.reload(null);
         });
     }
-  }
-
-  private _initOverlay() {
-    this._filterOverlay.attach$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.showFilterMenu = true;
-      });
-
-    this._filterOverlay.detach$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.showFilterMenu = false;
-      });
-
-    this._filterOverlay.setClearFn(this.clear.bind(this));
-    this._filterOverlay.setDoneFn(this.hideDrawer.bind(this));
   }
 }

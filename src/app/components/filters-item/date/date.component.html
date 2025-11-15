@@ -1,5 +1,7 @@
 @if (item.mode === itemDateMode.ScrollMonthDayYear || item.mode === itemDateMode.ScrollMonthYear) {
-  <mat-form-field>
+  <mat-form-field
+      [floatLabel]="'always'"
+      class="form-field-padless">
     <mat-label>
       {{ item.label }}
     </mat-label>
@@ -7,7 +9,7 @@
       matInput
       fsDateScrollPicker
       [placeholder]="item.label"
-      [fsFilterFocusTrigger]="item"
+      [fsFilterFocusTrigger]="true"
       [(ngModel)]="value"
       (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"
@@ -19,14 +21,16 @@
       [name]="item.name">
   </mat-form-field>
 } @else if (item.mode === itemDateMode.Calendar) {
-  <mat-form-field>
+  <mat-form-field
+      [floatLabel]="'always'"
+      class="form-field-padless">
     <mat-label>
       {{ item.label }}
     </mat-label>
     <input
       matInput
       fsDatePicker
-      [fsFilterFocusTrigger]="item"
+      [fsFilterFocusTrigger]="true"
       [(ngModel)]="value"
       (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"

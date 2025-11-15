@@ -1,21 +1,30 @@
-<mat-form-field [ngClass]="{ isolate: item.isolate }">
+<mat-form-field
+    [ngClass]="{ isolate: item.isolate }"
+    [floatLabel]="'always'"
+    class="form-field-padless">
   <mat-label>
     {{ item.label }}
   </mat-label>
   <mat-select
-      [fsFilterFocusTrigger]="item"
+      [fsFilterFocusTrigger]="true"
       [(ngModel)]="value"
       (ngModelChange)="changed()"
       [multiple]="item.multiple">
     @if (item.children) {
       @for (option of item.values$ | async; track option) {
-        <mat-optgroup [label]="option.name">
-          @for (childOption of option[item.children]; track childOption.value) {
-            <mat-option [value]="childOption.value">
-              {{ childOption.name }}
-            </mat-option>
-          }
-        </mat-optgroup>
+        @if (option[item.children]) {
+          <mat-optgroup [label]="option.name">
+            @for (childOption of option[item.children]; track childOption.value) {
+              <mat-option [value]="childOption.value">
+                {{ childOption.name }}
+              </mat-option>
+            }
+          </mat-optgroup>
+        } @else {
+          <mat-option [value]="option.value">
+            {{ option.name }}
+          </mat-option>
+        }
       }
     } @else {
       @for (option of item.values$ | async; track option) {

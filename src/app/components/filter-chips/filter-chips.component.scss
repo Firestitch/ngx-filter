@@ -1,12 +1,21 @@
 :host  {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   column-gap: 4px;
   max-width: 100%;
 
   &.top-margin {
-    fs-chip {
+    fs-chip, .clear {
       margin-top: 4px;
     }
   }
+}
+
+.clear {
+  display: flex;
+  color: inherit;
+  width: 25px;
+  height: 25px;
+  padding: 1px;
 }

@@ -52,10 +52,9 @@ import { WeekComponent } from './week/week.component';
   ],
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
-  private _cdRef = inject(ChangeDetectorRef);
-
 
   @Input() public item: BaseItem<any>;
+  @Input() public name: string;
 
   public itemType = ItemType;
 
@@ -107,6 +106,7 @@ export class FilterItemComponent implements OnInit, OnDestroy {
     return this.item as CheckboxItem;
   }
 
+  private _cdRef = inject(ChangeDetectorRef);
   private _destroy$ = new Subject<void>();
 
   public ngOnInit(): void {

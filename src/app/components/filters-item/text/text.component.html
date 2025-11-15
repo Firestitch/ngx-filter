@@ -1,4 +1,6 @@
-<mat-form-field [floatLabel]="!item.placeholder ? 'auto' : 'always'">
+<mat-form-field
+    [floatLabel]="'always'"
+    class="form-field-padless">
   <mat-label>
     {{ item.label }}
   </mat-label>
@@ -13,7 +15,7 @@
     [(ngModel)]="value"
     (ngModelChange)="change()"
     [placeholder]="item.placeholder"
-    [fsFilterFocusTrigger]="item">
+    [fsFilterFocusTrigger]="true">
   @if (item.suffix) {
     <span
       matTextSuffix

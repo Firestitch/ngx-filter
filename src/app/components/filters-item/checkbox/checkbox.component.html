@@ -1,8 +1,6 @@
-<fs-label-field>
-  <mat-checkbox
-      [(ngModel)]="value"
-      (ngModelChange)="change()"
-      [name]="item.name">
-    {{ item.label }}
-  </mat-checkbox>
-</fs-label-field>
+<mat-slide-toggle
+    [(ngModel)]="value"
+    (ngModelChange)="change()"
+    [name]="item.name">
+  {{ item.label }}
+</mat-slide-toggle>

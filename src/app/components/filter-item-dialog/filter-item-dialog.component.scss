@@ -1,0 +1,12 @@
+.filter-item-dialog {
+  background-color: #fff;
+  padding: 12px;
+  box-shadow: var(--mat-autocomplete-container-elevation-shadow);
+  border-radius: 5px;
+
+  ::ng-deep {
+    mat-form-field {
+      margin-top: 0;
+    }
+  }
+}

@@ -29,7 +29,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public initCallback: (item: BaseItem<T>, filter?) => void;
 
   protected readonly _type: T['type'];
-
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
   private _hidden$ = new BehaviorSubject(false);
@@ -51,6 +50,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public get hidden$(): Observable<boolean> {
     return this._hidden$.asObservable();
+  }
+
+  public get mergedLabel(): string {
+    return Array.isArray(this.label) ? this.label.join(' / ') : this.label;
   }
 
   public get visible$(): Observable<boolean> {

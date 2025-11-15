@@ -4,10 +4,10 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  inject,
   Input,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 

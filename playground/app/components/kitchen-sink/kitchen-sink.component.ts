@@ -236,13 +236,13 @@ export class KitchenSinkComponent implements OnInit {
         init: (item, initFilter: FilterComponent) => {
           console.log('Item init', item, initFilter);
           
-          setTimeout(() => {
-            item.hide();
-          }, 5000);
+          // setTimeout(() => {
+          //   item.hide();
+          // }, 5000);
 
-          setTimeout(() => {
-            item.show();
-          }, 10000);
+          // setTimeout(() => {
+          //   item.show();
+          // }, 10000);
         },
         change: (item, filterComponent: FilterComponent) => {
           filterComponent.getItem('multiSelect').clear();
@@ -250,7 +250,10 @@ export class KitchenSinkComponent implements OnInit {
         values: () => {
           return of(this.users)
             .pipe(
-              map((users) => nameValue(users, 'name', 'id')),
+              map((users) => [
+                { name: 'All', value: null },
+                ...nameValue(users, 'name', 'id'),
+              ]),
             );
         },
       },
@@ -388,11 +391,6 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Scroll Date',
         maxYear: (new Date()).getFullYear(),
         mode: ItemDateMode.ScrollMonthYear,
-      },
-      {
-        name: 'week',
-        type: ItemType.Week,
-        label: 'Week',
       },
       {
         name: 'price',

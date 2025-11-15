@@ -1,5 +1,4 @@
 export * from './filter-controller.service';
-export * from './filter-overlay.service';
 export * from './focus-controller.service';
 export * from './keyword-controller.service';
 export * from './persistance-controller.service';

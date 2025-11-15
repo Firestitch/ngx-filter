@@ -22,6 +22,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-autocompletechips',
   templateUrl: './autocompletechips.component.html',
+  styleUrls: ['./autocompletechips.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [

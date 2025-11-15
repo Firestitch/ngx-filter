@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { FsFormModule } from '@firestitch/form';
 import { FsLabelModule } from '@firestitch/label';
@@ -26,7 +26,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   standalone: true,
   imports: [
     FsLabelModule,
-    MatCheckbox,
+    MatSlideToggle,
     FormsModule,
     FsFormModule,
   ],

@@ -1,13 +1,43 @@
-@for (item of items; track item.name) {
-  @if (item.visible$ | async) {
-    @for (chip of item.chips$ | async; track chip.label) {
-      <fs-chip
-          [removable]="item.clearable"
-          size="small"
-          (click)="click(item, chip)"
-          (removed)="remove(item, chip)">
-        {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
-      </fs-chip>
+@if (items.length !== 0) {
+  @for (item of items; track item.name) {
+    @if (item.visible$ | async) {
+      @if ((item.chips$ | async).length) {
+        @for (chip of item.chips$ | async; track chip.label) {
+          <fs-chip
+              class="filter-chip"
+              [removable]="item.clearable"
+              size="small"
+              (click)="click(item, chip.name, $event.target)"
+              (removed)="remove(item, chip)">
+            @if (chip.value) {
+              {{ chip.label + ': ' + chip.value }}
+            } @else {
+              {{ chip.label }}
+            }
+          </fs-chip>
+        }
+      } @else {
+        <fs-chip
+            class="filter-chip"
+            size="small"
+            (click)="click(item, null, $event.target)"
+            [outlined]="true">
+          {{ item.mergedLabel }}
+          <ng-template
+            fsChipSuffix
+            [icon]="'add_circle_outline'"
+            (click)="click(item, null, $event.event.target)">
+          </ng-template>
+        </fs-chip>
+      }
     }
   }
+  <a
+      class="clear"
+      mat-icon-button
+      (click)="clear()">
+    <mat-icon>
+      clear
+    </mat-icon>
+  </a>
 }

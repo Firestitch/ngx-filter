@@ -1,5 +1,6 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Directive, Input, inject } from '@angular/core';
 
+import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 
 import { FsAutocompleteComponent } from '@firestitch/autocomplete';
@@ -10,22 +11,18 @@ import {
   FsDateScrollPickerComponent,
 } from '@firestitch/datepicker';
 
-import { Subject } from 'rxjs';
-import { delay, takeUntil } from 'rxjs/operators';
-
-import { ItemDateMode } from '../enums/item-date-mode.enum';
-import { ItemType } from '../enums/item-type.enum';
-import { FocusControllerService } from '../services/focus-controller.service';
-
 
 @Directive({
   selector: '[fsFilterFocusTrigger]',
   standalone: true,
 })
-export class FocusToItemDirective implements OnInit, OnDestroy {
-  private _el = inject(ElementRef);
-  private _focusController = inject(FocusControllerService);
+export class FocusToItemDirective implements AfterViewInit {
+
+  @Input('fsFilterFocusTrigger')
+  public focusEnabled = true;
+
   private _targetSelect = inject(MatSelect, { optional: true, self: true });
+  private _targetText = inject(MatInput, { optional: true, self: true });
   private _targetDate = inject(FsDatePickerComponent, { optional: true, self: true });
   private _targetDateScroll = inject(FsDateScrollPickerComponent, { optional: true, self: true });
   private _targetDateRangeFrom = inject(DateRangePickerFromComponent, { optional: true, self: true });
@@ -34,63 +31,43 @@ export class FocusToItemDirective implements OnInit, OnDestroy {
   private _targetAutocompleteChips = inject(FsAutocompleteChipsComponent, { optional: true, self: true });
 
 
-  @Input('fsFilterFocusTrigger')
-  private _item;
-
-  @Input('focusTargetType')
-  private _focusTargetType;
-
-  private _destroy$ = new Subject<void>();
-
-  public ngOnInit(): void {
-    this._focusController
-      .listenFocusFor$(this._item, this._focusTargetType)
-      .pipe(
-        delay(500),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this._focus();
-      });
-  }
-
-  public ngOnDestroy() {
-    this._destroy$.next(null);
-    this._destroy$.complete();
+  public ngAfterViewInit(): void {
+    if(this.focusEnabled) {
+      this._focus();
+    }
   }
 
   private _focus() {
-    switch (this._item.type) {
-      case ItemType.Select: {
-        this._targetSelect.open();
-      } break;
+    if(this._targetSelect) {
+      this._targetSelect.open();
+    }
 
-      case ItemType.Text: case ItemType.Range: {
-        this._el.nativeElement.focus();
-      } break;
+    if(this._targetText) {
+      this._targetText.focus();
+    }
 
-      case ItemType.Date: {
-        if (this._item.mode === ItemDateMode.Calendar) {
-          this._targetDate.open();
-        } else {
-          this._targetDateScroll.open();
-        }
-      } break;
-      case ItemType.DateRange: {
-        if (this._focusTargetType === 'from') {
-          this._targetDateRangeFrom.open();
-        } else {
-          this._targetDateRangeTo.open();
-        }
-      } break;
+    if(this._targetDate) {
+      this._targetDate.open();
+    }
 
-      case ItemType.AutoComplete: {
-        this._targetAutocomplete.focus();
-      } break;
+    if(this._targetDateScroll) {
+      this._targetDateScroll.open();
+    }
 
-      case ItemType.AutoCompleteChips: {
-        this._targetAutocompleteChips.focus();
-      } break;
+    if(this._targetDateRangeFrom) {
+      this._targetDateRangeFrom.open();
+    }
+
+    if(this._targetDateRangeTo) {
+      this._targetDateRangeTo.open();
+    }
+
+    if(this._targetAutocomplete) {
+      this._targetAutocomplete.focus();
+    }
+
+    if(this._targetAutocompleteChips) {
+      this._targetAutocompleteChips.focus();
     }
   }
 }

@@ -15,7 +15,6 @@ import { IFilterConfigItem } from '../../../interfaces';
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../../models/items';
 import { FilterController } from '../../../services/filter-controller.service';
-import { FsFilterOverlayService } from '../../../services/filter-overlay.service';
 import { SavedFilterController } from '../../../services/saved-filter-controller.service';
 
 import { FsFilterSavedFilterChipsComponent } from './components/saved-filter-chips';
@@ -41,7 +40,6 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
   private _cdRef = inject(ChangeDetectorRef);
   private _filterController = inject(FilterController);
   private _dialogRef = inject(MatDialogRef);
-  private _filterOverlayService = inject(FsFilterOverlayService);
 
   public ngOnInit(): void {
     this.savedFilters = this._savedFilterController.savedFilters;
@@ -61,7 +59,6 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
 
   public selectFilter(savedFilter: IFilterSavedFilter) {
     this._savedFilterController.setActiveFilter(savedFilter);
-    this._filterOverlayService.open();
     this._dialogRef.close();
   }
 

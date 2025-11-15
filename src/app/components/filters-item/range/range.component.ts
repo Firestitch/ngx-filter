@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  Input,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -38,6 +39,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class RangeComponent extends BaseItemComponent<RangeItem> implements OnInit {
+
+  @Input() public name: string;
 
   public min: number;
   public max: number;

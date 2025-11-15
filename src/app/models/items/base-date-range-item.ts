@@ -100,7 +100,6 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     this.setValue({}, emitChange);
   }
   
-
   public clearByName(name: string, emitChange: boolean = true) {
     if (name === 'from') {
       this.setValue({ 

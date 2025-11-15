@@ -38,12 +38,10 @@
 <ng-template
     #chipsTmpl
     let-topMargin="topMargin">
-  @if (config.chips) {
-    <fs-filter-chips
-      class="filter-chips"
-      [ngClass]="{ 'top-margin': topMargin }">
-    </fs-filter-chips>
-  }
+  <fs-filter-chips
+    class="filter-chips"
+    [ngClass]="{ 'top-margin': topMargin }">
+  </fs-filter-chips>
 </ng-template>
 <ng-template #statusBarTmpl>
   @if (statusBar) {
@@ -71,17 +69,6 @@
 <ng-template #filterToolbarTmpl>
   @if (config.reload || config.autoReload || (filtersVisible$ | async)) {
     <div class="filter-toolbar">
-      @if ((filtersVisible$ | async)) {
-        <a
-            mat-icon-button
-            class="button-filters"
-            (click)="filterButtonClick($event)"
-            [color]="config.button?.color">
-          @if (config.button?.icon) {
-            <mat-icon [svgIcon]="'filterOutline'"></mat-icon>
-          }
-        </a>
-      }
       @if (config.reload) {
         <a
             mat-icon-button

@@ -1,4 +1,6 @@
-<mat-form-field>
+<mat-form-field
+    [floatLabel]="'always'"
+    class="form-field-padless">
   <mat-label>
     {{ item.label }}
   </mat-label>
@@ -6,7 +8,7 @@
     matInput
     fsDateWeekPicker
     [placeholder]="item.label"
-    [fsFilterFocusTrigger]="item"
+    [fsFilterFocusTrigger]="true"
     [(ngModel)]="value"
     (ngModelChange)="item.value = value"
     [seedDate]="item.seedDate"

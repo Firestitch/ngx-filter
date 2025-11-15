@@ -1,5 +1,8 @@
 <div class="form-field">
-  <mat-form-field class="filter-range-min">
+  <mat-form-field
+      class="filter-range-min"
+      [floatLabel]="'always'"
+      class="form-field-padless">
     <mat-label>
       {{ item.label[0] }}
     </mat-label>
@@ -12,8 +15,7 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="item"
-      [focusTargetType]="'from'"
+      [fsFilterFocusTrigger]="name === 'min'"
       type="number"
       [(ngModel)]="min"
       (ngModelChange)="change()"
@@ -26,7 +28,10 @@
       </span>
     }
   </mat-form-field>
-  <mat-form-field class="filter-range-max">
+  <mat-form-field
+      class="filter-range-max"
+      [floatLabel]="'always'"
+      class="form-field-padless">
     <mat-label>
       {{ item.label[1] }}
     </mat-label>
@@ -39,8 +44,7 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="item"
-      [focusTargetType]="'to'"
+      [fsFilterFocusTrigger]="name === 'max'"
       type="number"
       [(ngModel)]="max"
       (ngModelChange)="change()"

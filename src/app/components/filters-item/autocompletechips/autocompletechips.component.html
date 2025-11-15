@@ -1,11 +1,13 @@
 <fs-autocomplete-chips
-    [fsFilterFocusTrigger]="item"
+    [fsFilterFocusTrigger]="true"
     [fetch]="fetch"
     [ngModel]="value"
+    [floatLabel]="'always'"
     (selected)="selected($event)"
     (removed)="removed($event)"
     (clear)="clear()"
     [allowText]="false"
+    [padless]="true"
     [label]="label"
     [size]="'small'"
     [chipImage]="item.chipImage"
@@ -17,7 +19,6 @@
     [allowClear]="item.clearable"
     [removable]="item.clearable"
     [compareWith]="compareItems"
-    [panelWidth]="300"
     name="model">
   <ng-template
       fsAutocompleteObject
