@@ -51,7 +51,7 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
 
     return [
       {
-        value: '',
+        value: 'Yes',
         label: this.label,
       },
     ];

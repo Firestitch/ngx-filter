@@ -30,6 +30,6 @@ import { FilterItemComponent } from '../filters-item/filter-item.component';
 export class FilterItemDialogComponent {
 
   public item: BaseItem<IFilterConfigItem> = inject(FILTER_DRAWER_DATA)?.item;
-  public name: string = inject(FILTER_DRAWER_DATA)?.name;
+  public autofocusName: string = inject(FILTER_DRAWER_DATA)?.autofocusName;
 
 }

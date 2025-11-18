@@ -15,7 +15,7 @@
     [(ngModel)]="value"
     (ngModelChange)="change()"
     [placeholder]="item.placeholder"
-    [fsFilterFocusTrigger]="true">
+    [fsFilterFocusTrigger]="autofocus">
   @if (item.suffix) {
     <span
       matTextSuffix

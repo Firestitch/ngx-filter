@@ -16,7 +16,7 @@ import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -123,28 +123,8 @@ export class FsSavedFilterAutocompleteChipsComponent implements OnInit {
   }
 
   public saveAs(): void {
-    this._prompt.input({
-      title: 'Save as new',
-      label: 'Name',
-      required: true,
-      commitLabel: 'Save',
-      dialogConfig: {
-        restoreFocus: false,
-      },
-    })
-      .pipe(
-        switchMap((name) => {
-          const data: IFilterSavedFilter = {
-            id: null,
-            name,
-          };
-
-          return this.savedFiltersController.save(data);
-        }),
-        tap(() => {
-          this._message.success(`Saved ${this.savedFiltersController.singularLabel}`);
-        }),
-      )
+    this.savedFiltersController
+      .saveAs()
       .subscribe();
   } 
 

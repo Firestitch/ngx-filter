@@ -4,13 +4,15 @@
       @case (itemType.Text) {
         <filter-item-text
           class="interface"
-          [item]="textItem">
+          [item]="textItem"
+          [autofocus]="autofocus">
         </filter-item-text>
       }
       @case (itemType.Select) {
         <filter-item-select
           class="interface"
-          [item]="selectItem">
+          [item]="selectItem"
+          [autofocus]="autofocus">
         </filter-item-select>
       }
       @case (itemType.Chips) {
@@ -22,56 +24,65 @@
       @case (itemType.Range) {
         <filter-item-range
           class="interface interface-range"
-          [item]="rangeItem">
+          [item]="rangeItem"
+          [autofocusName]="autofocusName">
         </filter-item-range>
       }
       @case (itemType.AutoComplete) {
         <filter-item-autocomplete
           class="interface"
-          [item]="autocompleteItem">
+          [item]="autocompleteItem"
+          [autofocus]="autofocus">
         </filter-item-autocomplete>
       }
       @case (itemType.AutoCompleteChips) {
         <filter-item-autocompletechips
           class="interface"
-          [item]="autocompleteChipsItem">
+          [item]="autocompleteChipsItem"
+          [autofocus]="autofocus">
         </filter-item-autocompletechips>
       }
       @case (itemType.Date) {
         <filter-item-date
           class="interface interface-date"
-          [item]="dateItem">
+          [item]="dateItem"
+          [autofocus]="autofocus">
         </filter-item-date>
       }
       @case (itemType.DateTime) {
         <filter-item-date
           class="interface interface-date"
-          [item]="dateTimeItem">
+          [item]="dateTimeItem"
+          [autofocus]="autofocus">
         </filter-item-date>
       }
       @case (itemType.DateRange) {
         <filter-item-date-range
-          class="interface interface-date"
-          [item]="dateRangeItem"
+            class="interface interface-date"
+            [item]="dateRangeItem"
+            [autofocusName]="autofocusName">
           [name]="name">
         </filter-item-date-range>
       }
       @case (itemType.DateTimeRange) {
         <filter-item-date-range
           class="interface interface-date"
-          [item]="dateTimeRangeItem">
+          [item]="dateTimeRangeItem"
+          [autofocusName]="autofocusName">
         </filter-item-date-range>
       }
       @case (itemType.Week) {
         <filter-item-week
           class="interface"
-          [item]="weekItem">
+          [item]="weekItem"
+          [autofocus]="autofocus">
         </filter-item-week>
       }
       @case (itemType.Checkbox) {
         <filter-item-checkbox
           class="interface interface-checkbox"
-          [item]="checkboxItem">
+          [item]="checkboxItem"
+          [autofocus]="autofocus">
         </filter-item-checkbox>
       }
     }

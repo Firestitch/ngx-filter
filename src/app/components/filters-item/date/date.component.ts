@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   inject,
+  Input,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -42,6 +43,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> implements OnInit {
+
+  @Input() public autofocus: boolean = false;
 
   public viewType = PickerViewType.Date;
 

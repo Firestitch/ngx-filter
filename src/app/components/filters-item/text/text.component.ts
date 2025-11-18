@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  Input,
   OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -36,6 +37,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class TextComponent extends BaseItemComponent<TextItem> implements OnInit {
+
+  @Input() public autofocus: boolean = false;
 
   public value: string;
 

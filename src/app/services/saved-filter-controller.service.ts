@@ -1,5 +1,6 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
+import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -19,6 +20,8 @@ import type { FilterController } from './filter-controller.service';
 
 @Injectable()
 export class SavedFilterController implements OnDestroy {
+
+  private _message = inject(FsMessage);
 
   private _filterController: FilterController;
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);
@@ -107,6 +110,28 @@ export class SavedFilterController implements OnDestroy {
     this._setEnabledStatus(true);
 
     return this.load();
+  }
+
+  public saveAs(): Observable<IFilterSavedFilter> {
+    return this._prompt.input({
+      title: 'Save as new',
+      label: 'Name',
+      required: true,
+      commitLabel: 'Save',
+      dialogConfig: {
+        restoreFocus: false,
+      },
+    })
+      .pipe(
+        switchMap((name) => {
+          const data: IFilterSavedFilter = {
+            id: null,
+            name,
+          };
+
+          return this.save(data);
+        }),
+      );
   }
 
   public initSavedFilters(savedFilters: IFilterSavedFilter[]): void {

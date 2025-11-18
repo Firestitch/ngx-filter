@@ -9,7 +9,7 @@
       matInput
       fsDateScrollPicker
       [placeholder]="item.label"
-      [fsFilterFocusTrigger]="true"
+      [fsFilterFocusTrigger]="autofocus"
       [(ngModel)]="value"
       (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"
@@ -30,7 +30,7 @@
     <input
       matInput
       fsDatePicker
-      [fsFilterFocusTrigger]="true"
+      [fsFilterFocusTrigger]="autofocus"
       [(ngModel)]="value"
       (ngModelChange)="item.value = value"
       [maxYear]="item.maxYear"

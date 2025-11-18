@@ -8,7 +8,7 @@
     matInput
     fsDateWeekPicker
     [placeholder]="item.label"
-    [fsFilterFocusTrigger]="true"
+    [fsFilterFocusTrigger]="autofocus"
     [(ngModel)]="value"
     (ngModelChange)="item.value = value"
     [seedDate]="item.seedDate"

@@ -47,8 +47,8 @@ import { QueryParamController } from '../../services/query-param-controller.serv
 import { SavedFilterController } from '../../services/saved-filter-controller.service';
 import { FsFilterActionsComponent } from '../actions/actions.component';
 import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
+import { FilterItemComponent } from '../filters-item';
 import { KeywordInputComponent } from '../keyword-input/keyword-input.component';
-import { FsSavedFilterAutocompleteChipsComponent } from '../saved-filter/saved-filter-autocomplete-chips/saved-filter-autocomplete-chips.component';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
@@ -72,7 +72,7 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
   standalone: true,
   imports: [
     NgTemplateOutlet,
-    FsSavedFilterAutocompleteChipsComponent,
+    FilterItemComponent,
     NgClass,
     MatIcon,
     FormsModule,
@@ -218,6 +218,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._filterController.items;
   }
 
+  public get primaryItems(): BaseItem<IFilterConfigItem>[] {
+    return this.items.filter((item) => item.visible && item.primary);
+  }
+
   public change() {
     this._filterController.change();
   }
@@ -235,7 +239,7 @@ export class FilterComponent implements OnInit, OnDestroy {
       filtersVisible: this._filtersVisible$.asObservable(),
       hasVisibleItems: of(
         this.items
-          .some((item) => !item.hidden && !item.isTypeKeyword),
+          .some((item) => item.visible && !item.isTypeKeyword),
       ),
     })
       .pipe(
@@ -253,10 +257,10 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordFullWidth$;
   }
 
-  public get filterInputVisible$(): Observable<boolean> {
+  public get primaryFilterVisible$(): Observable<boolean> {
     return combineLatest({
       keywordVisible: this.keywordVisible$,
-      savedFilterVisible: of(this.savedFilterController.enabled),
+      savedFilterVisible: of(this.items.some((item) => item.visible && item.primary)),
     })
       .pipe(
         map(({ keywordVisible, savedFilterVisible }) => {

@@ -49,8 +49,8 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
     return this._filterController.items;
   }
 
-  public get pluralLabelLower(): string {
-    return this._savedFilterController.pluralLabelLower;
+  public get pluralLabel(): string {
+    return this._savedFilterController.pluralLabel;
   }
 
   public get sortable(): boolean {

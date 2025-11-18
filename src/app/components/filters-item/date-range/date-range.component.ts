@@ -43,7 +43,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class DateRangeComponent 
   extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit {
 
-    @Input() public name: string;
+    @Input() public autofocusName: string;
     
     public viewType = PickerViewType.Date;
     public from: Date;

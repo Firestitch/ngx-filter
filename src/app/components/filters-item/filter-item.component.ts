@@ -53,6 +53,8 @@ import { WeekComponent } from './week/week.component';
 })
 export class FilterItemComponent implements OnInit, OnDestroy {
 
+  @Input() public autofocus: boolean = false;
+  @Input() public autofocusName: string;
   @Input() public item: BaseItem<any>;
   @Input() public name: string;
 

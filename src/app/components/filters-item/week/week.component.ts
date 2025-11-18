@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  Input,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -36,6 +37,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class WeekComponent extends BaseItemComponent<WeekItem> implements OnInit {
+
+  @Input() public autofocus: boolean = false;
 
   public value: Date;
 

@@ -7,7 +7,7 @@
     </mat-label>
     <input
       matInput
-      [fsFilterFocusTrigger]="name === 'from'"
+      [fsFilterFocusTrigger]="autofocusName === 'from'"
       [fsDateRangeFrom]="item.name"
       [(ngModel)]="from"
       [clear]="item.clearable"
@@ -26,7 +26,7 @@
     </mat-label>
     <input
       matInput
-      [fsFilterFocusTrigger]="name === 'to'"
+      [fsFilterFocusTrigger]="autofocusName === 'to'"
       [fsDateRangeTo]="item.name"
       [(ngModel)]="to"
       (ngModelChange)="change()"

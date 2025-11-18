@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   Injector,
+  Input,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -33,6 +34,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> implements OnInit {
+
+  @Input() public autofocus: boolean = false;
 
   public value: any[];
   

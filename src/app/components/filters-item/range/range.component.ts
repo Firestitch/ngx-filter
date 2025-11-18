@@ -40,7 +40,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class RangeComponent extends BaseItemComponent<RangeItem> implements OnInit {
 
-  @Input() public name: string;
+  @Input() public autofocusName: string;
 
   public min: number;
   public max: number;

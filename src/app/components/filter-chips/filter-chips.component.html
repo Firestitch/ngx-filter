@@ -1,25 +1,28 @@
 @if (items.length !== 0) {
-  @for (item of items; track item.name) {
+  @for (item of nonPrimaryItems; track item.name) {
     @if (item.visible$ | async) {
       @if ((item.chips$ | async).length) {
         @for (chip of item.chips$ | async; track chip.label) {
           <fs-chip
-              class="filter-chip"
-              [removable]="item.clearable"
-              size="small"
-              (click)="click(item, chip.name, $event.target)"
-              (removed)="remove(item, chip)">
+              class="filter-chip selected"
+              [size]="'medium'"
+              (click)="click(item, chip.name, $event.target)">
             @if (chip.value) {
               {{ chip.label + ': ' + chip.value }}
             } @else {
               {{ chip.label }}
             }
+            <ng-template
+              fsChipSuffix
+              [icon]="'cancel_circle_outline'"
+              (click)="remove(item, chip)">
+            </ng-template>
           </fs-chip>
         }
       } @else {
         <fs-chip
             class="filter-chip"
-            size="small"
+            [size]="'medium'"
             (click)="click(item, null, $event.target)"
             [outlined]="true">
           {{ item.mergedLabel }}
@@ -34,10 +37,30 @@
   }
   <a
       class="clear"
-      mat-icon-button
+      mat-stroked-button
       (click)="clear()">
-    <mat-icon>
-      clear
-    </mat-icon>
+    Clear filters
   </a>
+  <mat-select
+      class="saved-filters-select mat-mdc-outlined-button"
+      [buttonType]="'basic'"
+      fsSelectButton
+      [placeholder]="(savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel"
+      [deselectOnChange]="true">
+    @if (savedFilterController.activeFilter$ | async) {
+      <mat-option (click)="saveActiveFilter()">
+        Update filters
+      </mat-option>
+      <mat-option (click)="saveAs()">
+        Save as new
+      </mat-option>
+    } @else {
+      <mat-option (click)="createSavedFilter()">
+        Create new
+      </mat-option>
+    }
+    <mat-option (click)="manageSavedFilters()">
+      View all
+    </mat-option>
+  </mat-select>
 }

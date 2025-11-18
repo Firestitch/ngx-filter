@@ -1,18 +1,18 @@
 <div
     class="filter-container"
-    [ngClass]="{ 'has-input': filterInputVisible$ | async }"
+    [ngClass]="{ 'has-primary-filter': primaryFilterVisible$ | async }"
     [ngClass]="{ 'keyword-full-width': keywordFullWidth$ | async }">
-  @if (filterInputVisible$ | async) {
+  @if (primaryFilterVisible$ | async) {
     <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
   }
   <div class="filter-bar-container">
-    @if (filterInputVisible$ | async) {
+    @if (primaryFilterVisible$ | async) {
       <div class="filter-input-container">
         @if (keywordVisible$ | async) {
           <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
         }
-        @if (savedFilterController.enabled) {
-          <fs-saved-filter-autocomplete-chips [savedFiltersController]="savedFilterController"></fs-saved-filter-autocomplete-chips>
+        @for (item of primaryItems; track item.name) {
+          <filter-item [item]="item"></filter-item>
         }
         <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       </div>
@@ -28,7 +28,7 @@
     <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
   <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
-  @if ((filterInputVisible$ | async) === true || hasHeading) {
+  @if ((primaryFilterVisible$ | async) === true || hasHeading) {
     <ng-container
       [ngTemplateOutlet]="chipsTmpl"
       [ngTemplateOutletContext]="{ topMargin: true }">

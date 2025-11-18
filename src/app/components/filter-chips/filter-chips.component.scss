@@ -2,20 +2,27 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 4px;
+  gap: 5px;
   max-width: 100%;
-
-  &.top-margin {
-    fs-chip, .clear {
-      margin-top: 4px;
-    }
-  }
 }
 
+.saved-filters-select,
 .clear {
   display: flex;
   color: inherit;
-  width: 25px;
-  height: 25px;
-  padding: 1px;
+  height: 30px;
+
+  &.clear {
+    padding: 0 10px;
+  }
+
+  ::ng-deep {
+    .mat-mdc-select-value {
+      padding: 0 10px;
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+      padding-right: 10px;
+    }
+  }
 }

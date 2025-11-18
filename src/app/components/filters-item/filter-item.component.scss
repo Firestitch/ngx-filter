@@ -1,6 +1,8 @@
 
 :host ::ng-deep {
   mat-form-field {
+    margin-top: 0 !important;
+
     .mat-form-field-prefix, 
     .mat-form-field-suffix {     
       .text-prefix, 

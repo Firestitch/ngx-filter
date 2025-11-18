@@ -114,7 +114,7 @@ export class KitchenSinkComponent implements OnInit {
       autofocus: false,
       queryParam: true,
       persist: true,
-      // actions: this._filterActions(),
+      actions: this._filterActions(),
       sort: {
         direction: 'desc',
         value: 'name',
@@ -231,6 +231,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'simpleSelect',
         type: ItemType.Select,
         label: 'Single select',
+        primary: true,
         disableQueryParams: true,
         chipLabel: 'Special Label',
         init: (item, initFilter: FilterComponent) => {
@@ -322,6 +323,7 @@ export class KitchenSinkComponent implements OnInit {
       {
         name: 'autocompletechips',
         label: 'Autocomplete Chips',
+        primary: true,
         type: ItemType.AutoCompleteChips,
         chipImage: 'data.image',
         panelActions: [

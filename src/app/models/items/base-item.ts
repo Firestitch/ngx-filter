@@ -25,6 +25,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public placeholder: string;
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
+  public primary: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
   public initCallback: (item: BaseItem<T>, filter?) => void;
 
@@ -290,6 +291,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     
     this.name = item.name;
     this.label = item.label;
+    this.primary = item.primary ?? false;
     this.chipLabel = item.chipLabel;
     this._hidden$.next(hidden);
     this.clearable = item.clear ?? true;

@@ -6,7 +6,7 @@
     {{ item.label }}
   </mat-label>
   <mat-select
-      [fsFilterFocusTrigger]="true"
+      [fsFilterFocusTrigger]="autofocus"
       [(ngModel)]="value"
       (ngModelChange)="changed()"
       [multiple]="item.multiple">
