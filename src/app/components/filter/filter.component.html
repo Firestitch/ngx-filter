@@ -14,26 +14,23 @@
         @for (item of primaryItems; track item.name) {
           <filter-item [item]="item"></filter-item>
         }
-        <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       </div>
     } @else if (hasHeading) {
       <div class="filter-heading-container">
         <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
-        <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       </div>
     } @else {
-      <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
     }
     <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
-  <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
   @if ((primaryFilterVisible$ | async) === true || hasHeading) {
     <ng-container
       [ngTemplateOutlet]="chipsTmpl"
       [ngTemplateOutletContext]="{ topMargin: true }">
     </ng-container>
   }
+  <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
 </div>
 <ng-template
     #chipsTmpl
@@ -59,6 +56,7 @@
 <ng-template #filterActionsTmpl>
   @if ((actionsVisible$ | async)) {
     <div class="filter-actions">
+      <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
       <fs-filter-actions
         [actions]="actions$ | async"
         [kebabActions]="menuActions$ | async">

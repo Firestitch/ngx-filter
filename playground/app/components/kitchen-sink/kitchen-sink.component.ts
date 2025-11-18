@@ -119,6 +119,7 @@ export class KitchenSinkComponent implements OnInit {
         direction: 'desc',
         value: 'name',
       },
+      reload: true,
       // autoReload: {
       //   enabled: false,
       //   seconds: 5,
