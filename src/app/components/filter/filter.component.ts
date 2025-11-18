@@ -219,7 +219,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   }
 
   public get primaryItems(): BaseItem<IFilterConfigItem>[] {
-    return this.items.filter((item) => item.visible && item.primary);
+    return this.items.filter((item) => item.primary);
   }
 
   public change() {

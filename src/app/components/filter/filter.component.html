@@ -12,7 +12,9 @@
           <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
         }
         @for (item of primaryItems; track item.name) {
-          <filter-item [item]="item"></filter-item>
+          @if (item.visible$ | async) {
+            <filter-item [item]="item"></filter-item>
+          }
         }
       </div>
     } @else if (hasHeading) {
