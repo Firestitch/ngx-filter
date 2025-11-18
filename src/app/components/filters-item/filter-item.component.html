@@ -3,6 +3,7 @@
     @switch (item.type) {
       @case (itemType.Text) {
         <filter-item-text
+          [floatLabel]="floatLabel"
           class="interface"
           [item]="textItem"
           [autofocus]="autofocus">
@@ -10,6 +11,7 @@
       }
       @case (itemType.Select) {
         <filter-item-select
+          [floatLabel]="floatLabel"
           class="interface"
           [item]="selectItem"
           [autofocus]="autofocus">
@@ -23,6 +25,7 @@
       }
       @case (itemType.Range) {
         <filter-item-range
+          [floatLabel]="floatLabel"
           class="interface interface-range"
           [item]="rangeItem"
           [autofocusName]="autofocusName">
@@ -30,6 +33,7 @@
       }
       @case (itemType.AutoComplete) {
         <filter-item-autocomplete
+          [floatLabel]="floatLabel"
           class="interface"
           [item]="autocompleteItem"
           [autofocus]="autofocus">
@@ -37,6 +41,7 @@
       }
       @case (itemType.AutoCompleteChips) {
         <filter-item-autocompletechips
+          [floatLabel]="floatLabel"
           class="interface"
           [item]="autocompleteChipsItem"
           [autofocus]="autofocus">
@@ -44,6 +49,7 @@
       }
       @case (itemType.Date) {
         <filter-item-date
+          [floatLabel]="floatLabel"
           class="interface interface-date"
           [item]="dateItem"
           [autofocus]="autofocus">
@@ -51,6 +57,7 @@
       }
       @case (itemType.DateTime) {
         <filter-item-date
+          [floatLabel]="floatLabel"
           class="interface interface-date"
           [item]="dateTimeItem"
           [autofocus]="autofocus">
@@ -58,6 +65,7 @@
       }
       @case (itemType.DateRange) {
         <filter-item-date-range
+            [floatLabel]="floatLabel"
             class="interface interface-date"
             [item]="dateRangeItem"
             [autofocusName]="autofocusName">
@@ -66,6 +74,7 @@
       }
       @case (itemType.DateTimeRange) {
         <filter-item-date-range
+          [floatLabel]="floatLabel"
           class="interface interface-date"
           [item]="dateTimeRangeItem"
           [autofocusName]="autofocusName">
@@ -73,6 +82,7 @@
       }
       @case (itemType.Week) {
         <filter-item-week
+          [floatLabel]="floatLabel"
           class="interface"
           [item]="weekItem"
           [autofocus]="autofocus">

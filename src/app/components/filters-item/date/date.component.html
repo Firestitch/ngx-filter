@@ -1,6 +1,6 @@
 @if (item.mode === itemDateMode.ScrollMonthDayYear || item.mode === itemDateMode.ScrollMonthYear) {
   <mat-form-field
-      [floatLabel]="'always'"
+      [floatLabel]="floatLabel"
       class="form-field-padless">
     <mat-label>
       {{ item.label }}
@@ -22,7 +22,7 @@
   </mat-form-field>
 } @else if (item.mode === itemDateMode.Calendar) {
   <mat-form-field
-      [floatLabel]="'always'"
+      [floatLabel]="floatLabel"
       class="form-field-padless">
     <mat-label>
       {{ item.label }}

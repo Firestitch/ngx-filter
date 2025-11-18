@@ -40,10 +40,11 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FsFormModule,
   ],
 })
-export class DateRangeComponent 
+export class  DateRangeComponent 
   extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit {
 
     @Input() public autofocusName: string;
+    @Input() public floatLabel: 'auto' | 'always' = 'auto';
     
     public viewType = PickerViewType.Date;
     public from: Date;

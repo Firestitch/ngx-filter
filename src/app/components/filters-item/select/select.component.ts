@@ -48,7 +48,7 @@ import { SelectItem } from '../../../models/items/select-item';
 export class SelectComponent implements OnInit {
 
   @Input() public autofocus: boolean = false;
-  
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
   @Input()
   public item: SelectItem;
 

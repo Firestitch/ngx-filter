@@ -39,6 +39,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class WeekComponent extends BaseItemComponent<WeekItem> implements OnInit {
 
   @Input() public autofocus: boolean = false;
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
 
   public value: Date;
 

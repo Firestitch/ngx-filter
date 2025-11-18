@@ -39,7 +39,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class TextComponent extends BaseItemComponent<TextItem> implements OnInit {
 
   @Input() public autofocus: boolean = false;
-
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
+  
   public value: string;
 
   private _change$ = new Subject<string>();

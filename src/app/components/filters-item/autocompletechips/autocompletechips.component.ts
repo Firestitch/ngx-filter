@@ -36,6 +36,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> implements OnInit {
 
   @Input() public autofocus: boolean = false;
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
 
   public value: any[];
   

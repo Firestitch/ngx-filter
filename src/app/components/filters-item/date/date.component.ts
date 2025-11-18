@@ -45,7 +45,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> implements OnInit {
 
   @Input() public autofocus: boolean = false;
-
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
+  
   public viewType = PickerViewType.Date;
 
   public itemDateMode = ItemDateMode;
