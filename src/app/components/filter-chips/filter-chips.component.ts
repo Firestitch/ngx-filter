@@ -1,18 +1,21 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Injector, OnInit, StaticProvider, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, StaticProvider, inject } from '@angular/core';
 
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatOption, MatSelect } from '@angular/material/select';
+import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select';
 
 import { FsChipModule } from '@firestitch/chip';
 import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { fromEvent, tap } from 'rxjs';
+import { BehaviorSubject, Observable, fromEvent, tap } from 'rxjs';
+
+
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ItemType } from '../../enums';
 import { FILTER_DRAWER_DATA } from '../../injectors';
@@ -43,6 +46,7 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
 export class FsFilterChipsComponent implements OnInit {
 
   public ItemType = ItemType;
+  public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
 
   private _filterController = inject(FilterController);
   private _dialog = inject(MatDialog);
@@ -51,55 +55,66 @@ export class FsFilterChipsComponent implements OnInit {
   private _injector = inject(Injector);
   private _overlay = inject(Overlay);
   private _overlayRef: OverlayRef;
+  private _destroyRef = inject(DestroyRef);
+  private _elementRef = inject(ElementRef);
+  private _hasSecondaryValue$ = new BehaviorSubject(false);
 
   public get items() {
     return this._filterController.items
       .filter((item) => !item.isTypeKeyword);
   }
 
-  public get nonPrimaryItems() {
+  public addFilter(event: MatSelectChange) {
+    const item: BaseItem<IFilterConfigItem> = event.value;
+    item.secondaryShow();
+
+    setTimeout(() => {
+      this.openChip(item);
+    });
+  }
+
+  public get disabledItems() {
     return this.items
-      .filter((item) => !item.primary)
-      .flat();
+      .filter((item) => !item.secondaryVisible && !item.hasValue && !item.primary);
+  }
+
+  public get hasSecondaryValue$(): Observable<boolean> {
+    return this._hasSecondaryValue$.asObservable();
   }
 
   public get savedFilterController(): SavedFilterController {
     return this._savedFilterController;
   }
 
+  public get hasSecondaryValue(): boolean {
+    return this._filterController.items
+      .some((item) => item.hasValue && item.visible && !item.primary);
+  }
+
   public ngOnInit(): void {
-    fromEvent(document, 'click')
-      .subscribe((event: MouseEvent) => {
-        const elements = document.elementsFromPoint(event.clientX, event.clientY);
-        
-        const item1 = elements.some((element) => {
-          return !!this.getNestedElement(element, 'cdk-overlay-pane');
-        });
+    this.secondaryItems = this.items
+      .filter((item) => !item.primary);
 
-        const item2 = elements.some((element) => {
-          return !!this.getNestedElement(element, 'filter-chip');
-        });
-
-        if(!item1 && !item2) {
-          this._destroyOverlay();
-        }
-      });
+    this._initHasSecondaryValue();
+    this._initChipClick();
   }
 
   public clear() {
     this.items
       .filter((item) => item.clearable)
       .forEach((item) => {
+        if(!item.secondary) {
+          item.secondaryHide();
+        }
         item.clear(false);
       });
 
     this._filterController.change();
-    this._savedFilterController.setActiveFilter(null);
   }
 
-  public click(item: BaseItem<IFilterConfigItem>, name: string, el: any) {
+  public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
     this._destroyOverlay();
-    el = this.getNestedElement(el, 'filter-chip');
+    const el = this._elementRef.nativeElement.querySelector(`[data-filter-item="${item.name}"]`);
 
     const positions: ConnectedPosition[] = [
       {
@@ -201,10 +216,14 @@ export class FsFilterChipsComponent implements OnInit {
     }
   }
 
-  public remove(
+  public removeChip(
     item: BaseItem<IFilterConfigItem>, 
     chip: { name?: string, value: string, label: string },
   ) {
+    if(!item.secondary) {
+      item.secondaryHide();
+    }
+
     if(chip.name) {
       item.clearByName(chip.name);
     } else {
@@ -231,5 +250,36 @@ export class FsFilterChipsComponent implements OnInit {
     });
   }
 
+  private _initChipClick() {
+    fromEvent(document, 'click')
+      .subscribe((event: MouseEvent) => {
+        const elements = document.elementsFromPoint(event.clientX, event.clientY);
+      
+        const item1 = elements.some((element) => {
+          return !!this.getNestedElement(element, 'cdk-overlay-pane');
+        });
+
+        const item2 = elements.some((element) => {
+          return !!this.getNestedElement(element, 'filter-chip');
+        });
+
+        if(!item1 && !item2) {
+          this._destroyOverlay();
+        }
+      });
+  }
+
+  private _initHasSecondaryValue() {
+    this._hasSecondaryValue$.next(this.hasSecondaryValue);
+
+    this._filterController.change$
+      .pipe(
+        tap(() => {
+          this._hasSecondaryValue$.next(this.hasSecondaryValue);
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+  }
 
 }

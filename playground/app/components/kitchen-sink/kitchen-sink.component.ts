@@ -264,6 +264,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Select,
         label: 'Grouped select',
         disablePersist: true,
+        secondary: true,
         children: 'types',
         values: () => {
           return this.subject;
@@ -324,7 +325,6 @@ export class KitchenSinkComponent implements OnInit {
       {
         name: 'autocompletechips',
         label: 'Autocomplete Chips',
-        primary: true,
         type: ItemType.AutoCompleteChips,
         chipImage: 'data.image',
         panelActions: [

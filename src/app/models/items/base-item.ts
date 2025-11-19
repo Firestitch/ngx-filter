@@ -26,6 +26,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
   public primary: boolean;
+  public secondary: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
   public initCallback: (item: BaseItem<T>, filter?) => void;
 
@@ -35,6 +36,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   private _hidden$ = new BehaviorSubject(false);
   private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
   private _values$ = new BehaviorSubject<{ name: string, value: string|null }[]>(null);
+  private _secondaryVisible$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -43,6 +45,22 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   ) {
     this._type = itemConfig.type;
     this._initConfig(itemConfig);
+  }
+
+  public secondaryShow() {
+    this._secondaryVisible$.next(true);
+  }
+
+  public secondaryHide() {
+    this._secondaryVisible$.next(false);
+  }
+
+  public get secondaryVisible$(): Observable<boolean> {
+    return this._secondaryVisible$.asObservable();
+  }
+
+  public get secondaryVisible(): boolean {
+    return this._secondaryVisible$.getValue();
   }
 
   public get filter(): FilterComponent {
@@ -112,7 +130,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this.type === ItemType.DateTime;
   }
 
-  public get isTypeKeyword() {
+  public get isTypeKeyword(): boolean {
     return this.type === ItemType.Keyword;
   }
 
@@ -130,6 +148,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public get hasValue() {
     return this.value !== null && this.value !== undefined;
+  }
+
+  public get notValue$() {
+    return this.value$
+      .pipe(
+        map(() => !this.hasValue),
+      );
   }
 
   public get hasValue$() {
@@ -193,10 +218,18 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public hide() {
+    if(!this.primary) {
+      this.secondaryHide();
+    }
+
     this._hidden$.next(true);
   }
 
   public show() {
+    if(!this.primary) {
+      this.secondaryShow();
+    }
+
     this._hidden$.next(false);
   }
 
@@ -287,13 +320,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   private _initConfig(item: T) {
-    const hidden = item.hide ?? !(item.show ?? true);
-    
     this.name = item.name;
     this.label = item.label;
-    this.primary = item.primary ?? false;
+    this.primary = this.isTypeKeyword || (item.primary ?? false);
+    this.secondary = item.secondary ?? false;
     this.chipLabel = item.chipLabel;
-    this._hidden$.next(hidden);
+    this._hidden$.next(item.hide ?? !(item.show ?? true));
+    this._secondaryVisible$.next(item.secondary ?? false);
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;

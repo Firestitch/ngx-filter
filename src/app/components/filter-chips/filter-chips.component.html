@@ -1,46 +1,64 @@
 @if (items.length !== 0) {
-  @for (item of nonPrimaryItems; track item.name) {
-    @if (item.visible$ | async) {
-      @if ((item.chips$ | async).length) {
-        @for (chip of item.chips$ | async; track chip.label) {
-          <fs-chip
-              class="filter-chip selected"
-              [size]="'medium'"
-              (click)="click(item, chip.name, $event.target)">
-            @if (chip.value) {
-              {{ chip.label + ': ' + chip.value }}
-            } @else {
-              {{ chip.label }}
-            }
-            <ng-template
-              fsChipSuffix
-              [icon]="'cancel_circle_outline'"
-              (click)="remove(item, chip)">
-            </ng-template>
-          </fs-chip>
-        }
-      } @else {
+  @for (item of secondaryItems; track item.name) {
+    @if ((item.visible$ | async) && (item.hasValue$ | async)) {
+      @for (chip of item.chips$ | async; track chip.label) {
         <fs-chip
-            class="filter-chip"
+            class="filter-chip selected"
             [size]="'medium'"
-            (click)="click(item, null, $event.target)"
-            [outlined]="true">
-          {{ item.mergedLabel }}
+            [attr.data-filter-item]="item.name"
+            (click)="openChip(item, chip.name)">
+          @if (chip.value) {
+            {{ chip.label + ': ' + chip.value }}
+          } @else {
+            {{ chip.label }}
+          }
           <ng-template
             fsChipSuffix
-            [icon]="'add_circle_outline'"
-            (click)="click(item, null, $event.event.target)">
+            [icon]="'cancel_circle_outline'"
+            (click)="removeChip(item, chip)">
           </ng-template>
         </fs-chip>
       }
     }
   }
-  <a
-      class="clear"
-      mat-stroked-button
-      (click)="clear()">
-    Clear filters
-  </a>
+  @for (item of secondaryItems; track item.name) {
+    @if ((item.visible$ | async) && (item.notValue$ | async) && (item.secondaryVisible$ | async)) {
+      <fs-chip
+          class="filter-chip"
+          [attr.data-filter-item]="item.name"
+          [size]="'medium'"
+          (click)="openChip(item)"
+          [outlined]="true">
+        {{ item.mergedLabel }}
+        <ng-template
+          fsChipSuffix
+          [icon]="'add_circle_outline'"
+          (click)="openChip(item)">
+        </ng-template>
+      </fs-chip>
+    }
+  }
+  <mat-select
+      class="more-filters-select mat-mdc-outlined-button"
+      [buttonType]="'basic'"
+      fsSelectButton
+      [placeholder]="'More filters'"
+      (selectionChange)="addFilter($event)"
+      [deselectOnChange]="true">
+    @for (item of disabledItems; track item.name) {
+      <mat-option [value]="item">
+        {{ item.mergedLabel }}
+      </mat-option>
+    }
+  </mat-select>
+  @if (hasSecondaryValue$ | async) {
+    <a
+        class="clear"
+        mat-stroked-button
+        (click)="clear()">
+      Clear filters
+    </a>
+  }
   <mat-select
       class="saved-filters-select mat-mdc-outlined-button"
       [buttonType]="'basic'"

@@ -39,6 +39,7 @@ export class FsFilterConfig {
   public namespace: string; // for persistance
   public heading: string;
   public subheading: string;
+  public maxEnabled: number;
 
   constructor(data: FilterConfig = {}) {
     this._init(data);
@@ -51,6 +52,7 @@ export class FsFilterConfig {
       savedFilters: data.savedFilters,
       autofocus: data.autofocus ?? false,
       chips: data.chips ?? false,
+      maxEnabled: data.maxEnabled ?? 0,
       sort: data.sort,
       queryParam: data.queryParam ?? false,
       init: data.init,

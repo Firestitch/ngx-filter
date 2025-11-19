@@ -29,7 +29,6 @@ export class FilterController implements OnDestroy {
   private _ready$ = new BehaviorSubject(false);
   private _items = new Map<string, BaseItem<IFilterConfigItem>>();
   private _config: FsFilterConfig;
-  private _add$ = new Subject<void>();
   private _init$ = new Subject<void>();
   private _change$ = new Subject<BaseItem<IFilterConfigItem>[]>();
   private _destroy$ = new Subject<void>();
@@ -53,10 +52,6 @@ export class FilterController implements OnDestroy {
 
   public get init$() {
     return this._init$.asObservable();
-  }
-
-  public get add$() {
-    return this._add$.asObservable();
   }
 
   public get change$() {
@@ -217,36 +212,61 @@ export class FilterController implements OnDestroy {
         }),
     )
       .pipe(
-        tap(() => this.items.forEach((item) => {
-          item.initCallback(item, this.filter);
-        })),
+        tap(() => {
+          this._initEnabledItems();
+        }),
+        tap(() => this.items
+          .forEach((item) => {
+            item.initCallback(item, this.filter);
+          })),
       );
   }
 
+  private _initEnabledItems() {
+    let enabled = 0;
+
+    this.items
+      .forEach((item) => {
+        if(!item.primary) {
+          if(item.hasValue) {
+            item.secondaryShow();
+          }
+        }
+      });
+
+    this.items
+      .forEach((item) => {
+        if(!item.primary) {
+          if(item.secondaryVisible) {
+            enabled++;
+          } else if(enabled < this._config.maxEnabled) {
+            item.secondaryShow();
+            enabled++;
+          }
+        }
+      });
+  }
+
   private _addItems(items: IFilterConfigItem[]) {
-    this._add$.next();
+    const itemMap = items      
+      .filter((item) => {
+        if (this._items.has(item.name)) {
+          throw Error('Filter init error. Items name must be unique.');
+        }
 
-    this._items = new Map(
-      items      
-        .filter((item) => {
-          if (this._items.has(item.name)) {
-            throw Error('Filter init error. Items name must be unique.');
-          }
+        return true;
+      })
+      .map((item): [string, BaseItem<IFilterConfigItem>] => {          
+        const filterItem = createFilterItem(item, this.filter);
 
-          return true;
-        })
-        .map((item) => {
-          const filterItem = createFilterItem(item, this.filter);
+        if (filterItem instanceof KeywordItem) {
+          this._keywordController.keywordItem = filterItem;
+        }
 
-          if (filterItem instanceof KeywordItem) {
-            this._keywordController.keywordItem = filterItem;
-          }
+        return [item.name, filterItem];
+      });
 
-          this._items.set(item.name, filterItem);
-
-          return [item.name, filterItem];
-        }),
-    );
+    this._items = new Map(itemMap);
   }
 
   private _initChanges() {

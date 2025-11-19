@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatOptgroup, MatOption } from '@angular/material/core';
-import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 
 import { FsFormModule } from '@firestitch/form';
@@ -40,7 +40,6 @@ import { SelectItem } from '../../../models/items/select-item';
     FsFormModule,
     MatOption,
     MatOptgroup,
-    MatHint,
     MatCheckbox,
     AsyncPipe,  
   ],

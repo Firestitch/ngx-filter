@@ -19,6 +19,7 @@ export interface FilterConfig {
   chips?: boolean;
   autofocus?: boolean;
   queryParam?: boolean;
+  maxEnabled?: number;
   namespace?: string;
   persist?: FsFilterPersistance;
   reload?: boolean;

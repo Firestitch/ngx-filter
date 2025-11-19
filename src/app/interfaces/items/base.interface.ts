@@ -20,6 +20,7 @@ export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   show?: boolean;
   values?: any;
   primary?: boolean;
+  secondary?: boolean;
   default?: unknown;
   change?: (item: BaseItem<any>, filter: FilterComponent) => void;
   init?: (item: BaseItem<any>, filter?: FilterComponent) => void;

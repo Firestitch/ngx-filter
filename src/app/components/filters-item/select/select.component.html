@@ -6,7 +6,7 @@
     {{ item.label }}
   </mat-label>
   <mat-select
-      [fsFilterFocusTrigger]="autofocus"
+      [fsFilterFocusTrigger]="autofocus && !item.isolate"
       [(ngModel)]="value"
       (ngModelChange)="changed()"
       [multiple]="item.multiple">
@@ -34,15 +34,15 @@
       }
     }
   </mat-select>
-  <mat-hint>
-    @if (item.isolate) {
-      <mat-checkbox
-          (change)="isolateChange($event)"
-          [(ngModel)]="item.isolated">
-        <span class="checkbox-label">
-          {{ item.isolateLabel }}
-        </span>
-      </mat-checkbox>
-    }
-  </mat-hint>
 </mat-form-field>
+@if (item.isolate) {
+  <div class="isolate-checkbox">
+    <mat-checkbox
+        (change)="isolateChange($event)"
+        [(ngModel)]="item.isolated">
+      <span class="checkbox-label">
+        {{ item.isolateLabel }}
+      </span>
+    </mat-checkbox>
+  </div>
+}
