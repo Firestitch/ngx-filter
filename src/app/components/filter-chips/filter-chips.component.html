@@ -5,10 +5,15 @@
         <fs-chip
             class="filter-chip selected"
             [size]="'medium'"
+            [borderColor]="'#ddd'"
             [attr.data-filter-item]="item.name"
+            [outlined]="true"
             (click)="openChip(item, chip.name)">
           @if (chip.value) {
-            {{ chip.label + ': ' + chip.value }}
+            {{ chip.label }}:
+            <a>
+              {{ chip.value }}
+            </a>
           } @else {
             {{ chip.label }}
           }
@@ -20,13 +25,12 @@
         </fs-chip>
       }
     }
-  }
-  @for (item of secondaryItems; track item.name) {
     @if ((item.visible$ | async) && (item.notValue$ | async) && (item.secondaryVisible$ | async)) {
       <fs-chip
           class="filter-chip"
           [attr.data-filter-item]="item.name"
           [size]="'medium'"
+          [borderColor]="'#ddd'"
           (click)="openChip(item)"
           [outlined]="true">
         {{ item.mergedLabel }}
@@ -39,7 +43,7 @@
     }
   }
   <mat-select
-      class="more-filters-select mat-mdc-outlined-button"
+      class="more-filters-select mat-mdc-button-base"
       [buttonType]="'basic'"
       fsSelectButton
       [placeholder]="'More filters'"
@@ -51,16 +55,8 @@
       </mat-option>
     }
   </mat-select>
-  @if (hasSecondaryValue$ | async) {
-    <a
-        class="clear"
-        mat-stroked-button
-        (click)="clear()">
-      Clear filters
-    </a>
-  }
   <mat-select
-      class="saved-filters-select mat-mdc-outlined-button"
+      class="saved-filters-select mat-mdc-button-base"
       [buttonType]="'basic'"
       fsSelectButton
       [placeholder]="(savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel"
@@ -81,4 +77,12 @@
       View all
     </mat-option>
   </mat-select>
+  @if (hasSecondaryValue$ | async) {
+    <a
+        class="clear"
+        mat-button
+        (click)="clear()">
+      Clear filters
+    </a>
+  }
 }

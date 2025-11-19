@@ -1,6 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
-import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -20,8 +19,6 @@ import type { FilterController } from './filter-controller.service';
 
 @Injectable()
 export class SavedFilterController implements OnDestroy {
-
-  private _message = inject(FsMessage);
 
   private _filterController: FilterController;
   private _savedFilters$ = new BehaviorSubject<IFilterSavedFilter[]>([]);

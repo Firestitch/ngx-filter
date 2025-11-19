@@ -100,7 +100,7 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public clear() {
-    this.items
+    this._filterController.items
       .filter((item) => item.clearable)
       .forEach((item) => {
         if(!item.secondary) {
@@ -110,6 +110,7 @@ export class FsFilterChipsComponent implements OnInit {
       });
 
     this._filterController.change();
+    this._savedFilterController.setActiveFilter(null);
   }
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {

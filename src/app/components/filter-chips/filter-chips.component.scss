@@ -11,7 +11,6 @@
 .more-filters-select,
 .clear {
   display: flex;
-  color: inherit;
   height: 30px;
 
   &.clear {
@@ -20,7 +19,7 @@
 
   ::ng-deep {
     .mat-mdc-select-value {
-      padding: 0 10px;
+      padding: 0 5px;
     }
 
     .mat-mdc-select-arrow-wrapper {
