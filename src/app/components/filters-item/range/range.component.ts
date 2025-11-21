@@ -54,4 +54,10 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
       max: this.max,
     };
   }
+
+  public keyup(event: KeyboardEvent) {
+    if(event.key === 'Enter' || event.code === 'Tab') {
+      this.close();
+    }
+  }
 }

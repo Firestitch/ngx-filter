@@ -13,6 +13,7 @@
   <input
     matInput
     [(ngModel)]="value"
+    (keyup)="keyup($event)"
     [placeholder]="item.placeholder"
     [fsFilterFocusTrigger]="autofocus">
   @if (item.suffix) {

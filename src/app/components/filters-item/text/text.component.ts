@@ -51,4 +51,10 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
     this.item.value = this.value;
   }
 
+  public keyup(event: KeyboardEvent) {
+    if(event.key === 'Enter' || event.code === 'Tab') {
+      this.close();
+    }
+  }
+
 }

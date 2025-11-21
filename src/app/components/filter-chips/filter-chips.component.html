@@ -57,28 +57,30 @@
       </mat-option>
     }
   </mat-select>
-  <mat-select
-      class="saved-filters-select mat-mdc-button-base"
-      [buttonType]="'basic'"
-      fsSelectButton
-      [placeholder]="(savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel"
-      [deselectOnChange]="true">
-    @if (savedFilterController.activeFilter$ | async) {
-      <mat-option (click)="saveActiveFilter()">
-        Update filters
+  @if (savedFilterController.enabled) {
+    <mat-select
+        class="saved-filters-select mat-mdc-button-base"
+        [buttonType]="'basic'"
+        fsSelectButton
+        [placeholder]="(savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel"
+        [deselectOnChange]="true">
+      @if (savedFilterController.activeFilter$ | async) {
+        <mat-option (click)="saveActiveFilter()">
+          Update filters
+        </mat-option>
+        <mat-option (click)="saveAs()">
+          Save as new
+        </mat-option>
+      } @else {
+        <mat-option (click)="createSavedFilter()">
+          Create new
+        </mat-option>
+      }
+      <mat-option (click)="manageSavedFilters()">
+        View all
       </mat-option>
-      <mat-option (click)="saveAs()">
-        Save as new
-      </mat-option>
-    } @else {
-      <mat-option (click)="createSavedFilter()">
-        Create new
-      </mat-option>
-    }
-    <mat-option (click)="manageSavedFilters()">
-      View all
-    </mat-option>
-  </mat-select>
+    </mat-select>
+  }
   @if (hasSecondaryValue$ | async) {
     <a
         class="clear"
