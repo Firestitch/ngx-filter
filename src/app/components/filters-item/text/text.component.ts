@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,8 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+
+import { FsCommonModule } from '@firestitch/common';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { TextItem } from '../../../models/items/text-item';
@@ -34,48 +33,22 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     ReactiveFormsModule,
     FocusToItemDirective,
     MatSuffix,
+    FsCommonModule,
   ],
 })
-export class TextComponent extends BaseItemComponent<TextItem> implements OnInit {
+export class TextComponent extends BaseItemComponent<TextItem> implements OnInit, OnDestroy {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
   
   public value: string;
 
-  private _change$ = new Subject<string>();
-  private _cdRef = inject(ChangeDetectorRef);
-
   public ngOnInit(): void {
-    this._listenControlValueChanges();
-    this._listenValueChanges();
+    this.value = this.item.value;
   }
 
-  public change() {
-    this._change$.next(this.value);
-  }
-
-  private _listenControlValueChanges(): void {
-    this._change$
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(200),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((value) => {
-        this.item.value = value;
-      });
-  }
-
-  private _listenValueChanges(): void {
-    this.item.value$
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe((value) => {
-        this.value = value;
-        this._cdRef.detectChanges();
-      });
+  public ngOnDestroy(): void {
+    this.item.value = this.value;
   }
 
 }

@@ -11,7 +11,7 @@
       [placeholder]="item.label"
       [fsFilterFocusTrigger]="autofocus"
       [(ngModel)]="value"
-      (ngModelChange)="item.value = value"
+      (ngModelChange)="change($event)"
       [maxYear]="item.maxYear"
       [showMonth]="showMonth"
       [showDay]="showDay"
@@ -32,7 +32,7 @@
       fsDatePicker
       [fsFilterFocusTrigger]="autofocus"
       [(ngModel)]="value"
-      (ngModelChange)="item.value = value"
+      (ngModelChange)="change($event)"
       [maxYear]="item.maxYear"
       [view]="viewType"
       [placeholder]="item.label"

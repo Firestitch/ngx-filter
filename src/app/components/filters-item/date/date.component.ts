@@ -1,9 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DestroyRef,
-  inject,
   Input,
   OnInit,
 } from '@angular/core';
@@ -15,7 +12,6 @@ import { MatInput } from '@angular/material/input';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsFormModule } from '@firestitch/form';
 
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { ItemDateMode } from '../../../enums/item-date-mode.enum';
@@ -55,9 +51,6 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
   public showDay = true;
   public value: any;
 
-  private _destroyRef = inject(DestroyRef);
-  private _cdRef = inject(ChangeDetectorRef);
-
   public ngOnInit() {
     this.viewType = this.item.type === ItemType.DateTime ? 
       PickerViewType.DateTime : PickerViewType.Date;
@@ -66,13 +59,11 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
       this.showDay = false;
     }
 
-    this.item.value$
-      .pipe(
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe((value) => {
-        this.value = value;
-        this._cdRef.detectChanges();
-      });
+    this.value = this.item.value;
+  }
+
+  public change(event: any) {
+    this.item.value = event;
+    this.close();
   }
 }

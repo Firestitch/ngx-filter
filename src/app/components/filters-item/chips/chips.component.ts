@@ -5,6 +5,7 @@ import {
   Component,
   DestroyRef,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -33,7 +34,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     AsyncPipe,
   ],
 })
-export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnInit {
+export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnInit, OnDestroy {
 
   public value: any;
 
@@ -49,6 +50,10 @@ export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnIn
         this.value = value;
         this._cdRef.detectChanges();
       });
+  }
+
+  public ngOnDestroy(): void {
+    this.item.value = this.value;
   }
 
   public compareFn = (modelValue, chipValue) => {

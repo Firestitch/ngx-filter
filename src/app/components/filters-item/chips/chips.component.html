@@ -6,7 +6,6 @@
     <fs-chips
         [(ngModel)]="value"
         [compare]="compareFn"
-        (ngModelChange)="item.value = value"
         [multiple]="item.multiple">
       @for (value of item.values; track value) {
         <fs-chip

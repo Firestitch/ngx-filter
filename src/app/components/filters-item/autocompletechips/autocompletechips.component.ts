@@ -1,10 +1,10 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   Injector,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsFormModule } from '@firestitch/form';
 
-import { takeUntil } from 'rxjs';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
@@ -33,7 +32,9 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FsFormModule,
   ],
 })
-export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteChipsItem> implements OnInit {
+export class AutocompletechipsComponent 
+  extends BaseItemComponent<AutocompleteChipsItem> 
+  implements OnInit, OnDestroy {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
@@ -41,31 +42,13 @@ export class AutocompletechipsComponent extends BaseItemComponent<AutocompleteCh
   public value: any[];
   
   private _injector = inject(Injector);
-  private _cdRef = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
-    this.item.value$
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe((value) => {
-        this.value = value;
-        this._cdRef.detectChanges();
-      });
+    this.value = this.item.value;
   }
 
-  public selected(event) {
-    if (event.data && this.item.value.indexOf(event.data.value) === -1) {
-      this.item.value = [
-        ...this.item.value, 
-        event.data,
-      ];
-    }
-  }
-
-  public removed(event) {
-    this.item.value = this.item.value
-      .filter((item) => item.value !== event.data.value);
+  public ngOnDestroy(): void {
+    this.item.value = this.value;
   }
 
   public clear() {

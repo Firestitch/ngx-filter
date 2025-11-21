@@ -5,6 +5,7 @@
   gap: 5px;
   max-width: 100%;
   margin-top: 4px;
+  z-index: 999;
 }
 
 .saved-filters-select,
@@ -12,6 +13,7 @@
 .clear {
   display: flex;
   height: 30px;
+  font-size: 90%;
 
   &.clear {
     padding: 0 10px;
@@ -26,4 +28,8 @@
       padding-right: 10px;
     }
   }
+}
+
+::ng-deep .mat-mdc-select-panel.fs-filter-no-initial-focus .mat-mdc-option-active:not(:hover) {
+  background: transparent !important;
 }

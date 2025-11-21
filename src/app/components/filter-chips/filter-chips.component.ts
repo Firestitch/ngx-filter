@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, StaticProvider, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, QueryList, StaticProvider, ViewChildren, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -7,12 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select';
 
-import { FsChipModule } from '@firestitch/chip';
+import { FsChipComponent, FsChipModule } from '@firestitch/chip';
 import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { BehaviorSubject, Observable, fromEvent, tap } from 'rxjs';
+import { BehaviorSubject, Observable, delay, take, tap } from 'rxjs';
 
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -41,9 +42,13 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
     FsSelectButtonModule,
     MatButtonModule,
     FsButtonDirective,
+    FormsModule,
   ],
 })
 export class FsFilterChipsComponent implements OnInit {
+
+  @ViewChildren(FsChipComponent) 
+  public chips: QueryList<FsChipComponent>;
 
   public ItemType = ItemType;
   public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
@@ -68,9 +73,16 @@ export class FsFilterChipsComponent implements OnInit {
     const item: BaseItem<IFilterConfigItem> = event.value;
     item.secondaryShow();
 
-    setTimeout(() => {
-      this.openChip(item);
-    });
+    this.chips.changes
+      .pipe(
+        take(1),
+        delay(100),
+        tap(() => {
+          this.openChip(item);
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 
   public get disabledItems() {
@@ -96,7 +108,6 @@ export class FsFilterChipsComponent implements OnInit {
       .filter((item) => !item.primary);
 
     this._initHasSecondaryValue();
-    this._initChipClick();
   }
 
   public clear() {
@@ -115,7 +126,8 @@ export class FsFilterChipsComponent implements OnInit {
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
     this._destroyOverlay();
-    const el = this._elementRef.nativeElement.querySelector(`[data-filter-item="${item.name}"]`);
+    const el = this._elementRef.nativeElement
+      .querySelector(`[data-filter-item="${item.name}"]`);
 
     const positions: ConnectedPosition[] = [
       {
@@ -143,15 +155,21 @@ export class FsFilterChipsComponent implements OnInit {
       positionStrategy: strategy,
       scrollStrategy: this._overlay.scrollStrategies.block(),
       disposeOnNavigation: true,
+      hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
       panelClass: 'fs-sidenav-menu-overlay-pane',
     });
 
-    if(this._overlayRef) {
-      this._destroyOverlay();
-    }
-
     this._overlayRef = this._overlay.create(overlayConfig);
+
+    this._overlayRef.backdropClick().pipe(
+      take(1),
+      tap(() => {
+        this._destroyOverlay();
+      }),
+      takeUntilDestroyed(this._destroyRef),
+    ).subscribe();
+
     this._attachContainer(this._overlayRef, item, name);
   }
 
@@ -214,6 +232,7 @@ export class FsFilterChipsComponent implements OnInit {
       this._overlayRef.detachBackdrop();
       this._overlayRef.detach();
       this._overlayRef.dispose();
+      this._overlayRef = null;
     }
   }
 
@@ -242,32 +261,13 @@ export class FsFilterChipsComponent implements OnInit {
 
   private _createInjector(item: BaseItem<IFilterConfigItem>, autofocusName: string): Injector {
     const providers: StaticProvider[] = [
-      { provide: FILTER_DRAWER_DATA, useValue: { item, autofocusName } },
+      { provide: FILTER_DRAWER_DATA, useValue: { item, autofocusName, overlayRef: this._overlayRef } },
     ];
   
     return Injector.create({
       providers,
       parent: this._injector,
     });
-  }
-
-  private _initChipClick() {
-    fromEvent(document, 'click')
-      .subscribe((event: MouseEvent) => {
-        const elements = document.elementsFromPoint(event.clientX, event.clientY);
-      
-        const item1 = elements.some((element) => {
-          return !!this.getNestedElement(element, 'cdk-overlay-pane');
-        });
-
-        const item2 = elements.some((element) => {
-          return !!this.getNestedElement(element, 'filter-chip');
-        });
-
-        if(!item1 && !item2) {
-          this._destroyOverlay();
-        }
-      });
   }
 
   private _initHasSecondaryValue() {

@@ -15,10 +15,9 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="autofocusName === 'min'"
+      [fsFilterFocusTrigger]="autofocusName === 'min' || !min"
       type="number"
       [(ngModel)]="min"
-      (ngModelChange)="change()"
       #from>
     @if (item.suffix) {
       <span
@@ -44,10 +43,9 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="autofocusName === 'max'"
+      [fsFilterFocusTrigger]="autofocusName === 'max' || !!min"
       type="number"
       [(ngModel)]="max"
-      (ngModelChange)="change()"
       #to>
     @if (item.suffix) {
       <span

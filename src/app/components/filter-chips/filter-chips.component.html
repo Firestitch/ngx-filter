@@ -46,6 +46,8 @@
       class="more-filters-select mat-mdc-button-base"
       [buttonType]="'basic'"
       fsSelectButton
+      [disableOptionCentering]="true"
+      [panelClass]="'fs-filter-no-initial-focus'"
       [placeholder]="'More filters'"
       (selectionChange)="addFilter($event)"
       [deselectOnChange]="true">
@@ -81,6 +83,7 @@
     <a
         class="clear"
         mat-button
+        color="primary"
         (click)="clear()">
       Clear filters
     </a>

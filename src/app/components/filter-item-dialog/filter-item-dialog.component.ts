@@ -6,6 +6,8 @@ import {
 import { FormsModule } from '@angular/forms';
 
 
+import { OverlayRef } from '@angular/cdk/overlay';
+
 import { FsFormModule } from '@firestitch/form';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 
@@ -31,5 +33,6 @@ export class FilterItemDialogComponent {
 
   public item: BaseItem<IFilterConfigItem> = inject(FILTER_DRAWER_DATA)?.item;
   public autofocusName: string = inject(FILTER_DRAWER_DATA)?.autofocusName;
+  public overlayRef: OverlayRef = inject(FILTER_DRAWER_DATA)?.overlayRef;
 
 }

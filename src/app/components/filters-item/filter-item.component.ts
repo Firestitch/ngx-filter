@@ -1,6 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 
+import { OverlayRef } from '@angular/cdk/overlay';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -56,6 +58,7 @@ export class FilterItemComponent implements OnInit, OnDestroy {
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
   @Input() public autofocusName: string;
+  @Input() public overlayRef: OverlayRef;
   @Input() public item: BaseItem<any>;
   @Input() public name: string;
 

@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+
+import { OverlayRef } from '@angular/cdk/overlay';
 
 import { IFilterConfigItem } from '../../../interfaces/config.interface';
 import { BaseItem } from '../../../models/items/base-item';
@@ -12,38 +13,17 @@ import { BaseItem } from '../../../models/items/base-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>>
-implements OnChanges, OnDestroy {
+export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> {
 
   @Input() public item: T;
+  @Input() public overlayRef: OverlayRef;
 
-  @Input()
-  public inline = false;
-
-  public label!: string;
-
-  protected _kvDiffer: KeyValueDiffer<string, any>;
-  protected _kvDiffers = inject(KeyValueDiffers);
-  protected _cd = inject(ChangeDetectorRef);
-
-  private _destroy$ = new Subject();
-
-  public get destroy$(): Observable<any> {
-    return this._destroy$.asObservable();
-  }
-
-  public destroy() {
-    return this._destroy$.asObservable();
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.item) {
-      this.label = Array.isArray(this.item.label) ? this.item.label[0] : this.item.label;
+  public close() {
+    if(this.overlayRef) {
+      this.overlayRef.detachBackdrop();
+      this.overlayRef.detach();
+      this.overlayRef.dispose();
     }
   }
 
-  public ngOnDestroy(): void {
-    this._destroy$.next(null);
-    this._destroy$.complete();
-  }
 }

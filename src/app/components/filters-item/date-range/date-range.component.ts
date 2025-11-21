@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   Input,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +13,6 @@ import { MatInput } from '@angular/material/input';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsFormModule } from '@firestitch/form';
 
-import { takeUntil } from 'rxjs/operators';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { ItemType } from '../../../enums/item-type.enum';
@@ -41,7 +39,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
   ],
 })
 export class  DateRangeComponent 
-  extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit {
+  extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit, OnDestroy {
 
     @Input() public autofocusName: string;
     @Input() public floatLabel: 'auto' | 'always' = 'auto';
@@ -50,26 +48,22 @@ export class  DateRangeComponent
     public from: Date;
     public to: Date;
 
-    private _cdRef = inject(ChangeDetectorRef);
-
     public ngOnInit() {
-      this.viewType = this.item.type === ItemType.DateTimeRange ? PickerViewType.DateTime : PickerViewType.Date;
+      this.viewType = this.item.type === ItemType.DateTimeRange ? 
+        PickerViewType.DateTime : PickerViewType.Date;
 
-      this.item.value$
-        .pipe(
-          takeUntil(this.destroy$),
-        )
-        .subscribe((value) => {
-          this.from = value?.from;
-          this.to = value?.to;
-          this._cdRef.detectChanges();
-        });
+      if(!this.autofocusName) {
+        this.autofocusName = this.from ? 'to' : 'from';
+      }
+
+      this.from = this.item.value?.from;
+      this.to = this.item.value?.to;
     }
-
-    public change() {
+    
+    public ngOnDestroy(): void {
       this.item.value = {
         from: this.from,
         to: this.to,
       };
-    }
+    }    
 }

@@ -12,7 +12,6 @@
       [(ngModel)]="from"
       [clear]="item.clearable"
       [view]="viewType"
-      (ngModelChange)="change()"
       name="dateFrom">
   </mat-form-field>
   <div class="to">
@@ -29,7 +28,6 @@
       [fsFilterFocusTrigger]="autofocusName === 'to'"
       [fsDateRangeTo]="item.name"
       [(ngModel)]="to"
-      (ngModelChange)="change()"
       [clear]="item.clearable"
       [view]="viewType"
       name="dateTo">

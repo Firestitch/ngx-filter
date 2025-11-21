@@ -5,6 +5,7 @@ import {
   Component,
   DestroyRef,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
   inject,
@@ -18,10 +19,10 @@ import { MatSelect } from '@angular/material/select';
 
 import { FsFormModule } from '@firestitch/form';
 
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { SelectItem } from '../../../models/items/select-item';
+import { BaseItemComponent } from '../base-item';
 
 
 @Component({
@@ -44,12 +45,10 @@ import { SelectItem } from '../../../models/items/select-item';
     AsyncPipe,  
   ],
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent extends BaseItemComponent<SelectItem> implements OnInit, OnDestroy {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
-  @Input()
-  public item: SelectItem;
 
   @ViewChild(MatSelect, { static: true })
   public select: MatSelect;
@@ -60,6 +59,18 @@ export class SelectComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
 
   public changed() {
+    if(!this.item.multiple) {
+      this.change();
+    }
+  }
+
+  public selectOpenedChange(opened: boolean) {
+    if(!opened && !this.item.isolate) {
+      this.close();
+    }
+  }
+
+  public change() {
     let value = this.value;
     if(this.item.isolate) {
       if(this.item.multiple) {
@@ -74,24 +85,17 @@ export class SelectComponent implements OnInit {
     this.item.value = value;
   }
 
-  public ngOnInit(): void {
-    this.item.value$
-      .pipe(
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe((value) => {
-        this.value = value;
-
-        if(this.item.isolate && !this.item.hasValue) {
-          this.item.isolated = false;
-        }
-
-        this._cdRef.detectChanges();
-      });
+  public ngOnDestroy(): void {
+    if(this.item.isolate) {
+      this.change();
+    }
   }
 
-  public close() {
-    this.select.close();
+  public ngOnInit(): void {
+    this.value = this.item.value;
+    if(this.item.isolate && !this.item.hasValue) {
+      this.item.isolated = false;
+    }
   }
 
   public markForCheck() {
@@ -100,9 +104,9 @@ export class SelectComponent implements OnInit {
 
   public isolateChange(event: MatCheckboxChange) {
     if(event.checked) {
-      this.item.value = this.item.multiple ? this.item.isolateValues : this.item.isolateValues[0];
+      this.value = this.item.multiple ? this.item.isolateValues : this.item.isolateValues[0];
     } else {
-      this.item.value = this.item.multiple ? [] : null;
+      this.value = this.item.multiple ? [] : null;
     }
   }
 }

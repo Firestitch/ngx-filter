@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  inject,
   Input,
   OnInit,
 } from '@angular/core';
@@ -14,7 +12,6 @@ import { MatInput } from '@angular/material/input';
 import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsFormModule } from '@firestitch/form';
 
-import { takeUntil } from 'rxjs/operators';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { WeekItem } from '../../../models/items/week-item';
@@ -43,16 +40,7 @@ export class WeekComponent extends BaseItemComponent<WeekItem> implements OnInit
 
   public value: Date;
 
-  private _cdRef = inject(ChangeDetectorRef);
-
   public ngOnInit() {
-    this.item.value$
-      .pipe(
-        takeUntil(this.destroy$),
-      )
-      .subscribe((value) => {
-        this.value = value;
-        this._cdRef.detectChanges();
-      });
+    this.value = this.item.value;
   }
 }
