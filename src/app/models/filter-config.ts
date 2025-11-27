@@ -40,6 +40,7 @@ export class FsFilterConfig {
   public heading: string;
   public subheading: string;
   public maxEnabled: number;
+  public minSecondaryItems: number;
 
   constructor(data: FilterConfig = {}) {
     this._init(data);
@@ -63,6 +64,7 @@ export class FsFilterConfig {
         enabled: data.autoReload ? data.autoReload.enabled ?? true : false,
       } : null,
       clear: data.clear,
+      minSecondaryItems: data.minSecondaryItems ?? 2,
       sortChange: data.sortChange,
       case: data.case ?? 'camel',
       reloadWhenConfigChanged: data.reloadWhenConfigChanged,

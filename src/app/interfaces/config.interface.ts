@@ -38,6 +38,7 @@ export interface FilterConfig {
   autoReload?: FsFilterAutoReload;  
   heading?: string;
   subheading?: string;
+  minSecondaryItems?: number;
 }
 
 export interface FsFilterAutoReload {

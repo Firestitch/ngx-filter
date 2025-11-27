@@ -10,6 +10,7 @@
       [fsFilterFocusTrigger]="autofocusName === 'from'"
       [fsDateRangeFrom]="item.name"
       [(ngModel)]="from"
+      (ngModelChange)="change()"
       [clear]="item.clearable"
       [view]="viewType"
       name="dateFrom">
@@ -28,6 +29,7 @@
       [fsFilterFocusTrigger]="autofocusName === 'to'"
       [fsDateRangeTo]="item.name"
       [(ngModel)]="to"
+      (ngModelChange)="change()"
       [clear]="item.clearable"
       [view]="viewType"
       name="dateTo">

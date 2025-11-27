@@ -247,24 +247,34 @@ export class FilterController implements OnDestroy {
       });
   }
 
-  private _addItems(items: IFilterConfigItem[]) {
-    const itemMap = items      
-      .filter((item) => {
-        if (this._items.has(item.name)) {
+  private _addItems(itemsConfig: IFilterConfigItem[]) {
+    let secondaryItemCount = itemsConfig
+      .filter((item) => item.secondary)
+      .length;
+
+    const itemMap = itemsConfig      
+      .filter((itemConfig) => {
+        if (this._items.has(itemConfig.name)) {
           throw Error('Filter init error. Items name must be unique.');
         }
 
         return true;
       })
-      .map((item): [string, BaseItem<IFilterConfigItem>] => {          
-        const filterItem = createFilterItem(item, this.filter);
+      .map((itemConfig): [string, BaseItem<IFilterConfigItem>] => {  
+        if(!itemConfig.primary && !itemConfig.secondary && secondaryItemCount <= this._config.minSecondaryItems) {
+          itemConfig.secondary = true;
+          secondaryItemCount++;
+        }        
+
+        const filterItem = createFilterItem(itemConfig, this.filter);
 
         if (filterItem instanceof KeywordItem) {
           this._keywordController.keywordItem = filterItem;
         }
 
-        return [item.name, filterItem];
+        return [itemConfig.name, filterItem];
       });
+
 
     this._items = new Map(itemMap);
   }

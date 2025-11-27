@@ -48,7 +48,21 @@ export class AutocompletechipsComponent
   }
 
   public ngOnDestroy(): void {
-    this.item.value = this.value;
+    if(this.triggerChangeOn === 'close') {
+      this.item.value = this.value;
+    }
+  }
+
+  public panelClosed() {
+    if(this.triggerChangeOn === 'change') {
+      this.item.value = this.value;
+    }
+  }
+
+  public removed() {
+    if(this.triggerChangeOn === 'change') {
+      this.item.value = this.value;
+    }
   }
 
   public clear() {

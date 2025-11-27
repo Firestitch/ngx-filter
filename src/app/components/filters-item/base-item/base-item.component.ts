@@ -17,6 +17,7 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> {
 
   @Input() public item: T;
   @Input() public overlayRef: OverlayRef;
+  @Input() public triggerChangeOn: 'close' | 'change' = 'close';
 
   public close() {
     if(this.overlayRef) {

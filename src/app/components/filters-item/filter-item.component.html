@@ -7,7 +7,8 @@
           class="interface"
           [item]="textItem"
           [overlayRef]="overlayRef"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-text>
       }
       @case (itemType.Select) {
@@ -16,14 +17,16 @@
           [floatLabel]="floatLabel"
           class="interface"
           [item]="selectItem"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-select>
       }
       @case (itemType.Chips) {
         <filter-item-chips
           class="interface"
           [item]="chipsItem"
-          [overlayRef]="overlayRef">
+          [overlayRef]="overlayRef"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-chips>
       }
       @case (itemType.Range) {
@@ -32,7 +35,8 @@
           class="interface interface-range"
           [item]="rangeItem"
           [overlayRef]="overlayRef"
-          [autofocusName]="autofocusName">
+          [autofocusName]="autofocusName"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-range>
       }
       @case (itemType.AutoComplete) {
@@ -41,7 +45,8 @@
           class="interface"
           [overlayRef]="overlayRef"
           [item]="autocompleteItem"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-autocomplete>
       }
       @case (itemType.AutoCompleteChips) {
@@ -50,7 +55,8 @@
           class="interface"
           [overlayRef]="overlayRef"
           [item]="autocompleteChipsItem"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-autocompletechips>
       }
       @case (itemType.Date) {
@@ -59,7 +65,8 @@
           class="interface interface-date"
           [item]="dateItem"
           [overlayRef]="overlayRef"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-date>
       }
       @case (itemType.DateTime) {
@@ -68,17 +75,18 @@
           class="interface interface-date"
           [item]="dateTimeItem"
           [overlayRef]="overlayRef"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-date>
       }
       @case (itemType.DateRange) {
         <filter-item-date-range
-            [floatLabel]="floatLabel"
-            class="interface interface-date"
-            [item]="dateRangeItem"
-            [overlayRef]="overlayRef"
-            [autofocusName]="autofocusName">
-          [name]="name">
+          [floatLabel]="floatLabel"
+          class="interface interface-date"
+          [item]="dateRangeItem"
+          [overlayRef]="overlayRef"
+          [autofocusName]="autofocusName"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-date-range>
       }
       @case (itemType.DateTimeRange) {
@@ -87,7 +95,8 @@
           class="interface interface-date"
           [item]="dateTimeRangeItem"
           [overlayRef]="overlayRef"
-          [autofocusName]="autofocusName">
+          [autofocusName]="autofocusName"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-date-range>
       }
       @case (itemType.Week) {
@@ -96,7 +105,8 @@
           class="interface"
           [overlayRef]="overlayRef"
           [item]="weekItem"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-week>
       }
       @case (itemType.Checkbox) {
@@ -104,7 +114,8 @@
           [overlayRef]="overlayRef"
           class="interface interface-checkbox"
           [item]="checkboxItem"
-          [autofocus]="autofocus">
+          [autofocus]="autofocus"
+          [triggerChangeOn]="triggerChangeOn">
         </filter-item-checkbox>
       }
     }

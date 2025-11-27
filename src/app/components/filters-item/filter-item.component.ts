@@ -61,6 +61,7 @@ export class FilterItemComponent implements OnInit, OnDestroy {
   @Input() public overlayRef: OverlayRef;
   @Input() public item: BaseItem<any>;
   @Input() public name: string;
+  @Input() public triggerChangeOn: 'close' | 'change' = 'close';
 
   public itemType = ItemType;
 

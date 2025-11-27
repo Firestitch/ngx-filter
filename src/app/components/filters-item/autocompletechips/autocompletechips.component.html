@@ -17,6 +17,8 @@
     [allowClear]="item.clearable"
     [removable]="item.clearable"
     [compareWith]="compareItems"
+    (panelClosed)="panelClosed()"
+    (removed)="removed()"
     name="model">
   <ng-template
       fsAutocompleteObject

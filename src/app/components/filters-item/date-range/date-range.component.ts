@@ -41,29 +41,41 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class  DateRangeComponent 
   extends BaseItemComponent<DateRangeItem | DateTimeRangeItem> implements OnInit, OnDestroy {
 
-    @Input() public autofocusName: string;
-    @Input() public floatLabel: 'auto' | 'always' = 'auto';
-    
-    public viewType = PickerViewType.Date;
-    public from: Date;
-    public to: Date;
+  @Input() public autofocusName: string;
+  @Input() public floatLabel: 'auto' | 'always' = 'auto';
+  
+  public viewType = PickerViewType.Date;
+  public from: Date;
+  public to: Date;
 
-    public ngOnInit() {
-      this.viewType = this.item.type === ItemType.DateTimeRange ? 
-        PickerViewType.DateTime : PickerViewType.Date;
+  public ngOnInit() {
+    this.viewType = this.item.type === ItemType.DateTimeRange ? 
+      PickerViewType.DateTime : PickerViewType.Date;
 
-      if(!this.autofocusName) {
-        this.autofocusName = this.from ? 'to' : 'from';
-      }
-
-      this.from = this.item.value?.from;
-      this.to = this.item.value?.to;
+    if(!this.autofocusName) {
+      this.autofocusName = this.from ? 'to' : 'from';
     }
-    
-    public ngOnDestroy(): void {
-      this.item.value = {
-        from: this.from,
-        to: this.to,
-      };
-    }    
+
+    this.from = this.item.value?.from;
+    this.to = this.item.value?.to;
+  }
+  
+  public ngOnDestroy(): void {
+    if(this.triggerChangeOn === 'close') {
+      this.item.value = this.value;
+    }
+  }  
+  
+  public change() {
+    if(this.triggerChangeOn === 'change') {
+      this.item.value = this.value;
+    }
+  }
+
+  public get value() {
+    return {
+      from: this.from,
+      to: this.to,
+    };
+  }
 }

@@ -13,7 +13,10 @@
         }
         @for (item of primaryItems; track item.name) {
           @if (item.visible$ | async) {
-            <filter-item [item]="item"></filter-item>
+            <filter-item
+              [item]="item"
+              [triggerChangeOn]="'change'">
+            </filter-item>
           }
         }
       </div>

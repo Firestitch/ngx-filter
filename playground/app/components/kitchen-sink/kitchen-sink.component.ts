@@ -327,6 +327,7 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Autocomplete Chips',
         type: ItemType.AutoCompleteChips,
         chipImage: 'data.image',
+        primary: true,
         panelActions: [
           {
             label: 'Add User',
@@ -382,6 +383,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Date,
         label: 'Date',
         clear: false,
+        primary: true,
       },
       {
         name: 'dateRange',

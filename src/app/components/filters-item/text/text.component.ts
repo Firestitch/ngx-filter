@@ -48,12 +48,22 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnInit
   }
 
   public ngOnDestroy(): void {
-    this.item.value = this.value;
+    if(this.triggerChangeOn === 'close') {
+      this.item.value = this.value;
+    }
+  }
+
+  public change() {
+    if(this.triggerChangeOn === 'change') {
+      this.item.value = this.value;
+    }
   }
 
   public keyup(event: KeyboardEvent) {
-    if(event.key === 'Enter' || event.code === 'Tab') {
-      this.close();
+    if(this.triggerChangeOn === 'close') {
+      if(event.key === 'Enter' || event.code === 'Tab') {
+        this.close();
+      }
     }
   }
 
