@@ -275,6 +275,7 @@ export class FilterController implements OnDestroy {
         if(
           !item.primary && 
           !item.secondary && 
+          item.visible &&
           secondaryItemCount < this._config.minSecondaryItems
         ) {
           item.secondary = true;
