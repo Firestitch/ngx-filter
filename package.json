@@ -2,7 +2,7 @@
   "name": "@firestitch/filter",
   "title": "Filter",
   "description": "@firestitch/filter",
-  "version": "18.2.76",
+  "version": "18.2.77",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-filter"

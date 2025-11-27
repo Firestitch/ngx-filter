@@ -249,7 +249,7 @@ export class FilterController implements OnDestroy {
 
   private _addItems(itemsConfig: IFilterConfigItem[]) {
     let secondaryItemCount = itemsConfig
-      .filter((item) => item.secondary)
+      .filter((itemConfig) => !itemConfig.primary && !itemConfig.secondary)
       .length;
 
     const itemMap = itemsConfig      
