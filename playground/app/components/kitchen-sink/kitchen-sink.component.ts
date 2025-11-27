@@ -300,6 +300,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'range',
         type: ItemType.Range,
         prefix: '$&nbsp;',
+        secondary: true,
         label: ['Min Price', 'Max Price'],
         chipLabel: ['Custom Min Price', 'Custom Max Price'],
       },

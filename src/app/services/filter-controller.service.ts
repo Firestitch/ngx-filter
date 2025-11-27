@@ -249,7 +249,7 @@ export class FilterController implements OnDestroy {
 
   private _addItems(itemsConfig: IFilterConfigItem[]) {
     let secondaryItemCount = itemsConfig
-      .filter((itemConfig) => !itemConfig.primary && !itemConfig.secondary)
+      .filter((itemConfig) => !itemConfig.primary && itemConfig.secondary)
       .length;
 
     const itemMap = itemsConfig      
@@ -261,7 +261,11 @@ export class FilterController implements OnDestroy {
         return true;
       })
       .map((itemConfig): [string, BaseItem<IFilterConfigItem>] => {  
-        if(!itemConfig.primary && !itemConfig.secondary && secondaryItemCount <= this._config.minSecondaryItems) {
+        if(
+          !itemConfig.primary && 
+          !itemConfig.secondary && 
+          secondaryItemCount < this._config.minSecondaryItems
+        ) {
           itemConfig.secondary = true;
           secondaryItemCount++;
         }        
