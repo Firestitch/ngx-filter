@@ -264,7 +264,6 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Select,
         label: 'Grouped select',
         disablePersist: true,
-        secondary: true,
         children: 'types',
         values: () => {
           return this.subject;
@@ -300,7 +299,6 @@ export class KitchenSinkComponent implements OnInit {
         name: 'range',
         type: ItemType.Range,
         prefix: '$&nbsp;',
-        secondary: true,
         label: ['Min Price', 'Max Price'],
         chipLabel: ['Custom Min Price', 'Custom Max Price'],
       },

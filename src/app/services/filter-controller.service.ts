@@ -269,17 +269,18 @@ export class FilterController implements OnDestroy {
     let secondaryItemCount = items
       .filter((item) => item.secondary && item.visible)
       .length;
-
-    this._items.forEach((item) => {
-      if(
-        !item.primary && 
-        !item.secondary && 
-        secondaryItemCount < this._config.minSecondaryItems
-      ) {
-        item.secondary = true;
-        secondaryItemCount++;
-      }  
-    });
+      
+    items
+      .forEach((item) => {
+        if(
+          !item.primary && 
+          !item.secondary && 
+          secondaryItemCount < this._config.minSecondaryItems
+        ) {
+          item.secondary = true;
+          secondaryItemCount++;
+        }  
+      });
 
     this._items = new Map(items
       .map((item): [string, BaseItem<IFilterConfigItem>] => [item.name, item]));

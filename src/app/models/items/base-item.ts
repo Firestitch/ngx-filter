@@ -26,7 +26,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public persistanceDisabled: boolean;
   public queryParamsDisabled: boolean;
   public primary: boolean;
-  public secondary: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
   public initCallback: (item: BaseItem<T>, filter?) => void;
 
@@ -38,6 +37,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   private _values$ = new BehaviorSubject<{ name: string, value: string|null }[]>(null);
   private _secondaryVisible$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
+  private _secondary = false;
 
   constructor(
     itemConfig: T,
@@ -45,6 +45,15 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   ) {
     this._type = itemConfig.type;
     this._initConfig(itemConfig);
+  }
+
+  public get secondary(): boolean {
+    return this._secondary;
+  }
+
+  public set secondary(value: boolean) {
+    this._secondary = value;
+    this._secondaryVisible$.next(value);
   }
 
   public secondaryShow() {
@@ -326,7 +335,6 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.secondary = !this.primary && (item.secondary ?? false);
     this.chipLabel = item.chipLabel;
     this._hidden$.next(item.hide ?? !(item.show ?? true));
-    this._secondaryVisible$.next(item.secondary ?? false);
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
