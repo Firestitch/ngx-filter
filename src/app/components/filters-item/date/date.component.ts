@@ -49,17 +49,15 @@ export class DateComponent extends BaseItemComponent<DateItem | DateTimeItem> im
   public showYear = true;
   public showMonth = true;
   public showDay = true;
-  public value: any;
 
   public ngOnInit() {
+    super.ngOnInit();
     this.viewType = this.item.type === ItemType.DateTime ? 
       PickerViewType.DateTime : PickerViewType.Date;
 
     if ((this.item as BaseDateItem).mode === ItemDateMode.ScrollMonthYear) {
       this.showDay = false;
     }
-
-    this.value = this.item.value;
   }
 
   public change(event: any) {

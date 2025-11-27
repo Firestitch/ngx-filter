@@ -3,7 +3,6 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -36,16 +35,10 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FsCommonModule,
   ],
 })
-export class TextComponent extends BaseItemComponent<TextItem> implements OnInit, OnDestroy {
+export class TextComponent extends BaseItemComponent<TextItem> implements OnDestroy {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
-  
-  public value: string;
-
-  public ngOnInit(): void {
-    this.value = this.item.value;
-  }
 
   public ngOnDestroy(): void {
     if(this.triggerChangeOn === 'close') {

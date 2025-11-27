@@ -25,6 +25,7 @@ import { FsMenuModule } from '@firestitch/menu';
 
 import { map, of, tap } from 'rxjs';
 
+import { subDays } from 'date-fns';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
@@ -381,7 +382,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'date',
         type: ItemType.Date,
         label: 'Date',
-        clear: false,
+        default: subDays(new Date(), 3),
         primary: true,
       },
       {

@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -33,14 +32,9 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FsFormModule,
   ],
 })
-export class WeekComponent extends BaseItemComponent<WeekItem> implements OnInit {
+export class WeekComponent extends BaseItemComponent<WeekItem> {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
 
-  public value: Date;
-
-  public ngOnInit() {
-    this.value = this.item.value;
-  }
 }

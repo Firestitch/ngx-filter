@@ -1,12 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DestroyRef,
-  inject,
   OnDestroy,
-  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -14,7 +10,6 @@ import { FsChipModule } from '@firestitch/chip';
 import { FsFormModule } from '@firestitch/form';
 import { FsLabelModule } from '@firestitch/label';
 
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ChipsItem } from '../../../models/items/chips-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
@@ -34,23 +29,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     AsyncPipe,
   ],
 })
-export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnInit, OnDestroy {
-
-  public value: any;
-
-  private _destroyRef = inject(DestroyRef);
-  private _cdRef = inject(ChangeDetectorRef);
-
-  public ngOnInit(): void {
-    this.item.value$
-      .pipe(
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe((value) => {
-        this.value = value;
-        this._cdRef.detectChanges();
-      });
-  }
+export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.item.value = this.value;

@@ -14,6 +14,8 @@ import { FsDatePickerModule } from '@firestitch/datepicker';
 import { FsFormModule } from '@firestitch/form';
 
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { ItemType } from '../../../enums/item-type.enum';
 import { PickerViewType } from '../../../enums/picker-view-type.enum';
@@ -49,30 +51,41 @@ export class  DateRangeComponent
   public to: Date;
 
   public ngOnInit() {
+    super.ngOnInit();
+
     this.viewType = this.item.type === ItemType.DateTimeRange ? 
       PickerViewType.DateTime : PickerViewType.Date;
 
-    if(!this.autofocusName) {
+    if(this.item.primary) {
+      this.autofocusName = null;
+    } else if(!this.autofocusName) {
       this.autofocusName = this.from ? 'to' : 'from';
     }
 
-    this.from = this.item.value?.from;
-    this.to = this.item.value?.to;
+    this.item.value$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((value) => {
+        this.from = value?.from;
+        this.to = value?.to;
+        this._cdRef.detectChanges();
+      });
   }
   
   public ngOnDestroy(): void {
     if(this.triggerChangeOn === 'close') {
-      this.item.value = this.value;
+      this.item.value = this.getValue;
     }
   }  
   
   public change() {
     if(this.triggerChangeOn === 'change') {
-      this.item.value = this.value;
+      this.item.value = this.getValue;
     }
   }
 
-  public get value() {
+  public get getValue() {
     return {
       from: this.from,
       to: this.to,

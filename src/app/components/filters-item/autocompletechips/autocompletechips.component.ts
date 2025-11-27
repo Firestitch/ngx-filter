@@ -38,14 +38,8 @@ export class AutocompletechipsComponent
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
-
-  public value: any[];
   
   private _injector = inject(Injector);
-
-  public ngOnInit(): void {
-    this.value = this.item.value;
-  }
 
   public ngOnDestroy(): void {
     if(this.triggerChangeOn === 'close') {

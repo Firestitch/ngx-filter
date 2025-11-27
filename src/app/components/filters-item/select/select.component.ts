@@ -1,14 +1,11 @@
 import { AsyncPipe, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DestroyRef,
   Input,
   OnDestroy,
   OnInit,
   ViewChild,
-  inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -53,11 +50,6 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
   @ViewChild(MatSelect, { static: true })
   public select: MatSelect;
 
-  public value: any;
-
-  private _cdRef = inject(ChangeDetectorRef);
-  private _destroyRef = inject(DestroyRef);
-
   public changed() {
     if(!this.item.multiple) {
       this.change();
@@ -92,7 +84,8 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
   }
 
   public ngOnInit(): void {
-    this.value = this.item.value;
+    super.ngOnInit();
+    
     if(this.item.isolate && !this.item.hasValue) {
       this.item.isolated = false;
     }

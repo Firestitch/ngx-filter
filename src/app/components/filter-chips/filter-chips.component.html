@@ -81,13 +81,11 @@
       </mat-option>
     </mat-select>
   }
-  @if (hasSecondaryValue$ | async) {
-    <a
-        class="clear"
-        mat-button
-        color="primary"
-        (click)="clear()">
-      Clear filters
-    </a>
-  }
+  <a
+      class="clear"
+      mat-button
+      color="primary"
+      (click)="clear()">
+    Clear filters
+  </a>
 }

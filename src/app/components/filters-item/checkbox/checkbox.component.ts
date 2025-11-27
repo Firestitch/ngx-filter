@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -28,14 +27,8 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FsFormModule,
   ],
 })
-export class CheckboxComponent extends BaseItemComponent<CheckboxItem> implements OnInit {
-
-  public value: boolean;
-
-  public ngOnInit() {
-    this.value = this.item.value;
-  }
-
+export class CheckboxComponent extends BaseItemComponent<CheckboxItem> {
+  
   public change() {
     this.item.setValue(this.value);
     this.close();
