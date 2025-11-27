@@ -26,6 +26,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 @Component({
   selector: 'filter-item-date',
   templateUrl: './date.component.html',
+  styleUrls: ['./date.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
