@@ -248,11 +248,7 @@ export class FilterController implements OnDestroy {
   }
 
   private _addItems(itemsConfig: IFilterConfigItem[]) {
-    let secondaryItemCount = itemsConfig
-      .filter((itemConfig) => !itemConfig.primary && itemConfig.secondary)
-      .length;
-
-    const itemMap = itemsConfig      
+    const items = itemsConfig      
       .filter((itemConfig) => {
         if (this._items.has(itemConfig.name)) {
           throw Error('Filter init error. Items name must be unique.');
@@ -260,27 +256,33 @@ export class FilterController implements OnDestroy {
 
         return true;
       })
-      .map((itemConfig): [string, BaseItem<IFilterConfigItem>] => {  
-        if(
-          !itemConfig.primary && 
-          !itemConfig.secondary && 
-          secondaryItemCount < this._config.minSecondaryItems
-        ) {
-          itemConfig.secondary = true;
-          secondaryItemCount++;
-        }        
-
+      .map((itemConfig) => {  
         const filterItem = createFilterItem(itemConfig, this.filter);
 
         if (filterItem instanceof KeywordItem) {
           this._keywordController.keywordItem = filterItem;
         }
 
-        return [itemConfig.name, filterItem];
+        return filterItem;
       });
 
+    let secondaryItemCount = items
+      .filter((item) => item.secondary && item.visible)
+      .length;
 
-    this._items = new Map(itemMap);
+    this._items.forEach((item) => {
+      if(
+        !item.primary && 
+        !item.secondary && 
+        secondaryItemCount < this._config.minSecondaryItems
+      ) {
+        item.secondary = true;
+        secondaryItemCount++;
+      }  
+    });
+
+    this._items = new Map(items
+      .map((item): [string, BaseItem<IFilterConfigItem>] => [item.name, item]));
   }
 
   private _initChanges() {

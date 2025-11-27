@@ -15,6 +15,7 @@ export class KeywordItem extends TextItem {
   ) {
     super(itemConfig, _filter);
     this.fullWidth = itemConfig.fullWidth;
+    this.primary = true;
   }
 
   public static create(config: IFilterConfigKeywordItem, filter: FilterComponent) {

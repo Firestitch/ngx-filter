@@ -322,8 +322,8 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   private _initConfig(item: T) {
     this.name = item.name;
     this.label = item.label;
-    this.primary = this.isTypeKeyword || (item.primary ?? false);
-    this.secondary = item.secondary ?? false;
+    this.primary = item.primary ?? false;
+    this.secondary = !this.primary && (item.secondary ?? false);
     this.chipLabel = item.chipLabel;
     this._hidden$.next(item.hide ?? !(item.show ?? true));
     this._secondaryVisible$.next(item.secondary ?? false);
