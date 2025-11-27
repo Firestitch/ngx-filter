@@ -87,7 +87,7 @@ export class FsFilterChipsComponent implements OnInit {
 
   public get disabledItems() {
     return this.items
-      .filter((item) => !item.secondaryVisible && !item.hasValue && !item.primary);
+      .filter((item) => !item.secondaryVisible && !item.hasValue && !item.primary && item.visible);
   }
 
   public get hasSecondaryValue$(): Observable<boolean> {
