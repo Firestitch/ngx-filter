@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -42,7 +41,7 @@ import { BaseItemComponent } from '../base-item';
     AsyncPipe,  
   ],
 })
-export class SelectComponent extends BaseItemComponent<SelectItem> implements OnInit, OnDestroy {
+export class SelectComponent extends BaseItemComponent<SelectItem> implements OnInit {
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
@@ -50,14 +49,9 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
   @ViewChild(MatSelect, { static: true })
   public select: MatSelect;
 
-  public changed() {
-    if(!this.item.multiple) {
-      this.change();
-    }
-  }
-
   public selectOpenedChange(opened: boolean) {
-    if(!opened && !this.item.isolate) {
+    if(!opened) {
+      this.change();
       this.close();
     }
   }
@@ -77,12 +71,6 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
     this.item.value = value;
   }
 
-  public ngOnDestroy(): void {
-    if(this.item.isolate) {
-      this.change();
-    }
-  }
-
   public ngOnInit(): void {
     super.ngOnInit();
     
@@ -91,15 +79,13 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
     }
   }
 
-  public markForCheck() {
-    this._cdRef.markForCheck();
-  }
-
   public isolateChange(event: MatCheckboxChange) {
     if(event.checked) {
       this.value = this.item.multiple ? this.item.isolateValues : this.item.isolateValues[0];
     } else {
       this.value = this.item.multiple ? [] : null;
     }
+
+    this.change();
   }
 }

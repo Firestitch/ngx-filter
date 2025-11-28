@@ -44,7 +44,7 @@ export class TextItem extends BaseItem<IFilterConfigTextItem> {
   }
 
   public get chips(): { name?: string, value: string, label: string }[] {
-    if(!this.hasValue || this.isTypeKeyword) {
+    if(!this.hasValue) {
       return [];
     }
 

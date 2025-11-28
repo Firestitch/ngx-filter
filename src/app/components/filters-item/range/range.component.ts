@@ -10,8 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
+import { FsCommonModule } from '@firestitch/common';
 import { FsFormModule } from '@firestitch/form';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { RangeItem } from '../../../models/items/range-item';
@@ -33,6 +35,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
     FocusToItemDirective,
     FsFormModule,
     MatSuffix,
+    FsCommonModule,
   ],
 })
 export class RangeComponent extends BaseItemComponent<RangeItem> implements OnInit, OnDestroy {
@@ -44,19 +47,37 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
   public max: number;
 
   public ngOnInit(): void {
-    this.min = this.item.value?.min;
-    this.max = this.item.value?.max;
+    this.item.value$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((value) => {
+        this.min = value?.min;
+        this.max = value?.max;
+        this._cdRef.detectChanges();
+      });
   }
 
   public ngOnDestroy(): void {
-    this.item.value = {
-      min: this.min,
-      max: this.max,
-    };
+    if(this.triggerChangeOn === 'close') {
+      this.item.value = {
+        min: this.min,
+        max: this.max,
+      };
+    }
+  }
+
+  public change() {
+    if(this.triggerChangeOn === 'change') {
+      this.item.value = {
+        min: this.min,
+        max: this.max,
+      };
+    }
   }
 
   public keyup(event: KeyboardEvent) {
-    if(event.key === 'Enter' || event.code === 'Tab') {
+    if(this.triggerChangeOn === 'close' && (event.key === 'Enter' || event.code === 'Tab')) {
       this.close();
     }
   }

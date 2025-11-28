@@ -32,7 +32,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected readonly _type: T['type'];
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
-  private _hidden$ = new BehaviorSubject(false);
+  private _visible$ = new BehaviorSubject(false);
   private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
   private _values$ = new BehaviorSubject<{ name: string, value: string|null }[]>(null);
   private _secondaryVisible$ = new BehaviorSubject(false);
@@ -77,7 +77,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get hidden$(): Observable<boolean> {
-    return this._hidden$.asObservable();
+    return this._visible$.asObservable()
+      .pipe(
+        map((visible) => !visible),
+      );
   }
 
   public get mergedLabel(): string {
@@ -85,18 +88,19 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get visible$(): Observable<boolean> {
-    return this._hidden$
-      .pipe(
-        map((hidden) => !hidden),
-      );
+    return this._visible$.asObservable();
   }
 
   public get visible(): boolean {
-    return !this._hidden$.getValue();
+    return this._visible$.getValue();
+  }
+
+  public set visible(value: boolean) {
+    this._visible$.next(value);
   }
 
   public get hidden(): boolean {
-    return this._hidden$.getValue();
+    return !this._visible$.getValue();
   }
 
   public get isTypeAutocomplete() {
@@ -231,7 +235,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       this.secondaryHide();
     }
 
-    this._hidden$.next(true);
+    this.visible = false;  
   }
 
   public show() {
@@ -239,7 +243,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       this.secondaryShow();
     }
 
-    this._hidden$.next(false);
+    this.visible = true;
   }
 
   public get query(): Record<string, any> {
@@ -334,7 +338,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.primary = item.primary ?? false;
     this.secondary = !this.primary && (item.secondary ?? false);
     this.chipLabel = item.chipLabel;
-    this._hidden$.next(item.hide ?? !(item.show ?? true));
+    this.visible = !(item.hide ?? !(item.show ?? true));
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, QueryList, StaticProvider, ViewChildren, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, QueryList, StaticProvider, ViewChildren, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -13,7 +13,7 @@ import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { BehaviorSubject, Observable, delay, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, delay, merge, skip, take, tap } from 'rxjs';
 
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -52,6 +52,8 @@ export class FsFilterChipsComponent implements OnInit {
 
   public ItemType = ItemType;
   public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
+  public moreFilterItems = signal<BaseItem<IFilterConfigItem>[]>([]);
+  public clearFiltersVisible = signal<boolean>(false);
 
   private _filterController = inject(FilterController);
   private _dialog = inject(MatDialog);
@@ -64,9 +66,8 @@ export class FsFilterChipsComponent implements OnInit {
   private _elementRef = inject(ElementRef);
   private _hasSecondaryValue$ = new BehaviorSubject(false);
 
-  public get items() {
-    return this._filterController.items
-      .filter((item) => !item.isTypeKeyword);
+  public get items(): BaseItem<IFilterConfigItem>[] {
+    return this._filterController.items;
   }
 
   public addFilter(event: MatSelectChange) {
@@ -83,11 +84,6 @@ export class FsFilterChipsComponent implements OnInit {
         takeUntilDestroyed(this._destroyRef),
       )
       .subscribe();
-  }
-
-  public get disabledItems() {
-    return this.items
-      .filter((item) => !item.secondaryVisible && !item.hasValue && !item.primary && item.visible);
   }
 
   public get hasSecondaryValue$(): Observable<boolean> {
@@ -108,6 +104,8 @@ export class FsFilterChipsComponent implements OnInit {
       .filter((item) => !item.primary);
 
     this._initHasSecondaryValue();
+    this._initMoreFilterItems();
+    this._initClearFiltersVisible();
   }
 
   public clear() {
@@ -251,6 +249,10 @@ export class FsFilterChipsComponent implements OnInit {
     }
   }
 
+  public removeItem(item: BaseItem<IFilterConfigItem>) {
+    item.secondaryHide();
+  }
+
   private _attachContainer(overlayRef: OverlayRef, item: BaseItem<IFilterConfigItem>, name: string) {
     const injector = this._createInjector(item, name);
     const containerPortal = new ComponentPortal(FilterItemDialogComponent, undefined, injector);
@@ -268,6 +270,66 @@ export class FsFilterChipsComponent implements OnInit {
       providers,
       parent: this._injector,
     });
+  }
+
+  private _initMoreFilterItems() {
+    merge(
+      ...this.items
+        .reduce((accum, item) => {
+          return [
+            ...accum, 
+            item.visible$
+              .pipe(skip(1)),
+            item.secondaryVisible$
+              .pipe(skip(1)),
+          ];
+        }, []),
+    )
+      .pipe(
+        tap(() => {
+          this._updateMoreFilterItems();
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+
+    this._updateMoreFilterItems();
+  }
+
+  private _initClearFiltersVisible() {
+    merge(
+      ...this.items
+        .reduce((accum, item) => {
+          return [
+            ...accum, 
+            item.visible$
+              .pipe(skip(1)),
+            item.hasValue$
+              .pipe(skip(1)),
+          ];
+        }, []),
+    )
+      .pipe(
+        tap(() => {
+          this._updateClearItems();
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+
+    this._updateClearItems();
+  }
+
+  private _updateMoreFilterItems() {
+    this.moreFilterItems
+      .set(this.items
+        .filter((item) => !item.primary && item.visible && !item.secondaryVisible));
+  }
+
+  private _updateClearItems() {
+    this.clearFiltersVisible
+      .set(this.items
+        .some((item) => item.clearable && item.hasValue && item.visible));
   }
 
   private _initHasSecondaryValue() {

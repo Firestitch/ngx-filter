@@ -1,62 +1,66 @@
 @if (items.length !== 0) {
   @for (item of secondaryItems; track item.name) {
-    @if ((item.visible$ | async) && (item.hasValue$ | async)) {
-      @for (chip of item.chips$ | async; track chip.label) {
+    @if ((item.visible$ | async)) {
+      @if ((item.hasValue$ | async)) {
+        @for (chip of item.chips$ | async; track chip.label) {
+          <fs-chip
+              class="filter-chip selected"
+              [size]="'medium'"
+              [borderColor]="'#ddd'"
+              [attr.data-filter-item]="item.name"
+              [outlined]="true"
+              (click)="openChip(item, chip.name)">
+            @if (chip.value) {
+              {{ chip.label }}:
+              <a>
+                {{ chip.value }}
+              </a>
+            } @else {
+              {{ chip.label }}
+            }
+            <ng-template
+              fsChipSuffix
+              [icon]="'cancel_circle_outline'"
+              (click)="removeChip(item, chip)">
+            </ng-template>
+          </fs-chip>
+        }
+      }
+      @if ((item.notValue$ | async) && (item.secondaryVisible$ | async)) {
         <fs-chip
-            class="filter-chip selected"
+            class="filter-chip"
+            [attr.data-filter-item]="item.name"
             [size]="'medium'"
             [borderColor]="'#ddd'"
-            [attr.data-filter-item]="item.name"
-            [outlined]="true"
-            (click)="openChip(item, chip.name)">
-          @if (chip.value) {
-            {{ chip.label }}:
-            <a>
-              {{ chip.value }}
-            </a>
-          } @else {
-            {{ chip.label }}
-          }
+            (click)="openChip(item)"
+            [outlined]="true">
+          {{ item.mergedLabel }}
           <ng-template
             fsChipSuffix
             [icon]="'cancel_circle_outline'"
-            (click)="removeChip(item, chip)">
+            (click)="removeItem(item)">
           </ng-template>
         </fs-chip>
       }
     }
-    @if ((item.visible$ | async) && (item.notValue$ | async) && (item.secondaryVisible$ | async)) {
-      <fs-chip
-          class="filter-chip"
-          [attr.data-filter-item]="item.name"
-          [size]="'medium'"
-          [borderColor]="'#ddd'"
-          (click)="openChip(item)"
-          [outlined]="true">
-        {{ item.mergedLabel }}
-        <ng-template
-          fsChipSuffix
-          [icon]="'add_circle_outline'"
-          (click)="openChip(item)">
-        </ng-template>
-      </fs-chip>
-    }
   }
-  <mat-select
-      class="more-filters-select mat-mdc-button-base"
-      [buttonType]="'basic'"
-      fsSelectButton
-      [disableOptionCentering]="true"
-      [panelClass]="'fs-filter-no-initial-focus'"
-      [placeholder]="'More filters'"
-      (selectionChange)="addFilter($event)"
-      [deselectOnChange]="true">
-    @for (item of disabledItems; track item.name) {
-      <mat-option [value]="item">
-        {{ item.mergedLabel }}
-      </mat-option>
-    }
-  </mat-select>
+  @if (moreFilterItems().length > 0) {
+    <mat-select
+        class="more-filters-select mat-mdc-button-base"
+        [buttonType]="'basic'"
+        fsSelectButton
+        [disableOptionCentering]="true"
+        [panelClass]="'fs-filter-no-initial-focus'"
+        [placeholder]="'More filters'"
+        (selectionChange)="addFilter($event)"
+        [deselectOnChange]="true">
+      @for (item of moreFilterItems(); track item.name) {
+        <mat-option [value]="item">
+          {{ item.mergedLabel }}
+        </mat-option>
+      }
+    </mat-select>
+  }
   @if (savedFilterController.enabled) {
     <mat-select
         class="saved-filters-select mat-mdc-button-base"
@@ -81,11 +85,13 @@
       </mat-option>
     </mat-select>
   }
-  <a
-      class="clear"
-      mat-button
-      color="primary"
-      (click)="clear()">
-    Clear filters
-  </a>
+  @if (clearFiltersVisible()) {
+    <a
+        class="clear"
+        mat-button
+        color="primary"
+        (click)="clear()">
+      Clear filters
+    </a>
+  }
 }

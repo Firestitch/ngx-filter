@@ -24,7 +24,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { FsClearModule } from '@firestitch/clear';
 import { FsFormModule } from '@firestitch/form';
 
-import { BehaviorSubject, combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxjs';
+import { combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxjs';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
@@ -119,8 +119,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   private _config: FsFilterConfig;
   private _filterConfig: FilterConfig;
-  private _filtersVisible$ = new BehaviorSubject(true);
-  private _hasFilterChips$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
   private _defaultConfig = inject(FS_FILTER_CONFIG, { optional: true });
   private _zone = inject(NgZone);
@@ -228,25 +226,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
   public get hasHeading(): boolean {
     return !!this.headingTemplate || !!this.config.heading;
-  }
-
-  public get hasFilterChips$(): Observable<boolean> {
-    return this._hasFilterChips$.asObservable();
-  }
-
-  public get filtersVisible$(): Observable<boolean> {
-    return combineLatest({
-      filtersVisible: this._filtersVisible$.asObservable(),
-      hasVisibleItems: of(
-        this.items
-          .some((item) => item.visible && !item.isTypeKeyword),
-      ),
-    })
-      .pipe(
-        map(({ filtersVisible, hasVisibleItems }) => {
-          return filtersVisible && hasVisibleItems;
-        }),
-      );
   }
 
   public get keywordVisible$(): Observable<boolean> {
@@ -424,20 +403,6 @@ export class FilterComponent implements OnInit, OnDestroy {
    */
   public updateActions(actions: FsFilterAction[]): void {
     this._actionsController.initActions(actions);
-  }
-
-  /**
-   * Show "Filters" button
-   */
-  public showFilters(): void {
-    this._filtersVisible$.next(true);
-  }
-
-  /**
-   * Hide "Filters" button
-   */
-  public hideFilters(): void {
-    this._filtersVisible$.next(false);
   }
 
   /**

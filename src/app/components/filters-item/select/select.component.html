@@ -9,7 +9,6 @@
       [fsFilterFocusTrigger]="autofocus && !item.isolate"
       [(ngModel)]="value"
       (openedChange)="selectOpenedChange($event)"
-      (ngModelChange)="changed()"
       [multiple]="item.multiple">
     @if (item.children) {
       @for (option of item.values$ | async; track option) {

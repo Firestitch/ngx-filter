@@ -13,7 +13,6 @@ import {
   ActionMode,
   FilterComponent,
   FilterConfig,
-  FilterHeadingDirective,
   FilterSort,
   FilterStatusBarDirective,
   IFilterConfigItem,
@@ -22,8 +21,9 @@ import {
   SortItem,
 } from '@firestitch/filter';
 import { FsMenuModule } from '@firestitch/menu';
+import { FsMessage } from '@firestitch/message';
 
-import { map, of, tap } from 'rxjs';
+import { map, of } from 'rxjs';
 
 import { subDays } from 'date-fns';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
@@ -42,7 +42,6 @@ import { SavedFilters } from './saved-filter';
   imports: [
     FilterComponent,
     FilterStatusBarDirective,
-    FilterHeadingDirective,
     JsonPipe,
     FsMenuModule,
     MatButtonModule,
@@ -106,6 +105,7 @@ export class KitchenSinkComponent implements OnInit {
   ];
   
   private _cdRef = inject(ChangeDetectorRef);
+  private _message = inject(FsMessage);
 
   public ngOnInit(): void {
     this.conf = {
@@ -126,37 +126,24 @@ export class KitchenSinkComponent implements OnInit {
       //   seconds: 5,
       // },
       change: (query, sort) => {
-        const hasValues = this.filter.items
-          .filter((item) => item.hasValue)
-          .reduce((accum, item) => {
-            return {
-              ...accum,
-              [item.name]: {
-                value: item.value,
-                model: item.value,
-              },
-            };
-          }, {});
-
-        console.log('Change', query, sort );
-        console.log('Has Values', hasValues);
+        this._log('Change', query, sort );
         this.query = query;
         this.sort = sort;
         this._cdRef.detectChanges();
       },
       init: (query, sort) => {
-        console.log('Init', query, sort);
+        this._log('Init', query, sort);
         this.query = query;
         this.sort = sort;
         this._cdRef.detectChanges();
       },
       sortChange: (query, sort) => {
-        console.log('sortChange', query, sort);
+        this._log('sortChange', query, sort);
         this.query = query;
         this.sort = sort;
         this._cdRef.detectChanges();
       },
-      items: this._filterItems(true),  
+      items: this._filterItems(),  
       savedFilters: this._savedFilters(),
     };
 
@@ -178,12 +165,12 @@ export class KitchenSinkComponent implements OnInit {
       //   icon: 'notifications',
       // },        
       load: () => {
-        console.log('<====== Load Saved Filters =====>');
+        this._log('<====== Load Saved Filters =====>');
 
         return of(SavedFilters);
       },
       save: (savedFilter) => {
-        console.log('====== Save Filter =====');
+        this._log('====== Save Filter =====');
         const filterIndex = SavedFilters.findIndex((f) => {
           return f.id === savedFilter.id;
         });
@@ -200,20 +187,20 @@ export class KitchenSinkComponent implements OnInit {
           SavedFilters.push(savedFilter);
         }
 
-        console.log('Save Filter', savedFilter);
-        console.log('Saved Filters: ', SavedFilters);
+        this._log('Save Filter', savedFilter);
+        this._log('Saved Filters: ', SavedFilters);
 
         return of(savedFilter);
       },
       // order: (filters) => {
-      //   console.log('====== Order Saved Filters =====');
-      //   console.log('order filters', filters);
+      //   this._log('====== Order Saved Filters =====');
+      //   this._log('order filters', filters);
 
       //   return of(null);
       // },
       delete: () => {
-        console.log('====== Delete Saved Filter =====');
-        console.log('order filters', filter);
+        this._log('====== Delete Saved Filter =====');
+        this._log('order filters', filter);
 
         return of(null);
       },
@@ -237,7 +224,7 @@ export class KitchenSinkComponent implements OnInit {
         disableQueryParams: true,
         chipLabel: 'Special Label',
         init: (item, initFilter: FilterComponent) => {
-          console.log('Item init', item, initFilter);
+          this._log('Item init', item, initFilter);
           
           // setTimeout(() => {
           //   item.hide();
@@ -308,15 +295,15 @@ export class KitchenSinkComponent implements OnInit {
       //   label: 'Autocomplete User',
       //   type: ItemType.AutoComplete,
       //   change: (item) => {
-      //     console.log('Item Change', item);
+      //     this._log('Item Change', item);
       //   },
       //   init: (item) => {
-      //     console.log('Item Init', item);
+      //     this._log('Item Init', item);
       //   },
       //   values: (keyword) => {
       //     return of(this.users)
       //       .pipe(
-      //         tap(() => console.log('load autocomplete_user_id')),
+      //         tap(() => this._log('load autocomplete_user_id')),
       //         map((users) => this._filterUsersByKeyword(users, keyword)),
       //         map((users) => nameValue(users, 'name', 'id')),
       //       );
@@ -332,7 +319,7 @@ export class KitchenSinkComponent implements OnInit {
           {
             label: 'Add User',
             click: (filterComponent: FilterComponent) => {
-              console.log('Added User', filterComponent);
+              this._log('Added User', filterComponent);
               const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
               const item = filterComponent.getItem('autocompletechips');
               item.value = [
@@ -354,7 +341,6 @@ export class KitchenSinkComponent implements OnInit {
 
                 return user;
               })),
-              tap(console.log),
             );
         },
       },
@@ -416,7 +402,7 @@ export class KitchenSinkComponent implements OnInit {
         primary: false,
         multiple: true,
         select: (file) => {
-          console.log('Selected File', file);
+          this._log('File Action - Selected File', file);
         },
       },
       {
@@ -427,13 +413,13 @@ export class KitchenSinkComponent implements OnInit {
           {
             label: 'Test',
             click: () => {
-              console.log('Test clicked');
+              this._log('Menu Action - Test clicked');
             },
           },
           {
             label: 'Test 2',
             click: () => {
-              console.log('Test 2 clicked');
+              this._log('Menu Action - Test 2 clicked');
             },
           },
           {
@@ -441,7 +427,7 @@ export class KitchenSinkComponent implements OnInit {
             mode: MenuActionMode.File,
             multiple: true,
             fileSelected: (files: FsFile[]) => {
-              console.log('File Upload', files);
+              this._log('Menu Action - File Upload', files);
             },
           },
           {
@@ -450,7 +436,7 @@ export class KitchenSinkComponent implements OnInit {
               {
                 label: 'Sub Item',
                 click: () => {
-                  console.log('Group 1 Sub Item clicked');
+                  this._log('Menu Action - Group 1 Sub Item clicked');
                 },
               },
               {
@@ -458,7 +444,7 @@ export class KitchenSinkComponent implements OnInit {
                 mode: MenuActionMode.File,
                 multiple: true,
                 fileSelected: (files: FsFile[]) => {
-                  console.log('File Upload', files);
+                  this._log('Menu Action - File Upload', files);
                 },
               },
             ],
@@ -478,7 +464,7 @@ export class KitchenSinkComponent implements OnInit {
         primary: false,
         //default: 'week',
         change: (value) => {
-          console.log('Select button change',value);
+          this._log('Select button change',value);
         },
         values: [
           { name: 'Month', value: 'month' },
@@ -486,12 +472,12 @@ export class KitchenSinkComponent implements OnInit {
           { name: 'Day', value: 'day' },
         ],
         // change: (file) => {
-        //   console.log('Selected File', file);
+        //   this._log('Selected File', file);
         // },
       },
       {
         click: (event) => {
-          console.log(event);
+          this._log('Menu Action - Click Secondary', event);
         },
         primary: false,
         label: 'Secondary',
@@ -509,12 +495,11 @@ export class KitchenSinkComponent implements OnInit {
         click: () => {
           this.filter.updateActions(this._doneAction());
           this.filter.hideKeywordField();
-          this.filter.hideFilters();
         },
       },
       {
         click: (event) => {
-          console.log(event);
+          this._log('Click Primary', event);
         },
         label: 'Primary',
       },
@@ -529,7 +514,6 @@ export class KitchenSinkComponent implements OnInit {
         click: () => {
           this.filter.updateActions(this._filterActions());
           this.filter.showKeywordField();
-          this.filter.showFilters();
         },
       },
     ];
@@ -539,5 +523,10 @@ export class KitchenSinkComponent implements OnInit {
     return filter(users, (user) => {
       return user.name.toLowerCase().match(new RegExp(`${keyword}`));
     });
+  }
+
+  private _log(message: string, ...args: any[]) {
+    this._message.info(message);
+    console.log({ message, ...args });
   }
 }

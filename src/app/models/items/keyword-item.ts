@@ -41,7 +41,7 @@ export class KeywordItem extends TextItem {
   }
 
   public get chips(): { name?: string, value: string, label: string }[] {
-    if(!this.hasValue || this.isTypeKeyword) {
+    if(!this.hasValue) {
       return [];
     }
 
