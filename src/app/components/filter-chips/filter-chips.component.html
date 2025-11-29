@@ -37,8 +37,8 @@
           {{ item.mergedLabel }}
           <ng-template
             fsChipSuffix
-            [icon]="'cancel_circle_outline'"
-            (click)="removeItem(item)">
+            [icon]="'add_circle_outline'"
+            (click)="openChip(item)">
           </ng-template>
         </fs-chip>
       }
