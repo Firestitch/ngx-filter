@@ -4,12 +4,12 @@ import {
   inject,
   Injector,
   Input,
-  OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
+import { FsAutocompleteChipsComponent, FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsFormModule } from '@firestitch/form';
 
 
@@ -34,33 +34,29 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class AutocompletechipsComponent 
   extends BaseItemComponent<AutocompleteChipsItem> 
-  implements OnInit, OnDestroy {
+  implements OnInit {
+
+  @ViewChild(FsAutocompleteChipsComponent)
+  public autocompleteChips: FsAutocompleteChipsComponent;
 
   @Input() public autofocus: boolean = false;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
   
   private _injector = inject(Injector);
 
-  public ngOnDestroy(): void {
-    if(this.triggerChangeOn === 'close') {
-      this.item.value = this.value;
-    }
-  }
-
   public panelClosed() {
-    if(this.triggerChangeOn === 'change') {
-      this.item.value = this.value;
-    }
+    this.item.value = this.value;
   }
 
   public removed() {
-    if(this.triggerChangeOn === 'change') {
+    if(!this.autocompleteChips.panelOpen) {
       this.item.value = this.value;
     }
   }
 
   public clear() {
     this.item.clear();
+    this.close();
   }
 
   public fetch = (keyword) => {

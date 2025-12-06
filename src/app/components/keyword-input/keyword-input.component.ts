@@ -17,10 +17,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 
 import { FsClearModule } from '@firestitch/clear';
+import { FsCommonModule } from '@firestitch/common';
 import { FsFormModule } from '@firestitch/form';
 
 import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -42,6 +42,7 @@ import { KeywordController } from '../../services/keyword-controller.service';
     FormsModule,
     FsFormModule,
     FsClearModule,
+    FsCommonModule,
     AsyncPipe,
   ],
 })
@@ -55,7 +56,6 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
   public searchPlaceholder = 'Search';
   public keyword = '';
 
-  private _keyword$ = new Subject();
   private _destroyRef = inject(DestroyRef);
   private _destroy$ = new Subject<void>();
   private _keywordController = inject(KeywordController);
@@ -67,7 +67,6 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this._initAutoFocus();
-    this._listenInputChanges();
     this._initKeyword();
   }
 
@@ -97,19 +96,7 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
   }
 
   public keywordChange(keyword) {
-    this._keyword$.next(keyword);
-  }
-
-  private _listenInputChanges() {
-    this._keyword$
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((value) => {
-        this._keywordController.keywordItem.value = value;
-      });
+    this._keywordController.keywordItem.value = keyword;
   }
 
   private _initKeyword() {
