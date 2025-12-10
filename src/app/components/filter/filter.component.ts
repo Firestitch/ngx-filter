@@ -35,7 +35,6 @@ import {
   FilterConfig,
   IFilterConfigItem,
 } from '../../interfaces/config.interface';
-import { IUpdateFilterItemConfig } from '../../interfaces/update-filter-item.interface';
 import { FsFilterConfig } from '../../models/filter-config';
 import { BaseItem } from '../../models/items/base-item';
 import { SortController } from '../../services';
@@ -333,20 +332,6 @@ export class FilterComponent implements OnInit, OnDestroy {
     }
 
     item.clear();
-  }
-
-  public updateItemConfig(
-    name: string,
-    params: IUpdateFilterItemConfig,
-  ): void {
-    const item = this.getItem(name);
-
-    if (!item) {
-      return;
-    }
-
-    item.label = params.label ?? item.label;
-    item.chipLabel = params.chipLabel ?? item.chipLabel;
   }
 
   public clear(event = null) {

@@ -3,6 +3,7 @@ import { format, iso8601 } from '@firestitch/date';
 
 import { isDate, isValid, parseISO } from 'date-fns';
 
+import { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
 import { getRangeName } from '../../helpers/get-range-name';
 import {
@@ -13,6 +14,26 @@ import { BaseItem } from './base-item';
 
 
 export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeItem> {
+
+  public fromLabel: string;
+  public toLabel: string;
+
+  constructor(
+    itemConfig: IFilterConfigDateRangeItem,
+    protected _filter: FilterComponent,
+  ) {
+    super(itemConfig, _filter);
+    if(itemConfig.label instanceof Array) {
+      this.fromLabel = itemConfig.label[0];
+      this.toLabel = itemConfig.label[1];
+    } else if (typeof itemConfig.label === 'string') {
+      this.fromLabel = `From ${itemConfig.label}`;
+      this.toLabel = `To ${itemConfig.label}`;
+    } else if (typeof itemConfig.label === 'object') {
+      this.fromLabel = itemConfig.label.from;
+      this.toLabel = itemConfig.label.to;
+    }
+  }
 
   public get isTypeDateRange(): boolean {
     return this.type === ItemType.DateRange;
@@ -73,7 +94,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
     return value;
   }
 
-  public get chips(): { name?: string, value: string, label: string }[] {
+  public get chips(): { name?: string, value: string, label: any }[] {
     const dateFormat = this.type === ItemType.DateRange ? 'date' : 'date-time';
     const chips = [];
 
@@ -81,7 +102,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       chips.push({
         name: 'from',
         value: format(this.value.from, dateFormat),
-        label: this.label[0],
+        label: this.fromLabel,
       });
     }
 
@@ -89,7 +110,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       chips.push({
         name: 'to',
         value: format(this.value.to, dateFormat),
-        label: this.label[1],
+        label: this.toLabel,
       });
     }
 

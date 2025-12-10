@@ -14,8 +14,8 @@ type DefaultItemType = ItemType.Date | ItemType.DateTime | ItemType.Week | ItemT
 export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   name: string;
   type: T;
-  label: string | string[];
-  chipLabel?: string | string[];
+  label: unknown;
+  chipLabel?: unknown;
   hide?: boolean;
   show?: boolean;
   values?: any;

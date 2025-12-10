@@ -17,7 +17,13 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public declare options: { scale?: number };
   public declare prefix: string;
   public declare suffix: string;
-  
+  public declare minLabel: string;
+  public declare maxLabel: string;
+
+  public get mergedLabel() {
+    return `${this.label[0]} / ${this.label[1]}`;
+  }
+
   constructor(
     itemConfig: IFilterConfigRangeItem,
     protected _filter: FilterComponent,

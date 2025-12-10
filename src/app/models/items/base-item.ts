@@ -18,7 +18,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public name: string;
   public label: any;
-  public chipLabel: string | string[];
+  public chipLabel: string;
   public defaultValueFn: IFilterDefaultFn;
   public defaultValue: any;
   public clearable: boolean;
@@ -84,7 +84,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public get mergedLabel(): string {
-    return Array.isArray(this.label) ? this.label.join(' / ') : this.label;
+    return this.label;
   }
 
   public get visible$(): Observable<boolean> {
@@ -337,13 +337,16 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.label = item.label;
     this.primary = item.primary ?? false;
     this.secondary = !this.primary && (item.secondary ?? false);
-    this.chipLabel = item.chipLabel;
     this.visible = !(item.hide ?? !(item.show ?? true));
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
     this.defaultValueFn = typeof item.default === 'function' ?
       item.default as IFilterDefaultFn : () => of(item.default);
+    
+    if(typeof item.chipLabel === 'string') {
+      this.chipLabel = item.chipLabel;
+    }
 
     if ('placeholder' in item) {
       this.placeholder = item.placeholder;

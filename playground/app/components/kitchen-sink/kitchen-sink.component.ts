@@ -374,7 +374,7 @@ export class KitchenSinkComponent implements OnInit {
       {
         name: 'dateRange',
         type: ItemType.DateRange,
-        label: ['From Date', 'To Date'],
+        label: 'Date',
       },
       {
         name: 'scrollDate',

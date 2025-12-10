@@ -34,7 +34,7 @@ export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomple
 export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
 export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
 export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
-export { IFilterConfigDateRangeItem, IFilterItemDefaultDateRange } from './app/interfaces/items/date-range.interface';
+export { IFilterConfigDateRangeItem, IFilterItemDateRangeDefault } from './app/interfaces/items/date-range.interface';
 export { IFilterConfigDateItem } from './app/interfaces/items/date.interface';
 export { IFilterConfigRangeItem, IFilterItemDefaultRange } from './app/interfaces/items/range.interface';
 export { FilterValuesReturnFn, IFilterConfigSelectIsolate, IFilterConfigSelectItem, IFilterSelectValue } from './app/interfaces/items/select.interface';
