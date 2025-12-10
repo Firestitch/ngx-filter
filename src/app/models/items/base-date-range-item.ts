@@ -27,8 +27,8 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
       this.fromLabel = itemConfig.label[0];
       this.toLabel = itemConfig.label[1];
     } else if (typeof itemConfig.label === 'string') {
-      this.fromLabel = `From ${itemConfig.label}`;
-      this.toLabel = `To ${itemConfig.label}`;
+      this.fromLabel = `${itemConfig.label} from`;
+      this.toLabel = `${itemConfig.label} to`;
     } else if (typeof itemConfig.label === 'object') {
       this.fromLabel = itemConfig.label.from;
       this.toLabel = itemConfig.label.to;
