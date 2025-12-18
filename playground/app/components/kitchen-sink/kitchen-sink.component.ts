@@ -121,10 +121,10 @@ export class KitchenSinkComponent implements OnInit {
         value: 'name',
       },
       reload: true,
-      // autoReload: {
-      //   enabled: false,
-      //   seconds: 5,
-      // },
+      autoReload: {
+        enabled: true,
+        seconds: 5,
+      },
       change: (query, sort) => {
         this._log('Change', query, sort );
         this.query = query;

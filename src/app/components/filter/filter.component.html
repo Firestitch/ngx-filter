@@ -83,8 +83,15 @@
         </a>
       }
       @if (config.autoReload) {
-        <div class="filter-reload">
-          <mat-slide-toggle
+        <a
+            mat-icon-button
+            class="filter-reload"
+            (click)="config.autoReload.enabled = !config.autoReload.enabled">
+          <mat-icon>
+            {{ config.autoReload.enabled ? 'sync' : 'sync_disabled' }}
+          </mat-icon>
+        </a>
+        <!-- <mat-slide-toggle
               name="autoReload"
               class="auto-reload"
               [ngModel]="config.autoReload.enabled"
@@ -92,8 +99,7 @@
             <span>
               Auto refresh
             </span>
-          </mat-slide-toggle>
-        </div>
+          </mat-slide-toggle> -->
       }
     </div>
   }

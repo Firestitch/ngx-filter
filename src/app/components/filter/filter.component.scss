@@ -81,15 +81,8 @@
   align-items: center;   
   flex: 1;
   justify-content: flex-end;
-}
 
-.filter-toolbar {
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-
-  .button-filters,
-  .button-reload {
+  ::ng-deep .mdc-icon-button {
     display: flex;
 
     --mdc-icon-button-state-layer-size: 40px;
@@ -99,19 +92,12 @@
       display: flex;
     }
   }
+}
 
-  .button-reload {
-    display: flex;
-    align-items: center;
-
-    .auto-reload {
-      margin-right: 5px;
-
-      span {
-        font-size: 80%;
-      }
-    }
-  }
+.filter-toolbar {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 .heading {
