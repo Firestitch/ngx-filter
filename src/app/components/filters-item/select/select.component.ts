@@ -49,9 +49,20 @@ export class SelectComponent extends BaseItemComponent<SelectItem> implements On
   @ViewChild(MatSelect, { static: true })
   public select: MatSelect;
 
-  public selectOpenedChange(opened: boolean) {
-    if(!opened) {
+  public selectionChange() {
+    if(!this.item.multiple) {
       this.change();
+    }
+  }
+
+  public selectOpenedChange(opened: boolean) {
+    if(this.item.multiple) {
+      if(!opened && this.value !== this.item.value) {
+        this.change();
+      }
+    }
+
+    if(!opened) {
       this.close();
     }
   }

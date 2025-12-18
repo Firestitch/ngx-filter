@@ -8,6 +8,7 @@
   <mat-select
       [fsFilterFocusTrigger]="autofocus && !item.isolate"
       [(ngModel)]="value"
+      (selectionChange)="selectionChange()"
       (openedChange)="selectOpenedChange($event)"
       [multiple]="item.multiple">
     @if (item.children) {

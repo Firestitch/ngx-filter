@@ -15,7 +15,6 @@ import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
 import { BehaviorSubject, Observable, delay, merge, skip, take, tap } from 'rxjs';
 
-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ItemType } from '../../enums';

@@ -314,7 +314,7 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Autocomplete Chips',
         type: ItemType.AutoCompleteChips,
         chipImage: 'data.image',
-        primary: false,
+        primary: true,
         panelActions: [
           {
             label: 'Add User',

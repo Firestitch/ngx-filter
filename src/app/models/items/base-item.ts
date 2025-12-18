@@ -212,7 +212,9 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   public set value(value) {
-    this.setValue(value);
+    if(value !== this.value) {
+      this.setValue(value);
+    }
   }
 
   /**
