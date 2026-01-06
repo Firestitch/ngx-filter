@@ -33,7 +33,9 @@ export class FocusToItemDirective implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     if(this.focusEnabled) {
-      this._focus();
+      setTimeout(() => {
+        this._focus();
+      });
     }
   }
 

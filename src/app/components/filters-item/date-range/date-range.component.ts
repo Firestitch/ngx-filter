@@ -49,6 +49,7 @@ export class  DateRangeComponent
   public viewType = PickerViewType.Date;
   public from: Date;
   public to: Date;
+  public initialized = false;
 
   public ngOnInit() {
     super.ngOnInit();
@@ -56,20 +57,24 @@ export class  DateRangeComponent
     this.viewType = this.item.type === ItemType.DateTimeRange ? 
       PickerViewType.DateTime : PickerViewType.Date;
 
-    if(this.item.primary) {
-      this.autofocusName = null;
-    } else if(!this.autofocusName) {
-      this.autofocusName = this.from ? 'to' : 'from';
-    }
-
     this.item.value$
       .pipe(
         takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe((value) => {
+      .subscribe((value: { from?: Date; to?: Date }) => {
         this.from = value?.from;
         this.to = value?.to;
-        this._cdRef.detectChanges();
+
+        if(!this.initialized) {
+          this.initialized = true;
+          if(this.item.primary) {
+            this.autofocusName = null;
+          } else {
+            this.autofocusName = this.from ? 'to' : 'from';
+          }
+        }
+
+        this._cdRef.markForCheck();
       });
   }
   

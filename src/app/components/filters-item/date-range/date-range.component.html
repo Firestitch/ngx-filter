@@ -1,37 +1,39 @@
-<div class="row">
-  <mat-form-field
-      [floatLabel]="floatLabel"
-      class="form-field-padless">
-    <mat-label>
-      {{ item.fromLabel }}
-    </mat-label>
-    <input
-      matInput
-      [fsFilterFocusTrigger]="autofocusName === 'from'"
-      [fsDateRangeFrom]="item.name"
-      [(ngModel)]="from"
-      (ngModelChange)="change()"
-      [clear]="item.clearable"
-      [view]="viewType"
-      name="dateFrom">
-  </mat-form-field>
-  <div class="to">
-    to
+@if (initialized) {
+  <div class="row">
+    <mat-form-field
+        [floatLabel]="floatLabel"
+        class="form-field-padless">
+      <mat-label>
+        {{ item.fromLabel }}
+      </mat-label>
+      <input
+        matInput
+        [fsFilterFocusTrigger]="autofocusName === 'from'"
+        [fsDateRangeFrom]="item.name"
+        [(ngModel)]="from"
+        (ngModelChange)="change()"
+        [clear]="item.clearable"
+        [view]="viewType"
+        name="dateFrom">
+    </mat-form-field>
+    <div class="to">
+      to
+    </div>
+    <mat-form-field
+        [floatLabel]="floatLabel"
+        class="form-field-padless">
+      <mat-label>
+        {{ item.toLabel }}
+      </mat-label>
+      <input
+        matInput
+        [fsFilterFocusTrigger]="autofocusName === 'to'"
+        [fsDateRangeTo]="item.name"
+        [(ngModel)]="to"
+        (ngModelChange)="change()"
+        [clear]="item.clearable"
+        [view]="viewType"
+        name="dateTo">
+    </mat-form-field>
   </div>
-  <mat-form-field
-      [floatLabel]="floatLabel"
-      class="form-field-padless">
-    <mat-label>
-      {{ item.toLabel }}
-    </mat-label>
-    <input
-      matInput
-      [fsFilterFocusTrigger]="autofocusName === 'to'"
-      [fsDateRangeTo]="item.name"
-      [(ngModel)]="to"
-      (ngModelChange)="change()"
-      [clear]="item.clearable"
-      [view]="viewType"
-      name="dateTo">
-  </mat-form-field>
-</div>
+}
