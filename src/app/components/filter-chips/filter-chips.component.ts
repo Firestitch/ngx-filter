@@ -8,8 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatOption, MatSelect } from '@angular/material/select';
 
-import { FsChipComponent, FsChipModule } from '@firestitch/chip';
-import { FsChipSelectTriggerDirective } from '@firestitch/chip/app/components/chip-select/chip-select-trigger.directive';
+import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@firestitch/chip';
 import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
