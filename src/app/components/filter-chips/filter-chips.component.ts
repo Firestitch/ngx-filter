@@ -6,9 +6,10 @@ import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatOption, MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 import { FsChipComponent, FsChipModule } from '@firestitch/chip';
+import { FsChipSelectTriggerDirective } from '@firestitch/chip/app/components/chip-select/chip-select-trigger.directive';
 import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
@@ -42,6 +43,7 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
     MatButtonModule,
     FsButtonDirective,
     FormsModule,
+    FsChipSelectTriggerDirective,
   ],
 })
 export class FsFilterChipsComponent implements OnInit {
@@ -69,8 +71,7 @@ export class FsFilterChipsComponent implements OnInit {
     return this._filterController.items;
   }
 
-  public addFilter(event: MatSelectChange) {
-    const item: BaseItem<IFilterConfigItem> = event.value;
+  public addFilter(item: BaseItem<IFilterConfigItem>) {
     item.secondaryShow();
 
     this.chips.changes
@@ -100,7 +101,7 @@ export class FsFilterChipsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.secondaryItems = this.items
-      .filter((item) => !item.primary);
+      .filter((item) => item.allowSecondary);
 
     this._initHasSecondaryValue();
     this._initMoreFilterItems();

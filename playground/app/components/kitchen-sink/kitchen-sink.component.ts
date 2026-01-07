@@ -247,6 +247,15 @@ export class KitchenSinkComponent implements OnInit {
             );
         },
       },
+      
+      {
+        name: 'showDeleted',
+        type: ItemType.Checkbox,
+        label: 'Show Deleted',
+        // default: true,
+        unchecked: 'active',
+        checked: 'deleted',
+      },
       {
         name: 'groupSelect',
         type: ItemType.Select,
@@ -355,14 +364,6 @@ export class KitchenSinkComponent implements OnInit {
               map((weekdays) => nameValue(weekdays, 'name', 'id')),
             );
         },
-      },
-      {
-        name: 'showDeleted',
-        type: ItemType.Checkbox,
-        label: 'Show Deleted',
-        // default: true,
-        unchecked: 'active',
-        checked: 'deleted',
       },
       {
         name: 'date',

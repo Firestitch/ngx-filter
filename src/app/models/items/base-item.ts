@@ -163,6 +163,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this.value !== null && this.value !== undefined;
   }
 
+  public get allowSecondary() {
+    return !this.primary;
+  }
+
   public get notValue$() {
     return this.value$
       .pipe(

@@ -37,61 +37,57 @@
           {{ item.mergedLabel }}
           <ng-template
             fsChipSuffix
-            [icon]="'add_circle_outline'"
-            (click)="openChip(item)">
+            [icon]="'add_circle_outline'">
           </ng-template>
         </fs-chip>
       }
     }
   }
   @if (moreFilterItems().length > 0) {
-    <mat-select
-        class="more-filters-select mat-mdc-button-base"
-        [buttonType]="'basic'"
-        fsSelectButton
-        [disableOptionCentering]="true"
-        [panelClass]="'fs-filter-no-initial-focus'"
-        [placeholder]="'More filters'"
-        (selectionChange)="addFilter($event)"
-        [deselectOnChange]="true">
+    <fs-chip-select
+        [outlined]="true"
+        (select)="addFilter($event)">
+      <fs-chip-select-trigger>
+        More filters
+      </fs-chip-select-trigger>
       @for (item of moreFilterItems(); track item.name) {
-        <mat-option [value]="item">
+        <fs-chip-select-option [value]="item">
           {{ item.mergedLabel }}
-        </mat-option>
+        </fs-chip-select-option>
       }
-    </mat-select>
+    </fs-chip-select>
   }
   @if (savedFilterController.enabled) {
-    <mat-select
-        class="saved-filters-select mat-mdc-button-base"
-        [buttonType]="'basic'"
-        fsSelectButton
-        [placeholder]="(savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel"
-        [deselectOnChange]="true">
+    <fs-chip-select [outlined]="true">
+      <fs-chip-select-trigger>
+        {{ (savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel }}
+      </fs-chip-select-trigger>
       @if (savedFilterController.activeFilter$ | async) {
-        <mat-option (click)="saveActiveFilter()">
+        <fs-chip-select-option (click)="saveActiveFilter()">
           Update filters
-        </mat-option>
-        <mat-option (click)="saveAs()">
+        </fs-chip-select-option>
+        <fs-chip-select-option (click)="saveAs()">
           Save as new
-        </mat-option>
+        </fs-chip-select-option>
       } @else {
-        <mat-option (click)="createSavedFilter()">
+        <fs-chip-select-option (click)="createSavedFilter()">
           Create new
-        </mat-option>
+        </fs-chip-select-option>
       }
-      <mat-option (click)="manageSavedFilters()">
+      <fs-chip-select-option (click)="manageSavedFilters()">
         View all
-      </mat-option>
-    </mat-select>
+      </fs-chip-select-option>
+    </fs-chip-select>
   }
   @if (clearFiltersVisible()) {
-    <a
-        class="clear"
-        mat-button
-        color="primary"
+    <fs-chip
+        [outlined]="true"
         (click)="clear()">
       Clear filters
-    </a>
+      <ng-template
+        fsChipSuffix
+        [icon]="'cancel_circle_outline'">
+      </ng-template>
+    </fs-chip>
   }
 }
