@@ -113,6 +113,7 @@ export class KitchenSinkComponent implements OnInit {
       subheading: 'This is a subtitle',
       chips: true,
       autofocus: false,
+      minSecondaryItems: 3,
       queryParam: true,
       persist: true,
       actions: this._filterActions(),
@@ -253,7 +254,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Checkbox,
         label: 'Show Deleted',
         // default: true,
-        unchecked: 'active',
+        //unchecked: 'active',
         checked: 'deleted',
       },
       {

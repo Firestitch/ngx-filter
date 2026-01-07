@@ -72,7 +72,17 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public addFilter(item: BaseItem<IFilterConfigItem>) {
+    // For checkbox items, set to checked when adding from "More filters"
+    if (item.isTypeCheckbox && !item.hasValue) {
+      item.setValue(true);
+    }
+    
     item.secondaryShow();
+
+    // Don't open overlay for secondary checkbox items
+    if (item.isTypeCheckbox && !item.primary) {
+      return;
+    }
 
     this.chips.changes
       .pipe(
@@ -100,12 +110,49 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.secondaryItems = this.items
-      .filter((item) => item.allowSecondary);
-
+    this._initSecondaryItems();
     this._initHasSecondaryValue();
     this._initMoreFilterItems();
     this._initClearFiltersVisible();
+  }
+
+  private _initSecondaryItems() {
+    this._updateSecondaryItems();
+
+    merge(
+      ...this.items
+        .reduce((accum, item) => {
+          return [
+            ...accum, 
+            item.hasValue$
+              .pipe(skip(1)),
+            item.visible$
+              .pipe(skip(1)),
+          ];
+        }, []),
+    )
+      .pipe(
+        tap(() => {
+          this._updateSecondaryItems();
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+  }
+
+  private _updateSecondaryItems() {
+    this.secondaryItems = this.items
+      .filter((item) => {
+        if (!item.allowSecondary) {
+          return false;
+        }
+        // Exclude checkbox items without values from secondary filters
+        if (item.isTypeCheckbox && !item.hasValue) {
+          return false;
+        }
+
+        return true;
+      });
   }
 
   public clear() {
@@ -120,6 +167,15 @@ export class FsFilterChipsComponent implements OnInit {
 
     this._filterController.change();
     this._savedFilterController.setActiveFilter(null);
+  }
+
+  public handleChipClick(item: BaseItem<IFilterConfigItem>, name: string = null) {
+    // For secondary checkbox items, don't open overlay - clearing is done via remove button
+    if (item.isTypeCheckbox && !item.primary) {
+      return;
+    }
+
+    this.openChip(item, name);
   }
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
@@ -237,7 +293,13 @@ export class FsFilterChipsComponent implements OnInit {
   public removeChip(
     item: BaseItem<IFilterConfigItem>, 
     chip: { name?: string, value: string, label: string },
+    event?: { event: MouseEvent; data: any } | Event,
   ) {
+    if (event) {
+      const mouseEvent = 'event' in event ? event.event : event;
+      mouseEvent.stopPropagation();
+    }
+
     if(!item.secondary) {
       item.secondaryHide();
     }

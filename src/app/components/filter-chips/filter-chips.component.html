@@ -9,7 +9,7 @@
               [borderColor]="'#ddd'"
               [attr.data-filter-item]="item.name"
               [outlined]="true"
-              (click)="openChip(item, chip.name)">
+              (click)="handleChipClick(item, chip.name)">
             @if (chip.value) {
               {{ chip.label }}:
               <a>
@@ -21,7 +21,7 @@
             <ng-template
               fsChipSuffix
               [icon]="'cancel_circle_outline'"
-              (click)="removeChip(item, chip)">
+              (click)="removeChip(item, chip, $event)">
             </ng-template>
           </fs-chip>
         }
@@ -32,8 +32,9 @@
             [attr.data-filter-item]="item.name"
             [size]="'medium'"
             [borderColor]="'#ddd'"
-            (click)="openChip(item)"
-            [outlined]="true">
+            (click)="handleChipClick(item)"
+            [outlined]="true"
+            [outlineDash]="true">
           {{ item.mergedLabel }}
           <ng-template
             fsChipSuffix

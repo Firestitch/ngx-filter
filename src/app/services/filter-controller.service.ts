@@ -228,6 +228,7 @@ export class FilterController implements OnDestroy {
     this.items
       .forEach((item) => {
         if(!item.primary) {
+          // Show secondary if item has value (checkbox items without values are excluded elsewhere)
           if(item.hasValue) {
             item.secondaryShow();
           }
@@ -240,6 +241,10 @@ export class FilterController implements OnDestroy {
           if(item.secondaryVisible) {
             enabled++;
           } else if(enabled < this._config.maxEnabled) {
+            // Skip checkbox items without values when automatically showing secondary items
+            if (item.isTypeCheckbox && !item.hasValue) {
+              return;
+            }
             item.secondaryShow();
             enabled++;
           }
@@ -278,6 +283,11 @@ export class FilterController implements OnDestroy {
           item.visible &&
           secondaryItemCount < this._config.minSecondaryItems
         ) {
+          // Skip checkbox items when automatically adding secondary items
+          // Checkbox items should only be secondary if they have values
+          if (item.isTypeCheckbox) {
+            return;
+          }
           item.secondary = true;
           secondaryItemCount++;
         }  
