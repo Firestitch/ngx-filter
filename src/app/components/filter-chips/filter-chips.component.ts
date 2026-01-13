@@ -6,10 +6,8 @@ import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatOption, MatSelect } from '@angular/material/select';
 
 import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@firestitch/chip';
-import { FsButtonDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
@@ -36,11 +34,8 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
   imports: [
     AsyncPipe,
     FsChipModule,
-    MatSelect,
-    MatOption,
     FsSelectButtonModule,
     MatButtonModule,
-    FsButtonDirective,
     FormsModule,
     FsChipSelectTriggerDirective,
   ],
@@ -113,45 +108,6 @@ export class FsFilterChipsComponent implements OnInit {
     this._initHasSecondaryValue();
     this._initMoreFilterItems();
     this._initClearFiltersVisible();
-  }
-
-  private _initSecondaryItems() {
-    this._updateSecondaryItems();
-
-    merge(
-      ...this.items
-        .reduce((accum, item) => {
-          return [
-            ...accum, 
-            item.hasValue$
-              .pipe(skip(1)),
-            item.visible$
-              .pipe(skip(1)),
-          ];
-        }, []),
-    )
-      .pipe(
-        tap(() => {
-          this._updateSecondaryItems();
-        }),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe();
-  }
-
-  private _updateSecondaryItems() {
-    this.secondaryItems = this.items
-      .filter((item) => {
-        if (!item.allowSecondary) {
-          return false;
-        }
-        // Exclude checkbox items without values from secondary filters
-        if (item.isTypeCheckbox && !item.hasValue) {
-          return false;
-        }
-
-        return true;
-      });
   }
 
   public clear() {
@@ -312,6 +268,45 @@ export class FsFilterChipsComponent implements OnInit {
 
   public removeItem(item: BaseItem<IFilterConfigItem>) {
     item.secondaryHide();
+  }
+
+  private _initSecondaryItems() {
+    this._updateSecondaryItems();
+
+    merge(
+      ...this.items
+        .reduce((accum, item) => {
+          return [
+            ...accum, 
+            item.hasValue$
+              .pipe(skip(1)),
+            item.visible$
+              .pipe(skip(1)),
+          ];
+        }, []),
+    )
+      .pipe(
+        tap(() => {
+          this._updateSecondaryItems();
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+  }
+
+  private _updateSecondaryItems() {
+    this.secondaryItems = this.items
+      .filter((item) => {
+        if (!item.allowSecondary) {
+          return false;
+        }
+        // Exclude checkbox items without values from secondary filters
+        if (item.isTypeCheckbox && !item.hasValue) {
+          return false;
+        }
+
+        return true;
+      });
   }
 
   private _attachContainer(overlayRef: OverlayRef, item: BaseItem<IFilterConfigItem>, name: string) {

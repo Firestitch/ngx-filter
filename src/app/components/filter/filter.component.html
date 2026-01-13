@@ -30,20 +30,12 @@
     <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
   @if ((primaryFilterVisible$ | async) === true || hasHeading) {
-    <ng-container
-      [ngTemplateOutlet]="chipsTmpl"
-      [ngTemplateOutletContext]="{ topMargin: true }">
-    </ng-container>
+    <ng-container [ngTemplateOutlet]="chipsTmpl"></ng-container>
   }
   <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
 </div>
-<ng-template
-    #chipsTmpl
-    let-topMargin="topMargin">
-  <fs-filter-chips
-    class="filter-chips"
-    [ngClass]="{ 'top-margin': topMargin }">
-  </fs-filter-chips>
+<ng-template #chipsTmpl>
+  <fs-filter-chips class="filter-chips"></fs-filter-chips>
 </ng-template>
 <ng-template #statusBarTmpl>
   @if (statusBar) {

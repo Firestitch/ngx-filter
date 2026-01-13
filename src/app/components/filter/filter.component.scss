@@ -74,6 +74,15 @@
       }
     }
   }
+
+  .filter-bar-container + .filter-chips,
+  .filter-bar-container + .filter-status-container {
+    margin-top: 6px;
+  }
+
+  .filter-chips + .filter-status-container {
+    margin-top: 4px;
+  }
 }
 
 .filter-actions {
