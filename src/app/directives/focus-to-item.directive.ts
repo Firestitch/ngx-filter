@@ -42,34 +42,20 @@ export class FocusToItemDirective implements AfterViewInit {
   private _focus() {
     if(this._targetSelect) {
       this._targetSelect.open();
-    }
-
-    if(this._targetText) {
-      this._targetText.focus();
-    }
-
-    if(this._targetDate) {
-      this._targetDate.open();
-    }
-
-    if(this._targetDateScroll) {
-      this._targetDateScroll.open();
-    }
-
-    if(this._targetDateRangeFrom) {
+    } else if(this._targetDateRangeFrom) {
       this._targetDateRangeFrom.open();
-    }
-
-    if(this._targetDateRangeTo) {
+    } else if(this._targetDateRangeTo) {
       this._targetDateRangeTo.open();
-    }
-
-    if(this._targetAutocomplete) {
+    } else if(this._targetDate) {
+      this._targetDate.open();
+    } else if(this._targetDateScroll) {
+      this._targetDateScroll.open();
+    } else if(this._targetAutocomplete) {
       this._targetAutocomplete.focus();
-    }
-
-    if(this._targetAutocompleteChips) {
+    } else if(this._targetAutocompleteChips) {
       this._targetAutocompleteChips.focus();
+    } else if(this._targetText) {
+      this._targetText.focus();
     }
   }
 }
