@@ -4,13 +4,18 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 
-import { FsDatePickerModule } from '@firestitch/datepicker';
+import {
+  DateRangePickerFromComponent,
+  DateRangePickerToComponent,
+  FsDatePickerModule,
+} from '@firestitch/datepicker';
 import { FsFormModule } from '@firestitch/form';
 
 
@@ -45,12 +50,17 @@ export class  DateRangeComponent
 
   @Input() public autofocusName: string;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
-  
+
+  @ViewChild(DateRangePickerFromComponent)
+  private _fromPicker: DateRangePickerFromComponent;
+
+  @ViewChild(DateRangePickerToComponent)
+  private _toPicker: DateRangePickerToComponent;
+
   public viewType = PickerViewType.Date;
   public from: Date;
   public to: Date;
   public initialized = false;
-  public focusReady = false;
 
   public ngOnInit() {
     super.ngOnInit();
@@ -70,7 +80,6 @@ export class  DateRangeComponent
           this.initialized = true;
           if(this.item.primary) {
             this.autofocusName = null;
-            this.focusReady = true;
           } else {
             this.autofocusName = this.from ? 'to' : 'from';
           }
@@ -81,14 +90,16 @@ export class  DateRangeComponent
   }
   
   public ngOnDestroy(): void {
+    // Close any open datepicker dialogs to prevent overlay leaks.
+    // RangePickerComponent.ngOnDestroy() does not call close() (unlike
+    // FsDatePickerBaseComponent), so the calendar overlay stays in the DOM
+    // if we don't clean it up here.
+    this._fromPicker?.dateDialogRef?.close();
+    this._toPicker?.dateDialogRef?.close();
+
     if(this.triggerChangeOn === 'close') {
       this.item.value = this.getValue;
     }
-  }  
-  
-  public onFocusApplied() {
-    this.focusReady = true;
-    this._cdRef.markForCheck();
   }
 
   public change() {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, EventEmitter, Input, Output, inject } from '@angular/core';
+import { AfterViewInit, Directive, Input, inject } from '@angular/core';
 
 import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
@@ -21,9 +21,6 @@ export class FocusToItemDirective implements AfterViewInit {
   @Input('fsFilterFocusTrigger')
   public focusEnabled = true;
 
-  @Output()
-  public focused = new EventEmitter<void>();
-
   private _targetSelect = inject(MatSelect, { optional: true, self: true });
   private _targetText = inject(MatInput, { optional: true, self: true });
   private _targetDate = inject(FsDatePickerComponent, { optional: true, self: true });
@@ -38,7 +35,6 @@ export class FocusToItemDirective implements AfterViewInit {
     if(this.focusEnabled) {
       setTimeout(() => {
         this._focus();
-        this.focused.emit();
       });
     }
   }
