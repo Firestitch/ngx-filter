@@ -64,6 +64,7 @@ export class  DateRangeComponent
 
   public ngOnInit() {
     super.ngOnInit();
+    console.log('[DateRangeComponent] ngOnInit', this.item.name);
 
     this.viewType = this.item.type === ItemType.DateTimeRange ? 
       PickerViewType.DateTime : PickerViewType.Date;
@@ -83,6 +84,7 @@ export class  DateRangeComponent
           } else {
             this.autofocusName = this.from ? 'to' : 'from';
           }
+          console.log('[DateRangeComponent] initialized, autofocusName:', this.autofocusName);
         }
 
         this._cdRef.markForCheck();
@@ -90,6 +92,11 @@ export class  DateRangeComponent
   }
   
   public ngOnDestroy(): void {
+    console.log('[DateRangeComponent] ngOnDestroy', this.item.name, {
+      fromDialogOpen: !!this._fromPicker?.dateDialogRef,
+      toDialogOpen: !!this._toPicker?.dateDialogRef,
+    });
+    
     // Close any open datepicker dialogs to prevent overlay leaks.
     // RangePickerComponent.ngOnDestroy() does not call close() (unlike
     // FsDatePickerBaseComponent), so the calendar overlay stays in the DOM

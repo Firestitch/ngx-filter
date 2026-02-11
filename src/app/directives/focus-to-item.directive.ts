@@ -34,6 +34,16 @@ export class FocusToItemDirective implements AfterViewInit {
   public ngAfterViewInit(): void {
     if(this.focusEnabled) {
       setTimeout(() => {
+        console.log('[FocusToItemDirective] _focus() called', {
+          hasSelect: !!this._targetSelect,
+          hasText: !!this._targetText,
+          hasDate: !!this._targetDate,
+          hasDateScroll: !!this._targetDateScroll,
+          hasDateRangeFrom: !!this._targetDateRangeFrom,
+          hasDateRangeTo: !!this._targetDateRangeTo,
+          hasAutocomplete: !!this._targetAutocomplete,
+          hasAutocompleteChips: !!this._targetAutocompleteChips,
+        });
         this._focus();
       });
     }
@@ -42,12 +52,12 @@ export class FocusToItemDirective implements AfterViewInit {
   private _focus() {
     if(this._targetSelect) {
       this._targetSelect.open();
-    } else if(this._targetDateRangeFrom) {
-      this._targetDateRangeFrom.open();
-    } else if(this._targetDateRangeTo) {
-      this._targetDateRangeTo.open();
-    } else if(this._targetDate) {
-      this._targetDate.open();
+    } else if(this._targetDateRangeFrom || this._targetDateRangeTo || this._targetDate) {
+      // Don't call open() directly on date pickers.
+      // Date picker directives bind @HostListener('focus') → open(), so focusing
+      // the input is enough.  Calling open() directly creates a dual-trigger:
+      // open() → _doFocus() → focus event → @HostListener('focus') → open() again.
+      this._targetText?.focus();
     } else if(this._targetDateScroll) {
       this._targetDateScroll.open();
     } else if(this._targetAutocomplete) {

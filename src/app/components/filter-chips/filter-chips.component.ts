@@ -134,6 +134,7 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
+    console.log('[FilterChips] openChip', item.name, 'type:', item.type, 'existingOverlay:', !!this._overlayRef);
     this._destroyOverlay();
     const el = this._elementRef.nativeElement
       .querySelector(`[data-filter-item="${item.name}"]`);
@@ -246,6 +247,7 @@ export class FsFilterChipsComponent implements OnInit {
 
   public _destroyOverlay() {
     if(this._overlayRef) {
+      console.log('[FilterChips] _destroyOverlay - disposing existing overlay');
       try {
         this._overlayRef.detachBackdrop();
         this._overlayRef.detach();
