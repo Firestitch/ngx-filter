@@ -50,6 +50,7 @@ export class  DateRangeComponent
   public from: Date;
   public to: Date;
   public initialized = false;
+  public focusReady = false;
 
   public ngOnInit() {
     super.ngOnInit();
@@ -69,6 +70,7 @@ export class  DateRangeComponent
           this.initialized = true;
           if(this.item.primary) {
             this.autofocusName = null;
+            this.focusReady = true;
           } else {
             this.autofocusName = this.from ? 'to' : 'from';
           }
@@ -84,6 +86,11 @@ export class  DateRangeComponent
     }
   }  
   
+  public onFocusApplied() {
+    this.focusReady = true;
+    this._cdRef.markForCheck();
+  }
+
   public change() {
     if(this.triggerChangeOn === 'change') {
       this.item.value = this.getValue;

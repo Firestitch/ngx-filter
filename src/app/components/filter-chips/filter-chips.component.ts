@@ -179,6 +179,14 @@ export class FsFilterChipsComponent implements OnInit {
       takeUntilDestroyed(this._destroyRef),
     ).subscribe();
 
+    this._overlayRef.detachments().pipe(
+      take(1),
+      tap(() => {
+        this._overlayRef = null;
+      }),
+      takeUntilDestroyed(this._destroyRef),
+    ).subscribe();
+
     this._attachContainer(this._overlayRef, item, name);
   }
 
@@ -238,9 +246,13 @@ export class FsFilterChipsComponent implements OnInit {
 
   public _destroyOverlay() {
     if(this._overlayRef) {
-      this._overlayRef.detachBackdrop();
-      this._overlayRef.detach();
-      this._overlayRef.dispose();
+      try {
+        this._overlayRef.detachBackdrop();
+        this._overlayRef.detach();
+        this._overlayRef.dispose();
+      } catch {
+        // overlay may already be disposed by BaseItemComponent.close()
+      }
       this._overlayRef = null;
     }
   }
