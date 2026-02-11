@@ -1,43 +1,69 @@
 @if (initialized) {
   <div class="row">
-    <mat-form-field
-        [floatLabel]="floatLabel"
-        class="form-field-padless">
-      <mat-label>
-        {{ item.fromLabel }}
-      </mat-label>
-      <input
-        matInput
-        [fsFilterFocusTrigger]="autofocusName === 'from'"
-        (focused)="onFocusApplied()"
-        [readonly]="autofocusName === 'to' && !focusReady"
-        [fsDateRangeFrom]="item.name"
-        [(ngModel)]="from"
-        (ngModelChange)="change()"
-        [clear]="item.clearable"
-        [view]="viewType"
-        name="dateFrom">
-    </mat-form-field>
+    @if (autofocusName !== 'to' || focusReady) {
+      <mat-form-field
+          [floatLabel]="floatLabel"
+          class="form-field-padless">
+        <mat-label>
+          {{ item.fromLabel }}
+        </mat-label>
+        <input
+          matInput
+          [fsFilterFocusTrigger]="autofocusName === 'from'"
+          (focused)="onFocusApplied()"
+          [fsDateRangeFrom]="item.name"
+          [(ngModel)]="from"
+          (ngModelChange)="change()"
+          [clear]="item.clearable"
+          [view]="viewType"
+          name="dateFrom">
+      </mat-form-field>
+    } @else {
+      <mat-form-field
+          [floatLabel]="floatLabel"
+          class="form-field-padless">
+        <mat-label>
+          {{ item.fromLabel }}
+        </mat-label>
+        <input
+          matInput
+          readonly
+          name="dateFrom">
+      </mat-form-field>
+    }
     <div class="to">
       to
     </div>
-    <mat-form-field
-        [floatLabel]="floatLabel"
-        class="form-field-padless">
-      <mat-label>
-        {{ item.toLabel }}
-      </mat-label>
-      <input
-        matInput
-        [fsFilterFocusTrigger]="autofocusName === 'to'"
-        (focused)="onFocusApplied()"
-        [readonly]="autofocusName === 'from' && !focusReady"
-        [fsDateRangeTo]="item.name"
-        [(ngModel)]="to"
-        (ngModelChange)="change()"
-        [clear]="item.clearable"
-        [view]="viewType"
-        name="dateTo">
-    </mat-form-field>
+    @if (autofocusName !== 'from' || focusReady) {
+      <mat-form-field
+          [floatLabel]="floatLabel"
+          class="form-field-padless">
+        <mat-label>
+          {{ item.toLabel }}
+        </mat-label>
+        <input
+          matInput
+          [fsFilterFocusTrigger]="autofocusName === 'to'"
+          (focused)="onFocusApplied()"
+          [fsDateRangeTo]="item.name"
+          [(ngModel)]="to"
+          (ngModelChange)="change()"
+          [clear]="item.clearable"
+          [view]="viewType"
+          name="dateTo">
+      </mat-form-field>
+    } @else {
+      <mat-form-field
+          [floatLabel]="floatLabel"
+          class="form-field-padless">
+        <mat-label>
+          {{ item.toLabel }}
+        </mat-label>
+        <input
+          matInput
+          readonly
+          name="dateTo">
+      </mat-form-field>
+    }
   </div>
 }
