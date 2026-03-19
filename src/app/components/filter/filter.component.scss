@@ -93,9 +93,9 @@
   gap: 5px;
 
   ::ng-deep .mdc-icon-button {
-    display: flex;
-
     --mdc-icon-button-state-layer-size: 40px;
+    display: flex;
+    align-items: center;    
     padding: 8px;
 
     ::ng-deep svg {
