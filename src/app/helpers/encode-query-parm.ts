@@ -6,7 +6,7 @@
  * resolve to a bare primitive whose `.name` is undefined.
  */
 export function encodeQueryParam(value: string | null | undefined): string {
-  return (value ?? '')
+  return String(value ?? '')
     .replace(/,/g, '\\,')
     .replace(/:/g, '\\:');
 }

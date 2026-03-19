@@ -2,42 +2,54 @@
   {{ pluralLabel }}
 </h1>
 <div mat-dialog-content>
-  <table class="fs-list-table">
-    <thead>
-      <tr>
-        <th>
-          Name
-        </th>
-        <th>
-          Filters
-        </th>
-        <th class="actions-column"></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (savedFilter of savedFilters; track savedFilter.id) {
+  @if (savedFilters?.length) {
+    <table class="fs-list-table">
+      <thead>
         <tr>
-          <td>
-            <a (click)="selectFilter(savedFilter)">
-              {{ savedFilter.name }}
-            </a>
-          </td>
-          <td>
-            <fs-saved-filter-chips [savedFilter]="savedFilter"></fs-saved-filter-chips>
-          </td>
-          <td>
-            <fs-menu>
-              <ng-template
-                  fs-menu-item
-                  (click)="remove(savedFilter)">
-                Delete
-              </ng-template>
-            </fs-menu>
-          </td>
+          @if (orderable) {
+            <th class="drag-col"></th>
+          }
+          <th>
+            Name
+          </th>
+          <th>
+            Filters
+          </th>
+          <th class="actions-column"></th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody
+          cdkDropList
+          (cdkDropListDropped)="drop($event)">
+        @for (savedFilter of savedFilters; track savedFilter.id) {
+          <tr cdkDrag [cdkDragDisabled]="!orderable" cdkDragLockAxis="y" [cdkDragPreviewClass]="'saved-filter-drag-preview'">
+            @if (orderable) {
+              <td class="drag-col" cdkDragHandle>
+                <mat-icon>drag_handle</mat-icon>
+              </td>
+            }
+            <td>
+              <a (click)="selectFilter(savedFilter)">
+                {{ savedFilter.name }}
+              </a>
+            </td>
+            <td>
+              <fs-saved-filter-chips [savedFilter]="savedFilter"></fs-saved-filter-chips>
+            </td>
+            <td>
+              <fs-menu>
+                <ng-template
+                    fs-menu-item
+                    (click)="remove(savedFilter)">
+                  Delete
+                </ng-template>
+              </fs-menu>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>
 <div mat-dialog-actions>
   <button

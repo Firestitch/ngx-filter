@@ -193,12 +193,12 @@ export class KitchenSinkComponent implements OnInit {
 
         return of(savedFilter);
       },
-      // order: (filters) => {
-      //   this._log('====== Order Saved Filters =====');
-      //   this._log('order filters', filters);
+      order: (filters) => {
+        this._log('====== Order Saved Filters =====');
+        this._log('order filters', filters);
 
-      //   return of(null);
-      // },
+        return of(null);
+      },
       delete: () => {
         this._log('====== Delete Saved Filter =====');
         this._log('order filters', filter);

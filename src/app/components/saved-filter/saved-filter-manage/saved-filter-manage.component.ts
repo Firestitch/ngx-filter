@@ -6,8 +6,10 @@ import {
   OnInit,
 } from '@angular/core';
 
+import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButton } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 
 import { FsMenuModule } from '@firestitch/menu';
 
@@ -28,6 +30,10 @@ import { FsFilterSavedFilterChipsComponent } from './components/saved-filter-chi
   imports: [
     MatDialogModule,
     MatButton,
+    MatIcon,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle,
     FsFilterSavedFilterChipsComponent,
     FsMenuModule,
   ],
@@ -53,7 +59,7 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
     return this._savedFilterController.pluralLabel;
   }
 
-  public get sortable(): boolean {
+  public get orderable(): boolean {
     return this._savedFilterController.orderable;
   }
 
@@ -68,6 +74,11 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
         this.savedFilters = this._savedFilterController.savedFilters;
         this._cdRef.markForCheck();
       });
+  }
+
+  public drop(event: CdkDragDrop<IFilterSavedFilter[]>) {
+    moveItemInArray(this.savedFilters, event.previousIndex, event.currentIndex);
+    this.order(this.savedFilters);
   }
 
   public order(savedFilters: IFilterSavedFilter[]) {

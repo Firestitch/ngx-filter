@@ -2,15 +2,60 @@
 
 @include fs-list.core();
 
+::ng-deep .saved-filter-drag-preview {
+  display: table;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 5px;
+
+  td {
+    border: none;
+    padding: 8px;
+    vertical-align: middle;
+  }
+
+  fs-menu {
+    display: none;
+  }
+}
+
 :host {
   ::ng-deep {
     .mat-mdc-dialog-content {
-      width: 800px;
-      max-width: 100%;
+      min-width: 400px;
+    }
+
+    .cdk-drag-placeholder {
+      opacity: 0.5;
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 5px;
+
+      td {
+        border: none;
+      }
+    }
+
+    .cdk-drop-list-dragging .cdk-drag {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .cdk-drag-animating {
+      transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
     }
   }
 }
 
 .actions-column {
   width: 1%;
+}
+
+td.drag-col,
+th.drag-col {
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
+  cursor: grab;
+
+  mat-icon {
+    display: flex;
+  }
 }
