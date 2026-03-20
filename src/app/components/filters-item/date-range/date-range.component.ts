@@ -50,17 +50,18 @@ export class  DateRangeComponent
 
   @Input() public autofocusName: string;
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
+  
+  public viewType = PickerViewType.Date;
+  public from: Date;
+  public to: Date;
+  public initialized = false;
+
 
   @ViewChild(DateRangePickerFromComponent)
   private _fromPicker: DateRangePickerFromComponent;
 
   @ViewChild(DateRangePickerToComponent)
   private _toPicker: DateRangePickerToComponent;
-
-  public viewType = PickerViewType.Date;
-  public from: Date;
-  public to: Date;
-  public initialized = false;
 
   public ngOnInit() {
     super.ngOnInit();
@@ -79,11 +80,7 @@ export class  DateRangeComponent
 
         if(!this.initialized) {
           this.initialized = true;
-          if(this.item.primary) {
-            this.autofocusName = null;
-          } else {
-            this.autofocusName = this.from ? 'to' : 'from';
-          }
+          this.autofocusName = this.item.primary ? null : 'from';
           console.log('[DateRangeComponent] initialized, autofocusName:', this.autofocusName);
         }
 
