@@ -397,8 +397,11 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   private _updateClearItems() {
+    const visibleItems = this.items.filter((item) => item.visible);
+    const onlyKeyword = visibleItems.length === 1 && visibleItems[0].type === ItemType.Keyword;
+
     this.clearFiltersVisible
-      .set(this.items
+      .set(!onlyKeyword && this.items
         .some((item) => item.clearable && item.hasValue && item.visible));
   }
 
