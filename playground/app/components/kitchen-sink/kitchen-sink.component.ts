@@ -115,7 +115,7 @@ export class KitchenSinkComponent implements OnInit {
       autofocus: false,
       minSecondaryItems: 3,
       queryParam: true,
-      persist: true,
+      persist: false,
       actions: this._filterActions(),
       sort: {
         direction: 'desc',
@@ -272,6 +272,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Select,
         label: 'Multi select',
         multiple: true,
+        default: ['active', 'pending'],
         values: [
           { name: 'Active', value: 'active' },
           { name: 'Pending', value: 'pending' },
