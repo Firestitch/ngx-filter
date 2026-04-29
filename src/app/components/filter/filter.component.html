@@ -19,7 +19,6 @@
             </filter-item>
           }
         }
-        <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
       </div>
     } @else if (hasHeading) {
       <div class="filter-heading-container">
@@ -30,7 +29,7 @@
     }
     <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
-  @if (hasHeading && (primaryFilterVisible$ | async) === false) {
+  @if ((primaryFilterVisible$ | async) || hasHeading) {
     <ng-container [ngTemplateOutlet]="chipsTmpl"></ng-container>
   }
   <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
