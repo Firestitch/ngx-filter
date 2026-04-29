@@ -18,4 +18,5 @@
 
 @include fs-style.core();
 @include fs-file(playground.$primary-palette);
+@include fs-filter(playground.$primary-palette);
 

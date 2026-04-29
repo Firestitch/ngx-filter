@@ -1,0 +1,9 @@
+@use '@angular/material' as mat;
+
+@mixin fs-filter($theme) {
+  $primary: mat.m2-define-palette($theme);
+
+  fs-filter-chips {
+    --fs-filter-primary: #{mat.m2-get-color-from-palette($primary)};
+  }
+}
