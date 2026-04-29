@@ -11,10 +11,7 @@
               [outlined]="true"
               (click)="handleChipClick(item, chip.name)">
             @if (chip.value) {
-              {{ chip.label }}:
-              <a>
-                {{ chip.value }}
-              </a>
+              {{ chip.label }}: {{ chip.value }}
             } @else {
               {{ chip.label }}
             }
