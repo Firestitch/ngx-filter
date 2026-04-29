@@ -1,0 +1,7 @@
+<fs-filter [config]="conf"></fs-filter>
+@if (query) {
+  <fieldset>
+    <legend>Filter values</legend>
+    {{ query | json }}
+  </fieldset>
+}

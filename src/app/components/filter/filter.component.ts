@@ -235,16 +235,20 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordFullWidth$;
   }
 
-  public get primaryFilterVisible$(): Observable<boolean> {
+  public get primaryToolbarVisible$(): Observable<boolean> {
     return combineLatest({
       keywordVisible: this.keywordVisible$,
-      savedFilterVisible: of(this.items.some((item) => item.visible && item.primary)),
+      primaryFiltersVisible: this.primaryFiltersVisible$,
     })
       .pipe(
-        map(({ keywordVisible, savedFilterVisible }) => {
-          return keywordVisible || savedFilterVisible;
+        map(({ keywordVisible, primaryFiltersVisible }) => {
+          return keywordVisible || primaryFiltersVisible;
         }),
       );
+  }
+
+  public get primaryFiltersVisible$(): Observable<boolean> {
+    return of(this.items.some((item) => item.visible && item.primary && !item.isTypeKeyword));
   }
 
   public get actionsVisible$() {

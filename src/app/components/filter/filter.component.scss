@@ -20,7 +20,7 @@
 .filter-container {
   width: 100%;
   
-  &.has-primary-filter {
+  &.has-primary-toolbar {
     .heading {
       margin-bottom: 10px;
     }
@@ -69,6 +69,12 @@
       column-gap: 5px;
       row-gap: 10px;
       flex-wrap: wrap;
+
+      &.chips-inline {
+        fs-filter-chips {
+          min-width: 0;
+        }
+      }
     }
 
     .filter-heading-container {
@@ -86,7 +92,7 @@
 
   .filter-bar-container + .filter-chips,
   .filter-bar-container + .filter-status-container {
-    margin-top: 6px;
+    margin-top: 5px;
   }
 
   .filter-chips + .filter-status-container {

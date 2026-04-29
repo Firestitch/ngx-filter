@@ -1,13 +1,15 @@
 <div
     class="filter-container"
-    [ngClass]="{ 'has-primary-filter': primaryFilterVisible$ | async }"
+    [ngClass]="{ 'has-primary-filter': primaryToolbarVisible$ | async }"
     [ngClass]="{ 'keyword-full-width': keywordFullWidth$ | async }">
-  @if (primaryFilterVisible$ | async) {
+  @if (primaryToolbarVisible$ | async) {
     <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
   }
   <div class="filter-bar-container">
-    @if (primaryFilterVisible$ | async) {
-      <div class="filter-input-container">
+    @if (primaryToolbarVisible$ | async) {
+      <div
+          class="filter-input-container"
+          [ngClass]="{ 'chips-inline': !primaryItems.length }">
         @if (keywordVisible$ | async) {
           <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
         }
@@ -19,6 +21,9 @@
             </filter-item>
           }
         }
+        @if ((primaryFiltersVisible$ | async) === false) {
+          <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+        }
       </div>
     } @else if (hasHeading) {
       <div class="filter-heading-container">
@@ -29,10 +34,12 @@
     }
     <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
   </div>
-  @if ((primaryFilterVisible$ | async) || hasHeading) {
-    <ng-container [ngTemplateOutlet]="chipsTmpl"></ng-container>
+  @if ((keywordVisible$ | async) === true && (primaryFiltersVisible$ | async) === true) {
+    <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
   }
-  <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
+  @if ((primaryToolbarVisible$ | async) === false) {
+    <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+  }
 </div>
 <ng-template #chipsTmpl>
   <fs-filter-chips class="filter-chips"></fs-filter-chips>

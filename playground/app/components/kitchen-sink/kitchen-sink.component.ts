@@ -221,7 +221,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'simpleSelect',
         type: ItemType.Select,
         label: 'Single select',
-        primary: true,
+        primary: false,
         disableQueryParams: true,
         chipLabel: 'Special Label',
         init: (item, initFilter: FilterComponent) => {
@@ -325,7 +325,7 @@ export class KitchenSinkComponent implements OnInit {
         label: 'Autocomplete Chips',
         type: ItemType.AutoCompleteChips,
         chipImage: 'data.image',
-        primary: true,
+        primary: false,
         panelActions: [
           {
             label: 'Add User',
@@ -372,7 +372,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Date,
         label: 'Date',
         default: subDays(new Date(), 3),
-        primary: true,
+        primary: false,
       },
       {
         name: 'dateRange',
