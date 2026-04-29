@@ -7,6 +7,19 @@
   z-index: 999;
 }
 
+.filter-chip.selected ::ng-deep {
+  .fs-chip:hover {
+    background-color: rgb(var(--primary-rgb, 33, 150, 243)) !important;
+    filter: none !important;
+    color: #fff !important;
+
+    a,
+    mat-icon {
+      color: #fff !important;
+    }
+  }
+}
+
 .saved-filters-select,
 .more-filters-select,
 .clear {

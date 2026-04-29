@@ -45,6 +45,15 @@
   }
 
   .filter-bar-container {
+    --mat-form-field-container-height: 44px;
+    --mat-form-field-container-vertical-padding: 10px;
+
+    ::ng-deep .mat-mdc-icon-button {
+      --mdc-icon-button-state-layer-size: 42px !important;
+      padding: calc(calc(var(--mdc-icon-button-state-layer-size, 42px) - var(--mdc-icon-button-icon-size, 24px)) / 2);
+    }
+
+
     flex-direction: row;
     box-sizing: border-box;
     display: flex;
