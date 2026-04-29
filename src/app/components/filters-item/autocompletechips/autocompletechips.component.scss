@@ -3,3 +3,7 @@ fs-autocomplete-chips {
   display: block;
   max-width: 100%;
 }
+
+:host-context(.filter-input-container) fs-autocomplete-chips {
+  min-width: 200px;
+}
