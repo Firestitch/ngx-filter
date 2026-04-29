@@ -1,4 +1,9 @@
+@use '@angular/material' as mat;
+@use '@firestitch/style/variables' as fs;
+
 :host  {
+  --fs-filter-primary: #{mat.m2-get-color-from-palette(fs.$palette, 500)};
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -9,7 +14,7 @@
 
 .filter-chip.selected ::ng-deep {
   .fs-chip:hover {
-    background-color: rgb(var(--primary-rgb, 33, 150, 243)) !important;
+    background-color: var(--fs-filter-primary, #2196f3) !important;
     filter: none !important;
     color: #fff !important;
 
