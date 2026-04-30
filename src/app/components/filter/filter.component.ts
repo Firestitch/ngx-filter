@@ -19,7 +19,6 @@ import { FormsModule } from '@angular/forms';
 
 import { MatIconAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { FsClearModule } from '@firestitch/clear';
 import { FsFormModule } from '@firestitch/form';
@@ -80,7 +79,6 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
     FsFilterChipsComponent,
     FsFilterActionsComponent,
     MatIconAnchor,
-    MatSlideToggle,
     AsyncPipe,
     KeywordInputComponent,
   ],

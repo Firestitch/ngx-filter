@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { FilterComponent, FilterConfig, FsFilterAction } from '@firestitch/filter';
+import { FilterConfig, FsFilterAction, FsFilterModule } from '@firestitch/filter';
 
 
 @Component({
@@ -8,7 +8,7 @@ import { FilterComponent, FilterConfig, FsFilterAction } from '@firestitch/filte
   templateUrl: './heading-only.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [FilterComponent],
+  imports: [FsFilterModule],
 })
 export class HeadingOnlyComponent {
 

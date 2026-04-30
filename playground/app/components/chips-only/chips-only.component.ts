@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { FilterComponent, FilterConfig, FsFilterAction } from '@firestitch/filter';
+import { FilterConfig, FsFilterAction, FsFilterModule } from '@firestitch/filter';
 
 import { FilterItemsService } from '../../services';
 
@@ -11,7 +11,7 @@ import { FilterItemsService } from '../../services';
   templateUrl: './chips-only.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [FilterComponent, JsonPipe],
+  imports: [FsFilterModule, JsonPipe],
 })
 export class ChipsOnlyComponent {
 

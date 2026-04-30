@@ -1,20 +1,24 @@
 import { Component, inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
+
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+
 import { FsFormModule } from '@firestitch/form';
+
+import { DialogComponent } from '../dialog/dialog.component';
 @Component({
-    templateUrl: 'dialog-example.component.html',
-    standalone: true,
-    imports: [MatButton, FsFormModule]
+  templateUrl: './dialog-example.component.html',
+  standalone: true,
+  imports: [MatButton, FsFormModule],
 })
 export class DialogExampleComponent {
-  dialog = inject(MatDialog);
+ 
+  public dialog = inject(MatDialog);
 
 
-  open(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '250px'
+  public open(): void {
+    this.dialog.open(DialogComponent, {
+      width: '250px',
     });
   }
 
