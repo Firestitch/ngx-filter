@@ -7,13 +7,13 @@ import { FilterItemsService } from '../../services';
 
 
 @Component({
-  selector: 'chips-only',
-  templateUrl: './chips-only.component.html',
+  selector: 'chips-heading',
+  templateUrl: './chips-heading.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [FsFilterModule, JsonPipe],
 })
-export class ChipsOnlyComponent {
+export class ChipsHeadingComponent {
 
   public query: unknown = null;
 
@@ -23,6 +23,8 @@ export class ChipsOnlyComponent {
 
   constructor() {
     this.conf = {
+      heading: 'Chips and Heading',
+      subheading: 'Heading with chip filters, no keyword search',
       chips: true,
       change: (query) => {
         this.query = query;

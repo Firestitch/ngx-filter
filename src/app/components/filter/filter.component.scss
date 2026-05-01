@@ -19,16 +19,6 @@
 
 .filter-container {
   width: 100%;
-  
-  &.has-primary-toolbar {
-    .heading {
-      margin-bottom: 10px;
-    }
-
-    .filter-bar-container {
-      margin-bottom: 4px;
-    }
-  }
 
   &.keyword-full-width {
     .filter-input-container {
@@ -83,10 +73,18 @@
       display: flex;
       align-items: center;
       min-width: 0;
-      
+
       fs-keyword-input + fs-saved-filter-autocomplete-chips {
         margin-left: 5px;
       }
+    }
+
+    // Wraps chips + status as a vertical column inside the bar
+    // (chips-only layout) so the status sits directly under the chips
+    // instead of below the action button.
+    .filter-stack {
+      flex: 1;
+      min-width: 0;
     }
   }
 

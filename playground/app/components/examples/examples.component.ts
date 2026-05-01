@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { FsExampleModule } from '@firestitch/example';
+import { ChipsHeadingComponent } from '../chips-heading/chips-heading.component';
 import { ChipsOnlyComponent } from '../chips-only/chips-only.component';
 import { HeadingOnlyComponent } from '../heading-only/heading-only.component';
 import { KitchenSinkComponent } from '../kitchen-sink/kitchen-sink.component';
@@ -16,6 +17,7 @@ import { PrimarySearchChipsComponent } from '../primary-search-chips/primary-sea
       FsExampleModule,
       KitchenSinkComponent,
       ChipsOnlyComponent,
+      ChipsHeadingComponent,
       PrimarySearchChipsComponent,
       HeadingOnlyComponent,
     ],

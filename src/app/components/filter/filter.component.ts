@@ -249,6 +249,42 @@ export class FilterComponent implements OnInit, OnDestroy {
     return of(this.items.some((item) => item.visible && item.primary && !item.isTypeKeyword));
   }
 
+  /**
+   * Layout mode the filter renders in:
+   *   inputs  — keyword and/or primary filters present (full toolbar row)
+   *   heading — no inputs, but a heading is configured (heading aligned with actions)
+   *   chips   — no inputs, no heading (chips aligned with actions)
+   */
+  public get layout$(): Observable<'inputs' | 'heading' | 'chips'> {
+    return combineLatest({
+      keywordVisible: this.keywordVisible$,
+      primaryFiltersVisible: this.primaryFiltersVisible$,
+    })
+      .pipe(
+        map(({ keywordVisible, primaryFiltersVisible }) => {
+          if (keywordVisible || primaryFiltersVisible) {
+            return 'inputs';
+          }
+
+          return this.hasHeading ? 'heading' : 'chips';
+        }),
+      );
+  }
+
+  /**
+   * In `inputs` layout, chips render inline (right of the keyword) only when there's
+   * a keyword and no primary filters. With any primary filter present, chips drop below.
+   */
+  public get chipsInline$(): Observable<boolean> {
+    return combineLatest({
+      keywordVisible: this.keywordVisible$,
+      primaryFiltersVisible: this.primaryFiltersVisible$,
+    })
+      .pipe(
+        map(({ keywordVisible, primaryFiltersVisible }) => keywordVisible && !primaryFiltersVisible),
+      );
+  }
+
   public get actionsVisible$() {
     return this._actionsController.visible$;
   }

@@ -25,7 +25,6 @@ import { FsMessage } from '@firestitch/message';
 
 import { map, of } from 'rxjs';
 
-import { subDays } from 'date-fns';
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 
 import { FsFilterAction } from '../../../../src/app/interfaces/action.interface';
@@ -109,11 +108,9 @@ export class KitchenSinkComponent implements OnInit {
 
   public ngOnInit(): void {
     this.conf = {
-      heading: 'Kitchen Sink',
-      subheading: 'This is a subtitle',
       chips: true,
       autofocus: false,
-      minSecondaryItems: 3,
+      minSecondaryItems: 1,
       queryParam: true,
       persist: false,
       actions: this._filterActions(),
@@ -242,7 +239,6 @@ export class KitchenSinkComponent implements OnInit {
           return of(this.users)
             .pipe(
               map((users) => [
-                { name: 'All', value: null },
                 ...nameValue(users, 'name', 'id'),
               ]),
             );
@@ -272,7 +268,7 @@ export class KitchenSinkComponent implements OnInit {
         type: ItemType.Select,
         label: 'Multi select',
         multiple: true,
-        default: ['active', 'pending'],
+        //default: ['active', 'pending'],
         values: [
           { name: 'Active', value: 'active' },
           { name: 'Pending', value: 'pending' },
@@ -371,7 +367,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'date',
         type: ItemType.Date,
         label: 'Date',
-        default: subDays(new Date(), 3),
+        //default: subDays(new Date(), 3),
         primary: false,
       },
       {

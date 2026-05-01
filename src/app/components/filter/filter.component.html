@@ -1,46 +1,56 @@
 <div
     class="filter-container"
-    [ngClass]="{ 'has-primary-filter': primaryToolbarVisible$ | async }"
-    [ngClass]="{ 'keyword-full-width': keywordFullWidth$ | async }">
-  @if (primaryToolbarVisible$ | async) {
-    <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
-  }
-  <div class="filter-bar-container">
-    @if (primaryToolbarVisible$ | async) {
-      <div
-          class="filter-input-container"
-          [ngClass]="{ 'chips-inline': !primaryItems.length }">
-        @if (keywordVisible$ | async) {
-          <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
-        }
-        @for (item of primaryItems; track item.name) {
-          @if (item.visible$ | async) {
-            <filter-item
-              [item]="item"
-              [triggerChangeOn]="'change'">
-            </filter-item>
-          }
-        }
-        @if ((primaryFiltersVisible$ | async) === false) {
-          <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
-        }
-      </div>
-    } @else if (hasHeading) {
-      <div class="filter-heading-container">
+    [ngClass]="{
+      'has-primary-filter': primaryToolbarVisible$ | async,
+      'keyword-full-width': keywordFullWidth$ | async
+    }">
+  @switch (layout$ | async) {
+    @case ('inputs') {
+      @if (hasHeading) {
         <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
+      }
+      <div class="filter-bar-container">
+        <div class="filter-input-container">
+          @if (keywordVisible$ | async) {
+            <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
+          }
+          @for (item of primaryItems; track item.name) {
+            @if (item.visible$ | async) {
+              <filter-item
+                [item]="item"
+                [triggerChangeOn]="'change'">
+              </filter-item>
+            }
+          }
+          @if (chipsInline$ | async) {
+            <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+          }
+        </div>
+        <ng-container *ngTemplateOutlet="filterActionsTmpl"></ng-container>
       </div>
-    } @else {
-      <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+      @if ((chipsInline$ | async) === false) {
+        <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+      }
+      <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
     }
-    <ng-container [ngTemplateOutlet]="filterActionsTmpl"></ng-container>
-  </div>
-  @if ((keywordVisible$ | async) === true && (primaryFiltersVisible$ | async) === true) {
-    <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+    @case ('heading') {
+      <div class="filter-bar-container">
+        <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
+        <ng-container *ngTemplateOutlet="filterActionsTmpl"></ng-container>
+      </div>
+      <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+      <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
+    }
+    @case ('chips') {
+      <div class="filter-bar-container">
+        <div class="filter-stack">
+          <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
+          <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
+        </div>
+        <ng-container *ngTemplateOutlet="filterActionsTmpl"></ng-container>
+      </div>
+    }
   }
-  @if ((primaryToolbarVisible$ | async) === false) {
-    <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
-  }
-  <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
 </div>
 <ng-template #chipsTmpl>
   <fs-filter-chips class="filter-chips"></fs-filter-chips>
@@ -61,7 +71,7 @@
 <ng-template #filterActionsTmpl>
   @if ((actionsVisible$ | async)) {
     <div class="filter-actions">
-      <ng-container [ngTemplateOutlet]="filterToolbarTmpl"></ng-container>
+      <ng-container *ngTemplateOutlet="filterToolbarTmpl"></ng-container>
       <fs-filter-actions
         [actions]="actions$ | async"
         [kebabActions]="menuActions$ | async">
@@ -96,16 +106,18 @@
   }
 </ng-template>
 <ng-template #headingTmpl>
-  @if (headingTemplate) {
-    <ng-container *ngTemplateOutlet="headingTemplate"></ng-container>
-  } @else if (config.heading) {
-    <div class="heading">
-      <h2>
-        {{ config.heading }}
-      </h2>
-      <div class="subheading">
-        {{ config.subheading }}
+  <div class="filter-heading-container">
+    @if (headingTemplate) {
+      <ng-container *ngTemplateOutlet="headingTemplate"></ng-container>
+    } @else if (config.heading) {
+      <div class="heading">
+        <h2>
+          {{ config.heading }}
+        </h2>
+        <div class="subheading">
+          {{ config.subheading }}
+        </div>
       </div>
-    </div>
-  }
+    }
+  </div>
 </ng-template>
