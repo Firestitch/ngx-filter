@@ -9,7 +9,7 @@
   justify-content: center;
   flex-direction: column;
   align-self: flex-end;
-  margin-top: 4px;
+  margin-top: 3px;
 
   .filter-status {
     overflow: hidden;
@@ -86,15 +86,6 @@
       flex: 1;
       min-width: 0;
     }
-  }
-
-  .filter-bar-container + .filter-chips,
-  .filter-bar-container + .filter-status-container {
-    margin-top: 5px;
-  }
-
-  .filter-chips + .filter-status-container {
-    margin-top: 4px;
   }
 }
 
