@@ -33,6 +33,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
 
   private _visible$ = new BehaviorSubject(false);
+  private _disabled$ = new BehaviorSubject(false);
   private _value$ = new BehaviorSubject<{ value: any, emitChange: boolean }>({ value: undefined, emitChange: true });
   private _values$ = new BehaviorSubject<{ name: string, value: string|null }[]>(null);
   private _secondaryVisible$ = new BehaviorSubject(false);
@@ -101,6 +102,26 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
 
   public get hidden(): boolean {
     return !this._visible$.getValue();
+  }
+
+  public get disabled$(): Observable<boolean> {
+    return this._disabled$.asObservable();
+  }
+
+  public get disabled(): boolean {
+    return this._disabled$.getValue();
+  }
+
+  public set disabled(value: boolean) {
+    this._disabled$.next(value);
+  }
+
+  public disable() {
+    this.disabled = true;
+  }
+
+  public enable() {
+    this.disabled = false;
   }
 
   public get isTypeAutocomplete() {
@@ -344,6 +365,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.primary = item.primary ?? false;
     this.secondary = !this.primary && (item.secondary ?? false);
     this.visible = !(item.hide ?? !(item.show ?? true));
+    this.disabled = item.disabled ?? false;
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;

@@ -1,16 +1,19 @@
 @if ((item.values$ | async)?.length) {
-  <fs-label-field [padless]="true">
+  <fs-label-field
+      [padless]="true"
+      [class.chips-disabled]="disabled">
     <fs-label>
       {{ item.label }}
     </fs-label>
     <fs-chips
         [(ngModel)]="value"
         [compare]="compareFn"
+        [selectable]="!disabled"
         [multiple]="item.multiple">
       @for (value of item.values; track value) {
         <fs-chip
             [value]="value"
-            [selectable]="true">
+            [selectable]="!disabled">
           {{ value.name }}
         </fs-chip>
       }

@@ -65,6 +65,10 @@ export class FsFilterChipsComponent implements OnInit {
     return this._filterController.items;
   }
 
+  public get disabledFilters$(): Observable<boolean> {
+    return this._filterController.disabled$;
+  }
+
   public addFilter(item: BaseItem<IFilterConfigItem>) {
     // For checkbox items, set to checked when adding from "More filters"
     if (item.isTypeCheckbox && !item.hasValue) {
@@ -134,7 +138,6 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
-    console.log('[FilterChips] openChip', item.name, 'type:', item.type, 'existingOverlay:', !!this._overlayRef);
     this._destroyOverlay();
     const el = this._elementRef.nativeElement
       .querySelector(`[data-filter-item="${item.name}"]`);

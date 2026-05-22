@@ -65,6 +65,10 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordVisible$;
   }
 
+  public get keywordDisabled$(): Observable<boolean> {
+    return this._keywordController.keywordDisabled$;
+  }
+
   public ngOnInit(): void {
     this._initAutoFocus();
     this._initKeyword();

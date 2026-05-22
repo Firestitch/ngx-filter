@@ -18,6 +18,7 @@
       [fsFilterFocusTrigger]="autofocusName === 'min' || !min"
       type="number"
       [(ngModel)]="min"
+      [disabled]="disabled"
       (fsModelChange)="change()"
       (keyup)="keyup($event)"
       #from>
@@ -48,6 +49,7 @@
       [fsFilterFocusTrigger]="autofocusName === 'max' || !!min"
       type="number"
       [(ngModel)]="max"
+      [disabled]="disabled"
       (fsModelChange)="change()"
       (keyup)="keyup($event)"
       #to>

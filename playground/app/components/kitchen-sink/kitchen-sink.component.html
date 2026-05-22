@@ -47,6 +47,11 @@
   </button>
   <button
       mat-stroked-button
+      (click)="enabledFilters ? filter.disableFilters() : filter.enableFilters(); enabledFilters = !enabledFilters">
+    {{ enabledFilters ? 'Disable Filters' : 'Enable Filters' }}
+  </button>
+  <button
+      mat-stroked-button
       (click)="filter.reload()">
     Reload
   </button>

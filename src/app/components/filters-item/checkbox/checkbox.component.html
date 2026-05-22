@@ -1,5 +1,6 @@
 <mat-slide-toggle
     [(ngModel)]="value"
+    [disabled]="disabled"
     (ngModelChange)="change()"
     [name]="item.name">
   {{ item.label }}

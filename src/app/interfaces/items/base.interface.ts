@@ -27,4 +27,5 @@ export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   clear?: boolean;
   disablePersist?: boolean;
   disableQueryParams?: boolean;
+  disabled?: boolean;
 }

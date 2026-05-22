@@ -23,6 +23,7 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
   @Input() public triggerChangeOn: 'close' | 'change' = 'close';
 
   public value: any;
+  public disabled = false;
 
   protected _destroyRef = inject(DestroyRef);
   protected _cdRef = inject(ChangeDetectorRef);
@@ -34,6 +35,15 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
       )
       .subscribe((value) => {
         this.value = value;
+        this._cdRef.detectChanges();
+      });
+
+    this.item.disabled$
+      .pipe(
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe((disabled) => {
+        this.disabled = disabled;
         this._cdRef.detectChanges();
       });
   }

@@ -9,6 +9,7 @@
               [color]="'var(--fs-filter-primary)'"
               [attr.data-filter-item]="item.name"
               [outlined]="true"
+              [disabled]="(disabledFilters$ | async)"
               (click)="handleChipClick(item, chip.name)">
             @if (chip.value) {
               {{ chip.label }}: {{ chip.value }}
@@ -29,6 +30,7 @@
             [attr.data-filter-item]="item.name"
             [size]="'medium'"
             [borderColor]="'#ddd'"
+            [disabled]="(disabledFilters$ | async)"
             (click)="handleChipClick(item)"
             [outlined]="true">
           {{ item.mergedLabel }}
@@ -43,6 +45,7 @@
   @if (moreFilterItems().length > 0) {
     <fs-chip-select
         [outlined]="true"
+        [disabled]="(disabledFilters$ | async)"
         (select)="addFilter($event)">
       <fs-chip-select-trigger>
         More filters
@@ -55,7 +58,9 @@
     </fs-chip-select>
   }
   @if (savedFilterController.enabled) {
-    <fs-chip-select [outlined]="true">
+    <fs-chip-select
+        [outlined]="true"
+        [disabled]="(disabledFilters$ | async)">
       <fs-chip-select-trigger>
         {{ (savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel }}
       </fs-chip-select-trigger>
@@ -79,6 +84,7 @@
   @if (clearFiltersVisible()) {
     <fs-chip
         [outlined]="true"
+        [disabled]="(disabledFilters$ | async)"
         (click)="clear()">
       Clear filters
       <ng-template

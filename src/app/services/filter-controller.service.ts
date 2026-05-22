@@ -31,6 +31,7 @@ export class FilterController implements OnDestroy {
   private _config: FsFilterConfig;
   private _init$ = new Subject<void>();
   private _change$ = new Subject<BaseItem<IFilterConfigItem>[]>();
+  private _disabled$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
   private _persistanceController = inject(PersistanceController);
   private _savedFilterController = inject(SavedFilterController);
@@ -102,6 +103,20 @@ export class FilterController implements OnDestroy {
 
   public getItem(name: string): BaseItem<IFilterConfigItem> {
     return this._items.get(name);
+  }
+
+  public disableFilters() {
+    this.items.forEach((item) => item.disabled = true);
+    this._disabled$.next(true);
+  }
+
+  public enableFilters() {
+    this.items.forEach((item) => item.disabled = false);
+    this._disabled$.next(false);
+  }
+
+  public get disabled$(): Observable<boolean> {
+    return this._disabled$.asObservable();
   }
 
   public filtersClear() {

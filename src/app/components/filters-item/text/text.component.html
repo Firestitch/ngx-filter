@@ -13,6 +13,7 @@
   <input
     matInput
     [(ngModel)]="value"
+    [disabled]="disabled"
     (keyup)="keyup($event)"
     (fsModelChange)="change()"
     [placeholder]="item.placeholder"

@@ -1,7 +1,7 @@
 @if (keywordVisible$ | async) {
   <mat-form-field
       class="search-form-field form-field-padless"
-      [ngClass]="{ 'has-keyword': !!keyword }">
+      [ngClass]="{ 'has-keyword': !!keyword, 'disabled': keywordDisabled$ | async }">
     <span
         matPrefix
         class="icon">
@@ -13,6 +13,7 @@
       #keywordMatInput
       matInput
       [(ngModel)]="keyword"
+      [disabled]="keywordDisabled$ | async"
       (fsModelChange)="keywordChange($event)"
       name="filter-input"
       [fsClear]="true"

@@ -12,6 +12,7 @@ export class KeywordController {
 
   private _keywordItem$ = new BehaviorSubject<KeywordItem>(null);
   private _keywordVisible$ = new BehaviorSubject(null);
+  private _keywordDisabled$ = new BehaviorSubject(false);
   private _keywordFullWidth$ = new BehaviorSubject(null);
   private _destroyRef = inject(DestroyRef);
 
@@ -28,6 +29,18 @@ export class KeywordController {
       )
       .subscribe();
       
+    this._keywordItem$
+      .pipe(
+        // when item changes, unsubscribe from the previous disabled$
+        switchMap((item) => item ? item.disabled$ : of(false)),
+        // avoid redundant writes
+        distinctUntilChanged(),
+        tap((disabled) => this._keywordDisabled$.next(disabled)),
+        // clean up on destroy,
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+
     this._keywordItem$
       .pipe(
         map((item) => !!item?.fullWidth),
@@ -66,6 +79,10 @@ export class KeywordController {
 
   public get keywordVisible$(): Observable<boolean> {
     return this._keywordVisible$.asObservable();
+  }
+
+  public get keywordDisabled$(): Observable<boolean> {
+    return this._keywordDisabled$.asObservable();
   }
 
   public get keywordFullWidth$(): Observable<boolean> {

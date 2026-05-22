@@ -52,11 +52,10 @@ export class KitchenSinkComponent implements OnInit {
   public filter: FilterComponent;
 
   public status = false;
-
+  public enabledFilters = true;
   public conf: FilterConfig;
   public sortUpdated = new EventEmitter();
   public query = null;
-
   public sort: FilterSort;
 
   public sorts: SortItem[] = [

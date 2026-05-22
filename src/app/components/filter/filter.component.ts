@@ -331,6 +331,14 @@ export class FilterComponent implements OnInit, OnDestroy {
     this._sortController.updateSort(sort, emitChange);
   }
 
+  public disableFilters() {
+    this._filterController.disableFilters();
+  }
+
+  public enableFilters() {
+    this._filterController.enableFilters();
+  }
+
   public get itemValues(): any[] {
     return this.items
       .map((item) => item.value);

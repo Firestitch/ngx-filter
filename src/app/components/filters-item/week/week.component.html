@@ -10,6 +10,7 @@
     [placeholder]="item.label"
     [fsFilterFocusTrigger]="autofocus"
     [(ngModel)]="value"
+    [disabled]="disabled"
     (ngModelChange)="item.value = value"
     [seedDate]="item.seedDate"
     [clear]="item.clearable"
