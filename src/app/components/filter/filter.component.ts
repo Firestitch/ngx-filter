@@ -412,7 +412,11 @@ export class FilterComponent implements OnInit, OnDestroy {
       }, 1000);
     }
 
-    this.change();
+    if (typeof this.config.reload === 'function') {
+      this.config.reload(this.query, this._sortController.getSort());
+    } else {
+      this.change();
+    }
   }
 
   public getItem(name): BaseItem<any> {

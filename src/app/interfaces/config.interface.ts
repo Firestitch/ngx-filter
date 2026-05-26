@@ -22,7 +22,7 @@ export interface FilterConfig {
   maxEnabled?: number;
   namespace?: string;
   persist?: FsFilterPersistance;
-  reload?: boolean;
+  reload?: ChangeFn;
   clear?: ChangeFn;
   items?: IFilterConfigItem[];
   init?: ChangeFn;
