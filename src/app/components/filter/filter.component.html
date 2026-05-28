@@ -1,7 +1,10 @@
 <div
     class="filter-container"
     [ngClass]="{
-      'has-primary-filter': primaryToolbarVisible$ | async,
+      'has-primary-filter': primaryFiltersVisible$ | async,
+      'has-heading': headingVisible$ | async,
+      'has-keyword': keywordVisible$ | async,
+      'has-chip': chipVisible$ | async,
       'keyword-full-width': keywordFullWidth$ | async
     }">
   @switch (layout$ | async) {

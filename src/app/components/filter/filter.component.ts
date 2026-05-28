@@ -24,7 +24,7 @@ import { FsClearModule } from '@firestitch/clear';
 import { FsFormModule } from '@firestitch/form';
 
 import { combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
 import { FilterHeadingDirective } from '../../directives';
@@ -124,6 +124,7 @@ export class FilterComponent implements OnInit, OnDestroy {
   private _sortController = inject(SortController);
   private _savedFilterController = inject(SavedFilterController);
   private _keywordController = inject(KeywordController);
+  private _inputsState$: Observable<{ keywordVisible: boolean; primaryFiltersVisible: boolean }>;
 
   constructor(
   ) {
@@ -233,20 +234,34 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this._keywordController.keywordFullWidth$;
   }
 
-  public get primaryToolbarVisible$(): Observable<boolean> {
-    return combineLatest({
-      keywordVisible: this.keywordVisible$,
-      primaryFiltersVisible: this.primaryFiltersVisible$,
-    })
-      .pipe(
-        map(({ keywordVisible, primaryFiltersVisible }) => {
-          return keywordVisible || primaryFiltersVisible;
-        }),
-      );
+  public get headingVisible$(): Observable<boolean> {
+    return of(this.hasHeading);
   }
 
   public get primaryFiltersVisible$(): Observable<boolean> {
-    return of(this.items.some((item) => item.visible && item.primary && !item.isTypeKeyword));
+    return this._filterController.itemsState$
+      .pipe(
+        map((items) => items.some((item) => item.visible && item.primary && !item.isTypeKeyword)),
+        distinctUntilChanged(),
+      );
+  }
+
+  public get chipVisible$(): Observable<boolean> {
+    return this._filterController.chipVisible$;
+  }
+
+  public get inputsState$(): Observable<{ keywordVisible: boolean; primaryFiltersVisible: boolean }> {
+    if (!this._inputsState$) {
+      this._inputsState$ = combineLatest({
+        keywordVisible: this.keywordVisible$,
+        primaryFiltersVisible: this.primaryFiltersVisible$,
+      })
+        .pipe(
+          shareReplay({ bufferSize: 1, refCount: true }),
+        );
+    }
+
+    return this._inputsState$;
   }
 
   /**
@@ -256,18 +271,16 @@ export class FilterComponent implements OnInit, OnDestroy {
    *   chips   — no inputs, no heading (chips aligned with actions)
    */
   public get layout$(): Observable<'inputs' | 'heading' | 'chips'> {
-    return combineLatest({
-      keywordVisible: this.keywordVisible$,
-      primaryFiltersVisible: this.primaryFiltersVisible$,
-    })
+    return this.inputsState$
       .pipe(
-        map(({ keywordVisible, primaryFiltersVisible }) => {
+        map(({ keywordVisible, primaryFiltersVisible }): 'inputs' | 'heading' | 'chips' => {
           if (keywordVisible || primaryFiltersVisible) {
             return 'inputs';
           }
 
           return this.hasHeading ? 'heading' : 'chips';
         }),
+        distinctUntilChanged(),
       );
   }
 
@@ -276,12 +289,10 @@ export class FilterComponent implements OnInit, OnDestroy {
    * a keyword and no primary filters. With any primary filter present, chips drop below.
    */
   public get chipsInline$(): Observable<boolean> {
-    return combineLatest({
-      keywordVisible: this.keywordVisible$,
-      primaryFiltersVisible: this.primaryFiltersVisible$,
-    })
+    return this.inputsState$
       .pipe(
         map(({ keywordVisible, primaryFiltersVisible }) => keywordVisible && !primaryFiltersVisible),
+        distinctUntilChanged(),
       );
   }
 

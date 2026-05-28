@@ -11,7 +11,7 @@ import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@fi
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { BehaviorSubject, Observable, delay, merge, skip, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, delay, take, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -108,10 +108,7 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this._initSecondaryItems();
-    this._initHasSecondaryValue();
-    this._initMoreFilterItems();
-    this._initClearFiltersVisible();
+    this._initItemsState();
   }
 
   public clear() {
@@ -287,24 +284,14 @@ export class FsFilterChipsComponent implements OnInit {
     item.secondaryHide();
   }
 
-  private _initSecondaryItems() {
-    this._updateSecondaryItems();
-
-    merge(
-      ...this.items
-        .reduce((accum, item) => {
-          return [
-            ...accum, 
-            item.hasValue$
-              .pipe(skip(1)),
-            item.visible$
-              .pipe(skip(1)),
-          ];
-        }, []),
-    )
+  private _initItemsState() {
+    this._filterController.itemsState$
       .pipe(
         tap(() => {
           this._updateSecondaryItems();
+          this._updateMoreFilterItems();
+          this._updateClearItems();
+          this._hasSecondaryValue$.next(this.hasSecondaryValue);
         }),
         takeUntilDestroyed(this._destroyRef),
       )
@@ -345,54 +332,6 @@ export class FsFilterChipsComponent implements OnInit {
     });
   }
 
-  private _initMoreFilterItems() {
-    merge(
-      ...this.items
-        .reduce((accum, item) => {
-          return [
-            ...accum, 
-            item.visible$
-              .pipe(skip(1)),
-            item.secondaryVisible$
-              .pipe(skip(1)),
-          ];
-        }, []),
-    )
-      .pipe(
-        tap(() => {
-          this._updateMoreFilterItems();
-        }),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe();
-
-    this._updateMoreFilterItems();
-  }
-
-  private _initClearFiltersVisible() {
-    merge(
-      ...this.items
-        .reduce((accum, item) => {
-          return [
-            ...accum, 
-            item.visible$
-              .pipe(skip(1)),
-            item.hasValue$
-              .pipe(skip(1)),
-          ];
-        }, []),
-    )
-      .pipe(
-        tap(() => {
-          this._updateClearItems();
-        }),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe();
-
-    this._updateClearItems();
-  }
-
   private _updateMoreFilterItems() {
     this.moreFilterItems
       .set(this.items
@@ -406,19 +345,6 @@ export class FsFilterChipsComponent implements OnInit {
     this.clearFiltersVisible
       .set(!onlyKeyword && this.items
         .some((item) => item.clearable && item.hasValue && item.visible));
-  }
-
-  private _initHasSecondaryValue() {
-    this._hasSecondaryValue$.next(this.hasSecondaryValue);
-
-    this._filterController.change$
-      .pipe(
-        tap(() => {
-          this._hasSecondaryValue$.next(this.hasSecondaryValue);
-        }),
-        takeUntilDestroyed(this._destroyRef),
-      )
-      .subscribe();
   }
 
 }

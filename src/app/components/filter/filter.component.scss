@@ -20,6 +20,18 @@
 .filter-container {
   width: 100%;
 
+  &.has-primary-filter {
+    .filter-chips {
+      margin-top: 5px;
+    }
+  }
+
+  &.has-heading.has-chip:not(.has-primary-filter):not(.has-keyword) {
+    .filter-chips {
+      margin-top: 5px;
+    }
+  }
+
   &.keyword-full-width {
     .filter-input-container {
       flex: 1;
@@ -57,7 +69,7 @@
       align-items: center;
       min-width: 0;
       column-gap: 5px;
-      row-gap: 10px;
+      row-gap: 5px;
       flex-wrap: wrap;
 
       &.chips-inline {

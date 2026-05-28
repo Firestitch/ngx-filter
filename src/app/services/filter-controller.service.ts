@@ -1,10 +1,11 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, forkJoin, merge, Observable, of, Subject } from 'rxjs';
-import { debounceTime, filter, finalize, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, defer, forkJoin, merge, Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, finalize, map, shareReplay, skip, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 
 import type { FilterComponent } from '../components/filter/filter.component';
+import { ItemType } from '../enums/item-type.enum';
 import { createFilterItem } from '../helpers/create-filter-item';
 import {
   IFilterConfigItem,
@@ -33,6 +34,7 @@ export class FilterController implements OnDestroy {
   private _change$ = new Subject<BaseItem<IFilterConfigItem>[]>();
   private _disabled$ = new BehaviorSubject(false);
   private _destroy$ = new Subject<void>();
+  private _itemsState$: Observable<BaseItem<IFilterConfigItem>[]>;
   private _persistanceController = inject(PersistanceController);
   private _savedFilterController = inject(SavedFilterController);
   private _queryParamController = inject(QueryParamController);
@@ -117,6 +119,79 @@ export class FilterController implements OnDestroy {
 
   public get disabled$(): Observable<boolean> {
     return this._disabled$.asObservable();
+  }
+
+  /**
+   * Shared upstream that emits the current items array whenever any item's
+   * visible$, hasValue$, or secondaryVisible$ changes. All visibility-derived
+   * observables in the filter should source from here so the work merging
+   * per-item streams happens once.
+   */
+  public get itemsState$(): Observable<BaseItem<IFilterConfigItem>[]> {
+    if (!this._itemsState$) {
+      this._itemsState$ = defer(() => {
+        const events = this.items.flatMap((item) => [
+          item.visible$.pipe(skip(1)),
+          item.hasValue$.pipe(skip(1)),
+          item.secondaryVisible$.pipe(skip(1)),
+        ]);
+
+        return merge(...events)
+          .pipe(
+            startWith(null),
+            map(() => this.items),
+          );
+      })
+        .pipe(
+          shareReplay({ bufferSize: 1, refCount: true }),
+        );
+    }
+
+    return this._itemsState$;
+  }
+
+  /**
+   * True when the chips component would render any chip — a value chip,
+   * placeholder, "More filters" select, saved-filter select, or "Clear filters".
+   * Mirrors the visibility logic inside FsFilterChipsComponent's template.
+   */
+  public get chipVisible$(): Observable<boolean> {
+    return this.itemsState$
+      .pipe(
+        map((items) => {
+          if (items.length === 0) {
+            return false;
+          }
+
+          if (this._savedFilterController.enabled) {
+            return true;
+          }
+
+          const visibleItems = items.filter((item) => item.visible);
+          const onlyKeyword = visibleItems.length === 1 && visibleItems[0].type === ItemType.Keyword;
+          const hasClearable = !onlyKeyword
+            && items.some((item) => item.clearable && item.hasValue && item.visible);
+
+          if (hasClearable) {
+            return true;
+          }
+
+          return items.some((item) => {
+            if (!item.visible) {
+              return false;
+            }
+
+            const renderable = item.allowSecondary
+              && !(item.isTypeCheckbox && !item.hasValue)
+              && (item.hasValue || item.secondaryVisible);
+
+            const inMoreFilters = !item.primary && !item.secondaryVisible;
+
+            return renderable || inMoreFilters;
+          });
+        }),
+        distinctUntilChanged(),
+      );
   }
 
   public filtersClear() {

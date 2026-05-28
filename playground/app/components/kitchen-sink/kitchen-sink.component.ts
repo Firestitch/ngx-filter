@@ -117,7 +117,12 @@ export class KitchenSinkComponent implements OnInit {
         direction: 'desc',
         value: 'name',
       },
-      reload: true,
+      reload: (query, sort) => {
+        this._log('Reload', query, sort);
+        this.query = query;
+        this.sort = sort;
+        this._cdRef.detectChanges();
+      },
       autoReload: {
         enabled: true,
         seconds: 5,
