@@ -209,6 +209,7 @@ export class FilterController implements OnDestroy {
 
   public get queryParam(): Record<string, unknown> {
     return this.items
+      .filter((item) => !item.queryParamsDisabled)
       .reduce((accum, item) => {
         return {
           ...accum,
