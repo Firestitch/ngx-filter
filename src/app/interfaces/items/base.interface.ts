@@ -15,6 +15,7 @@ export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   name: string;
   type: T;
   label: unknown;
+  placeholder?: string;
   chipLabel?: unknown;
   hide?: boolean;
   show?: boolean;

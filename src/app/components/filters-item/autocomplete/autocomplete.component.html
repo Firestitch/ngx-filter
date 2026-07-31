@@ -5,7 +5,7 @@
     [(ngModel)]="value"
     (ngModelChange)="change()"
     [disabled]="disabled"
-    [placeholder]="item.placeholder"
+    [placeholder]="item.placeholder ?? item.label"
     [fetchOnFocus]="item.fetchOnFocus"
     [showClear]="item.clearable"
     formFieldClass="form-field-padless"
