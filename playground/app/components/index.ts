@@ -3,5 +3,6 @@ export * from './kitchen-sink';
 export * from './chips-only';
 export * from './chips-heading';
 export * from './primary-search-chips';
+export * from './autocomplete-example';
 export * from './heading-only';
 export * from './examples';

@@ -24,6 +24,15 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
   }
 
   /**
+   * Pairs with the unwrapping getter above. A getter-only override makes the
+   * accessor read-only, so any `item.value = ...` throws in strict mode and
+   * the assigned value is lost.
+   */
+  public set value(value) {
+    this.setValue(value);
+  }
+
+  /**
    * API-ready query: returns the raw primitive value keyed by item name.
    */
   public get query(): Record<string, any> {

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { FsExampleModule } from '@firestitch/example';
+import { AutocompleteExampleComponent } from '../autocomplete-example/autocomplete-example.component';
 import { ChipsHeadingComponent } from '../chips-heading/chips-heading.component';
 import { ChipsOnlyComponent } from '../chips-only/chips-only.component';
 import { HeadingOnlyComponent } from '../heading-only/heading-only.component';
@@ -19,6 +20,7 @@ import { PrimarySearchChipsComponent } from '../primary-search-chips/primary-sea
       ChipsOnlyComponent,
       ChipsHeadingComponent,
       PrimarySearchChipsComponent,
+      AutocompleteExampleComponent,
       HeadingOnlyComponent,
     ],
 })

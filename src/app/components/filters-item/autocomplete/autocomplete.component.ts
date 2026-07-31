@@ -32,6 +32,10 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
     return data ? data.name : data;
   };
 
+  public change() {
+    this.item.setValue(this.value);
+  }
+
   public fetch = (keyword): Observable<any> => {
     return this.item.valuesFn(keyword, this.item.filter) as Observable<any>;
   };

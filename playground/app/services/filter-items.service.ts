@@ -48,6 +48,30 @@ export class FilterItemsService {
     };
   }
 
+  public userAutocomplete(
+    opts: {
+      name?: string;
+      label?: string;
+      primary?: boolean;
+      default?: { name: string; value: unknown };
+    } = {},
+  ): IFilterConfigItem {
+    return {
+      name: opts.name ?? 'userId',
+      type: ItemType.AutoComplete,
+      label: opts.label ?? 'User',
+      primary: opts.primary,
+      default: opts.default,
+      values: (keyword) => this._users$()
+        .pipe(
+          map((users) => users.filter((user) => {
+            return user.name.toLowerCase().includes((keyword ?? '').toLowerCase());
+          })),
+          map((users) => nameValue(users, 'name', 'id')),
+        ),
+    };
+  }
+
   public userSelect(opts: { primary?: boolean; multiple?: boolean } = {}): IFilterConfigItem {
     return {
       name: 'user',

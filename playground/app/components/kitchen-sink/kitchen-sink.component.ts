@@ -23,7 +23,7 @@ import {
 import { FsMenuModule } from '@firestitch/menu';
 import { FsMessage } from '@firestitch/message';
 
-import { map, of } from 'rxjs';
+import { map, of, tap } from 'rxjs';
 
 import { ItemDateMode, MenuActionMode } from 'src/app/enums';
 
@@ -301,25 +301,25 @@ export class KitchenSinkComponent implements OnInit {
         label: ['Min Price', 'Max Price'],
         chipLabel: ['Custom Min Price', 'Custom Max Price'],
       },
-      // {
-      //   name: 'autocompleteUserId',
-      //   label: 'Autocomplete User',
-      //   type: ItemType.AutoComplete,
-      //   change: (item) => {
-      //     this._log('Item Change', item);
-      //   },
-      //   init: (item) => {
-      //     this._log('Item Init', item);
-      //   },
-      //   values: (keyword) => {
-      //     return of(this.users)
-      //       .pipe(
-      //         tap(() => this._log('load autocomplete_user_id')),
-      //         map((users) => this._filterUsersByKeyword(users, keyword)),
-      //         map((users) => nameValue(users, 'name', 'id')),
-      //       );
-      //   },
-      // },
+      {
+        name: 'autocompleteUserId',
+        label: 'Autocomplete User',
+        type: ItemType.AutoComplete,
+        change: (item) => {
+          this._log('Item Change', item);
+        },
+        init: (item) => {
+          this._log('Item Init', item);
+        },
+        values: (keyword) => {
+          return of(this.users)
+            .pipe(
+              tap(() => this._log('load autocomplete_user_id')),
+              map((users) => this._filterUsersByKeyword(users, keyword || '')),
+              map((users) => nameValue(users, 'name', 'id')),
+            );
+        },
+      },
       {
         name: 'autocompletechips',
         label: 'Autocomplete Chips',
