@@ -11,7 +11,7 @@ import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@fi
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { BehaviorSubject, Observable, delay, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, delay, take, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -60,6 +60,7 @@ export class FsFilterChipsComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
   private _elementRef = inject(ElementRef);
   private _hasSecondaryValue$ = new BehaviorSubject(false);
+  private _pendingChipOpen: Subscription;
 
   public get items(): BaseItem<IFilterConfigItem>[] {
     return this._filterController.items;
@@ -82,7 +83,12 @@ export class FsFilterChipsComponent implements OnInit {
       return;
     }
 
-    this.chips.changes
+    // A pick whose chips never changed leaves this subscription waiting. Left alive it
+    // fires alongside the next one, opening the popover twice in the same tick — the
+    // second open disposes the first mid-flight and orphans whatever it had attached.
+    this._pendingChipOpen?.unsubscribe();
+
+    this._pendingChipOpen = this.chips.changes
       .pipe(
         take(1),
         delay(100),
@@ -135,9 +141,18 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
-    this._destroyOverlay();
+    this._pendingChipOpen?.unsubscribe();
+
     const el = this._elementRef.nativeElement
       .querySelector(`[data-filter-item="${item.name}"]`);
+
+    // Without an anchor the overlay resolves to the viewport origin and floats there
+    // detached from any chip, so leave the current one alone rather than open a stray.
+    if(!el) {
+      return;
+    }
+
+    this._destroyOverlay();
 
     const positions: ConnectedPosition[] = [
       {
@@ -247,7 +262,6 @@ export class FsFilterChipsComponent implements OnInit {
 
   public _destroyOverlay() {
     if(this._overlayRef) {
-      console.log('[FilterChips] _destroyOverlay - disposing existing overlay');
       try {
         this._overlayRef.detachBackdrop();
         this._overlayRef.detach();
