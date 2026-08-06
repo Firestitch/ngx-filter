@@ -15,7 +15,7 @@
       <div class="filter-bar-container">
         <div class="filter-input-container">
           @if (keywordVisible$ | async) {
-            <fs-keyword-input [autofocus]="config.autofocus"></fs-keyword-input>
+            <fs-filter-keyword [autofocus]="config.autofocus"></fs-filter-keyword>
           }
           @for (item of primaryItems; track item.name) {
             @if (item.visible$ | async) {
@@ -72,7 +72,7 @@
   }
 </ng-template>
 <ng-template #filterActionsTmpl>
-  @if ((actionsVisible$ | async)) {
+  @if ((actionsVisible$ | async) && (actions$ | async) && (menuActions$ | async)) {
     <div class="filter-actions">
       <ng-container *ngTemplateOutlet="filterToolbarTmpl"></ng-container>
       <fs-filter-actions

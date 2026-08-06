@@ -16,11 +16,12 @@ export class FilterItemsService {
     { id: 4, name: 'James Bond' },
   ];
 
-  public keyword(): IFilterConfigItem {
+  public keyword(opts: { label?: string; fullWidth?: boolean } = {}): IFilterConfigItem {
     return {
       name: 'keyword',
       type: ItemType.Keyword,
-      label: 'Search',
+      label: opts.label ?? 'Search',
+      fullWidth: opts.fullWidth,
     };
   }
 

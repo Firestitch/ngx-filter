@@ -6,6 +6,7 @@ import { AutocompleteExampleComponent } from '../autocomplete-example/autocomple
 import { ChipsHeadingComponent } from '../chips-heading/chips-heading.component';
 import { ChipsOnlyComponent } from '../chips-only/chips-only.component';
 import { HeadingOnlyComponent } from '../heading-only/heading-only.component';
+import { KeywordFullWidthComponent } from '../keyword-full-width/keyword-full-width.component';
 import { KitchenSinkComponent } from '../kitchen-sink/kitchen-sink.component';
 import { PrimarySearchChipsComponent } from '../primary-search-chips/primary-search-chips.component';
 
@@ -22,6 +23,7 @@ import { PrimarySearchChipsComponent } from '../primary-search-chips/primary-sea
       PrimarySearchChipsComponent,
       AutocompleteExampleComponent,
       HeadingOnlyComponent,
+      KeywordFullWidthComponent,
     ],
 })
 export class ExamplesComponent {

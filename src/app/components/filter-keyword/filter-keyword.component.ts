@@ -28,9 +28,9 @@ import { KeywordController } from '../../services/keyword-controller.service';
 
 
 @Component({
-  selector: 'fs-keyword-input',
-  styleUrls: ['./keyword-input.component.scss'],
-  templateUrl: './keyword-input.component.html',
+  selector: 'fs-filter-keyword',
+  styleUrls: ['./filter-keyword.component.scss'],
+  templateUrl: './filter-keyword.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -46,7 +46,7 @@ import { KeywordController } from '../../services/keyword-controller.service';
     AsyncPipe,
   ],
 })
-export class KeywordInputComponent implements OnInit, OnDestroy {
+export class FilterKeywordComponent implements OnInit, OnDestroy {
 
   @ViewChild('keywordMatInput', { read: MatInput })
   public keywordMatInput: MatInput;
@@ -67,6 +67,10 @@ export class KeywordInputComponent implements OnInit, OnDestroy {
 
   public get keywordDisabled$(): Observable<boolean> {
     return this._keywordController.keywordDisabled$;
+  }
+
+  public get keywordFullWidth$(): Observable<boolean> {
+    return this._keywordController.keywordFullWidth$;
   }
 
   public ngOnInit(): void {

@@ -7,13 +7,13 @@ import { FilterItemsService } from '../../services';
 
 
 @Component({
-  selector: 'chips-only',
-  templateUrl: './chips-only.component.html',
+  selector: 'keyword-full-width',
+  templateUrl: './keyword-full-width.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [FsFilterModule, JsonPipe],
 })
-export class ChipsOnlyComponent {
+export class KeywordFullWidthComponent {
 
   public query: unknown = null;
 
@@ -28,8 +28,7 @@ export class ChipsOnlyComponent {
         this.query = query;
       },
       items: [
-        this._filterItems.statusSelect(),
-        this._filterItems.date(),
+        this._filterItems.keyword({ fullWidth: true }),
       ],
     };
   }

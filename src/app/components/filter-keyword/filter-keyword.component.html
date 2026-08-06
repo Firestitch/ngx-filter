@@ -1,7 +1,11 @@
 @if (keywordVisible$ | async) {
   <mat-form-field
       class="search-form-field form-field-padless"
-      [ngClass]="{ 'has-keyword': !!keyword, 'disabled': keywordDisabled$ | async }">
+      [ngClass]="{
+        'has-keyword': !!keyword,
+        'disabled': keywordDisabled$ | async,
+        'full-width': keywordFullWidth$ | async
+      }">
     <span
         matPrefix
         class="icon">

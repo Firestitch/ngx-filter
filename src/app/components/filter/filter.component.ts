@@ -45,8 +45,8 @@ import { QueryParamController } from '../../services/query-param-controller.serv
 import { SavedFilterController } from '../../services/saved-filter-controller.service';
 import { FsFilterActionsComponent } from '../actions/actions.component';
 import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
+import { FilterKeywordComponent } from '../filter-keyword/filter-keyword.component';
 import { FilterItemComponent } from '../filters-item';
-import { KeywordInputComponent } from '../keyword-input/keyword-input.component';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar.directive';
 import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
@@ -80,13 +80,13 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
     FsFilterActionsComponent,
     MatIconAnchor,
     AsyncPipe,
-    KeywordInputComponent,
+    FilterKeywordComponent,
   ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
-  @ViewChild(KeywordInputComponent)
-  public keywordInput: KeywordInputComponent;
+  @ViewChild(FilterKeywordComponent)
+  public keywordInput: FilterKeywordComponent;
   
   @Input('config') public set setFilterConfig(value: FilterConfig) {
     this._filterConfig = value;

@@ -3,6 +3,12 @@
   width: 250px;
   margin-top: 0;
 
+  &.full-width {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+
   .icon {
     margin-left: 10px;
     color: #626262;
@@ -17,4 +23,9 @@
       display: none;
     }
   }
+}
+
+
+:host {
+  display: contents;
 }
