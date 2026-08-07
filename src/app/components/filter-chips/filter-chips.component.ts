@@ -66,6 +66,10 @@ export class FsFilterChipsComponent implements OnInit {
     return this._filterController.items;
   }
 
+  public get maxChipWidth(): string {
+    return this._filterController.config.maxChipWidth;
+  }
+
   public get disabledFilters$(): Observable<boolean> {
     return this._filterController.disabled$;
   }
@@ -118,17 +122,19 @@ export class FsFilterChipsComponent implements OnInit {
   }
 
   public clear() {
+    // Hide first so the chip row has settled before filtersClear() fires change().
+    // Items promoted by minSecondaryItems carry secondary === true and keep their chip;
+    // items showing only because they held a value are hidden, as before.
     this._filterController.items
-      .filter((item) => item.clearable)
-      .forEach((item) => {
-        if(!item.secondary) {
-          item.secondaryHide();
-        }
-        item.clear(false);
-      });
+      .filter((item) => item.clearable && !item.secondary)
+      .forEach((item) => item.secondaryHide());
 
-    this._filterController.change();
+    this._filterController.filtersClear();
     this._savedFilterController.setActiveFilter(null);
+
+    if (this._filterController.config.clear) {
+      this._filterController.config.clear();
+    }
   }
 
   public handleChipClick(item: BaseItem<IFilterConfigItem>, name: string = null) {
@@ -358,7 +364,7 @@ export class FsFilterChipsComponent implements OnInit {
 
     this.clearFiltersVisible
       .set(!onlyKeyword && this.items
-        .some((item) => item.clearable && item.hasValue && item.visible));
+        .some((item) => item.clearable && item.hasNonDefaultValue && item.visible));
   }
 
 }

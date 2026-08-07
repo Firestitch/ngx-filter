@@ -109,7 +109,8 @@ export class KitchenSinkComponent implements OnInit {
     this.conf = {
       chips: true,
       autofocus: false,
-      minSecondaryItems: 1,
+      // 6 so the chip row overflows and exercises one-at-a-time wrapping
+      minSecondaryItems: 6,
       queryParam: true,
       persist: false,
       actions: this._filterActions(),

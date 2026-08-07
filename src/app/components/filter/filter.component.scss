@@ -70,6 +70,14 @@
       row-gap: 5px;
       flex-wrap: wrap;
 
+      // The chips holder is a single flex item of this row, so all its chips wrap
+      // together as one block. Dropping its box promotes the chips to flex items of
+      // this row, letting them wrap one at a time from the end. Only the inline
+      // layout nests the holder here; the heading and chips layouts are unaffected.
+      > fs-filter-chips {
+        display: contents;
+      }
+
       &.chips-inline {
         fs-filter-chips {
           min-width: 0;

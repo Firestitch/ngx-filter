@@ -6,7 +6,7 @@ import {
   tap,
 } from 'rxjs/operators';
 
-import { isFunction } from 'lodash-es';
+import { isEqual, isFunction } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
@@ -184,6 +184,18 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this.value !== null && this.value !== undefined;
   }
 
+  // An item sitting at its configured default is already in its cleared state, so
+  // "Clear filters" has nothing to offer for it. Distinct from hasValue, which is true
+  // for a default too and would keep the control permanently visible.
+  //
+  // Compares the STORED value, not this.value: AutocompleteItem overrides the value
+  // getter to unwrap the primitive out of its {name, value} object, while defaultValue
+  // keeps the object — so comparing the public getter compares two different shapes and
+  // never matches.
+  public get hasNonDefaultValue() {
+    return this.hasValue && !isEqual(this._value$.getValue().value, this.defaultValue);
+  }
+
   public get allowSecondary() {
     return !this.primary;
   }
@@ -332,8 +344,11 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.setValue(value === undefined ? this.defaultValue : value);
   }
 
-  public clear(emitChange: boolean = true) {
-    this.setValue(undefined, emitChange);
+  // restoreDefault is opt-in so only "Clear filters" resets to configured defaults.
+  // Removing a single chip must still empty the item, or a filter carrying a default
+  // could never be switched off.
+  public clear(emitChange: boolean = true, restoreDefault: boolean = false) {
+    this.setValue(restoreDefault ? this.defaultValue : undefined, emitChange);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

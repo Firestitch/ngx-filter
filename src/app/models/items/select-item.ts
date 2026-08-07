@@ -37,8 +37,10 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
     return new SelectItem(itemConfig, filter);
   }
 
-  public clear(emitChange: boolean = true) {
-    this.setValue(this.multiple ? [] : undefined, emitChange);
+  public clear(emitChange: boolean = true, restoreDefault: boolean = false) {
+    const empty = this.multiple ? [] : undefined;
+
+    this.setValue(restoreDefault ? this.defaultValue ?? empty : empty, emitChange);
   }
   
   public init(value: unknown): Observable<unknown> {

@@ -39,6 +39,9 @@ export interface FilterConfig {
   heading?: string;
   subheading?: string;
   minSecondaryItems?: number;
+  // Caps how wide a single chip can grow — a multi-select renders all its values in one
+  // chip, so without a cap 20 selections eat a whole row. Any CSS length; 'none' removes it.
+  maxChipWidth?: string;
 }
 
 export interface FsFilterAutoReload {

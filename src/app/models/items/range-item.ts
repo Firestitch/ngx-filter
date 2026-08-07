@@ -78,8 +78,8 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     return chips;
   }
 
-  public clear(emitChange: boolean = true) {
-    this.setValue({}, emitChange);
+  public clear(emitChange: boolean = true, restoreDefault: boolean = false) {
+    this.setValue(restoreDefault ? this.defaultValue ?? {} : {}, emitChange);
   }
 
   public clearByName(name: string, emitChange: boolean = true) {

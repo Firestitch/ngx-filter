@@ -41,6 +41,7 @@ export class FsFilterConfig {
   public subheading: string;
   public maxEnabled: number;
   public minSecondaryItems: number;
+  public maxChipWidth: string;
 
   constructor(data: FilterConfig = {}) {
     this._init(data);
@@ -65,6 +66,7 @@ export class FsFilterConfig {
       } : null,
       clear: data.clear,
       minSecondaryItems: data.minSecondaryItems ?? 2,
+      maxChipWidth: data.maxChipWidth ?? '400px',
       sortChange: data.sortChange,
       case: data.case ?? 'camel',
       reloadWhenConfigChanged: data.reloadWhenConfigChanged,

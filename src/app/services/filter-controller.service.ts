@@ -198,7 +198,8 @@ export class FilterController implements OnDestroy {
     this.items
       .filter((item) => item.clearable)
       .forEach((item) => {
-        item.clear(false);
+        // The only path that resets to configured defaults — removing a single chip empties.
+        item.clear(false, true);
       });
 
     this._keywordController.clear(false);

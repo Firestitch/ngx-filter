@@ -30,9 +30,15 @@ export class SortController {
     }
   }
 
+  // Restores the screen's configured sort rather than dropping sorting altogether —
+  // a null name makes query() omit `order` entirely, leaving the list at whatever the
+  // backend happens to return.
   public clear() {
-    this._name = null;
-    this._direction = null;
+    const sort = this._filterController?.config?.sort;
+
+    this._name = sort?.value ?? null;
+    this._direction = sort?.direction ?? null;
+    this._change$.next({ name: this._name, direction: this._direction });
   }
 
   public get queryParam(): KeyValue {
