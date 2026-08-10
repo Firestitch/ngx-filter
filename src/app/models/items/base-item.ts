@@ -192,8 +192,32 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   // getter to unwrap the primitive out of its {name, value} object, while defaultValue
   // keeps the object — so comparing the public getter compares two different shapes and
   // never matches.
+  // Numbers are stringified on both sides first: a value that round-trips through the
+  // URL comes back as a string ({value: '7'}) while the default is still a number
+  // ({value: 7}), and a strict compare would call an untouched filter "changed".
   public get hasNonDefaultValue() {
-    return this.hasValue && !isEqual(this._value$.getValue().value, this.defaultValue);
+    if(!this.hasValue) {
+      return false;
+    }
+
+    const normalize = (value: unknown): unknown => {
+      if(typeof value === 'number') {
+        return String(value);
+      }
+
+      if(Array.isArray(value)) {
+        return value.map(normalize);
+      }
+
+      if(value && typeof value === 'object') {
+        return Object.entries(value)
+          .reduce((acc, [key, val]) => ({ ...acc, [key]: normalize(val) }), {});
+      }
+
+      return value;
+    };
+
+    return !isEqual(normalize(this._value$.getValue().value), normalize(this.defaultValue));
   }
 
   public get allowSecondary() {
