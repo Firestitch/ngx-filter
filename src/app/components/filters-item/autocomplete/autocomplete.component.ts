@@ -34,7 +34,13 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
 
   public change() {
     this.item.setValue(this.value);
-    this.close();
+
+    // A clear arrives here as a null — backspace over the selection, the clear button, emptying the
+    // input. Closing on that ejects the user from the popup before they can type a replacement, which
+    // is the only way to change a value that is already set.
+    if (this.value) {
+      this.close();
+    }
   }
 
   public fetch = (keyword): Observable<any> => {
