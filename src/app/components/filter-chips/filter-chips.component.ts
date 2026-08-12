@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnInit, QueryList, StaticProvider, ViewChildren, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnDestroy, OnInit, QueryList, StaticProvider, ViewChildren, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -40,7 +40,7 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
     FsChipSelectTriggerDirective,
   ],
 })
-export class FsFilterChipsComponent implements OnInit {
+export class FsFilterChipsComponent implements OnInit, OnDestroy {
 
   @ViewChildren(FsChipComponent) 
   public chips: QueryList<FsChipComponent>;
@@ -119,6 +119,13 @@ export class FsFilterChipsComponent implements OnInit {
 
   public ngOnInit(): void {
     this._initItemsState();
+  }
+
+  // The overlay is attached to the CDK container at document level, outside this component's view, so
+  // nothing tears it down with us. Left behind it outlives the route change that destroyed the filter,
+  // and its backdrop-click handler died with us — leaving a popup on screen that cannot be closed at all.
+  public ngOnDestroy(): void {
+    this._destroyOverlay();
   }
 
   public clear() {

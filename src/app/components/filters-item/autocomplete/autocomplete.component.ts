@@ -34,6 +34,7 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
 
   public change() {
     this.item.setValue(this.value);
+    this.close();
   }
 
   public fetch = (keyword): Observable<any> => {
