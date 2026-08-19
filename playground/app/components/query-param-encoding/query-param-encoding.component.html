@@ -1,0 +1,49 @@
+<fs-filter [config]="conf"></fs-filter>
+
+<fieldset>
+  <legend>How to reproduce</legend>
+  <ol>
+    <li>Pick a <strong>User</strong>. Its label carries a <code>#</code>, e.g. <code>John Doe #1</code>.</li>
+    <li>Pick a <strong>Status</strong>. That second change is what triggers the second write.</li>
+    <li>Watch the two values below. The fragment fills up and <code>status</code> leaves the query string.</li>
+    <li>Refresh. The <code>#1</code> is gone from the chip and <code>status</code> is gone from the filter.</li>
+  </ol>
+</fieldset>
+
+<fieldset>
+  <legend>Live address bar</legend>
+  <p><code>location.search</code> = <code>{{ search() }}</code></p>
+  <p><code>location.hash</code> = <code>{{ hash() }}</code></p>
+  <p><code>filter query</code> = <code>{{ query() }}</code></p>
+
+  @if (broken()) {
+    <p>
+      <strong>Corrupted.</strong> A <code>#</code> from the User label has been decoded into a real
+      fragment marker, so everything after it has fallen out of the query string.
+    </p>
+  } @else {
+    <p>Query string intact — no fragment.</p>
+  }
+</fieldset>
+
+<fieldset>
+  <legend>What is going on</legend>
+  <p>
+    <code>QueryParamController._replaceState</code> rewrites the address bar on every filter change,
+    and finishes with <code>decodeURIComponent</code> over the whole query string so the
+    <code>id:label</code> separator reads as <code>:</code> rather than <code>%3A</code>.
+  </p>
+  <p>
+    It re-reads the address bar it wrote last time, so that decode runs again on each change and
+    peels off another layer of encoding. <code>%25</code> is the escape for a literal
+    <code>%</code>, so a label holding a <code>#</code> decays
+    <code>%2523</code> &rarr; <code>%23</code> &rarr; <code>#</code> in two passes. The same applies
+    to <code>&amp;</code> and <code>=</code>.
+  </p>
+  <p>
+    Fix: decode only the separator and never <code>%25</code> —
+    <code>url.search.replace(/%3A/gi, ':')</code> in place of
+    <code>decodeURIComponent(url.search)</code>. That makes the method idempotent, which is the
+    property it is missing.
+  </p>
+</fieldset>

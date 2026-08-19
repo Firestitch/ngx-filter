@@ -14,7 +14,7 @@ import { FsFormModule } from '@firestitch/form';
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 import { provideRouter } from '@angular/router';
-import { ExamplesComponent, NofiltersComponent } from './app/components';
+import { ExamplesComponent, NofiltersComponent, QueryParamEncodingComponent } from './app/components';
 import { DialogExampleComponent } from './app/components/dialog-example';
 import { FsFileModule } from '@firestitch/file';
 import { AppComponent } from './app/app.component';
@@ -42,6 +42,7 @@ bootstrapApplication(AppComponent, {
             { path: '', component: ExamplesComponent, pathMatch: 'full' },
             { path: 'nofilters', component: NofiltersComponent },
             { path: 'dialog', component: DialogExampleComponent },
+            { path: 'query-param-encoding', component: QueryParamEncodingComponent },
         ]),
     ]
 })

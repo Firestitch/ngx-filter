@@ -106,6 +106,13 @@ export class QueryParamController {
         }
       });
 
-    history.replaceState({}, null, url.pathname + decodeURIComponent(url.search));
+    // Decode only the id:label separator, never %25. This method re-reads the
+    // URL it wrote last time, so decoding the whole query string made it strip
+    // one layer of encoding per call: %2523 -> %23 -> a literal #, which then
+    // reads as a fragment marker and drops every later param out of the query
+    // string. Leaving %25 encoded keeps the method idempotent. Any label
+    // holding #, & or = depends on this — see the query-param-encoding
+    // playground example.
+    history.replaceState({}, null, url.pathname + url.search.replace(/%3A/gi, ':'));
   }
 }

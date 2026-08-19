@@ -73,6 +73,29 @@ export class FilterItemsService {
     };
   }
 
+  /**
+   * Same autocomplete, but each option's label carries the record id the way a
+   * "Name #id" picker label does. The `#` is the character the query-param
+   * encoding example exercises — see QueryParamEncodingComponent.
+   */
+  public userAutocompleteWithId(opts: { name?: string; label?: string } = {}): IFilterConfigItem {
+    return {
+      name: opts.name ?? 'userId',
+      type: ItemType.AutoComplete,
+      label: opts.label ?? 'User',
+      values: (keyword) => this._users$()
+        .pipe(
+          map((users) => users.filter((user) => {
+            return user.name.toLowerCase().includes((keyword ?? '').toLowerCase());
+          })),
+          map((users) => users.map((user) => ({
+            name: `${user.name} #${user.id}`,
+            value: user.id,
+          }))),
+        ),
+    };
+  }
+
   public userSelect(opts: { primary?: boolean; multiple?: boolean } = {}): IFilterConfigItem {
     return {
       name: 'user',
