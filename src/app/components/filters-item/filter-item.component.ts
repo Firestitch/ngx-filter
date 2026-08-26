@@ -16,6 +16,7 @@ import type { DateItem } from '../../models/items/date-item';
 import type { DateRangeItem } from '../../models/items/date-range-item';
 import type { DateTimeItem } from '../../models/items/date-time-item';
 import type { DateTimeRangeItem } from '../../models/items/date-time-range-item';
+import type { MonthRangeItem } from '../../models/items/month-range-item';
 import type { RangeItem } from '../../models/items/range-item';
 import { SelectItem } from '../../models/items/select-item';
 import type { TextItem } from '../../models/items/text-item';
@@ -27,6 +28,7 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
 import { ChipsComponent } from './chips/chips.component';
 import { DateRangeComponent } from './date-range/date-range.component';
 import { DateComponent } from './date/date.component';
+import { MonthRangeComponent } from './month-range/month-range.component';
 import { RangeComponent } from './range/range.component';
 import { SelectComponent } from './select/select.component';
 import { TextComponent } from './text/text.component';
@@ -48,6 +50,7 @@ import { WeekComponent } from './week/week.component';
     AutocompletechipsComponent,
     DateComponent,
     DateRangeComponent,
+    MonthRangeComponent,
     WeekComponent,
     CheckboxComponent,
     AsyncPipe,
@@ -103,6 +106,10 @@ export class FilterItemComponent implements OnInit, OnDestroy {
 
   public get dateTimeRangeItem(): DateTimeRangeItem {
     return this.item as DateTimeRangeItem;
+  }
+
+  public get monthRangeItem(): MonthRangeItem {
+    return this.item as MonthRangeItem;
   }
 
   public get weekItem(): WeekItem {

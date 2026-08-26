@@ -65,6 +65,7 @@ export { DateItem } from './app/models/items/date-item';
 export { DateRangeItem } from './app/models/items/date-range-item';
 export { DateTimeItem } from './app/models/items/date-time-item';
 export { DateTimeRangeItem } from './app/models/items/date-time-range-item';
+export { MonthRangeItem } from './app/models/items/month-range-item';
 export { RangeItem } from './app/models/items/range-item';
 export { SelectItem } from './app/models/items/select-item';
 export { TextItem } from './app/models/items/text-item';

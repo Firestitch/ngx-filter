@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { FsAutocompleteChipsComponent, FsAutocompleteChipsModule } from '@firestitch/autocomplete-chips';
 import { FsFormModule } from '@firestitch/form';
 
+import { Observable } from 'rxjs';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
 import { AutocompleteChipsItem } from '../../../models/items/autocomplete-chips-item';
@@ -59,8 +60,8 @@ export class AutocompletechipsComponent
     this.close();
   }
 
-  public fetch = (keyword) => {
-    return this.item.valuesFn(keyword, this.item.filter);
+  public fetch = (keyword): Observable<any> => {
+    return this.item.valuesFn(keyword, this.item.filter) as Observable<any>;
   };
 
   public compareItems(item1, item2): boolean {

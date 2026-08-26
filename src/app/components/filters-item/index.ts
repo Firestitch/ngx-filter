@@ -6,6 +6,7 @@ export * from './chips';
 export * from './date';
 export * from './date-range';
 export * from './filter-item.component';
+export * from './month-range';
 export * from './range';
 export * from './select';
 export * from './text';

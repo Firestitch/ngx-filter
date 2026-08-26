@@ -11,6 +11,7 @@ export * from './date-range-item';
 export * from './date-time-item';
 export * from './date-time-range-item';
 export * from './keyword-item';
+export * from './month-range-item';
 export * from './range-item';
 export * from './select-item';
 export * from './text-item';

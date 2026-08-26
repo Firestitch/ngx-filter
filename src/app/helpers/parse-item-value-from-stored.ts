@@ -15,7 +15,7 @@ export function parseItemValueFromStored(item, params) {
       return { min: min, max: max };
     }
 
-    case ItemType.DateRange: case ItemType.DateTimeRange: {
+    case ItemType.DateRange: case ItemType.DateTimeRange: case ItemType.MonthRange: {
       const from = params[getRangeName(item.name, 'from')];
       const to = params[getRangeName(item.name, 'to')];
 

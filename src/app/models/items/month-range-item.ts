@@ -4,10 +4,15 @@ import { IFilterConfigDateRangeItem } from '../../interfaces/items/date-range.in
 import { BaseDateRangeItem } from './base-date-range-item';
 
 
-export class DateRangeItem extends BaseDateRangeItem {
+export class MonthRangeItem extends BaseDateRangeItem {
+
+  // A month range is about months, so the day is left off both ends.
+  protected override get dateFormat(): string {
+    return 'date';
+  }
 
   public static create(config: IFilterConfigDateRangeItem, filter: FilterComponent) {
-    return new DateRangeItem(config, filter);
+    return new MonthRangeItem(config, filter);
   }
 
 }

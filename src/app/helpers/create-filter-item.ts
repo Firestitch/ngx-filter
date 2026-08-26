@@ -14,6 +14,7 @@ import { DateRangeItem } from '../models/items/date-range-item';
 import { DateTimeItem } from '../models/items/date-time-item';
 import { DateTimeRangeItem } from '../models/items/date-time-range-item';
 import { KeywordItem } from '../models/items/keyword-item';
+import { MonthRangeItem } from '../models/items/month-range-item';
 import { RangeItem } from '../models/items/range-item';
 import { SelectItem } from '../models/items/select-item';
 import { TextItem } from '../models/items/text-item';
@@ -40,6 +41,10 @@ export function createFilterItem(item: IFilterConfigItem, filter: FilterComponen
 
     case ItemType.DateTimeRange: {
       return DateTimeRangeItem.create(item as IFilterConfigDateRangeItem, filter);
+    }
+
+    case ItemType.MonthRange: {
+      return MonthRangeItem.create(item as IFilterConfigDateRangeItem, filter);
     }
 
     case ItemType.Date: {

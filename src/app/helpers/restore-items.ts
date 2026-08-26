@@ -1,5 +1,4 @@
-import { DateRangeItem } from '../models/items/date-range-item';
-import { DateTimeRangeItem } from '../models/items/date-time-range-item';
+import { BaseDateRangeItem } from '../models/items/base-date-range-item';
 import { RangeItem } from '../models/items/range-item';
 import { WeekItem } from '../models/items/week-item';
 
@@ -40,7 +39,7 @@ function findItemWidthName(items, name) {
         return  name === getRangeName(filterItem.name, 'min') ||
           name === getRangeName(filterItem.name, 'max') ||
           name === filterItem.name;
-      } else if (filterItem instanceof DateRangeItem || filterItem instanceof DateTimeRangeItem) {
+      } else if (filterItem instanceof BaseDateRangeItem) {
         return name === getRangeName(filterItem.name, 'from') ||
           name ===  getRangeName(filterItem.name, 'to');
       } else if (filterItem instanceof WeekItem) {

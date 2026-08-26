@@ -99,6 +99,16 @@
           [triggerChangeOn]="triggerChangeOn">
         </filter-item-date-range>
       }
+      @case (itemType.MonthRange) {
+        <filter-item-month-range
+          [floatLabel]="floatLabel"
+          class="interface interface-date"
+          [item]="monthRangeItem"
+          [overlayRef]="overlayRef"
+          [autofocusName]="autofocusName"
+          [triggerChangeOn]="triggerChangeOn">
+        </filter-item-month-range>
+      }
       @case (itemType.Week) {
         <filter-item-week
           [floatLabel]="floatLabel"

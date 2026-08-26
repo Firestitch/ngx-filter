@@ -20,8 +20,7 @@ export interface IFilterConfigSelectIsolate {
 
 export interface IFilterSelectValue {
   name: string;
-  value?: number | string | boolean;
-  types?: any;
+  value?: number | string | boolean | IFilterSelectValue[];
 }
 
 export type FilterValuesReturnFn = IFilterSelectValue[]

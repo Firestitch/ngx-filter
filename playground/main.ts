@@ -28,7 +28,7 @@ bootstrapApplication(AppComponent, {
         importProvidersFrom(BrowserModule, FsFilterModule.forRoot({
             buttonStyle: ButtonStyle.Flat,
             persist: true,
-        }), FsDatePickerModule.forRoot(), FsScrollbarModule, FormsModule, FsFormModule.forRoot(), FsExampleModule.forRoot({ iframeObserveBody: true }), FsMessageModule.forRoot(), FsFileModule.forRoot({
+        }), FsDatePickerModule.forRoot({ preset: true }), FsScrollbarModule, FormsModule, FsFormModule.forRoot(), FsExampleModule.forRoot({ iframeObserveBody: true }), FsMessageModule.forRoot(), FsFileModule.forRoot({
             allowDownload: true,
             allowRemove: true,
             dragoverMessage: true,

@@ -4,8 +4,8 @@ import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
 import { BaseItem } from '../../models/items/base-item';
 
-export type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange;
-export type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange;
+export type FilterConfigDateType = ItemType.Date | ItemType.DateTime | ItemType.DateRange | ItemType.DateTimeRange | ItemType.MonthRange;
+export type FilterDateRangeType = ItemType.DateRange | ItemType.DateTimeRange | ItemType.MonthRange;
 export type IFilterDefaultFn<T extends unknown = unknown> = () => Observable<T>;
 export interface FilterNameValue { name: string; value: unknown }
 

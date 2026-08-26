@@ -1,0 +1,39 @@
+@if (initialized) {
+  <div class="row">
+    <mat-form-field
+        [floatLabel]="floatLabel"
+        class="form-field-padless">
+      <mat-label>
+        {{ item.fromLabel }}
+      </mat-label>
+      <input
+        matInput
+        [fsFilterFocusTrigger]="autofocusName === 'from'"
+        [fsMonthRangeFrom]="item.name"
+        [(ngModel)]="from"
+        [disabled]="disabled"
+        (ngModelChange)="change()"
+        [clear]="item.clearable"
+        name="dateFrom">
+    </mat-form-field>
+    <div class="to">
+      to
+    </div>
+    <mat-form-field
+        [floatLabel]="floatLabel"
+        class="form-field-padless">
+      <mat-label>
+        {{ item.toLabel }}
+      </mat-label>
+      <input
+        matInput
+        [fsFilterFocusTrigger]="autofocusName === 'to'"
+        [fsMonthRangeTo]="item.name"
+        [(ngModel)]="to"
+        [disabled]="disabled"
+        (ngModelChange)="change()"
+        [clear]="item.clearable"
+        name="dateTo">
+    </mat-form-field>
+  </div>
+}

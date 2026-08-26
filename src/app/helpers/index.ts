@@ -1,5 +1,6 @@
 export * from './compare';
 export * from './create-filter-item';
+export * from './distill-range-label';
 export * from './encode-query-parm';
 export * from './find-value';
 export * from './get-range-name';

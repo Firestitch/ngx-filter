@@ -299,7 +299,7 @@ export class KitchenSinkComponent implements OnInit {
         name: 'range',
         type: ItemType.Range,
         prefix: '$&nbsp;',
-        label: ['Min Price', 'Max Price'],
+        label: 'Price',
         chipLabel: ['Custom Min Price', 'Custom Max Price'],
       },
       {
@@ -378,7 +378,12 @@ export class KitchenSinkComponent implements OnInit {
       {
         name: 'dateRange',
         type: ItemType.DateRange,
-        label: 'Date',
+        label: 'Date Range',
+      },
+      {
+        name: 'monthRange',
+        type: ItemType.MonthRange,
+        label: ['From Billing Month', 'To Billing Month'],
       },
       {
         name: 'scrollDate',
@@ -389,7 +394,7 @@ export class KitchenSinkComponent implements OnInit {
       },
       {
         name: 'price',
-        type: ItemType.Text,
+        type: ItemType.Range,
         label: 'Price',
         prefix: '$',
         suffix: 'USD',
