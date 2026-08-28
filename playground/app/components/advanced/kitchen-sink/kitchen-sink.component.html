@@ -1,0 +1,55 @@
+<fs-filter [config]="conf">
+  <ng-template fsFilterStatusBar>
+    <small>
+      Showing 4 results
+        sorted by
+      <a
+          class="order-toggle"
+          [fsMenuTriggerFor]="sortMenu">
+        {{ sort?.value || 'unsorted' }}
+      </a>
+      @if (sort?.value) {
+        <a
+            class="order-toggle"
+            (click)="filter.updateSort({ sortBy: sort.value, sortDirection: sort.direction === 'asc' ? 'desc' : 'asc' })">
+          {{ sort.direction || 'asc' }}
+        </a>
+      }
+      <fs-menu #sortMenu>
+        @for (item of sorts; track item.value) {
+          <ng-template
+              fs-menu-item
+              (click)="filter.updateSort({ sortBy: item.value, sortDirection: sort.direction })">
+            {{ item.name }}
+          </ng-template>
+        }
+      </fs-menu>
+    </small>
+  </ng-template>
+</fs-filter>
+@if (query) {
+  <fieldset>
+    <legend>
+      Filter values
+    </legend>
+    {{ query | json }}
+  </fieldset>
+}
+<br>
+<div class="fs-row.gap-xs">
+  <button
+      mat-stroked-button
+      (click)="filter.updateSort({ sortBy: 'name', sortDirection: 'desc' })">
+    Update Sort
+  </button>
+  <button
+      mat-stroked-button
+      (click)="enabledFilters ? filter.disableFilters() : filter.enableFilters(); enabledFilters = !enabledFilters">
+    {{ enabledFilters ? 'Disable Filters' : 'Enable Filters' }}
+  </button>
+  <button
+      mat-stroked-button
+      (click)="filter.reload()">
+    Reload
+  </button>
+</div>

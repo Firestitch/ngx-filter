@@ -29,9 +29,13 @@ export {
   IFsFilterMenuActionLink,
 } from './app/interfaces';
 
-export { IFilterConfigAutocompleteChipsItem } from './app/interfaces/items/autocomplete-chips.interface';
+export {
+  FilterAutocompleteChipsShape,
+  FilterAutocompleteChipsSubcontentFn,
+  IFilterConfigAutocompleteChipsItem,
+} from './app/interfaces/items/autocomplete-chips.interface';
 export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';
-export { IFilterConfigBaseItem } from './app/interfaces/items/base.interface';
+export { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './app/interfaces/items/base.interface';
 export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
 export { IFilterConfigChipsItem } from './app/interfaces/items/chips.interface';
 export { IFilterConfigDateRangeItem, IFilterItemDateRangeDefault } from './app/interfaces/items/date-range.interface';

@@ -14,8 +14,12 @@ import { FsFormModule } from '@firestitch/form';
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
 import { provideRouter } from '@angular/router';
-import { ExamplesComponent, NofiltersComponent, QueryParamEncodingComponent } from './app/components';
-import { DialogExampleComponent } from './app/components/dialog-example';
+import {
+    DialogExampleComponent,
+    ExamplesComponent,
+    NofiltersComponent,
+    QueryParamEncodingComponent,
+} from './app/components';
 import { FsFileModule } from '@firestitch/file';
 import { AppComponent } from './app/app.component';
 

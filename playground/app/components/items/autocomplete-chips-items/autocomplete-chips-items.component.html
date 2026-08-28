@@ -1,0 +1,31 @@
+<fs-filter [config]="conf"></fs-filter>
+@if (query) {
+  <fieldset>
+    <legend>
+      Filter values
+    </legend>
+    {{ query | json }}
+  </fieldset>
+}
+<fieldset>
+  <legend>
+    What to look for
+  </legend>
+  <ul>
+    <li>
+      Every option and every selected chip carries a second line — that is
+      <code>subcontent</code>, a fn handed the value object the item's
+      <code>values</code> fn produced.
+    </li>
+    <li>
+      <strong>Single</strong> is <code>multiple: false</code>. It holds one value rather
+      than a list, its query param is a bare value, and picking an option closes the popup
+      instead of waiting for more. It renders without a chip outline: a lone value reads as
+      a value, not as a chip.
+    </li>
+    <li>
+      <strong>Square</strong> and <strong>Shapeless</strong> are the <code>shape</code>
+      option, passed straight through to <code>fs-autocomplete-chips</code>.
+    </li>
+  </ul>
+</fieldset>

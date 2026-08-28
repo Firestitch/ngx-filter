@@ -1,30 +1,48 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { environment } from '../../../environments/environment';
 import { FsExampleModule } from '@firestitch/example';
-import { AutocompleteExampleComponent } from '../autocomplete-example/autocomplete-example.component';
-import { ChipsHeadingComponent } from '../chips-heading/chips-heading.component';
-import { ChipsOnlyComponent } from '../chips-only/chips-only.component';
-import { HeadingOnlyComponent } from '../heading-only/heading-only.component';
-import { KeywordFullWidthComponent } from '../keyword-full-width/keyword-full-width.component';
-import { KitchenSinkComponent } from '../kitchen-sink/kitchen-sink.component';
-import { PrimarySearchChipsComponent } from '../primary-search-chips/primary-search-chips.component';
+
+import { environment } from '../../../environments/environment';
+import { ActionButtonsComponent, ActionMenusComponent } from '../actions';
+import { KitchenSinkComponent } from '../advanced';
+import {
+  AutocompleteChipsItemsComponent,
+  AutocompleteItemsComponent,
+  ChipsCheckboxItemsComponent,
+  DateItemsComponent,
+  RangeItemsComponent,
+  SelectItemsComponent,
+} from '../items';
+import {
+  ChipsHeadingComponent,
+  ChipsOnlyComponent,
+  HeadingOnlyComponent,
+  KeywordFullWidthComponent,
+  PrimarySearchChipsComponent,
+} from '../layout';
 
 
 @Component({
-    templateUrl: 'examples.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-      FsExampleModule,
-      KitchenSinkComponent,
-      ChipsOnlyComponent,
-      ChipsHeadingComponent,
-      PrimarySearchChipsComponent,
-      AutocompleteExampleComponent,
-      HeadingOnlyComponent,
-      KeywordFullWidthComponent,
-    ],
+  templateUrl: './examples.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsExampleModule,
+    KitchenSinkComponent,
+    SelectItemsComponent,
+    DateItemsComponent,
+    RangeItemsComponent,
+    AutocompleteItemsComponent,
+    AutocompleteChipsItemsComponent,
+    ChipsCheckboxItemsComponent,
+    ActionButtonsComponent,
+    ActionMenusComponent,
+    ChipsOnlyComponent,
+    ChipsHeadingComponent,
+    PrimarySearchChipsComponent,
+    HeadingOnlyComponent,
+    KeywordFullWidthComponent,
+  ],
 })
 export class ExamplesComponent {
   public config = environment;

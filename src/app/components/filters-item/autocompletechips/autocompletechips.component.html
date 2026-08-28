@@ -2,12 +2,15 @@
     [fsFilterFocusTrigger]="autofocus"
     [fetch]="fetch"
     [(ngModel)]="value"
+    (ngModelChange)="modelChange()"
     [disabled]="disabled"
     [floatLabel]="floatLabel"
     (clear)="clear()"
     [allowText]="false"
     [padless]="true"
     [label]="item.label"
+    [multiple]="item.multiple"
+    [shape]="item.shape"
     [chipImage]="item.chipImage"
     [chipColor]="item.chipColor"
     [chipIconColor]="item.chipIcon"
@@ -25,6 +28,17 @@
       let-object="object">
     {{ object.name }}
   </ng-template>
+  <!--
+    Declared only when configured: an empty subtemplate is still a subtemplate, and every
+    chip would grow a blank second line.
+  -->
+  @if (item.subcontent) {
+    <ng-template
+        fsAutocompleteChipsSubtemplate
+        let-object="object">
+      {{ item.subcontent(object) }}
+    </ng-template>
+  }
   @for (action of item.panelActions; track action.label) {
     <ng-template
         fsAutocompleteChipsStatic

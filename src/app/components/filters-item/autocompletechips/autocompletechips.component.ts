@@ -49,6 +49,25 @@ export class AutocompletechipsComponent
     this.item.value = this.value;
   }
 
+  /**
+   * A single select is done as soon as something is picked, so apply it and close the
+   * popup the way the single autocomplete filter does. A clear arrives here as a null —
+   * closing on that would eject the user before they can type a replacement.
+   *
+   * A multi select keeps collecting, so it waits for the panel to close instead.
+   */
+  public modelChange() {
+    if(this.item.multiple) {
+      return;
+    }
+
+    this.item.value = this.value;
+
+    if(this.value) {
+      this.close();
+    }
+  }
+
   public removed() {
     if(!this.autocompleteChips.panelOpen) {
       this.item.value = this.value;
