@@ -31,7 +31,7 @@ export {
 
 export {
   FilterAutocompleteChipsShape,
-  FilterAutocompleteChipsSubcontentFn,
+  FilterAutocompleteChipsTemplateFn,
   IFilterConfigAutocompleteChipsItem,
 } from './app/interfaces/items/autocomplete-chips.interface';
 export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';

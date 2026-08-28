@@ -14,10 +14,11 @@ import { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './base
 export type FilterAutocompleteChipsShape = 'roundChip' | 'squareChip' | 'none';
 
 /**
- * Builds the second line rendered under an option's label, in the panel and on the
- * selected chip alike. Receives the value object the `values` fn produced.
+ * Formats one line of an option, in the panel and on the selected chip alike. Receives
+ * the value object the `values` fn produced, so `values` can hand back whole records and
+ * leave the wording to the template.
  */
-export type FilterAutocompleteChipsSubcontentFn = (data: any) => string;
+export type FilterAutocompleteChipsTemplateFn = (data: any) => string;
 
 export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseItem<ItemType.AutoCompleteChips> {
   fetchOnFocus?: boolean;
@@ -31,7 +32,10 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   chipBackground?: string;
   chipIcon?: string;
   chipClass?: string;
-  subcontent?: FilterAutocompleteChipsSubcontentFn;
+  // Defaults to the value object's own `name`, which is what this item type has always
+  // rendered.
+  template?: FilterAutocompleteChipsTemplateFn;
+  subTemplate?: FilterAutocompleteChipsTemplateFn;
   default?: IFilterDefaultFn<FilterNameValue[] | FilterNameValue> | FilterNameValue[] | FilterNameValue;
   values?: (keyword?: string, filter?: FilterComponent) => Observable<any[]>;
   panelActions?: {

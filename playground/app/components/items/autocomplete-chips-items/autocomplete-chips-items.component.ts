@@ -11,9 +11,10 @@ import { ExampleLogService, ExampleUser, FilterItemsService } from '../../../ser
  * holds, what shape they take, whether they carry an image, and what goes on their
  * second line.
  *
- * `subcontent` is handed the value object the item's `values` fn produced — here that
- * is a whole user, so the second line can show a title or an email that never makes it
- * into the query.
+ * `template` and `subTemplate` are both handed the value object the item's `values` fn
+ * produced — here that is a whole user — and each returns the string for its line. So
+ * `values` hands back records and the templates decide the wording, including fields
+ * like a title or an email that never make it into the query.
  */
 @Component({
   selector: 'autocomplete-chips-items',
@@ -49,7 +50,10 @@ export class AutocompleteChipsItemsComponent {
         this._filterItems.userAutocompleteChips({
           name: 'multipleUserIds',
           label: 'Multiple',
-          subcontent: (user: ExampleUser) => user.title,
+          // Without a `template` the option renders the value object's own `name`. This
+          // one formats it instead, off fields `values` returned.
+          template: (user: ExampleUser) => `${user.name} (${user.title})`,
+          subTemplate: (user: ExampleUser) => user.email,
         }),
         // multiple: false holds a single {name, value} and its query is the bare value,
         // the way ItemType.AutoComplete reads. Picking one closes the popup.
@@ -57,13 +61,13 @@ export class AutocompleteChipsItemsComponent {
           name: 'singleUserId',
           label: 'Single',
           multiple: false,
-          subcontent: (user: ExampleUser) => user.email,
+          subTemplate: (user: ExampleUser) => user.email,
         }),
         this._filterItems.userAutocompleteChips({
           name: 'squareUserIds',
           label: 'Square chips',
           shape: 'squareChip',
-          subcontent: (user: ExampleUser) => user.email,
+          subTemplate: (user: ExampleUser) => user.email,
         }),
         // '' opts out of the default 'image' lookup, so the chips carry no avatar.
         this._filterItems.userAutocompleteChips({

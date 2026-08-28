@@ -3,7 +3,7 @@ import type { FilterComponent } from '../../components/filter/filter.component';
 import { encodeQueryParam } from '../../helpers';
 import {
   FilterAutocompleteChipsShape,
-  FilterAutocompleteChipsSubcontentFn,
+  FilterAutocompleteChipsTemplateFn,
   IFilterConfigAutocompleteChipsItem,
 } from '../../interfaces/items/autocomplete-chips.interface';
 
@@ -28,7 +28,8 @@ export class AutocompleteChipsItem
   public declare chipIconColor: string;
   public declare chipBackground: string;
   public declare chipClass: string;
-  public declare subcontent?: FilterAutocompleteChipsSubcontentFn;
+  public declare template?: FilterAutocompleteChipsTemplateFn;
+  public declare subTemplate?: FilterAutocompleteChipsTemplateFn;
   public declare panelActions: {
     label: string;
     click: (filter: FilterComponent) => void;
@@ -47,7 +48,8 @@ export class AutocompleteChipsItem
     this.chipColor = itemConfig.chipColor;
     this.chipBackground = itemConfig.chipBackground;
     this.chipClass = itemConfig.chipClass;
-    this.subcontent = itemConfig.subcontent;
+    this.template = itemConfig.template;
+    this.subTemplate = itemConfig.subTemplate;
     this.panelActions = itemConfig.panelActions || [];
   }
 

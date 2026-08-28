@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { nameValue } from '@firestitch/common';
 import {
   FilterAutocompleteChipsShape,
-  FilterAutocompleteChipsSubcontentFn,
+  FilterAutocompleteChipsTemplateFn,
   FilterComponent,
   FilterNameValue,
   IFilterConfigItem,
@@ -301,7 +301,7 @@ export class FilterItemsService {
 
   /**
    * Each option carries the whole user, not just name/value, so `chipImage` has an
-   * `image` to read and a `subcontent` fn has something to put on the second line.
+   * `image` to read and the `template`/`subTemplate` fns have something to format.
    */
   public userAutocompleteChips(
     opts: {
@@ -310,7 +310,8 @@ export class FilterItemsService {
       primary?: boolean;
       multiple?: boolean;
       shape?: FilterAutocompleteChipsShape;
-      subcontent?: FilterAutocompleteChipsSubcontentFn;
+      template?: FilterAutocompleteChipsTemplateFn;
+      subTemplate?: FilterAutocompleteChipsTemplateFn;
       chipImage?: string;
       default?: FilterNameValue[] | FilterNameValue;
       panelActions?: { label: string; click: (filter: FilterComponent) => void }[];
@@ -323,7 +324,8 @@ export class FilterItemsService {
       primary: opts.primary,
       multiple: opts.multiple,
       shape: opts.shape,
-      subcontent: opts.subcontent,
+      template: opts.template,
+      subTemplate: opts.subTemplate,
       // '' opts out of the default 'image' lookup for the examples that want a bare chip.
       chipImage: opts.chipImage,
       default: opts.default,

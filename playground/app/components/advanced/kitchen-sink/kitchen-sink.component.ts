@@ -99,7 +99,8 @@ export class KitchenSinkComponent implements OnInit {
         this._filterItems.userAutocomplete({ name: 'autocompleteUserId', label: 'Autocomplete User' }),
         this._filterItems.userAutocompleteChips({
           label: 'Autocomplete Chips',
-          subcontent: (user: ExampleUser) => user.title,
+          subTemplate: (user: ExampleUser) => user.title,
+          template: (user: ExampleUser) => `${user.name}`,
         }),
         this._filterItems.weekdayChips(),
         this._filterItems.date(),

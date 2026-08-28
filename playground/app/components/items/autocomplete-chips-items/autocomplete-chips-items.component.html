@@ -14,8 +14,10 @@
   <ul>
     <li>
       Every option and every selected chip carries a second line — that is
-      <code>subcontent</code>, a fn handed the value object the item's
-      <code>values</code> fn produced.
+      <code>subTemplate</code>, a fn handed the value object the item's
+      <code>values</code> fn produced. <strong>Multiple</strong> also sets
+      <code>template</code>, which formats the first line the same way instead of
+      rendering the value object's own <code>name</code>.
     </li>
     <li>
       <strong>Single</strong> is <code>multiple: false</code>. It holds one value rather
