@@ -195,7 +195,8 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
       disposeOnNavigation: true,
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      panelClass: 'fs-sidenav-menu-overlay-pane',
+      // Never share a panel class — overlay CSS is global, so another package's rules would restyle this.
+      panelClass: 'fs-filter-chip-overlay-pane',
     });
 
     this._overlayRef = this._overlay.create(overlayConfig);
