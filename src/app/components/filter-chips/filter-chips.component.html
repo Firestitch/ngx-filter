@@ -30,7 +30,6 @@
             class="filter-chip"
             [attr.data-filter-item]="item.name"
             [size]="'medium'"
-            [borderColor]="'#ddd'"
             [disabled]="(disabledFilters$ | async)"
             (click)="handleChipClick(item)"
             [outlined]="true">

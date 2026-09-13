@@ -7,6 +7,14 @@
   z-index: 999;
 }
 
+// The SELECTED chip keeps the brand primary in both modes — a brand colour is
+// chosen to work on its own ground, so it is not swapped per scheme. Only the
+// ink on top of it is stated here, and white holds on a saturated primary in
+// either mode.
+//
+// The resting (unselected) chip passes no colour at all: fs-chip's `outlined`
+// style now carries a light-dark() default, so it is legible in both modes
+// without this component knowing which one it is in.
 .filter-chip.selected ::ng-deep {
   .fs-chip:hover {
     background-color: var(--fs-filter-primary) !important;

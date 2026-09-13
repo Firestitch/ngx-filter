@@ -1,5 +1,8 @@
 .filter-item-dialog {
-  background-color: #fff;
+  // An OPAQUE panel, so it cannot inherit the page behind it — #fff punched a
+  // white slab through a dark app. The light value is unchanged; only the dark
+  // counterpart is new.
+  background-color: var(--fs-color-surface-raised, light-dark(#fff, #292A2F));
   padding: 12px;
   box-shadow: var(--mat-autocomplete-container-elevation-shadow);
   border-radius: 5px;
