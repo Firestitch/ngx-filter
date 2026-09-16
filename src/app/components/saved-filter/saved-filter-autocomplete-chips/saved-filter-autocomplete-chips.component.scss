@@ -9,7 +9,7 @@ fs-autocomplete-chips {
     }
 
     .prefix-icon {
-      color: light-dark(#626262, #97A5A6);
+      color: var(--fs-color-text-muted, #626262);
     }
 
     .mat-mdc-form-field-subscript-wrapper {
