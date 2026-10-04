@@ -32,6 +32,7 @@ export class FsFilterConfig {
   public reload: ChangeFn;
   public autoReload: FsFilterAutoReload;
   public clear: ChangeFn;
+  public clearVisible: () => boolean;
   public sortChange: ChangeFn;
   public button: FilterButton;
   public items: IFilterConfigItem[];
@@ -65,6 +66,7 @@ export class FsFilterConfig {
         enabled: data.autoReload ? data.autoReload.enabled ?? true : false,
       } : null,
       clear: data.clear,
+      clearVisible: data.clearVisible ?? null,
       minSecondaryItems: data.minSecondaryItems ?? 2,
       maxChipWidth: data.maxChipWidth ?? '400px',
       sortChange: data.sortChange,

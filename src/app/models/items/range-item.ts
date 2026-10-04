@@ -6,6 +6,7 @@ import { isObject } from 'lodash-es';
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { distillRangeLabel } from '../../helpers/distill-range-label';
 import { getRangeName } from '../../helpers/get-range-name';
+import { isEmptyBound } from '../../helpers/is-empty-bound';
 import {
   IFilterConfigRangeItem,
 } from '../../interfaces/items/range.interface';
@@ -77,8 +78,8 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
     const paramMaxName = getRangeName(name, 'max');
 
     if (isObject(value)) {
-      params[paramMinName] = value.min || undefined;
-      params[paramMaxName] = value.max || undefined;
+      params[paramMinName] = isEmptyBound(value.min) ? undefined : value.min;
+      params[paramMaxName] = isEmptyBound(value.max) ? undefined : value.max;
     } else {
       params[paramMinName] = undefined;
       params[paramMaxName] = undefined;
@@ -92,35 +93,40 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
    * reads as the one thing it is. A half-filled range still says which end it
    * has and keeps that end's name, so removing the chip clears only that end;
    * a full range has no one end to name, and removing it clears both.
+   *
+   * 0 is a bound like any other, and each chip value is a string, so the chip row's
+   * truthiness test on the value still prints a 0.
    */
   public get chips(): { name?: string, value: string, label: string }[] {
     const min = this.value?.min;
     const max = this.value?.max;
+    const hasMin = !isEmptyBound(min);
+    const hasMax = !isEmptyBound(max);
 
     if(!this.rangeLabel) {
       const chips = [];
 
-      if (min) {
-        chips.push({ name: 'min', label: this.minLabel, value: min });
+      if (hasMin) {
+        chips.push({ name: 'min', label: this.minLabel, value: `${min}` });
       }
 
-      if (max) {
-        chips.push({ name: 'max', label: this.maxLabel, value: max });
+      if (hasMax) {
+        chips.push({ name: 'max', label: this.maxLabel, value: `${max}` });
       }
 
       return chips;
     }
 
-    if (min && max) {
+    if (hasMin && hasMax) {
       return [{ label: this.rangeLabel, value: `${min} – ${max}` }];
     }
 
-    if (min) {
-      return [{ name: 'min', label: this.minLabel, value: min }];
+    if (hasMin) {
+      return [{ name: 'min', label: this.minLabel, value: `${min}` }];
     }
 
-    if (max) {
-      return [{ name: 'max', label: this.maxLabel, value: max }];
+    if (hasMax) {
+      return [{ name: 'max', label: this.maxLabel, value: `${max}` }];
     }
 
     return [];

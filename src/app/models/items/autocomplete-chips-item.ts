@@ -1,6 +1,12 @@
+import { isEqual } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
-import { encodeQueryParam } from '../../helpers';
+import { encodeQueryParam } from '../../helpers/encode-query-parm';
+import { getExcludeName } from '../../helpers/get-exclude-name';
+import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
+import {
+  FilterAutocompleteChipsExcludeValue,
+} from '../../interfaces/items/autocomplete-chips-exclude-value.interface';
 import {
   FilterAutocompleteChipsShape,
   FilterAutocompleteChipsTemplateFn,
@@ -34,6 +40,13 @@ export class AutocompleteChipsItem
     label: string;
     click: (filter: FilterComponent) => void;
   }[];
+  // True when the config has `exclude`: the list shows the toggle, and only then does an
+  // excluding value count.
+  public declare excludable: boolean;
+  public declare excludeLabel: string;
+  public declare panelNote: (() => string | null) | null;
+
+  private _exclude = false;
 
   constructor(
     itemConfig: IFilterConfigAutocompleteChipsItem,
@@ -51,10 +64,42 @@ export class AutocompleteChipsItem
     this.template = itemConfig.template;
     this.subTemplate = itemConfig.subTemplate;
     this.panelActions = itemConfig.panelActions || [];
+    this.excludable = !!itemConfig.exclude;
+    this.excludeLabel = itemConfig.exclude?.label ?? 'Exclude these';
+    this.panelNote = itemConfig.panelNote ?? null;
   }
 
   public static create(config: IFilterConfigAutocompleteChipsItem, filter: FilterComponent) {
     return new AutocompleteChipsItem(config, filter);
+  }
+
+  /** Whether the picks are left out (the exclude toggle is on) rather than kept. */
+  public get exclude(): boolean {
+    return this._exclude;
+  }
+
+  /**
+   * The picks as they are stored while they are an include, which is the shape this item
+   * has always had. With exclude on they come with the mode
+   * (FilterAutocompleteChipsExcludeValue), so a persisted, saved or URL value brings the
+   * mode back with it.
+   */
+  public get value() {
+    if(this._exclude && this.hasValue) {
+      return { exclude: true, selected: super.value };
+    }
+
+    return super.value;
+  }
+
+  /**
+   * Pairs with the getter above: a getter-only override makes the accessor read-only.
+   * Compared with the stored picks, not the getter, which builds a new object each time.
+   */
+  public set value(value) {
+    if(value !== super.value) {
+      this.setValue(value);
+    }
   }
 
   /**
@@ -69,13 +114,23 @@ export class AutocompleteChipsItem
     return this.multiple ? super.value : [super.value];
   }
 
+  /**
+   * An excludable item writes both keys every time, the one it is not using as undefined:
+   * a host that merges this into the URL key by key would otherwise keep a stale <name>
+   * next to exclude<Name>, or the reverse.
+   */
   public get queryParam(): Record<string, unknown> {
+    const params = this.excludable
+      ? { [this.name]: undefined, [getExcludeName(this.name)]: undefined }
+      : {};
+
     if(!this.hasValue) {
-      return {};
+      return params;
     }
 
     return {
-      [this.name]: this.selected
+      ...params,
+      [this._queryName]: this.selected
         .filter((item) => !!item.value)
         .map((item) =>{
           return `${item.value}:${encodeQueryParam(item.name)}`;
@@ -95,18 +150,18 @@ export class AutocompleteChipsItem
     // one-element list — the same shape ItemType.AutoComplete produces.
     if(!this.multiple) {
       return {
-        [this.name]: value && typeof value === 'object' ? value.value : value,
+        [this._queryName]: value && typeof value === 'object' ? value.value : value,
       };
     }
 
     if (!Array.isArray(value)) {
       return {
-        [this.name]: value,
+        [this._queryName]: value,
       };
     }
 
     return {
-      [this.name]: value
+      [this._queryName]: value
         .filter((item) => !!item.value)
         .map((item) => item.value)
         .join(','),
@@ -118,16 +173,15 @@ export class AutocompleteChipsItem
       return [];
     }
 
+    const names = this.selected
+      .map((i) => (`${i.name}`).trim())
+      .join(', ');
+
+    // Left-out picks say so before the label: 'Exclude Region: West, East'.
     return [
       {
-        value: this.selected
-          .reduce((acc, i) => {
-            acc.push((`${i.name}`).trim());
-
-            return acc;
-          }, [])
-          .join(', '),
-        label: this.label,
+        value: names,
+        label: this._exclude ? `Exclude ${this.label}` : this.label,
       },
     ];
   }
@@ -141,18 +195,95 @@ export class AutocompleteChipsItem
   }
 
   /**
+   * The base compare reads the stored picks, which leave the mode out, so an excluding
+   * default would always look changed. This one compares picks and mode on both sides.
+   */
+  public get hasNonDefaultValue() {
+    if(!this.hasValue) {
+      return false;
+    }
+
+    return !isEqual(
+      normalizeCompareValue(this._comparable(this.value)),
+      normalizeCompareValue(this._comparable(this.defaultValue)),
+    );
+  }
+
+  /**
    * Normalizes whatever arrives — the component hands back an array when multiple and a
    * bare object otherwise, while stored/query-param values always parse as a list — into
    * the shape this item is configured for.
+   *
+   * A FilterAutocompleteChipsExcludeValue sets the mode with the picks; a plain list or
+   * pick is an include. An item without `exclude` drops an excluding value: keeping its
+   * picks as an include would turn 'leave these out' into 'only these'.
    */
   public setValue(value, emitChange = true) {
+    let picks = value;
+    this._exclude = false;
+
+    if(this._isExcludeValue(value)) {
+      const excluding = !!value.exclude;
+      this._exclude = excluding && this.excludable;
+      picks = excluding && !this.excludable ? null : value.selected;
+    }
+
     if(this.multiple) {
-      super.setValue(Array.isArray(value) ? value : [], emitChange);
+      super.setValue(Array.isArray(picks) ? picks : [], emitChange);
 
       return;
     }
 
-    super.setValue(Array.isArray(value) ? value[0] ?? null : value ?? null, emitChange);
+    super.setValue(Array.isArray(picks) ? picks[0] ?? null : picks ?? null, emitChange);
+  }
+
+  /**
+   * Applies the list's picks in the mode the item is already in. The same picks it holds
+   * are nothing to apply, so closing the list untouched fires no change.
+   */
+  public setSelected(selected: unknown) {
+    if(selected === super.value) {
+      return;
+    }
+
+    this.setValue(this._exclude ? { exclude: true, selected } : selected);
+  }
+
+  /**
+   * Turns exclude on or off and keeps the picks: the list's own, which a multi select
+   * has not applied yet. With no picks before or after there is no query to change.
+   */
+  public setExclude(exclude: boolean, selected: unknown = super.value) {
+    const picked = Array.isArray(selected) ? selected.length > 0 : !!selected;
+
+    this.setValue({ exclude, selected }, this.hasValue || picked);
+  }
+
+  private get _queryName(): string {
+    return this._exclude ? getExcludeName(this.name) : this.name;
+  }
+
+  private _isExcludeValue(value: unknown): value is FilterAutocompleteChipsExcludeValue {
+    return !!value && typeof value === 'object' && !Array.isArray(value)
+      && 'exclude' in value && 'selected' in value;
+  }
+
+  /** Picks and mode, with an include written as plain picks whichever form it came in. */
+  private _comparable(value: unknown): unknown {
+    if(!this._isExcludeValue(value)) {
+      return value;
+    }
+
+    if(!value.exclude) {
+      return value.selected;
+    }
+
+    // The same drop setValue makes on an item without `exclude`.
+    if(!this.excludable) {
+      return this.multiple ? [] : null;
+    }
+
+    return { exclude: true, selected: value.selected };
   }
 
 }

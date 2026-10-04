@@ -15,7 +15,7 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="autofocusName === 'min' || !min"
+      [fsFilterFocusTrigger]="autofocusName === 'min' || minIsEmpty"
       type="number"
       [(ngModel)]="min"
       [disabled]="disabled"
@@ -46,7 +46,7 @@
     }
     <input
       matInput
-      [fsFilterFocusTrigger]="autofocusName === 'max' || !!min"
+      [fsFilterFocusTrigger]="autofocusName === 'max' || !minIsEmpty"
       type="number"
       [(ngModel)]="max"
       [disabled]="disabled"

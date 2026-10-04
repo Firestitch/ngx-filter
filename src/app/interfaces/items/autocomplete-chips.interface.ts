@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
 
+import { FilterAutocompleteChipsExcludeValue } from './autocomplete-chips-exclude-value.interface';
 import { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './base.interface';
 
 
@@ -20,6 +21,10 @@ export type FilterAutocompleteChipsShape = 'roundChip' | 'squareChip' | 'none';
  */
 export type FilterAutocompleteChipsTemplateFn = (data: any) => string;
 
+/** What the item holds: its picks (an include), or its picks with the exclude mode. */
+export type FilterAutocompleteChipsValue =
+  FilterNameValue[] | FilterNameValue | FilterAutocompleteChipsExcludeValue;
+
 export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseItem<ItemType.AutoCompleteChips> {
   fetchOnFocus?: boolean;
   // Defaults to true, which is how this item type has always behaved. false holds a single
@@ -36,10 +41,19 @@ export interface IFilterConfigAutocompleteChipsItem extends IFilterConfigBaseIte
   // rendered.
   template?: FilterAutocompleteChipsTemplateFn;
   subTemplate?: FilterAutocompleteChipsTemplateFn;
-  default?: IFilterDefaultFn<FilterNameValue[] | FilterNameValue> | FilterNameValue[] | FilterNameValue;
+  default?: IFilterDefaultFn<FilterAutocompleteChipsValue> | FilterAutocompleteChipsValue;
   values?: (keyword?: string, filter?: FilterComponent) => Observable<any[]>;
   panelActions?: {
     label: string;
     click: (filter: FilterComponent) => void;
   }[];
+  // Shows a checkbox row at the foot of the list (label defaults to 'Exclude these').
+  // While it is on, the query writes the picks under exclude<Name> instead of <name>, the
+  // chip reads 'Exclude <Label>: A, B', and the item's value is a
+  // FilterAutocompleteChipsExcludeValue. Turning it off keeps the picks.
+  exclude?: { label?: string };
+  // One muted line at the foot of the list, such as 'Showing the first 500. Type to
+  // narrow.' Read when the list opens, on each keystroke and after each fetch; null hides
+  // the line.
+  panelNote?: () => string | null;
 }

@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, OnDestroy, OnInit, QueryList, StaticProvider, ViewChildren, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectedPosition, FlexibleConnectedPositionStrategy, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,7 +11,7 @@ import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@fi
 import { FsMessage } from '@firestitch/message';
 import { FsSelectButtonModule } from '@firestitch/selectbutton';
 
-import { BehaviorSubject, Observable, Subscription, delay, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, delay, filter, map, take, takeUntil, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -144,6 +144,15 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 'Clear filters' follows the host's rule when it sets one (config.clearVisible),
+  // else an item holding a value other than its default. Called on each check of the
+  // chip row, so a rule that reads signals stays current.
+  public clearVisible(): boolean {
+    const rule = this._filterController.config?.clearVisible;
+
+    return rule ? !!rule() : this.clearFiltersVisible();
+  }
+
   public handleChipClick(item: BaseItem<IFilterConfigItem>, name: string = null) {
     // For secondary checkbox items, don't open overlay - clearing is done via remove button
     if (item.isTypeCheckbox && !item.primary) {
@@ -156,8 +165,7 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
   public openChip(item: BaseItem<IFilterConfigItem>, name: string = null) {
     this._pendingChipOpen?.unsubscribe();
 
-    const el = this._elementRef.nativeElement
-      .querySelector(`[data-filter-item="${item.name}"]`);
+    const el = this._chipElement(item);
 
     // Without an anchor the overlay resolves to the viewport origin and floats there
     // detached from any chip, so leave the current one alone rather than open a stray.
@@ -218,6 +226,7 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this._attachContainer(this._overlayRef, item, name);
+    this._followChip(item, el, strategy);
   }
 
   public getNestedElement(el: any, className: string) {
@@ -339,6 +348,35 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
 
         return true;
       });
+  }
+
+  // The first chip of an item on screen, or null when it shows none.
+  private _chipElement(item: BaseItem<IFilterConfigItem>): HTMLElement | null {
+    return this._elementRef.nativeElement
+      .querySelector(`[data-filter-item="${item.name}"]`);
+  }
+
+  // A chip is drawn again when its text changes while its editor is open: a first pick
+  // replaces the '+ Label' chip, and the exclude row turns 'Region' into 'Exclude Region'.
+  // The editor then follows the new chip, so it stays under it rather than falling to the
+  // page's top left with the old one gone. With no chip left it stays where it is.
+  private _followChip(item: BaseItem<IFilterConfigItem>, origin: HTMLElement, strategy: FlexibleConnectedPositionStrategy) {
+    const overlayRef = this._overlayRef;
+    let anchor = origin;
+
+    this.chips.changes
+      .pipe(
+        map(() => this._chipElement(item)),
+        filter((chip) => !!chip && chip !== anchor),
+        tap((chip) => {
+          anchor = chip;
+          strategy.setOrigin(chip);
+          overlayRef.updatePosition();
+        }),
+        takeUntil(overlayRef.detachments()),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 
   private _attachContainer(overlayRef: OverlayRef, item: BaseItem<IFilterConfigItem>, name: string) {

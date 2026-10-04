@@ -29,4 +29,9 @@ export interface IFilterConfigBaseItem<T = DefaultItemType, U = string> {
   disablePersist?: boolean;
   disableQueryParams?: boolean;
   disabled?: boolean;
+  // The chip's whole text (label and value) in the host's words. When it gives a
+  // string the item shows one chip with that text, and removing that chip clears the
+  // item. Null, '' or no chipText keeps the item's own chips. Read each time the
+  // item's value changes.
+  chipText?: (item: BaseItem<any>) => string | null;
 }

@@ -81,7 +81,7 @@
       </fs-chip-select-option>
     </fs-chip-select>
   }
-  @if (clearFiltersVisible()) {
+  @if (clearVisible()) {
     <fs-chip
         [outlined]="true"
         [disabled]="(disabledFilters$ | async)"

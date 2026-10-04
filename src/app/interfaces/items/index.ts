@@ -1,3 +1,4 @@
+export * from './autocomplete-chips-exclude-value.interface';
 export * from './autocomplete-chips.interface';
 export * from './autocomplete.interface';
 export * from './base.interface';

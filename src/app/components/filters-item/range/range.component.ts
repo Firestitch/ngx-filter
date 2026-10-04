@@ -16,6 +16,7 @@ import { FsFormModule } from '@firestitch/form';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FocusToItemDirective } from '../../../directives/focus-to-item.directive';
+import { isEmptyBound } from '../../../helpers/is-empty-bound';
 import { RangeItem } from '../../../models/items/range-item';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
@@ -45,6 +46,11 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
   
   public min: number;
   public max: number;
+
+  /** Focus goes to min until it holds a bound; 0 is a bound. */
+  public get minIsEmpty(): boolean {
+    return isEmptyBound(this.min);
+  }
 
   public ngOnInit(): void {
     this.item.value$

@@ -4,9 +4,10 @@ import { nameValue } from '@firestitch/common';
 import {
   FilterAutocompleteChipsShape,
   FilterAutocompleteChipsTemplateFn,
+  FilterAutocompleteChipsValue,
   FilterComponent,
-  FilterNameValue,
   IFilterConfigItem,
+  IFilterItemDefaultRange,
   ItemDateMode,
   ItemType,
 } from '@firestitch/filter';
@@ -218,15 +219,18 @@ export class FilterItemsService {
 
   // --------------------------------------------------------------- range
 
-  public priceRange(opts: { name?: string; chipLabel?: string[] } = {}): IFilterConfigItem {
+  public priceRange(
+    opts: { name?: string; label?: string; chipLabel?: string[]; default?: IFilterItemDefaultRange } = {},
+  ): IFilterConfigItem {
     return {
       name: opts.name ?? 'price',
       type: ItemType.Range,
-      label: 'Price',
+      label: opts.label ?? 'Price',
       prefix: '$',
       suffix: 'USD',
       placeholder: 'Enter price',
       chipLabel: opts.chipLabel,
+      default: opts.default,
     };
   }
 
@@ -313,8 +317,10 @@ export class FilterItemsService {
       template?: FilterAutocompleteChipsTemplateFn;
       subTemplate?: FilterAutocompleteChipsTemplateFn;
       chipImage?: string;
-      default?: FilterNameValue[] | FilterNameValue;
+      default?: FilterAutocompleteChipsValue;
       panelActions?: { label: string; click: (filter: FilterComponent) => void }[];
+      exclude?: { label?: string };
+      panelNote?: () => string | null;
     } = {},
   ): IFilterConfigItem {
     return {
@@ -330,6 +336,8 @@ export class FilterItemsService {
       chipImage: opts.chipImage,
       default: opts.default,
       panelActions: opts.panelActions,
+      exclude: opts.exclude,
+      panelNote: opts.panelNote,
       values: (keyword) => this._users$()
         .pipe(
           map((users) => this._matchKeyword(users, keyword)),

@@ -24,6 +24,10 @@ export interface FilterConfig {
   persist?: FsFilterPersistance;
   reload?: ChangeFn;
   clear?: ChangeFn;
+  // When set, the 'Clear filters' chip shows exactly while this gives true, in place
+  // of the built-in rule (an item holds a value other than its default). Read on
+  // each check of the chip row, which is OnPush, so build it from signals.
+  clearVisible?: () => boolean;
   items?: IFilterConfigItem[];
   init?: ChangeFn;
   change?: ChangeFn;

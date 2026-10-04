@@ -10,6 +10,7 @@ import { isEqual, isFunction } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
+import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
 
@@ -28,6 +29,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public primary: boolean;
   public changeCallback: (item: BaseItem<T>, filter: FilterComponent) => void;
   public initCallback: (item: BaseItem<T>, filter?) => void;
+  public chipText: (item: BaseItem<T>) => string | null;
 
   protected readonly _type: T['type'];
   protected _valuesFn: (keyword?: string, filter?: FilterComponent) => Observable<any> | any[];
@@ -200,24 +202,10 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
       return false;
     }
 
-    const normalize = (value: unknown): unknown => {
-      if(typeof value === 'number') {
-        return String(value);
-      }
-
-      if(Array.isArray(value)) {
-        return value.map(normalize);
-      }
-
-      if(value && typeof value === 'object') {
-        return Object.entries(value)
-          .reduce((acc, [key, val]) => ({ ...acc, [key]: normalize(val) }), {});
-      }
-
-      return value;
-    };
-
-    return !isEqual(normalize(this._value$.getValue().value), normalize(this.defaultValue));
+    return !isEqual(
+      normalizeCompareValue(this._value$.getValue().value),
+      normalizeCompareValue(this.defaultValue),
+    );
   }
 
   public get allowSecondary() {
@@ -241,8 +229,19 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public get chips$() {
     return this.value$
       .pipe(
-        map(() => this.chips || []),
+        map(() => this.shownChips),
       );
+  }
+
+  // The chips the chip row shows: one chip with the host's whole text when chipText
+  // gives one, else the item's own. That chip has no name, so removing it clears the
+  // item.
+  public get shownChips(): { name?: string, value: string, label: string }[] {
+    const text = this.chipText?.(this);
+
+    return typeof text === 'string' && text !== ''
+      ? [{ label: text, value: '' }]
+      : this.chips || [];
   }
 
   public set values(values) {
@@ -408,6 +407,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.clearable = item.clear ?? true;
     this.persistanceDisabled = item.disablePersist ?? false;
     this.queryParamsDisabled = item.disableQueryParams ?? false;
+    this.chipText = item.chipText ?? null;
     this.defaultValueFn = typeof item.default === 'function' ?
       item.default as IFilterDefaultFn : () => of(item.default);
     

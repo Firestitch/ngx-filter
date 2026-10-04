@@ -32,8 +32,12 @@ export {
 export {
   FilterAutocompleteChipsShape,
   FilterAutocompleteChipsTemplateFn,
+  FilterAutocompleteChipsValue,
   IFilterConfigAutocompleteChipsItem,
 } from './app/interfaces/items/autocomplete-chips.interface';
+export {
+  FilterAutocompleteChipsExcludeValue,
+} from './app/interfaces/items/autocomplete-chips-exclude-value.interface';
 export { IFilterConfigAutocompleteItem } from './app/interfaces/items/autocomplete.interface';
 export { FilterNameValue, IFilterConfigBaseItem, IFilterDefaultFn } from './app/interfaces/items/base.interface';
 export { IFilterConfigCheckboxItem } from './app/interfaces/items/checkbox.interface';
@@ -80,4 +84,5 @@ export { FS_FILTER_CONFIG } from './app/injectors/filter-config';
 
 // Helpers
 export { filterFromQueryParam, filterToQueryParam } from './app/helpers/query-param-transformers';
+export { getExcludeName } from './app/helpers/get-exclude-name';
 

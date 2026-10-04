@@ -98,6 +98,18 @@ export class AutocompleteChipsItemsComponent {
             },
           ],
         }),
+        // A checkbox row at the foot of the list switches the picks from kept to left out:
+        // the query moves them from userIds to excludeUserIds and the chip reads
+        // 'Exclude Users: A, B'. Switching it back keeps the picks. panelNote is one muted
+        // line under the options; here it says how many users the list can hold.
+        this._filterItems.userAutocompleteChips({
+          name: 'userIds',
+          label: 'Users',
+          exclude: {},
+          panelNote: () => this._filterItems.users.length > 3
+            ? `Showing ${this._filterItems.users.length} users. Type to narrow.`
+            : null,
+        }),
       ],
     };
   }

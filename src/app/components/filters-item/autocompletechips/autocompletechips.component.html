@@ -39,6 +39,38 @@
       {{ item.subTemplate(object) }}
     </ng-template>
   }
+  <!--
+    Shown and hidden by the list itself, which reads showPanelNote on open and on each
+    keystroke; fetch reads it again once the options arrive. Disabled, so it is a line to
+    read and not a row to pick.
+  -->
+  @if (item.panelNote) {
+    <ng-template
+        #panelNoteRow
+        fsAutocompleteChipsStatic
+        [show]="showPanelNote"
+        [disable]="disablePanelNote">
+      <span class="small">{{ item.panelNote() }}</span>
+    </ng-template>
+  }
+  <!--
+    The checkbox is drawn as a multiple mat-option draws its own, so the option's styles
+    place the label beside it. No (click) here: the toggle listens to the list's own option
+    selection, which a click and Enter on the active row both reach. The option's role
+    children are presentational, so the state is in the row's text for a screen reader.
+  -->
+  @if (item.excludable) {
+    <ng-template fsAutocompleteChipsStatic>
+      <mat-pseudo-checkbox
+          class="mat-mdc-option-pseudo-checkbox exclude-toggle"
+          aria-hidden="true"
+          [appearance]="'full'"
+          [state]="item.exclude ? 'checked' : 'unchecked'">
+      </mat-pseudo-checkbox>
+      {{ item.excludeLabel }}
+      <span class="cdk-visually-hidden">{{ item.exclude ? 'On' : 'Off' }}</span>
+    </ng-template>
+  }
   @for (action of item.panelActions; track action.label) {
     <ng-template
         fsAutocompleteChipsStatic

@@ -1,6 +1,7 @@
 import { ItemType } from '../enums/item-type.enum';
 import { SelectItem } from '../models/items';
 
+import { getExcludeName } from './get-exclude-name';
 import { getRangeName } from './get-range-name';
 import { filterFromQueryParam } from './query-param-transformers';
 
@@ -47,28 +48,42 @@ export function parseItemValueFromStored(item, params) {
       };
     }
 
-    case ItemType.AutoCompleteChips: 
+    case ItemType.AutoCompleteChips: {
+      // An excludable item writes its picks under exclude<Name> while exclude is on.
+      const excludeParam = item.excludable ? params[getExcludeName(item.name)] : undefined;
+
+      if((param === undefined || param === null) && typeof excludeParam === 'string') {
+        return { exclude: true, selected: chipsFromQueryParam(excludeParam) };
+      }
+
+      return chipsFromQueryParam(param);
+    }
+
     case ItemType.Chips: {
-      const filterParts = param.split(/(?<!\\),/);
-
-      return filterParts.reduce((arry, value) => {
-        const chipParts = filterFromQueryParam(value);
-
-        arry.push({
-          name: chipParts[1]
-            .replace(/\\,/g, ',')
-            .replace(/\\:/g, ':'),
-          value: chipParts[0],
-        });
-
-        return arry;
-      }, []);
+      return chipsFromQueryParam(param);
     }
 
     default: {
       return param;
     }
   }
+}
+
+function chipsFromQueryParam(param: string) {
+  const filterParts = param.split(/(?<!\\),/);
+
+  return filterParts.reduce((arry, value) => {
+    const chipParts = filterFromQueryParam(value);
+
+    arry.push({
+      name: chipParts[1]
+        .replace(/\\,/g, ',')
+        .replace(/\\:/g, ':'),
+      value: chipParts[0],
+    });
+
+    return arry;
+  }, []);
 }
 
 function itemTypeSelect(item: SelectItem, param) {

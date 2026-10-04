@@ -1,7 +1,9 @@
+import { AutocompleteChipsItem } from '../models/items/autocomplete-chips-item';
 import { BaseDateRangeItem } from '../models/items/base-date-range-item';
 import { RangeItem } from '../models/items/range-item';
 import { WeekItem } from '../models/items/week-item';
 
+import { getExcludeName } from './get-exclude-name';
 import { getRangeName } from './get-range-name';
 import { parseItemValueFromStored } from './parse-item-value-from-stored';
 
@@ -42,6 +44,8 @@ function findItemWidthName(items, name) {
       } else if (filterItem instanceof BaseDateRangeItem) {
         return name === getRangeName(filterItem.name, 'from') ||
           name ===  getRangeName(filterItem.name, 'to');
+      } else if (filterItem instanceof AutocompleteChipsItem && filterItem.excludable) {
+        return name === filterItem.name || name === getExcludeName(filterItem.name);
       } else if (filterItem instanceof WeekItem) {
         return name === getRangeName(filterItem.name, 'from')
           || name ===  getRangeName(filterItem.name, 'to')
