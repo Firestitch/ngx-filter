@@ -64,6 +64,19 @@
       <fs-chip-select-trigger>
         {{ (savedFilterController.activeFilter$ | async) ? savedFilterController.singularLabel + ': ' + (savedFilterController.activeFilter$ | async).name : savedFilterController.pluralLabel }}
       </fs-chip-select-trigger>
+      @if (menuSavedFilters$ | async; as menuSavedFilters) {
+        @if (menuSavedFilters.length) {
+          @for (savedFilter of menuSavedFilters; track savedFilter.id) {
+            <fs-chip-select-option
+                class="saved-filter-option"
+                [class.active]="(savedFilterController.activeFilter$ | async)?.id === savedFilter.id"
+                (click)="selectSavedFilter(savedFilter)">
+              {{ savedFilter.name }}
+            </fs-chip-select-option>
+          }
+          <mat-divider class="saved-filters-divider"></mat-divider>
+        }
+      }
       @if (savedFilterController.activeFilter$ | async) {
         <fs-chip-select-option (click)="saveActiveFilter()">
           Update filters

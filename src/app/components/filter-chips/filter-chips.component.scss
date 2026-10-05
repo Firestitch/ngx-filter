@@ -50,6 +50,16 @@
   }
 }
 
+// The first saved filters lead the Saved filters menu; the one applied now
+// reads in bold.
+.saved-filter-option.active {
+  font-weight: 500;
+}
+
+.saved-filters-divider {
+  margin: 8px 0;
+}
+
 ::ng-deep .mat-mdc-select-panel.fs-filter-no-initial-focus .mat-mdc-option-active:not(:hover) {
   background: transparent !important;
 }

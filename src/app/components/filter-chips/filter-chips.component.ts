@@ -6,6 +6,7 @@ import { ConnectedPosition, FlexibleConnectedPositionStrategy, Overlay, OverlayC
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { FsChipComponent, FsChipModule, FsChipSelectTriggerDirective } from '@firestitch/chip';
 import { FsMessage } from '@firestitch/message';
@@ -18,12 +19,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ItemType } from '../../enums';
 import { FILTER_DRAWER_DATA } from '../../injectors';
 import { IFilterConfigItem } from '../../interfaces';
+import { IFilterSavedFilter } from '../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../models/items/base-item';
 import { SavedFilterController } from '../../services';
 import { FilterController } from '../../services/filter-controller.service';
 import { FilterItemDialogComponent } from '../filter-item-dialog';
 import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter-manage/saved-filter-manage.component';
 
+
+// How many saved filters the Saved filters menu lists before Create new and
+// View all; View all lists every one.
+const SAVED_FILTER_MENU_LIMIT = 4;
 
 @Component({
   selector: 'fs-filter-chips',
@@ -38,6 +44,7 @@ import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter
     MatButtonModule,
     FormsModule,
     FsChipSelectTriggerDirective,
+    MatDividerModule,
   ],
 })
 export class FsFilterChipsComponent implements OnInit, OnDestroy {
@@ -49,6 +56,12 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
   public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
   public moreFilterItems = signal<BaseItem<IFilterConfigItem>[]>([]);
   public clearFiltersVisible = signal<boolean>(false);
+
+  // The first saved filters, in their saved order, listed at the top of the
+  // Saved filters menu so one click applies one. Reordering them (View all)
+  // changes which ones lead.
+  public menuSavedFilters$: Observable<IFilterSavedFilter[]> = inject(SavedFilterController).savedFilters$
+    .pipe(map((savedFilters) => (savedFilters || []).slice(0, SAVED_FILTER_MENU_LIMIT)));
 
   private _filterController = inject(FilterController);
   private _dialog = inject(MatDialog);
@@ -250,6 +263,10 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe();
+  }
+
+  public selectSavedFilter(savedFilter: IFilterSavedFilter): void {
+    this._savedFilterController.setActiveFilter(savedFilter);
   }
 
   public createSavedFilter(): void {
