@@ -60,6 +60,15 @@
   margin: 8px 0;
 }
 
+// fs-chip-select caps its panel at 256px and scrolls past it. The Saved
+// filters menu holds at most eight rows (four saved filters, three actions and
+// the divider), so it shows them all. The panel sits in the overlay container,
+// outside this component, and has no class of its own: it is found by the
+// saved filter options it holds.
+::ng-deep .fs-chip-select-panel:has(.saved-filter-option) {
+  max-height: none;
+}
+
 ::ng-deep .mat-mdc-select-panel.fs-filter-no-initial-focus .mat-mdc-option-active:not(:hover) {
   background: transparent !important;
 }
