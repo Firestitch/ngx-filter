@@ -58,7 +58,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
 
     const chips = this.value
       .reduce((acc, i) => {
-        acc.push((`${i.name}`).trim());
+        acc.push((`${i.name ?? i.value}`).trim());
 
         return acc;
       }, [])

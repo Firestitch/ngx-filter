@@ -29,7 +29,7 @@ export class AutocompleteComponent extends BaseItemComponent<AutocompleteItem> {
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
   
   public displayWith = (data) => {
-    return data ? data.name : data;
+    return data ? (data.name ?? data.value) : data;
   };
 
   public change() {

@@ -67,7 +67,7 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
 
     return [
       {
-        value: super.value.name ?? '',
+        value: super.value.name ?? `${super.value.value ?? ''}`,
         label: this.label,
       },
     ];

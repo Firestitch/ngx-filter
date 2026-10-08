@@ -13,6 +13,6 @@
   <ng-template
       fsAutocompleteTemplate
       let-data="data">
-    {{ data.name }}
+    {{ data.name ?? data.value }}
   </ng-template>
 </fs-autocomplete>

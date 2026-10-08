@@ -15,7 +15,7 @@ function throughAddressBar(param: string): string {
     .queryParams.environmentId;
 }
 
-function roundTrip(value, name): string[] {
+function roundTrip(value, name): [string, string | null] {
   return filterFromQueryParam(throughAddressBar(filterToQueryParam(value, name)));
 }
 
@@ -41,5 +41,15 @@ describe('filterToQueryParam / filterFromQueryParam', () => {
   it('should round-trip a name holding an apostrophe or a trailing percent sign', () => {
     expect(roundTrip(16, 'Riverbend Women\'s Health')).toEqual(['16', 'Riverbend Women\'s Health']);
     expect(roundTrip(4, '100%')).toEqual(['4', '100%']);
+  });
+
+  it('should write a value with no name as the value alone', () => {
+    expect(filterToQueryParam(30, null)).toBe('30');
+    expect(filterToQueryParam(30, undefined)).toBe('30');
+  });
+
+  it('should read a param with no name as a null name', () => {
+    expect(filterFromQueryParam('30')).toEqual(['30', null]);
+    expect(roundTrip(30, null)).toEqual(['30', null]);
   });
 });

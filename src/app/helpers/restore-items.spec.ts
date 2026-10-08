@@ -8,6 +8,11 @@ describe('restoreItems', () => {
     { name: 'keyword', type: ItemType.Keyword },
   ];
 
+  it('should restore a chip that carries only its id with a null name', () => {
+    expect(restoreItems({ environmentId: '30' }, items))
+      .toEqual({ environmentId: [{ name: null, value: '30' }] });
+  });
+
   it('should skip a param it cannot read and restore the others', () => {
     spyOn(console, 'warn');
 

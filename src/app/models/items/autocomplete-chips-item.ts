@@ -172,7 +172,7 @@ export class AutocompleteChipsItem
     }
 
     const names = this.selected
-      .map((i) => (`${i.name}`).trim())
+      .map((i) => (`${i.name ?? i.value}`).trim())
       .join(', ');
 
     // Left-out picks say so before the label: 'Exclude Region: West, East'.

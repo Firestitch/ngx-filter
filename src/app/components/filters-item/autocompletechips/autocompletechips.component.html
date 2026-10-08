@@ -26,7 +26,7 @@
   <ng-template
       fsAutocompleteObject
       let-object="object">
-    {{ item.template ? item.template(object) : object.name }}
+    {{ item.template ? item.template(object) : (object.name ?? object.value) }}
   </ng-template>
   <!--
     Declared only when configured: an empty subtemplate is still a subtemplate, and every
