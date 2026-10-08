@@ -10,3 +10,12 @@ export function encodeQueryParam(value: string | null | undefined): string {
     .replace(/,/g, '\\,')
     .replace(/:/g, '\\:');
 }
+
+/**
+ * Reverses encodeQueryParam: unescapes the commas and colons it escaped.
+ */
+export function decodeQueryParam(value: string): string {
+  return value
+    .replace(/\\,/g, ',')
+    .replace(/\\:/g, ':');
+}

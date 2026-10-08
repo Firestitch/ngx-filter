@@ -27,7 +27,13 @@ export function restoreItems(params, items) {
       const item = findItemWidthName(items, name);
 
       if (item) {
-        result[item.name] = parseItemValueFromStored(item, params);
+        // A stale or hand-edited address must not stop the filter from initializing, which
+        // leaves the list on its loading skeleton for good: drop the param it cannot read.
+        try {
+          result[item.name] = parseItemValueFromStored(item, params);
+        } catch (error) {
+          console.warn(`@firestitch/filter: ignoring unreadable query param "${name}"`, error);
+        }
       }
     });
 

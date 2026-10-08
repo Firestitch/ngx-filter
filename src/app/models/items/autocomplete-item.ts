@@ -1,5 +1,5 @@
 import type { FilterComponent } from '../../components/filter/filter.component';
-import { encodeQueryParam } from '../../helpers';
+import { filterToQueryParam } from '../../helpers';
 import { IFilterConfigAutocompleteItem } from '../../interfaces/items/autocomplete.interface';
 
 import { BaseAutocompleteItem } from './base-autocomplete-item';
@@ -56,7 +56,7 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
     }
 
     return {
-      [this.name]: `${super.value.value}:${encodeQueryParam(super.value.name)}`,
+      [this.name]: filterToQueryParam(super.value.value, super.value.name),
     };
   }
 

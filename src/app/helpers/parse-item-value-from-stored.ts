@@ -76,9 +76,7 @@ function chipsFromQueryParam(param: string) {
     const chipParts = filterFromQueryParam(value);
 
     arry.push({
-      name: chipParts[1]
-        .replace(/\\,/g, ',')
-        .replace(/\\:/g, ':'),
+      name: chipParts[1],
       value: chipParts[0],
     });
 

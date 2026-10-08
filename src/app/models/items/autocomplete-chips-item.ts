@@ -1,9 +1,9 @@
 import { isEqual } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
-import { encodeQueryParam } from '../../helpers/encode-query-parm';
 import { getExcludeName } from '../../helpers/get-exclude-name';
 import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
+import { filterToQueryParam } from '../../helpers/query-param-transformers';
 import {
   FilterAutocompleteChipsExcludeValue,
 } from '../../interfaces/items/autocomplete-chips-exclude-value.interface';
@@ -132,9 +132,7 @@ export class AutocompleteChipsItem
       ...params,
       [this._queryName]: this.selected
         .filter((item) => !!item.value)
-        .map((item) =>{
-          return `${item.value}:${encodeQueryParam(item.name)}`;
-        })
+        .map((item) => filterToQueryParam(item.value, item.name))
         .join(','),
     };
   }

@@ -1,7 +1,7 @@
 
 
 import type { FilterComponent } from '../../components/filter/filter.component';
-import { encodeQueryParam } from '../../helpers';
+import { filterToQueryParam } from '../../helpers';
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
 
 import { BaseItem } from './base-item';
@@ -34,7 +34,7 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
   
     return {
       [this.name]: this.value
-        .map((item) => `${item.value}:${encodeQueryParam(item.name)}`)
+        .map((item) => filterToQueryParam(item.value, item.name))
         .join(','),
     };
   }
