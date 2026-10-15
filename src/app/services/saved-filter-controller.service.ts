@@ -208,6 +208,39 @@ export class SavedFilterController implements OnDestroy {
       );
   }
 
+  /**
+   * Asks for a new name and saves it through the save callback. Only the name
+   * changes: the saved filter keeps its own values, whichever filter is applied.
+   */
+  public rename(savedFilter: IFilterSavedFilter): Observable<IFilterSavedFilter> {
+    return this._prompt.input({
+      title: `Rename ${this.singularLabelLower}`,
+      label: 'Name',
+      default: savedFilter.name,
+      required: true,
+      commitLabel: 'Save',
+      dialogConfig: {
+        restoreFocus: false,
+      },
+    })
+      .pipe(
+        switchMap((name) => this._filterController.config.savedFilters
+          .save({
+            ...savedFilter,
+            name,
+          })),
+        tap((renamedFilter) => {
+          this.savedFilters = this.savedFilters
+            .map((item) => item.id === renamedFilter.id ? renamedFilter : item);
+
+          // The applied filter's chip shows its name; its values are unchanged, so they are not applied again
+          if (this.activeFilter?.id === renamedFilter.id) {
+            this._activeFilter$.next(renamedFilter);
+          }
+        }),
+      );
+  }
+
   public get orderable(): boolean {
     return !!this._filterController.config.savedFilters.order;
   }

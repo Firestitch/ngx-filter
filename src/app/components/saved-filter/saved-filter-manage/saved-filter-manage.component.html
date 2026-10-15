@@ -2,7 +2,7 @@
   {{ pluralLabel }}
 </h1>
 <div mat-dialog-content>
-  @if (savedFilters?.length) {
+  @if (savedFilters().length) {
     <table class="fs-list-table">
       <thead>
         <tr>
@@ -21,7 +21,7 @@
       <tbody
           cdkDropList
           (cdkDropListDropped)="drop($event)">
-        @for (savedFilter of savedFilters; track savedFilter.id) {
+        @for (savedFilter of savedFilters(); track savedFilter.id) {
           <tr cdkDrag [cdkDragDisabled]="!orderable" cdkDragLockAxis="y" [cdkDragPreviewClass]="'saved-filter-drag-preview'">
             @if (orderable) {
               <td class="drag-col" cdkDragHandle>
@@ -38,6 +38,11 @@
             </td>
             <td>
               <fs-menu>
+                <ng-template
+                    fs-menu-item
+                    (click)="rename(savedFilter)">
+                  Rename
+                </ng-template>
                 <ng-template
                     fs-menu-item
                     (click)="remove(savedFilter)">

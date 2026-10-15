@@ -1,10 +1,11 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnInit,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CdkDrag, CdkDragDrop, CdkDragHandle, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButton } from '@angular/material/button';
@@ -12,6 +13,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 
 import { FsMenuModule } from '@firestitch/menu';
+
+import { tap } from 'rxjs/operators';
 
 import { IFilterConfigItem } from '../../../interfaces';
 import { IFilterSavedFilter } from '../../../interfaces/saved-filters.interface';
@@ -38,17 +41,17 @@ import { FsFilterSavedFilterChipsComponent } from './components/saved-filter-chi
     FsMenuModule,
   ],
 })
-export class FsFilterSavedFilterManageComponent implements OnInit {
+export class FsFilterSavedFilterManageComponent {
 
-  public savedFilters: IFilterSavedFilter[];
+  public savedFilters = signal<IFilterSavedFilter[]>([]);
 
   private _savedFilterController = inject(SavedFilterController);
-  private _cdRef = inject(ChangeDetectorRef);
   private _filterController = inject(FilterController);
   private _dialogRef = inject(MatDialogRef);
+  private _destroyRef = inject(DestroyRef);
 
-  public ngOnInit(): void {
-    this.savedFilters = this._savedFilterController.savedFilters;
+  constructor() {
+    this._init();
   }
 
   public get items(): BaseItem<IFilterConfigItem>[] {
@@ -68,22 +71,42 @@ export class FsFilterSavedFilterManageComponent implements OnInit {
     this._dialogRef.close();
   }
 
+  public rename(savedFilter: IFilterSavedFilter): void {
+    this._savedFilterController.rename(savedFilter)
+      .pipe(
+        tap(() => {
+          this.savedFilters.set(this._savedFilterController.savedFilters);
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+  }
+
   public remove(savedFilter: IFilterSavedFilter) {
     this._savedFilterController.delete(savedFilter)
-      .subscribe(() => {
-        this.savedFilters = this._savedFilterController.savedFilters;
-        this._cdRef.markForCheck();
-      });
+      .pipe(
+        tap(() => {
+          this.savedFilters.set(this._savedFilterController.savedFilters);
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 
   public drop(event: CdkDragDrop<IFilterSavedFilter[]>) {
-    moveItemInArray(this.savedFilters, event.previousIndex, event.currentIndex);
-    this.order(this.savedFilters);
+    const savedFilters = [...this.savedFilters()];
+    moveItemInArray(savedFilters, event.previousIndex, event.currentIndex);
+    this.savedFilters.set(savedFilters);
+    this.order(savedFilters);
   }
 
   public order(savedFilters: IFilterSavedFilter[]) {
     this._savedFilterController.order(savedFilters)
       .subscribe();
+  }
+
+  private _init(): void {
+    this.savedFilters.set(this._savedFilterController.savedFilters);
   }
 
 }
