@@ -41,6 +41,7 @@ export class SelectItemsComponent {
         this._filterItems.statusSelect(),
         this._filterItems.subjectSelect(),
         this._filterItems.isolateSelect(),
+        this._filterItems.payPeriodSelect(),
       ],
     };
   }

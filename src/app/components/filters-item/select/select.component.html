@@ -11,7 +11,8 @@
       [disabled]="disabled"
       (selectionChange)="selectionChange()"
       (openedChange)="selectOpenedChange($event)"
-      [multiple]="item.multiple">
+      [multiple]="item.multiple"
+      [panelWidth]="item.panelWidth">
     @if (item.children) {
       @for (option of item.values$ | async; track option) {
         @if (option[item.children]) {
