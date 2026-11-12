@@ -16,6 +16,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
   public declare isolated: boolean;
   public declare isolateLabel: string;
   public declare isolateValues: number[] | string[] | boolean[];
+  public declare panelWidth: string | number | null;
 
   constructor(
     itemConfig: IFilterConfigSelectItem,
@@ -24,6 +25,8 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
     super(itemConfig, _filter);
     this.multiple = itemConfig.multiple || false;
     this.children = itemConfig.children || null;
+    // 'auto' is mat-select's own default; only an explicit null or width overrides it
+    this.panelWidth = itemConfig.panelWidth === undefined ? 'auto' : itemConfig.panelWidth;
 
     if (itemConfig.isolate) {
       this.isolate = true;

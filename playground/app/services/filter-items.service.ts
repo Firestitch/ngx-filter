@@ -152,6 +152,22 @@ export class FilterItemsService {
     };
   }
 
+  /** Options wider than the field; the open list grows to fit them instead of wrapping. */
+  public payPeriodSelect(opts: { name?: string; label?: string } = {}): IFilterConfigItem {
+    return {
+      name: opts.name ?? 'payPeriod',
+      type: ItemType.Select,
+      label: opts.label ?? 'Pay period',
+      panelWidth: null,
+      values: [
+        { name: 'All', value: null },
+        { name: '2026 #27: 2026-12-17 - 2026-12-30', value: '2026:27' },
+        { name: '2026 #26: 2026-12-03 - 2026-12-16', value: '2026:26' },
+        { name: '2026 #25: 2026-11-19 - 2026-12-02', value: '2026:25' },
+      ],
+    };
+  }
+
   /** A multi-select with one value promoted to its own toggle beside the list. */
   public isolateSelect(opts: { name?: string; label?: string } = {}): IFilterConfigItem {
     return {
