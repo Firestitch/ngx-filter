@@ -10,6 +10,7 @@ import { isEqual, isFunction } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { ItemType } from '../../enums/item-type.enum';
+import { isEmptyFilterValue } from '../../helpers/is-empty-filter-value';
 import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
 import { IFilterConfigItem } from '../../interfaces/config.interface';
 import { IFilterDefaultFn } from '../../interfaces/items/base.interface';
@@ -193,9 +194,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this.value !== null && this.value !== undefined;
   }
 
-  // An item sitting at its configured default is already in its cleared state, so
-  // Reset in the filters flyout has nothing to offer for it. Distinct from hasValue, which
-  // is true for a default too and would keep the control permanently visible.
+  // Whether the item has been moved off its configured default: what the filters flyout
+  // counts as active and what its Reset puts back. An item sitting at its default is in its
+  // cleared state, so it is neither. Distinct from hasValue, which is true for a default
+  // too and would keep the control permanently visible.
+  //
+  // An item emptied of a default it had has moved off it too (In use only unticked), so it
+  // counts until Reset or a pick puts the default back.
   //
   // Compares the STORED value, not this.value: AutocompleteItem overrides the value
   // getter to unwrap the primitive out of its {name, value} object, while defaultValue
@@ -206,7 +211,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   // ({value: 7}), and a strict compare would call an untouched filter "changed".
   public get hasNonDefaultValue() {
     if(!this.hasValue) {
-      return false;
+      return !isEmptyFilterValue(this.defaultValue);
     }
 
     return !isEqual(

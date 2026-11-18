@@ -6,6 +6,7 @@ export * from './find-value';
 export * from './get-exclude-name';
 export * from './get-range-name';
 export * from './is-empty-bound';
+export * from './is-empty-filter-value';
 export * from './normalize-compare-value';
 export * from './parse-date';
 export * from './parse-item-value-from-stored';

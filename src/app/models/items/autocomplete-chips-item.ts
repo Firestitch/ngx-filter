@@ -2,6 +2,7 @@ import { isEqual } from 'lodash-es';
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { getExcludeName } from '../../helpers/get-exclude-name';
+import { isEmptyFilterValue } from '../../helpers/is-empty-filter-value';
 import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
 import { filterToQueryParam } from '../../helpers/query-param-transformers';
 import { summarizePicks } from '../../helpers/summarize-picks';
@@ -201,10 +202,11 @@ export class AutocompleteChipsItem
   /**
    * The base compare reads the stored picks, which leave the mode out, so an excluding
    * default would always look changed. This one compares picks and mode on both sides.
+   * Emptied of a default it had, it has moved off it, as in the base.
    */
   public get hasNonDefaultValue() {
     if(!this.hasValue) {
-      return false;
+      return !isEmptyFilterValue(this._comparable(this.defaultValue));
     }
 
     return !isEqual(

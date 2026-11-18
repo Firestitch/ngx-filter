@@ -13,17 +13,19 @@
     [disabled]="disabled()"
     (click)="open()">
   <mat-icon
-      [matBadge]="appliedCount()"
-      [matBadgeHidden]="!appliedCount()"
+      [matBadge]="activeCount()"
+      [matBadgeHidden]="!activeCount()"
       [matBadgeSize]="'small'">
     filter_list
   </mat-icon>
 </button>
 <!--
   Reset heads the flyout beside the count it clears, so it stays in one place under the
-  button however long the list of filters runs. Every filter is listed whether applied or
-  not: the applied ones first, in the primary color with their values under their names,
-  then a divider and the rest.
+  button however long the list of filters runs. The count is of the filters applied, defaults
+  among them. Reset is never disabled: a count always offers a way to act on it, and Reset
+  puts every filter back to its default. Every filter is listed whether applied or not: the
+  applied ones first, in the primary color with their values under their names (a checkbox
+  filter's reads 'Selected'), then a divider and the rest.
 -->
 <ng-template #panel>
   <div
@@ -32,14 +34,13 @@
       aria-label="Filters">
     <div class="filter-menu-heading">
       <span class="filter-menu-title">Filters</span>
-      @if (appliedCount()) {
-        <span class="small">{{ appliedCount() }} active</span>
+      @if (activeCount()) {
+        <span class="small">{{ activeCount() }} active</span>
       }
       <button
           type="button"
           mat-button
           class="filter-menu-reset"
-          [disabled]="!resetEnabled()"
           (click)="reset()">
         Reset
       </button>

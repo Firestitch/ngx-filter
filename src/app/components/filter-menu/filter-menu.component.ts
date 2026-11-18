@@ -40,8 +40,8 @@ import { FsFilterChipTextComponent } from '../filter-chip-text';
 
 /**
  * The filters button beside reload: a count of the filters applied, and a flyout that lists
- * every filter of the chip row and resets them all. The flyout is a panel sized to what it
- * holds, opened under the button, rather than a menu.
+ * every filter of the chip row and resets them all to their defaults. The flyout is a panel
+ * sized to what it holds, opened under the button, rather than a menu.
  */
 @Component({
   selector: 'fs-filter-menu',
@@ -70,13 +70,13 @@ export class FsFilterMenuComponent implements OnDestroy {
 
   public panel = viewChild.required<TemplateRef<unknown>>('panel');
   public panelOpen = signal(false);
-  public appliedCount = signal(0);
-  public label = computed(() => this.appliedCount()
-    ? `Filters · ${this.appliedCount()} active`
+  public activeCount = signal(0);
+  public label = computed(() => this.activeCount()
+    ? `Filters · ${this.activeCount()} active`
     : 'Filters');
   public items = signal<BaseItem<IFilterConfigItem>[]>([]);
   // Applied filters head the flyout and the rest follow, each group in its configured order,
-  // so what narrows the list sits under the count and Reset that act on it. Grouped by what
+  // so what narrows the list sits at the top, under the count and Reset. Grouped by what
   // was applied when the flyout opened: a checkbox toggled in place keeps its row until the
   // flyout opens again, rather than jumping to the other group under the cursor.
   public groups = computed(() => {
@@ -96,7 +96,6 @@ export class FsFilterMenuComponent implements OnDestroy {
   private _viewContainerRef = inject(ViewContainerRef);
   private _destroyRef = inject(DestroyRef);
   private _overlayRef: OverlayRef = null;
-  private _nonDefaultValue = signal(false);
   private _appliedOnOpen = signal(new Set<string>());
 
   constructor() {
@@ -183,15 +182,6 @@ export class FsFilterMenuComponent implements OnDestroy {
     return { text, more: chips.reduce((sum, chip) => sum + (chip.more ?? 0), 0) };
   }
 
-  // Reset follows the host's rule when it sets one (config.clearVisible), else an item
-  // holding a value other than its default. Called on each check of the flyout, so a rule
-  // that reads signals stays current.
-  public resetEnabled(): boolean {
-    const rule = this._filterController.config?.clearVisible;
-
-    return rule ? !!rule() : this._nonDefaultValue();
-  }
-
   public reset(): void {
     this.close();
 
@@ -218,13 +208,10 @@ export class FsFilterMenuComponent implements OnDestroy {
             .filter((item) => item.visible && !item.isTypeKeyword);
 
           // A filter preselected on load narrows the list as much as one picked by hand,
-          // so a default value counts as applied.
-          this.appliedCount.set(filterItems.filter((item) => item.hasValue).length);
+          // so a default value counts as active.
+          this.activeCount.set(filterItems.filter((item) => item.hasValue).length);
           // Primary filters are inputs in the bar already, so the flyout leaves them out.
           this.items.set(filterItems.filter((item) => !item.primary));
-          // Reset also clears the keyword search, so typed text is something to reset.
-          this._nonDefaultValue.set(items
-            .some((item) => item.visible && item.clearable && item.hasNonDefaultValue));
         }),
         takeUntilDestroyed(this._destroyRef),
       )
