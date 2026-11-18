@@ -1,0 +1,17 @@
+// Takes the width it is given; the words give way to it and the count does not.
+:host {
+  display: flex;
+  gap: 5px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.more {
+  flex-shrink: 0;
+}

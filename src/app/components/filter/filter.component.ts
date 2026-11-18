@@ -226,8 +226,8 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this.items.filter((item) => item.primary);
   }
 
-  // The filters button holds Reset filters, so it shows whenever the filter has any item,
-  // the keyword search included, even with nothing left to add from it.
+  // The filters button holds Reset, so it shows whenever the filter has any item,
+  // the keyword search included, even with no filter to list in its flyout.
   public get hasFilterItems(): boolean {
     return this.items.length > 0;
   }

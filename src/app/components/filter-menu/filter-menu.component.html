@@ -19,32 +19,60 @@
     filter_list
   </mat-icon>
 </button>
+<!--
+  Reset heads the flyout beside the count it clears, so it stays in one place under the
+  button however long the list of filters runs. Every filter is listed whether applied or
+  not: the applied ones first, in the primary color with their values under their names,
+  then a divider and the rest.
+-->
 <ng-template #panel>
   <div
       class="filter-menu-panel"
       role="dialog"
       aria-label="Filters">
-    @if (addItems().length) {
-      <mat-action-list class="filter-menu-items">
-        @for (item of addItems(); track item.name) {
-          <button
-              type="button"
-              mat-list-item
-              (click)="addItem(item)">
-            {{ item.mergedLabel }}
-          </button>
-        }
-      </mat-action-list>
-      <mat-divider></mat-divider>
-    }
-    <div class="filter-menu-actions">
+    <div class="filter-menu-heading">
+      <span class="filter-menu-title">Filters</span>
+      @if (appliedCount()) {
+        <span class="small">{{ appliedCount() }} active</span>
+      }
       <button
           type="button"
           mat-button
+          class="filter-menu-reset"
           [disabled]="!resetEnabled()"
           (click)="reset()">
-        Reset filters
+        Reset
       </button>
     </div>
+    @if (items().length) {
+      <mat-divider></mat-divider>
+      <mat-action-list class="filter-menu-items">
+        @for (group of groups(); track $index) {
+          @if (!$first) {
+            <mat-divider class="filter-menu-group-divider"></mat-divider>
+          }
+          @for (item of group; track item.name) {
+            <button
+                type="button"
+                mat-list-item
+                [class.applied]="item.hasValue"
+                [attr.aria-pressed]="item.isTypeCheckbox ? item.hasValue : null"
+                (click)="pickItem(item)">
+              <span matListItemTitle>{{ item.mergedLabel }}</span>
+              @if (item.hasValue && summary(item); as value) {
+                <span matListItemLine>
+                  <small>
+                    <fs-filter-chip-text
+                      [text]="value.text"
+                      [more]="value.more">
+                    </fs-filter-chip-text>
+                  </small>
+                </span>
+              }
+            </button>
+          }
+        }
+      </mat-action-list>
+    }
   </div>
 </ng-template>

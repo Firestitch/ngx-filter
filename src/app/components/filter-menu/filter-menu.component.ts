@@ -20,7 +20,12 @@ import { MatBadge } from '@angular/material/badge';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
-import { MatActionList, MatListItem } from '@angular/material/list';
+import {
+  MatActionList,
+  MatListItem,
+  MatListItemLine,
+  MatListItemTitle,
+} from '@angular/material/list';
 import { MatTooltip } from '@angular/material/tooltip';
 
 import { filter, merge, take, takeUntil, tap } from 'rxjs';
@@ -29,12 +34,14 @@ import { IFilterConfigItem } from '../../interfaces';
 import { BaseItem } from '../../models/items/base-item';
 import { FilterController } from '../../services/filter-controller.service';
 import { SavedFilterController } from '../../services/saved-filter-controller.service';
+import { FsFilterChipTextComponent } from '../filter-chip-text';
+
 
 
 /**
- * The filters button beside reload: a count of the filters applied, and a flyout that adds
- * a filter not yet in the chip row and resets them all. The flyout is a panel sized to what
- * it holds, opened under the button, rather than a menu.
+ * The filters button beside reload: a count of the filters applied, and a flyout that lists
+ * every filter of the chip row and resets them all. The flyout is a panel sized to what it
+ * holds, opened under the button, rather than a menu.
  */
 @Component({
   selector: 'fs-filter-menu',
@@ -48,15 +55,18 @@ import { SavedFilterController } from '../../services/saved-filter-controller.se
     MatIconButton,
     MatDivider,
     MatIcon,
+    FsFilterChipTextComponent,
     MatActionList,
     MatListItem,
+    MatListItemLine,
+    MatListItemTitle,
     MatTooltip,
   ],
 })
 export class FsFilterMenuComponent implements OnDestroy {
 
-  // Picked from the flyout; the chip row shows the filter and opens it.
-  public add = output<BaseItem<IFilterConfigItem>>();
+  // Picked from the flyout; the chip row shows the filter if it is not already and opens it.
+  public pick = output<BaseItem<IFilterConfigItem>>();
 
   public panel = viewChild.required<TemplateRef<unknown>>('panel');
   public panelOpen = signal(false);
@@ -64,7 +74,19 @@ export class FsFilterMenuComponent implements OnDestroy {
   public label = computed(() => this.appliedCount()
     ? `Filters · ${this.appliedCount()} active`
     : 'Filters');
-  public addItems = signal<BaseItem<IFilterConfigItem>[]>([]);
+  public items = signal<BaseItem<IFilterConfigItem>[]>([]);
+  // Applied filters head the flyout and the rest follow, each group in its configured order,
+  // so what narrows the list sits under the count and Reset that act on it. Grouped by what
+  // was applied when the flyout opened: a checkbox toggled in place keeps its row until the
+  // flyout opens again, rather than jumping to the other group under the cursor.
+  public groups = computed(() => {
+    const applied = this._appliedOnOpen();
+
+    return [
+      this.items().filter((item) => applied.has(item.name)),
+      this.items().filter((item) => !applied.has(item.name)),
+    ].filter((group) => group.length);
+  });
   public disabled = toSignal(inject(FilterController).disabled$, { initialValue: false });
 
   private _filterController = inject(FilterController);
@@ -75,6 +97,7 @@ export class FsFilterMenuComponent implements OnDestroy {
   private _destroyRef = inject(DestroyRef);
   private _overlayRef: OverlayRef = null;
   private _nonDefaultValue = signal(false);
+  private _appliedOnOpen = signal(new Set<string>());
 
   constructor() {
     this._init();
@@ -105,6 +128,10 @@ export class FsFilterMenuComponent implements OnDestroy {
       panelClass: 'fs-filter-menu-overlay-pane',
     });
 
+    this._appliedOnOpen.set(new Set(this.items()
+      .filter((item) => item.hasValue)
+      .map((item) => item.name)));
+
     this._listenClose(this._overlayRef);
     this._overlayRef.attach(new TemplatePortal(this.panel(), this._viewContainerRef));
     this.panelOpen.set(true);
@@ -114,9 +141,46 @@ export class FsFilterMenuComponent implements OnDestroy {
     this._overlayRef?.dispose();
   }
 
-  public addItem(item: BaseItem<IFilterConfigItem>): void {
+  // A checkbox filter has no popup, so its row turns it on and off in place and the flyout
+  // stays open. Any other row opens the filter's popup, the same one its chip opens.
+  public pickItem(item: BaseItem<IFilterConfigItem>): void {
+    if (item.isTypeCheckbox) {
+      if (item.hasValue) {
+        item.clear();
+      } else {
+        item.setValue(true);
+      }
+
+      return;
+    }
+
     this.close();
-    this.add.emit(item);
+    this.pick.emit(item);
+  }
+
+  // The applied value under a filter's name, worded as its chips word it. A chip carrying
+  // the filter's own name gives just its value ('Active'); one named otherwise keeps its
+  // name ('From: Nov 1', 'Exclude Region: West'), and picks a chip only counts are counted
+  // here too ('+2 more'). A checkbox filter's chip is only ever its name, so its row reads
+  // 'Selected' instead. Called on each check of the flyout, as the value can change
+  // without the filter gaining or losing one.
+  public summary(item: BaseItem<IFilterConfigItem>): { text: string, more: number } {
+    if (item.isTypeCheckbox) {
+      return { text: 'Selected', more: 0 };
+    }
+
+    const chips = item.shownChips;
+    const text = chips
+      .map((chip) => {
+        if (!chip.value) {
+          return chip.label;
+        }
+
+        return chip.label === item.mergedLabel ? chip.value : `${chip.label}: ${chip.value}`;
+      })
+      .join(', ');
+
+    return { text, more: chips.reduce((sum, chip) => sum + (chip.more ?? 0), 0) };
   }
 
   // Reset follows the host's rule when it sets one (config.clearVisible), else an item
@@ -156,7 +220,8 @@ export class FsFilterMenuComponent implements OnDestroy {
           // A filter preselected on load narrows the list as much as one picked by hand,
           // so a default value counts as applied.
           this.appliedCount.set(filterItems.filter((item) => item.hasValue).length);
-          this.addItems.set(filterItems.filter((item) => !item.primary && !item.secondaryVisible));
+          // Primary filters are inputs in the bar already, so the flyout leaves them out.
+          this.items.set(filterItems.filter((item) => !item.primary));
           // Reset also clears the keyword search, so typed text is something to reset.
           this._nonDefaultValue.set(items
             .some((item) => item.visible && item.clearable && item.hasNonDefaultValue));

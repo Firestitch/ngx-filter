@@ -2,6 +2,7 @@
 
 import type { FilterComponent } from '../../components/filter/filter.component';
 import { filterToQueryParam } from '../../helpers';
+import { summarizePicks } from '../../helpers/summarize-picks';
 import { IFilterConfigChipsItem } from '../../interfaces/items/chips.interface';
 
 import { BaseItem } from './base-item';
@@ -51,21 +52,16 @@ export class ChipsItem extends BaseItem<IFilterConfigChipsItem> {
     };
   }
   
-  public get chips(): { name?: string, value: string, label: string }[] {
+  public get chips(): { name?: string, value: string, label: string, more?: number }[] {
     if(!this.hasValue) {
       return [];
     }
 
-    const chips = this.value
-      .reduce((acc, i) => {
-        acc.push((`${i.name ?? i.value}`).trim());
-
-        return acc;
-      }, [])
-      .join(', ');
+    const names = this.value
+      .map((i) => (`${i.name ?? i.value}`).trim());
 
     return [{
-      value: chips,
+      ...summarizePicks(names),
       label: this.label,
     }];
   }

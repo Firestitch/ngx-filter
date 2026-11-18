@@ -1,8 +1,11 @@
 .form-field {
   display: flex;
 
+  // A bound is a short number, so each field is half the 246px Material gives a field with
+  // a prefix and a suffix; the input shrinks to fit inside it.
   mat-form-field {
     min-width: 0;
+    width: 123px;
 
     + mat-form-field {
       margin-left: 10px;

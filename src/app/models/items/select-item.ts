@@ -3,6 +3,7 @@ import { map, Observable, tap } from 'rxjs';
 
 
 import type { FilterComponent } from '../../components/filter/filter.component';
+import { summarizePicks } from '../../helpers/summarize-picks';
 import { IFilterConfigSelectItem } from '../../interfaces/items/select.interface';
 
 import { BaseItem } from './base-item';
@@ -141,7 +142,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
     return this.values;
   }
 
-  public get chips(): { name?: string, value: string, label: string }[] {
+  public get chips(): { name?: string, value: string, label: string, more?: number }[] {
     if (!this.hasValue) {
       return [];
     }
@@ -158,7 +159,7 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
 
     return [
       {
-        value: options.join(', '),
+        ...summarizePicks(options),
         label: this.label,
       },
     ];

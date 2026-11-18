@@ -24,7 +24,7 @@ export interface FilterConfig {
   persist?: FsFilterPersistance;
   reload?: ChangeFn;
   clear?: ChangeFn;
-  // When set, 'Reset filters' in the filters button's flyout is enabled exactly while
+  // When set, Reset in the filters button's flyout is enabled exactly while
   // this gives true, in place of the built-in rule (an item holds a value other than its
   // default). Read on each check of the flyout, which is OnPush, so build it from signals.
   clearVisible?: () => boolean;

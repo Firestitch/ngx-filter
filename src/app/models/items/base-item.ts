@@ -194,8 +194,8 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   // An item sitting at its configured default is already in its cleared state, so
-  // "Reset filters" has nothing to offer for it. Distinct from hasValue, which is true
-  // for a default too and would keep the control permanently visible.
+  // Reset in the filters flyout has nothing to offer for it. Distinct from hasValue, which
+  // is true for a default too and would keep the control permanently visible.
   //
   // Compares the STORED value, not this.value: AutocompleteItem overrides the value
   // getter to unwrap the primitive out of its {name, value} object, while defaultValue
@@ -243,7 +243,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   // The chips the chip row shows: one chip with the host's whole text when chipText
   // gives one, else the item's own. That chip has no name, so removing it clears the
   // item.
-  public get shownChips(): { name?: string, value: string, label: string }[] {
+  public get shownChips(): { name?: string, value: string, label: string, more?: number }[] {
     const text = this.chipText?.(this);
 
     return typeof text === 'string' && text !== ''
@@ -374,9 +374,9 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.setValue(value === undefined ? this.defaultValue : value);
   }
 
-  // restoreDefault is opt-in so only "Reset filters" resets to configured defaults.
-  // Removing a single chip must still empty the item, or a filter carrying a default
-  // could never be switched off.
+  // restoreDefault is opt-in so only Reset in the filters flyout resets to configured
+  // defaults. Removing a single chip must still empty the item, or a filter carrying a
+  // default could never be switched off.
   public clear(emitChange: boolean = true, restoreDefault: boolean = false) {
     this.setValue(restoreDefault ? this.defaultValue : undefined, emitChange);
   }
@@ -459,6 +459,8 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     }
   }
   
-  public abstract get chips(): { name?: string, value: string, label: string }[];
+  // A filter holding several picks shows them in one chip, naming the first few in its
+  // value and counting the rest in more (summarizePicks).
+  public abstract get chips(): { name?: string, value: string, label: string, more?: number }[];
 
 }

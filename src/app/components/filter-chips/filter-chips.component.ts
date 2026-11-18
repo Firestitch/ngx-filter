@@ -23,6 +23,7 @@ import { IFilterSavedFilter } from '../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../models/items/base-item';
 import { SavedFilterController } from '../../services';
 import { FilterController } from '../../services/filter-controller.service';
+import { FsFilterChipTextComponent } from '../filter-chip-text';
 import { FilterItemDialogComponent } from '../filter-item-dialog';
 import { FsFilterSavedFilterManageComponent } from '../saved-filter/saved-filter-manage/saved-filter-manage.component';
 
@@ -45,6 +46,7 @@ const SAVED_FILTER_MENU_LIMIT = 4;
     FormsModule,
     FsChipSelectTriggerDirective,
     MatDividerModule,
+    FsFilterChipTextComponent,
   ],
 })
 export class FsFilterChipsComponent implements OnInit, OnDestroy {
@@ -85,19 +87,18 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
     return this._filterController.disabled$;
   }
 
-  // Shows a filter picked from the filters button's flyout and opens its popup.
-  public addFilter(item: BaseItem<IFilterConfigItem>) {
-    // For checkbox items, set to checked when adding from the filters button
-    if (item.isTypeCheckbox && !item.hasValue) {
-      item.setValue(true);
-    }
-    
-    item.secondaryShow();
+  // Opens the popup of a filter picked from the filters button's flyout. A filter the chip
+  // row already shows opens from its chip, as a click on the chip does; the chip row never
+  // changes for it, so waiting for it to would never open anything. Any other filter is
+  // shown first and opens once its chip is drawn.
+  public openFilter(item: BaseItem<IFilterConfigItem>) {
+    if (this._chipElement(item)) {
+      this.openChip(item);
 
-    // Don't open overlay for secondary checkbox items
-    if (item.isTypeCheckbox && !item.primary) {
       return;
     }
+
+    item.secondaryShow();
 
     // A pick whose chips never changed leaves this subscription waiting. Left alive it
     // fires alongside the next one, opening the popover twice in the same tick — the

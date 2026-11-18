@@ -73,7 +73,7 @@
     <div class="filter-actions">
       <div class="filter-toolbar">
         @if (hasFilterItems) {
-          <fs-filter-menu (add)="filterChips?.addFilter($event)"></fs-filter-menu>
+          <fs-filter-menu (pick)="filterChips?.openFilter($event)"></fs-filter-menu>
         }
         @if (config.reload) {
           <a

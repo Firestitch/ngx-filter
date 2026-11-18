@@ -12,11 +12,10 @@
               [outlined]="true"
               [disabled]="(disabledFilters$ | async)"
               (click)="handleChipClick(item, chip.name)">
-            @if (chip.value) {
-              {{ chip.label }}: {{ chip.value }}
-            } @else {
-              {{ chip.label }}
-            }
+            <fs-filter-chip-text
+              [text]="chip.value ? chip.label + ': ' + chip.value : chip.label"
+              [more]="chip.more">
+            </fs-filter-chip-text>
             <ng-template
               fsChipSuffix
               [icon]="'cancel_circle_outline'"

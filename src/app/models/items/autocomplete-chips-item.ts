@@ -4,6 +4,7 @@ import type { FilterComponent } from '../../components/filter/filter.component';
 import { getExcludeName } from '../../helpers/get-exclude-name';
 import { normalizeCompareValue } from '../../helpers/normalize-compare-value';
 import { filterToQueryParam } from '../../helpers/query-param-transformers';
+import { summarizePicks } from '../../helpers/summarize-picks';
 import {
   FilterAutocompleteChipsExcludeValue,
 } from '../../interfaces/items/autocomplete-chips-exclude-value.interface';
@@ -172,19 +173,18 @@ export class AutocompleteChipsItem
     };
   }
 
-  public get chips(): { name?: string, value: string, label: string }[] {
+  public get chips(): { name?: string, value: string, label: string, more?: number }[] {
     if(!this.hasValue) {
       return [];
     }
 
     const names = this.selected
-      .map((i) => (`${i.name ?? i.value}`).trim())
-      .join(', ');
+      .map((i) => (`${i.name ?? i.value}`).trim());
 
     // Left-out picks say so before the label: 'Exclude Region: West, East'.
     return [
       {
-        value: names,
+        ...summarizePicks(names),
         label: this._exclude ? `Exclude ${this.label}` : this.label,
       },
     ];

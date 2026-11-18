@@ -5,23 +5,73 @@
 
 // The same opaque, raised surface as a chip's popup (filter-item-dialog), so the two
 // flyouts of the filter bar read as one family. It takes the width and height of what
-// it holds, capped so a long filter list scrolls instead of running off the screen.
+// it holds, capped so a long filter list scrolls instead of running off the screen and
+// a long applied value is cut short rather than widening it.
 .filter-menu-panel {
   background-color: var(--fs-surface-background, #fff);
   box-shadow: var(--mat-autocomplete-container-elevation-shadow);
   border-radius: 5px;
-  min-width: 200px;
+  min-width: 220px;
+  max-width: 320px;
   max-height: 70vh;
   display: flex;
   flex-direction: column;
 }
 
-.filter-menu-items {
-  --mdc-list-list-item-one-line-container-height: 40px;
-  overflow-y: auto;
-  padding: 5px 0;
+// Lined up with the rows' text, the Reset button pushed to the far end.
+.filter-menu-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 5px 5px 16px;
 }
 
-.filter-menu-actions {
-  padding: 5px;
+.filter-menu-title {
+  font-weight: 500;
+}
+
+.filter-menu-reset {
+  margin-left: auto;
+}
+
+// Every row has the same padding above and below its text, so a row with its applied value
+// under its name grows to fit it and keeps both lines centered.
+.filter-menu-items {
+  --mdc-list-list-item-one-line-container-height: auto;
+  --mdc-list-list-item-two-line-container-height: auto;
+  overflow-y: auto;
+  padding: 5px 0;
+
+  .mat-mdc-list-item {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  // Material lays a two-line row's text on fixed baselines, which sits the name high and
+  // the value low. The lines stack plainly instead, the name keeping the line height it
+  // has in a one-line row.
+  .mdc-list-item--with-two-lines .mdc-list-item__primary-text {
+    margin-bottom: 0;
+    line-height: var(--mdc-list-list-item-label-text-line-height, var(--mat-app-body-large-line-height));
+  }
+
+  .mdc-list-item__primary-text::before,
+  .mdc-list-item__primary-text::after,
+  .mdc-list-item__secondary-text::before {
+    display: none;
+  }
+
+  // An applied filter takes the primary color the chip row gives its chips on its name,
+  // and keeps it on hover. Its value stays secondary text.
+  .applied {
+    --mdc-list-list-item-label-text-color: var(--fs-filter-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--fs-filter-primary);
+    --mdc-list-list-item-focus-label-text-color: var(--fs-filter-primary);
+  }
+
+  // Splits the applied filters from the rest with the same breathing room the list keeps
+  // above its first row and below its last.
+  .filter-menu-group-divider {
+    margin: 5px 0;
+  }
 }

@@ -13,6 +13,7 @@ import { IFilterConfigItem } from '../../../../../interfaces';
 import { IFilterSavedFilter } from '../../../../../interfaces/saved-filters.interface';
 import { BaseItem } from '../../../../../models/items';
 import { FilterController } from '../../../../../services';
+import { FsFilterChipTextComponent } from '../../../../filter-chip-text';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { FilterController } from '../../../../../services';
   standalone: true,
   imports: [
     FsChipModule,
+    FsFilterChipTextComponent,
   ],
 })
 export class FsFilterSavedFilterChipsComponent implements OnInit {

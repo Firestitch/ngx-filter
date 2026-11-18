@@ -2,7 +2,10 @@
   @for (item of items; track item.name) {
     @for (chip of item.chips; track chip.label) {
       <fs-chip size="small">
-        {{ chip.value ? chip.label + ': ' + chip.value : chip.label }}
+        <fs-filter-chip-text
+          [text]="chip.value ? chip.label + ': ' + chip.value : chip.label"
+          [more]="chip.more">
+        </fs-filter-chip-text>
       </fs-chip>
     }
   }
