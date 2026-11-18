@@ -87,7 +87,7 @@ export class MonthRangeComponent
     this._fromPicker?.dateDialogRef?.close();
     this._toPicker?.dateDialogRef?.close();
 
-    if(this.triggerChangeOn === 'close') {
+    if(this.triggerChangeOn === 'close' && !this._canceled) {
       this.item.value = this.getValue;
     }
   }

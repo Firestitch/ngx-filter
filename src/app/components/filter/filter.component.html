@@ -12,7 +12,9 @@
       @if (hasHeading) {
         <ng-container *ngTemplateOutlet="headingTmpl"></ng-container>
       }
-      <div class="filter-bar-container">
+      <div
+          class="filter-bar-container filter-inputs-bar"
+          fsFilterChipsPlacement>
         <div class="filter-input-container">
           @if (keywordVisible$ | async) {
             <fs-filter-keyword [autofocus]="config.autofocus"></fs-filter-keyword>
@@ -25,15 +27,10 @@
               </filter-item>
             }
           }
-          @if (chipsInline$ | async) {
-            <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
-          }
         </div>
+        <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
         <ng-container *ngTemplateOutlet="filterActionsTmpl"></ng-container>
       </div>
-      @if ((chipsInline$ | async) === false) {
-        <ng-container *ngTemplateOutlet="chipsTmpl"></ng-container>
-      }
       <ng-container *ngTemplateOutlet="statusBarTmpl"></ng-container>
     }
     @case ('heading') {
@@ -72,38 +69,40 @@
   }
 </ng-template>
 <ng-template #filterActionsTmpl>
-  @if ((actionsVisible$ | async) && (actions$ | async) && (menuActions$ | async)) {
+  @if (hasFilterItems || (actionsVisible$ | async)) {
     <div class="filter-actions">
-      <ng-container *ngTemplateOutlet="filterToolbarTmpl"></ng-container>
-      <fs-filter-actions
-        [actions]="actions$ | async"
-        [kebabActions]="menuActions$ | async">
-      </fs-filter-actions>
-    </div>
-  }
-</ng-template>
-<ng-template #filterToolbarTmpl>
-  @if (config.reload || config.autoReload) {
-    <div class="filter-toolbar">
-      @if (config.reload) {
-        <a
-            mat-icon-button
-            (click)="reload($event)"
-            class="button-reload">
-          <mat-icon #reloadEl>
-            refresh
-          </mat-icon>
-        </a>
-      }
-      @if (config.autoReload) {
-        <a
-            mat-icon-button
-            class="filter-reload"
-            (click)="config.autoReload.enabled = !config.autoReload.enabled">
-          <mat-icon>
-            {{ config.autoReload.enabled ? 'sync' : 'sync_disabled' }}
-          </mat-icon>
-        </a>
+      <div class="filter-toolbar">
+        @if (hasFilterItems) {
+          <fs-filter-menu (add)="filterChips?.addFilter($event)"></fs-filter-menu>
+        }
+        @if (config.reload) {
+          <a
+              mat-icon-button
+              [matTooltip]="'Reload'"
+              (click)="reload($event)"
+              class="button-reload">
+            <mat-icon #reloadEl>
+              refresh
+            </mat-icon>
+          </a>
+        }
+        @if (config.autoReload) {
+          <a
+              mat-icon-button
+              class="filter-reload"
+              [matTooltip]="autoReloadTooltip"
+              (click)="config.autoReload.enabled = !config.autoReload.enabled">
+            <mat-icon>
+              {{ config.autoReload.enabled ? 'sync' : 'sync_disabled' }}
+            </mat-icon>
+          </a>
+        }
+      </div>
+      @if ((actionsVisible$ | async) && (actions$ | async) && (menuActions$ | async)) {
+        <fs-filter-actions
+          [actions]="actions$ | async"
+          [kebabActions]="menuActions$ | async">
+        </fs-filter-actions>
       }
     </div>
   }

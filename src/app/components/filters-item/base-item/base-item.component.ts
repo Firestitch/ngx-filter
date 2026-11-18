@@ -5,6 +5,7 @@ import { OverlayRef } from '@angular/cdk/overlay';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { FILTER_DRAWER_DATA } from '../../../injectors/filter-drawer-data';
 import { IFilterConfigItem } from '../../../interfaces/config.interface';
 import { BaseItem } from '../../../models/items/base-item';
 
@@ -27,6 +28,15 @@ export class BaseItemComponent<T extends BaseItem<IFilterConfigItem>> implements
 
   protected _destroyRef = inject(DestroyRef);
   protected _cdRef = inject(ChangeDetectorRef);
+
+  // The chip popup this field sits in; null in the filter bar.
+  private _popup = inject(FILTER_DRAWER_DATA, { optional: true });
+
+  // True once the popup is closed with Escape. The popup puts the item back as it found it,
+  // so whatever the field still holds as it goes away is dropped, not applied.
+  protected get _canceled(): boolean {
+    return !!this._popup?.canceled();
+  }
 
   public ngOnInit(): void {
     this.item.value$

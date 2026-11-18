@@ -54,8 +54,6 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
 
   public ItemType = ItemType;
   public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
-  public moreFilterItems = signal<BaseItem<IFilterConfigItem>[]>([]);
-  public clearFiltersVisible = signal<boolean>(false);
 
   // The first saved filters, in their saved order, listed at the top of the
   // Saved filters menu so one click applies one. Reordering them (View all)
@@ -87,8 +85,9 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
     return this._filterController.disabled$;
   }
 
+  // Shows a filter picked from the filters button's flyout and opens its popup.
   public addFilter(item: BaseItem<IFilterConfigItem>) {
-    // For checkbox items, set to checked when adding from "More filters"
+    // For checkbox items, set to checked when adding from the filters button
     if (item.isTypeCheckbox && !item.hasValue) {
       item.setValue(true);
     }
@@ -139,31 +138,6 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
   // and its backdrop-click handler died with us — leaving a popup on screen that cannot be closed at all.
   public ngOnDestroy(): void {
     this._destroyOverlay();
-  }
-
-  public clear() {
-    // Hide first so the chip row has settled before filtersClear() fires change().
-    // Items promoted by minSecondaryItems carry secondary === true and keep their chip;
-    // items showing only because they held a value are hidden, as before.
-    this._filterController.items
-      .filter((item) => item.clearable && !item.secondary)
-      .forEach((item) => item.secondaryHide());
-
-    this._filterController.filtersClear();
-    this._savedFilterController.setActiveFilter(null);
-
-    if (this._filterController.config.clear) {
-      this._filterController.config.clear();
-    }
-  }
-
-  // 'Clear filters' follows the host's rule when it sets one (config.clearVisible),
-  // else an item holding a value other than its default. Called on each check of the
-  // chip row, so a rule that reads signals stays current.
-  public clearVisible(): boolean {
-    const rule = this._filterController.config?.clearVisible;
-
-    return rule ? !!rule() : this.clearFiltersVisible();
   }
 
   public handleChipClick(item: BaseItem<IFilterConfigItem>, name: string = null) {
@@ -240,6 +214,7 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
 
     this._attachContainer(this._overlayRef, item, name);
     this._followChip(item, el, strategy);
+    this._followReflow();
   }
 
   public getNestedElement(el: any, className: string) {
@@ -343,8 +318,6 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           this._updateSecondaryItems();
-          this._updateMoreFilterItems();
-          this._updateClearItems();
           this._hasSecondaryValue$.next(this.hasSecondaryValue);
         }),
         takeUntilDestroyed(this._destroyRef),
@@ -396,6 +369,32 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  // Chips also move without being drawn again: a chip whose text grows pushes the ones after
+  // it along, and the whole row drops under the filter bar once it no longer fits beside the
+  // inputs, or comes back up. Either way the row changes size, and the editor is placed
+  // against its chip again so it does not stay where the chip was.
+  private _followReflow() {
+    const overlayRef = this._overlayRef;
+
+    new Observable<void>((subscriber) => {
+      const observer = new ResizeObserver(() => {
+        subscriber.next();
+      });
+
+      observer.observe(this._elementRef.nativeElement);
+
+      return () => observer.disconnect();
+    })
+      .pipe(
+        tap(() => {
+          overlayRef.updatePosition();
+        }),
+        takeUntil(overlayRef.detachments()),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
+  }
+
   private _attachContainer(overlayRef: OverlayRef, item: BaseItem<IFilterConfigItem>, name: string) {
     const injector = this._createInjector(item, name);
     const containerPortal = new ComponentPortal(FilterItemDialogComponent, undefined, injector);
@@ -406,28 +405,16 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
 
   private _createInjector(item: BaseItem<IFilterConfigItem>, autofocusName: string): Injector {
     const providers: StaticProvider[] = [
-      { provide: FILTER_DRAWER_DATA, useValue: { item, autofocusName, overlayRef: this._overlayRef } },
+      {
+        provide: FILTER_DRAWER_DATA,
+        useValue: { item, autofocusName, overlayRef: this._overlayRef, canceled: signal(false) },
+      },
     ];
   
     return Injector.create({
       providers,
       parent: this._injector,
     });
-  }
-
-  private _updateMoreFilterItems() {
-    this.moreFilterItems
-      .set(this.items
-        .filter((item) => !item.primary && item.visible && !item.secondaryVisible));
-  }
-
-  private _updateClearItems() {
-    const visibleItems = this.items.filter((item) => item.visible);
-    const onlyKeyword = visibleItems.length === 1 && visibleItems[0].type === ItemType.Keyword;
-
-    this.clearFiltersVisible
-      .set(!onlyKeyword && this.items
-        .some((item) => item.clearable && item.hasNonDefaultValue && item.visible));
   }
 
 }

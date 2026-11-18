@@ -27,7 +27,7 @@ export class RangeItem extends BaseItem<IFilterConfigRangeItem> {
   public declare maxLabel: string;
 
   /**
-   * What the range goes by wherever it is named once — the "More filters" list,
+   * What the range goes by wherever it is named once — the filters button's list,
    * the unset chip, the value chip. A string label is that name already, and a
    * min/max pair earns one when both ends distill to the same stem: 'Min Price'
    * and 'Max Price' are the 'Price' filter. Null only when the two labels name

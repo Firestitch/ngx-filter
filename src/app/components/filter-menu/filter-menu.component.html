@@ -1,0 +1,49 @@
+<!--
+  The badge sits on the icon, not the button, so it stays inside the button's padding and
+  is not clipped when the button is the last thing in the bar. No tooltip: what the button
+  offers changes with the filters, so no one fixed label describes it.
+-->
+<button
+    type="button"
+    mat-icon-button
+    aria-haspopup="dialog"
+    [attr.aria-label]="appliedCount() ? 'Filters, ' + appliedCount() + ' applied' : 'Filters'"
+    [attr.aria-expanded]="panelOpen()"
+    [disabled]="disabled()"
+    (click)="open()">
+  <mat-icon
+      [matBadge]="appliedCount()"
+      [matBadgeHidden]="!appliedCount()"
+      [matBadgeSize]="'small'">
+    filter_list
+  </mat-icon>
+</button>
+<ng-template #panel>
+  <div
+      class="filter-menu-panel"
+      role="dialog"
+      aria-label="Filters">
+    @if (addItems().length) {
+      <mat-action-list class="filter-menu-items">
+        @for (item of addItems(); track item.name) {
+          <button
+              type="button"
+              mat-list-item
+              (click)="addItem(item)">
+            {{ item.mergedLabel }}
+          </button>
+        }
+      </mat-action-list>
+      <mat-divider></mat-divider>
+    }
+    <div class="filter-menu-actions">
+      <button
+          type="button"
+          mat-button
+          [disabled]="!resetEnabled()"
+          (click)="reset()">
+        Reset filters
+      </button>
+    </div>
+  </div>
+</ng-template>

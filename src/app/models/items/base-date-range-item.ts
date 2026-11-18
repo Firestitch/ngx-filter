@@ -20,7 +20,7 @@ export abstract class BaseDateRangeItem extends BaseItem<IFilterConfigDateRangeI
   public toLabel: string;
 
   /**
-   * What the range goes by wherever it is named once — the "More filters" list,
+   * What the range goes by wherever it is named once — the filters button's list,
    * the unset chip, the value chip. A string label is that name already, and a
    * from/to pair earns one when both ends distill to the same stem, which is
    * nearly always: 'From Create Date' and 'To Create Date' are the 'Create Date'

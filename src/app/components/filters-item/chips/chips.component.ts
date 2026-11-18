@@ -32,7 +32,9 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class ChipsComponent extends BaseItemComponent<ChipsItem> implements OnDestroy {
 
   public ngOnDestroy(): void {
-    this.item.value = this.value;
+    if(!this._canceled) {
+      this.item.value = this.value;
+    }
   }
 
   public compareFn = (modelValue, chipValue) => {

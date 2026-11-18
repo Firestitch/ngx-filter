@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MatIconAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { FsClearModule } from '@firestitch/clear';
 import { FsFormModule } from '@firestitch/form';
@@ -27,7 +28,7 @@ import { combineLatest, fromEvent, interval, Observable, of, Subject } from 'rxj
 import { debounceTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
 
 import { ActionsController } from '../../classes/actions-controller';
-import { FilterHeadingDirective } from '../../directives';
+import { FilterChipsPlacementDirective, FilterHeadingDirective } from '../../directives';
 import { ISortingChangeEvent, KeyValue } from '../../interfaces';
 import { FsFilterAction } from '../../interfaces/action.interface';
 import {
@@ -46,6 +47,7 @@ import { SavedFilterController } from '../../services/saved-filter-controller.se
 import { FsFilterActionsComponent } from '../actions/actions.component';
 import { FsFilterChipsComponent } from '../filter-chips/filter-chips.component';
 import { FilterKeywordComponent } from '../filter-keyword/filter-keyword.component';
+import { FsFilterMenuComponent } from '../filter-menu/filter-menu.component';
 import { FilterItemComponent } from '../filters-item';
 
 import { FilterStatusBarDirective } from './../../directives/status-bar.directive';
@@ -78,15 +80,21 @@ import { FS_FILTER_CONFIG } from './../../injectors/filter-config';
     FsClearModule,
     FsFilterChipsComponent,
     FsFilterActionsComponent,
+    FsFilterMenuComponent,
     MatIconAnchor,
+    MatTooltip,
     AsyncPipe,
     FilterKeywordComponent,
+    FilterChipsPlacementDirective,
   ],
 })
 export class FilterComponent implements OnInit, OnDestroy {
 
   @ViewChild(FilterKeywordComponent)
   public keywordInput: FilterKeywordComponent;
+
+  @ViewChild(FsFilterChipsComponent)
+  public filterChips: FsFilterChipsComponent;
   
   @Input('config') public set setFilterConfig(value: FilterConfig) {
     this._filterConfig = value;
@@ -218,6 +226,21 @@ export class FilterComponent implements OnInit, OnDestroy {
     return this.items.filter((item) => item.primary);
   }
 
+  // The filters button holds Reset filters, so it shows whenever the filter has any item,
+  // the keyword search included, even with nothing left to add from it.
+  public get hasFilterItems(): boolean {
+    return this.items.length > 0;
+  }
+
+  public get autoReloadTooltip(): string {
+    const { enabled, seconds } = this.config.autoReload;
+    if (!enabled) {
+      return 'Auto reload off';
+    }
+
+    return seconds === 1 ? 'Reloading every second' : `Reloading every ${seconds} seconds`;
+  }
+
   public change() {
     this._filterController.change();
   }
@@ -280,18 +303,6 @@ export class FilterComponent implements OnInit, OnDestroy {
 
           return this.hasHeading ? 'heading' : 'chips';
         }),
-        distinctUntilChanged(),
-      );
-  }
-
-  /**
-   * In `inputs` layout, chips render inline (right of the keyword) only when there's
-   * a keyword and no primary filters. With any primary filter present, chips drop below.
-   */
-  public get chipsInline$(): Observable<boolean> {
-    return this.inputsState$
-      .pipe(
-        map(({ keywordVisible, primaryFiltersVisible }) => keywordVisible && !primaryFiltersVisible),
         distinctUntilChanged(),
       );
   }

@@ -1,3 +1,4 @@
+<!-- A chip's popup (overlayRef set) has no clear button, so nothing in it reads as "close" while wiping the filter; the chip's remove icon clears it. -->
 @if (item.mode === itemDateMode.ScrollMonthDayYear || item.mode === itemDateMode.ScrollMonthYear) {
   <mat-form-field
       [floatLabel]="floatLabel"
@@ -18,7 +19,7 @@
       [showDay]="showDay"
       [showYear]="showYear"
       [placeholder]="item.placeholder"
-      [clear]="item.clearable"
+      [clear]="item.clearable && !overlayRef"
       [name]="item.name">
   </mat-form-field>
 } @else if (item.mode === itemDateMode.Calendar) {
@@ -38,7 +39,7 @@
       [maxYear]="item.maxYear"
       [view]="viewType"
       [placeholder]="item.label"
-      [clear]="item.clearable"
+      [clear]="item.clearable && !overlayRef"
       [name]="item.name">
   </mat-form-field>
 }

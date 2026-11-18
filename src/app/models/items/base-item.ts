@@ -174,6 +174,13 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     return this.hasValue;
   }
 
+  // True when the chip's popup closes by itself the moment a value is picked (a single
+  // select, a date). Any other popup stays open after a pick to take more, so it carries
+  // an Apply button to say the picking is done. Overridden by the items that close.
+  public get closesOnPick(): boolean {
+    return false;
+  }
+
   public get destroy$() {
     return this._destroy$.asObservable();
   }
@@ -187,7 +194,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   }
 
   // An item sitting at its configured default is already in its cleared state, so
-  // "Clear filters" has nothing to offer for it. Distinct from hasValue, which is true
+  // "Reset filters" has nothing to offer for it. Distinct from hasValue, which is true
   // for a default too and would keep the control permanently visible.
   //
   // Compares the STORED value, not this.value: AutocompleteItem overrides the value
@@ -367,7 +374,7 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
     this.setValue(value === undefined ? this.defaultValue : value);
   }
 
-  // restoreDefault is opt-in so only "Clear filters" resets to configured defaults.
+  // restoreDefault is opt-in so only "Reset filters" resets to configured defaults.
   // Removing a single chip must still empty the item, or a filter carrying a default
   // could never be switched off.
   public clear(emitChange: boolean = true, restoreDefault: boolean = false) {
@@ -382,6 +389,24 @@ export abstract class BaseItem<T extends IFilterConfigItem> {
   public destroy() {
     this._destroy$.next(null);
     this._destroy$.complete();
+  }
+
+  /**
+   * Takes the item as it stands and returns what puts it back that way. A chip's popup
+   * takes one as it opens and calls it when closed with Escape, undoing whatever the popup
+   * applied. It puts back, and so reloads, only when the item no longer matches.
+   *
+   * Takes the STORED value, not this.value: AutocompleteItem's getter unwraps the
+   * primitive, which would put back an id with its name lost.
+   */
+  public snapshot(): () => void {
+    const value = this._value$.getValue().value;
+
+    return () => {
+      if(!isEqual(value, this._value$.getValue().value)) {
+        this.setValue(value);
+      }
+    };
   }
 
   public clone(): BaseItem<T> {

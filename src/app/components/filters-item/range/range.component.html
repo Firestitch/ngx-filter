@@ -1,64 +1,65 @@
+<!--
+  The prefix and suffix are text affixes, so they keep the field's padding instead of sitting
+  flush against its edge. No type="number": its spinner arrows render in the same gutter as the
+  suffix; inputmode keeps the numeric keypad on a phone and fsFormNumeric flags a non-number.
+-->
 <div class="form-field">
   <mat-form-field
-      class="filter-range-min"
-      [floatLabel]="floatLabel"
-      class="form-field-padless">
+      class="filter-range-min form-field-padless"
+      [floatLabel]="floatLabel">
     <mat-label>
       {{ item.minLabel }}
     </mat-label>
     @if (item.prefix) {
-      <span
+      <div
         matTextPrefix
-        class="text-prefix"
         [innerHtml]="item.prefix">
-      </span>
+      </div>
     }
     <input
       matInput
       [fsFilterFocusTrigger]="autofocusName === 'min' || minIsEmpty"
-      type="number"
+      inputmode="decimal"
+      [fsFormNumeric]="true"
       [(ngModel)]="min"
       [disabled]="disabled"
       (fsModelChange)="change()"
       (keyup)="keyup($event)"
       #from>
     @if (item.suffix) {
-      <span
-        matSuffix
-        class="text-suffix"
+      <div
+        matTextSuffix
         [innerHtml]="item.suffix">
-      </span>
+      </div>
     }
   </mat-form-field>
   <mat-form-field
-      class="filter-range-max"
-      [floatLabel]="floatLabel"
-      class="form-field-padless">
+      class="filter-range-max form-field-padless"
+      [floatLabel]="floatLabel">
     <mat-label>
       {{ item.maxLabel }}
     </mat-label>
     @if (item.prefix) {
-      <span
+      <div
         matTextPrefix
-        class="text-prefix"
         [innerHtml]="item.prefix">
-      </span>
+      </div>
     }
     <input
       matInput
       [fsFilterFocusTrigger]="autofocusName === 'max' || !minIsEmpty"
-      type="number"
+      inputmode="decimal"
+      [fsFormNumeric]="true"
       [(ngModel)]="max"
       [disabled]="disabled"
       (fsModelChange)="change()"
       (keyup)="keyup($event)"
       #to>
     @if (item.suffix) {
-      <span
-        matSuffix
-        class="text-suffix"
+      <div
+        matTextSuffix
         [innerHtml]="item.suffix">
-      </span>
+      </div>
     }
   </mat-form-field>
 </div>

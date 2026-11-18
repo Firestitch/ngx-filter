@@ -7,4 +7,19 @@
     [overlayRef]="overlayRef"
     [item]="item">
   </filter-item>
+  <!--
+    Only a popup that stays open after a pick (a multiple list, a range, text) needs a way
+    to say "done". It keeps what was picked, exactly as clicking away does, which still works.
+  -->
+  @if (!item.closesOnPick) {
+    <div class="apply">
+      <button
+          type="button"
+          mat-button
+          [color]="'primary'"
+          (click)="apply()">
+        Apply
+      </button>
+    </div>
+  }
 </div>

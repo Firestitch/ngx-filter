@@ -1,3 +1,4 @@
+<!-- A chip's popup (overlayRef set) has no clear button, so nothing in it reads as "close" while wiping the filter; the chip's remove icon clears it. -->
 <fs-autocomplete-chips
     [fsFilterFocusTrigger]="autofocus"
     [fetch]="fetch"
@@ -17,7 +18,7 @@
     [chipBackground]="item.chipBackground"
     [chipIcon]="item.chipIcon"
     [chipClass]="item.chipClass"
-    [allowClear]="item.clearable"
+    [allowClear]="item.clearable && !overlayRef"
     [removable]="item.clearable"
     [compareWith]="compareItems"
     (panelClosed)="panelClosed()"

@@ -73,6 +73,12 @@ export class AutocompleteChipsItem
     return new AutocompleteChipsItem(config, filter);
   }
 
+  // A multiple list keeps collecting, and the exclude row toggles without closing, so
+  // only a plain single list closes on a pick.
+  public get closesOnPick(): boolean {
+    return !this.multiple && !this.excludable;
+  }
+
   /** Whether the picks are left out (the exclude toggle is on) rather than kept. */
   public get exclude(): boolean {
     return this._exclude;
@@ -255,6 +261,22 @@ export class AutocompleteChipsItem
     const picked = Array.isArray(selected) ? selected.length > 0 : !!selected;
 
     this.setValue({ exclude, selected }, this.hasValue || picked);
+  }
+
+  /**
+   * The mode is held beside the picks, and the stored value leaves it out, so both are
+   * taken. They go back through setExclude, which reloads only when there are picks to
+   * reload for.
+   */
+  public snapshot(): () => void {
+    const exclude = this._exclude;
+    const selected = super.value;
+
+    return () => {
+      if(exclude !== this._exclude || !isEqual(selected, super.value)) {
+        this.setExclude(exclude, selected);
+      }
+    };
   }
 
   private get _queryName(): string {

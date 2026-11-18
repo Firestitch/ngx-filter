@@ -65,7 +65,13 @@ export class AutocompletechipsComponent
     }
   }
 
+  // An open list emits its close as the popup is torn down, so a canceled popup applies
+  // nothing here.
   public panelClosed() {
+    if(this._canceled) {
+      return;
+    }
+
     this.item.setSelected(this.value);
   }
 

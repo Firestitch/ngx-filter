@@ -11,6 +11,10 @@ export class AutocompleteItem extends BaseAutocompleteItem<IFilterConfigAutocomp
     return new AutocompleteItem(config, filter);
   }
 
+  public get closesOnPick(): boolean {
+    return true;
+  }
+
   /**
    * Returns the unwrapped primitive value (e.g. 123) from the
    * underlying {name, value} object stored via BaseItem.

@@ -65,7 +65,7 @@ export class RangeComponent extends BaseItemComponent<RangeItem> implements OnIn
   }
 
   public ngOnDestroy(): void {
-    if(this.triggerChangeOn === 'close') {
+    if(this.triggerChangeOn === 'close' && !this._canceled) {
       this.item.value = {
         min: this.min,
         max: this.max,

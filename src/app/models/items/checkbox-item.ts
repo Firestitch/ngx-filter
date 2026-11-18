@@ -34,6 +34,10 @@ export class CheckboxItem extends BaseItem<IFilterConfigCheckboxItem> {
     return !!this.value;
   }
 
+  public get closesOnPick(): boolean {
+    return true;
+  }
+
   public get query(): Record<string, unknown> {
     if(!this.hasValue && this._unchecked === undefined) {
       return {};

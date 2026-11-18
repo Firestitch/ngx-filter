@@ -106,12 +106,29 @@ export class SelectItem extends BaseItem<IFilterConfigSelectItem> {
     };
   }
 
+  // A multiple select keeps its list open between picks, and the isolate checkbox
+  // applies without closing, so only a plain single select closes on a pick.
+  public get closesOnPick(): boolean {
+    return !this.multiple && !this.isolate;
+  }
+
   public get hasValue() {
     if(this.multiple) {
       return Array.isArray(super.value) && super.value.length > 0;
     }
 
     return super.hasValue;
+  }
+
+  // The isolate checkbox is held beside the value, so it goes back with it.
+  public snapshot(): () => void {
+    const isolated = this.isolated;
+    const restore = super.snapshot();
+
+    return () => {
+      this.isolated = isolated;
+      restore();
+    };
   }
 
   public get flattenedValues(): { name: string, value: any }[] {

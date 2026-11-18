@@ -22,6 +22,11 @@ export abstract class BaseDateItem extends BaseItem<IFilterConfigDateItem> {
     this.mode = itemConfig.mode || ItemDateMode.Calendar;
   }
 
+  // Date and date time both close as soon as the picker sets a value.
+  public get closesOnPick(): boolean {
+    return true;
+  }
+
   public setValue(value, emitChange = true) {
     if (value) {
       if (!isDate(value) || !isValid(value)) {

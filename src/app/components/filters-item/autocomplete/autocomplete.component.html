@@ -1,3 +1,4 @@
+<!-- A chip's popup (overlayRef set) has no clear button, so nothing in it reads as "close" while wiping the filter; the chip's remove icon clears it. -->
 <fs-autocomplete
     [fsFilterFocusTrigger]="autofocus"
     [fetch]="fetch"
@@ -7,7 +8,7 @@
     [disabled]="disabled"
     [placeholder]="item.placeholder ?? item.label"
     [fetchOnFocus]="item.fetchOnFocus"
-    [showClear]="item.clearable"
+    [showClear]="item.clearable && !overlayRef"
     formFieldClass="form-field-padless"
     name="item.name">
   <ng-template

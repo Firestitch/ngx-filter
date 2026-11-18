@@ -20,12 +20,6 @@
 .filter-container {
   width: 100%;
 
-  &.has-primary-filter {
-    .filter-chips {
-      margin-top: 5px;
-    }
-  }
-
   &.has-heading.has-chip:not(.has-primary-filter):not(.has-keyword) {
     .filter-chips {
       margin-top: 5px;
@@ -69,18 +63,44 @@
       column-gap: 5px;
       row-gap: 5px;
       flex-wrap: wrap;
+    }
 
-      // The chips holder is a single flex item of this row, so all its chips wrap
-      // together as one block. Dropping its box promotes the chips to flex items of
-      // this row, letting them wrap one at a time from the end. Only the inline
-      // layout nests the holder here; the heading and chips layouts are unaffected.
-      > fs-filter-chips {
-        display: contents;
+    // The inputs layout. FilterChipsPlacementDirective keeps the chips here between the
+    // inputs and the actions while they all fit on that one line, and sets chips-below
+    // once they would wrap.
+    &.filter-inputs-bar {
+      column-gap: 5px;
+
+      > .filter-chips {
+        min-width: 0;
       }
 
-      &.chips-inline {
-        fs-filter-chips {
-          min-width: 0;
+      // The chips take a second row that runs the bar's full width, under the actions
+      // too. The inputs and actions keep the first row, the inputs giving way to the
+      // actions on a narrow screen as they do with no chips at all.
+      &.chips-below {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 5px;
+
+        > .filter-chips {
+          grid-row: 2;
+          grid-column: 1 / -1;
+        }
+      }
+
+      // Set by the directive only while it measures, never painted: each part at its
+      // natural width on one line, wherever the chips sit now.
+      &.chips-measure {
+        display: flex;
+
+        > * {
+          flex: none;
+        }
+
+        > .filter-input-container,
+        > .filter-chips {
+          flex-wrap: nowrap;
         }
       }
     }

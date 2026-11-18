@@ -1,3 +1,4 @@
+<!-- A chip's popup (overlayRef set) has no clear button, so nothing in it reads as "close" while wiping the filter; the chip's remove icon clears it. -->
 @if (initialized) {
   <div class="row">
     <mat-form-field
@@ -13,7 +14,7 @@
         [(ngModel)]="from"
         [disabled]="disabled"
         (ngModelChange)="change()"
-        [clear]="item.clearable"
+        [clear]="item.clearable && !overlayRef"
         name="dateFrom">
     </mat-form-field>
     <div class="to">
@@ -32,7 +33,7 @@
         [(ngModel)]="to"
         [disabled]="disabled"
         (ngModelChange)="change()"
-        [clear]="item.clearable"
+        [clear]="item.clearable && !overlayRef"
         name="dateTo">
     </mat-form-field>
   </div>

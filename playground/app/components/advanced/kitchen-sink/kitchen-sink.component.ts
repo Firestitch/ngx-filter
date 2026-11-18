@@ -27,7 +27,6 @@ import { ExampleLogService, ExampleUser, FilterItemsService } from '../../../ser
 
 import { SavedFilters } from './saved-filter';
 
-
 /**
  * Every item type at once, plus the parts of the filter that are not items at all: saved
  * filters, sorting, the status bar, auto-reload, and the imperative API the host page
@@ -72,7 +71,8 @@ export class KitchenSinkComponent implements OnInit {
     this.conf = {
       chips: true,
       autofocus: false,
-      // 6 so the chip row overflows and exercises one-at-a-time wrapping
+      // 6 so the chips just fit beside the search, and a filter or two more drops them to
+      // their own row under the bar
       minSecondaryItems: 6,
       queryParam: true,
       persist: false,
@@ -95,17 +95,22 @@ export class KitchenSinkComponent implements OnInit {
         this._filterItems.subjectSelect(),
         this._filterItems.isolateSelect(),
         this._filterItems.showDeletedCheckbox(),
-        this._filterItems.priceRange(),
-        this._filterItems.userAutocomplete({ name: 'autocompleteUserId', label: 'Autocomplete User' }),
         this._filterItems.userAutocompleteChips({
           label: 'Autocomplete Chips',
+          shape: 'squareChip',
           subTemplate: (user: ExampleUser) => user.title,
           template: (user: ExampleUser) => `${user.name}`,
         }),
+        this._filterItems.priceRange(),
         this._filterItems.weekdayChips(),
         this._filterItems.date(),
         this._filterItems.dateRange(),
         this._filterItems.monthRange(),
+        this._filterItems.userAutocompleteChips({
+          name: 'autocompleteUserIds',
+          label: 'Autocomplete User',
+          multiple: true,
+        }),
       ],
       savedFilters: this._savedFilters(),
     };

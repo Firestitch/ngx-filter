@@ -41,7 +41,7 @@ export class TextComponent extends BaseItemComponent<TextItem> implements OnDest
   @Input() public floatLabel: 'auto' | 'always' = 'auto';
 
   public ngOnDestroy(): void {
-    if(this.triggerChangeOn === 'close') {
+    if(this.triggerChangeOn === 'close' && !this._canceled) {
       this.item.value = this.value;
     }
   }

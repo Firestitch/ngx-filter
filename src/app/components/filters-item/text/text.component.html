@@ -5,10 +5,10 @@
     {{ item.label }}
   </mat-label>
   @if (item.prefix) {
-    <span
+    <div
       matTextPrefix
       [innerHtml]="item.prefix">
-    </span>
+    </div>
   }
   <input
     matInput
@@ -19,9 +19,9 @@
     [placeholder]="item.placeholder"
     [fsFilterFocusTrigger]="autofocus">
   @if (item.suffix) {
-    <span
+    <div
       matTextSuffix
       [innerHtml]="item.suffix">
-    </span>
+    </div>
   }
 </mat-form-field>

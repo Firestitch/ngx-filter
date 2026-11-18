@@ -5,7 +5,6 @@ import { debounceTime, distinctUntilChanged, filter, finalize, map, shareReplay,
 
 
 import type { FilterComponent } from '../components/filter/filter.component';
-import { ItemType } from '../enums/item-type.enum';
 import { createFilterItem } from '../helpers/create-filter-item';
 import {
   IFilterConfigItem,
@@ -152,8 +151,8 @@ export class FilterController implements OnDestroy {
 
   /**
    * True when the chips component would render any chip — a value chip,
-   * placeholder, "More filters" select, saved-filter select, or "Clear filters".
-   * Mirrors the visibility logic inside FsFilterChipsComponent's template.
+   * placeholder, or saved-filter select. Mirrors the visibility logic inside
+   * FsFilterChipsComponent's template.
    */
   public get chipVisible$(): Observable<boolean> {
     return this.itemsState$
@@ -167,28 +166,10 @@ export class FilterController implements OnDestroy {
             return true;
           }
 
-          const visibleItems = items.filter((item) => item.visible);
-          const onlyKeyword = visibleItems.length === 1 && visibleItems[0].type === ItemType.Keyword;
-          const hasClearable = !onlyKeyword
-            && items.some((item) => item.clearable && item.hasValue && item.visible);
-
-          if (hasClearable) {
-            return true;
-          }
-
-          return items.some((item) => {
-            if (!item.visible) {
-              return false;
-            }
-
-            const renderable = item.allowSecondary
-              && !(item.isTypeCheckbox && !item.hasValue)
-              && (item.hasValue || item.secondaryVisible);
-
-            const inMoreFilters = !item.primary && !item.secondaryVisible;
-
-            return renderable || inMoreFilters;
-          });
+          return items.some((item) => item.visible
+            && item.allowSecondary
+            && !(item.isTypeCheckbox && !item.hasValue)
+            && (item.hasValue || item.secondaryVisible));
         }),
         distinctUntilChanged(),
       );

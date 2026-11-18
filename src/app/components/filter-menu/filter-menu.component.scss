@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
+// The same opaque, raised surface as a chip's popup (filter-item-dialog), so the two
+// flyouts of the filter bar read as one family. It takes the width and height of what
+// it holds, capped so a long filter list scrolls instead of running off the screen.
+.filter-menu-panel {
+  background-color: var(--fs-surface-background, #fff);
+  box-shadow: var(--mat-autocomplete-container-elevation-shadow);
+  border-radius: 5px;
+  min-width: 200px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-menu-items {
+  --mdc-list-list-item-one-line-container-height: 40px;
+  overflow-y: auto;
+  padding: 5px 0;
+}
+
+.filter-menu-actions {
+  padding: 5px;
+}

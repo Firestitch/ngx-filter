@@ -42,21 +42,6 @@
       }
     }
   }
-  @if (moreFilterItems().length > 0) {
-    <fs-chip-select
-        [outlined]="true"
-        [disabled]="(disabledFilters$ | async)"
-        (select)="addFilter($event)">
-      <fs-chip-select-trigger>
-        More filters
-      </fs-chip-select-trigger>
-      @for (item of moreFilterItems(); track item.name) {
-        <fs-chip-select-option [value]="item">
-          {{ item.mergedLabel }}
-        </fs-chip-select-option>
-      }
-    </fs-chip-select>
-  }
   @if (savedFilterController.enabled) {
     <fs-chip-select
         [outlined]="true"
@@ -93,17 +78,5 @@
         View all
       </fs-chip-select-option>
     </fs-chip-select>
-  }
-  @if (clearVisible()) {
-    <fs-chip
-        [outlined]="true"
-        [disabled]="(disabledFilters$ | async)"
-        (click)="clear()">
-      Clear filters
-      <ng-template
-        fsChipSuffix
-        [icon]="'cancel_circle_outline'">
-      </ng-template>
-    </fs-chip>
   }
 }
