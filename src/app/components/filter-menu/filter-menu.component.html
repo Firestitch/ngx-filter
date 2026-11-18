@@ -1,13 +1,14 @@
 <!--
   The badge sits on the icon, not the button, so it stays inside the button's padding and
-  is not clipped when the button is the last thing in the bar. No tooltip: what the button
-  offers changes with the filters, so no one fixed label describes it.
+  is not clipped when the button is the last thing in the bar. The tooltip and the
+  accessible name are the same text, so the tooltip is not announced a second time.
 -->
 <button
     type="button"
     mat-icon-button
     aria-haspopup="dialog"
-    [attr.aria-label]="appliedCount() ? 'Filters, ' + appliedCount() + ' applied' : 'Filters'"
+    [matTooltip]="label()"
+    [attr.aria-label]="label()"
     [attr.aria-expanded]="panelOpen()"
     [disabled]="disabled()"
     (click)="open()">

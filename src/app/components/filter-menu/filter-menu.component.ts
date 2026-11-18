@@ -6,6 +6,7 @@ import {
   OnDestroy,
   TemplateRef,
   ViewContainerRef,
+  computed,
   inject,
   output,
   signal,
@@ -20,6 +21,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatActionList, MatListItem } from '@angular/material/list';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { filter, merge, take, takeUntil, tap } from 'rxjs';
 
@@ -48,6 +50,7 @@ import { SavedFilterController } from '../../services/saved-filter-controller.se
     MatIcon,
     MatActionList,
     MatListItem,
+    MatTooltip,
   ],
 })
 export class FsFilterMenuComponent implements OnDestroy {
@@ -58,6 +61,9 @@ export class FsFilterMenuComponent implements OnDestroy {
   public panel = viewChild.required<TemplateRef<unknown>>('panel');
   public panelOpen = signal(false);
   public appliedCount = signal(0);
+  public label = computed(() => this.appliedCount()
+    ? `Filters · ${this.appliedCount()} active`
+    : 'Filters');
   public addItems = signal<BaseItem<IFilterConfigItem>[]>([]);
   public disabled = toSignal(inject(FilterController).disabled$, { initialValue: false });
 
