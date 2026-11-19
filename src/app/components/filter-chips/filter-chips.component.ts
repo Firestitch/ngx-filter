@@ -55,7 +55,11 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
   public chips: QueryList<FsChipComponent>;
 
   public ItemType = ItemType;
-  public secondaryItems: BaseItem<IFilterConfigItem>[] = [];
+  // Rebuilt on every change of the items' state, a signal so the chip row redraws with it. A
+  // checkbox filter joins the list only once it is ticked, and ticking it in the filters
+  // flyout or a saved filter's dialog happens outside this view, so a plain array changed
+  // here would not be drawn until something inside the row checked it again.
+  public secondaryItems = signal<BaseItem<IFilterConfigItem>[]>([]);
 
   // The first saved filters, in their saved order, listed at the top of the
   // Saved filters menu so one click applies one. Reordering them (View all)
@@ -327,7 +331,7 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
   }
 
   private _updateSecondaryItems() {
-    this.secondaryItems = this.items
+    this.secondaryItems.set(this.items
       .filter((item) => {
         if (!item.allowSecondary) {
           return false;
@@ -338,7 +342,7 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
         }
 
         return true;
-      });
+      }));
   }
 
   // The first chip of an item on screen, or null when it shows none.
