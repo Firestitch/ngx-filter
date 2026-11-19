@@ -119,6 +119,10 @@ export class FsFilterMenuComponent implements OnDestroy {
         .flexibleConnectedTo(this._elementRef)
         .withPositions(this._positions())
         .withViewportMargin(16),
+      // Never wider than the screen less 16px a side, like a chip's popup; the panel shrinks
+      // to fit. It opens under the button at the bar's right end, so a push brings it in
+      // from the left edge, where the CDK keeps the margin as given.
+      maxWidth: 'calc(100% - 32px)',
       scrollStrategy: this._overlay.scrollStrategies.reposition(),
       disposeOnNavigation: true,
       hasBackdrop: true,

@@ -184,13 +184,20 @@ export class FsFilterChipsComponent implements OnInit, OnDestroy {
       },
     ];
 
+    // The popup is never wider than the screen less 16px a side, and what it holds shrinks to
+    // that rather than running off it, so Apply stays on screen. Too wide to open at its chip,
+    // it is pushed in from the right edge. The CDK counts the margin twice on that side (it
+    // measures the overflow against the narrowed viewport's width, not its right edge), so 8
+    // leaves 16 there, and a popup as wide as it can be lands 16px from either edge.
     const strategy = this._overlay
       .position()
       .flexibleConnectedTo(el)
-      .withPositions(positions);
-    
+      .withPositions(positions)
+      .withViewportMargin(8);
+
     const overlayConfig = new OverlayConfig({
       positionStrategy: strategy,
+      maxWidth: 'calc(100% - 32px)',
       scrollStrategy: this._overlay.scrollStrategies.block(),
       disposeOnNavigation: true,
       hasBackdrop: true,

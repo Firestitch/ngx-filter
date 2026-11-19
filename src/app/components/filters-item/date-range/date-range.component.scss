@@ -1,8 +1,17 @@
 .row {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+
+  // Side by side while both fit; in a popup too narrow for both, the to field drops under
+  // the from field rather than both shrinking past where a date can be read.
+  .from {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
 
   mat-form-field {
     width: 200px;

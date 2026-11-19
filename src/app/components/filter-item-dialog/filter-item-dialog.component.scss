@@ -1,3 +1,9 @@
+// The overlay pane caps the popup at the screen's width less a gutter; without this the
+// popup would keep the width of its widest field and run past the pane instead of shrinking.
+:host {
+  min-width: 0;
+}
+
 .filter-item-dialog {
   // An OPAQUE panel, so it cannot inherit the page behind it — #fff punched a
   // white slab through a dark app. The light value is unchanged; only the dark

@@ -1,25 +1,28 @@
 <!-- A chip's popup (overlayRef set) has no clear button, so nothing in it reads as "close" while wiping the filter; the chip's remove icon clears it. -->
 @if (initialized) {
   <div class="row">
-    <mat-form-field
-        [floatLabel]="floatLabel"
-        class="form-field-padless">
-      <mat-label>
-        {{ item.fromLabel }}
-      </mat-label>
-      <input
-        matInput
-        [fsFilterFocusTrigger]="autofocusName === 'from'"
-        [fsDateRangeFrom]="item.name"
-        [(ngModel)]="from"
-        [disabled]="disabled"
-        (ngModelChange)="change()"
-        [clear]="item.clearable && !overlayRef"
-        [view]="viewType"
-        name="dateFrom">
-    </mat-form-field>
-    <div class="to">
-      to
+    <!-- 'to' ends the from field's line, so a pair too wide for the popup still reads as a range when the to field drops under it. -->
+    <div class="from">
+      <mat-form-field
+          [floatLabel]="floatLabel"
+          class="form-field-padless">
+        <mat-label>
+          {{ item.fromLabel }}
+        </mat-label>
+        <input
+          matInput
+          [fsFilterFocusTrigger]="autofocusName === 'from'"
+          [fsDateRangeFrom]="item.name"
+          [(ngModel)]="from"
+          [disabled]="disabled"
+          (ngModelChange)="change()"
+          [clear]="item.clearable && !overlayRef"
+          [view]="viewType"
+          name="dateFrom">
+      </mat-form-field>
+      <div class="to">
+        to
+      </div>
     </div>
     <mat-form-field
         [floatLabel]="floatLabel"
